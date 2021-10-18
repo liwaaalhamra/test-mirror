@@ -1,0 +1,49 @@
+@extends('vendor.layout')
+
+@section('content')
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="panel panel-default">
+                <div class="panel-heading font-bold">{{$content_header}}</div>
+                <div class="panel-body">
+                    <form action="{{ route('admin.review_tags_list.store') }}" method="post" enctype="multipart/form-data">
+                        {{ csrf_field() }}
+                        <div class="row">
+                            <div class="form-group col-sm-4">
+                                <label>Choose Type</label>
+                                <select class="form-control selectpicker" title="Choose..."  data-live-search="true" name="type" required>
+                                    @foreach($types as $type)
+                                        <option data-tokens="{{$type}}" value="{{ $type }}"> {{$type}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group col-sm-4">
+                                <label>Name English</label>
+                                <input type="text" name="name_en" id="name_en" class="form-control" required placeholder="Name English" value="{{ old('name_en') }}">
+                            </div>
+                            <div class="form-group col-sm-4">
+                                <label>Name Arabic</label>
+                                <input type="text" name="name_ar" id="name_ar" class="form-control" required placeholder="Name Arabic" value="{{ old('name_ar') }}">
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-sm btn-primary">Save</button>
+                        <a href="{{ route('admin.review_tags_list.index') }}" class="btn btn-sm btn-dark">Back</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection
+@section('scripts')
+    @parent
+    <script>
+        var $imageupload = $('.imageupload');
+        $imageupload.imageupload({
+//            allowedFormats: [ "pdf" ],
+//            previewWidth: 250,
+//            previewHeight: 250,
+            maxFileSizeKb: 10240
+        });
+    </script>
+@endsection

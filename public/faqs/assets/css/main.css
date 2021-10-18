@@ -1,0 +1,883 @@
+:root{
+
+    /*---------- Colors ----------*/
+    --color-primary: #C1CD21;
+    --color-secondary: #4D4D4F;
+}
+
+body{
+    color: #787878;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+    overflow-x: hidden;
+}
+::selection{
+    color: #000;
+    background: #ccc;
+}
+::-moz-selection{
+    color: #000;
+    background: #ccc;
+}
+*{
+    outline: none !important;
+}
+a{
+    color: inherit !important;
+    text-decoration: none !important;
+}
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+label {
+    margin: 0;
+}
+b,
+strong{
+    font-weight: bold;
+}
+ul.list-style-none{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+img{
+    width: 100%;
+    height: 100%;
+}
+img.cover{
+    object-fit: cover;
+}
+img.contain{
+    object-fit: contain;
+}
+button{
+    box-shadow: none !important;
+}
+
+/*
+|--------------------------------------------------------------------------
+| Shortcuts
+|--------------------------------------------------------------------------
+*/
+
+.text-primary{
+    color: var(--color-primary) !important;
+}
+.text-secondary{
+    color: var(--color-secondary);
+}
+.text-black{
+    color: #000;
+}
+
+.bg-primary{
+    background: var(--color-primary) !important;
+}
+.bg-secondary{
+    background: var(--color-secondary) !important;
+}
+.bg-white{
+    background: #ffffff;
+}
+.bg-grey{
+    background: #F3F3F3;
+}
+.bg-grey-2{
+    background: #F9F9F9;
+}
+
+.box-shadow{
+    position: relative;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.2) !important;
+    z-index: 1;
+}
+
+.background-image{
+    background-attachment: fixed;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.picture-wrapper{
+    position: relative;
+}
+.picture-wrapper.padding-top-77{
+    padding-top: 77%;
+}
+.picture-wrapper.padding-top-70{
+    padding-top: 70%;
+}
+.picture-wrapper.padding-top-65{
+    padding-top: 65%;
+}
+.picture-wrapper.padding-top-55{
+    padding-top: 55%;
+}
+.picture-wrapper img{
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.rich-text ul{
+    margin-bottom: 0;
+}
+
+/*
+|--------------------------------------------------------------------------
+| End Shortcuts
+|--------------------------------------------------------------------------
+*/
+
+/*
+|--------------------------------------------------------------------------
+| General Styling
+|--------------------------------------------------------------------------
+*/
+
+.banner{
+    height: 60vh;
+}
+
+/*
+|--------------------------------------------------------------------------
+| General Styling
+|--------------------------------------------------------------------------
+*/
+
+/*
+|--------------------------------------------------------------------------
+| Navigation
+|--------------------------------------------------------------------------
+*/
+
+.language-icon{
+    position: relative;
+    top: -1px;
+    width: 15px;
+    height: 15px;
+}
+.language{
+    background: transparent;
+    border: none;
+    -webkit-appearance: none;
+    background: url(../images/icons/angle-down.svg) 96% / 22.5% no-repeat;
+    padding-right: 20px;
+    font-size: 13px;
+}
+
+.top-bar{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to right, rgba(255,255,255,0.6) 5%, transparent 40%, rgba(255,255,255,0.6) 60%);
+    transition: all .3s;
+    z-index: 9;
+}
+.top-bar.onScroll{
+    background: #fff;
+    box-shadow: 0 0 8px 0 rgba(0,0,0,0.25);
+}
+nav,
+nav button{
+    font-size: .8rem !important;
+}
+nav .navbar-brand{
+    width: 180px;
+    transform: translateY(-25%);
+}
+nav .nav-item{
+    line-height: 2;
+}
+nav .nav-item .nav-link{
+    position: relative;
+    letter-spacing: 0.5px;
+}
+nav .nav-item .nav-link.active{
+    font-weight: bold;
+}
+nav .nav-item:not(:last-child) .nav-link:after{
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 3px;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--color-primary);
+    transition: all .3s;
+}
+nav .nav-item .nav-link.active:after,
+nav .nav-item:not(:last-child) .nav-link:hover:after{
+    width: 100%;
+}
+
+/**********/
+.btn-locate-us{
+    position: fixed;
+    top: 35%;
+    right: -50px;
+    transform: rotate(-90deg);
+    z-index: 2;
+}
+
+/*
+|--------------------------------------------------------------------------
+| End Navigation
+|--------------------------------------------------------------------------
+*/
+
+/*
+|--------------------------------------------------------------------------
+| Home Page
+|--------------------------------------------------------------------------
+*/
+
+.custom-slider{
+    position: relative;
+}
+.custom-slider img{
+    height: 75vh;
+}
+.custom-slider .info{
+    position: absolute;
+    max-width: 350px;
+    top: 50%;
+    right: 0;
+    transform: translate(-35%, -50%);
+}
+
+/**********/
+.bar{
+    position: relative;
+    width: 100%;
+    height: 3px;
+    background: #D8D8D8;
+}
+.bar span{
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 100%;
+    background: var(--color-primary);
+    transition: all 1.3s;
+}
+
+/**********/
+.about-vitas img{
+    width: 50px;
+    height: 50px;
+}
+.about-vitas b{
+    font-size: 18px;
+}
+.about-vitas small{
+    position: relative;
+    top: -5px;
+}
+
+/**********/
+.testimonial-slick .testimonial{
+    line-height: 30px;
+}
+
+/*
+|--------------------------------------------------------------------------
+| End Home Page
+|--------------------------------------------------------------------------
+*/
+
+/*
+|--------------------------------------------------------------------------
+| About Page
+|--------------------------------------------------------------------------
+*/
+
+.our-history-slider{
+    margin-bottom: 75px;
+}
+.our-history-slider:last-child{
+    margin-bottom: 0;
+}
+.our-history-slider:nth-child(odd){
+    text-align: right;
+}
+.our-history-slider > div{
+    position: relative;
+    width: 50%;
+}
+.our-history-slider:nth-child(odd) > div{
+    padding-right: 100px;
+}
+.our-history-slider:nth-child(even) > div{
+    margin-left: auto;
+    padding-left: 100px;
+}
+.our-history-slider .info{
+    display: inline-block;
+    width: 300px;
+}
+.our-history-slider .picture{
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    top: 0;
+    border-radius: 100%;
+    overflow: hidden;
+}
+.our-history-slider:nth-child(odd) .picture{
+    right: 0;
+    transform: translateX(50%);
+}
+.our-history-slider:nth-child(even) .picture{
+    left: 0;
+    transform: translateX(-50%);
+}
+
+/*
+|--------------------------------------------------------------------------
+| End About Page
+|--------------------------------------------------------------------------
+*/
+
+/*
+|--------------------------------------------------------------------------
+| Careers Page
+|--------------------------------------------------------------------------
+*/
+
+.vacancies{
+    position: relative;
+}
+.vacancies:before{
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--color-primary);
+    opacity: 0.75;
+}
+
+/*
+|--------------------------------------------------------------------------
+| End Careers Page
+|--------------------------------------------------------------------------
+*/
+
+/*
+|--------------------------------------------------------------------------
+| FAQs Page
+|--------------------------------------------------------------------------
+*/
+
+.faqs-list li{
+    margin-bottom: 5px;
+    cursor: pointer;
+}
+.faqs-list li .content{
+    display: none;
+}
+
+/*
+|--------------------------------------------------------------------------
+| End FAQs Page
+|--------------------------------------------------------------------------
+*/
+
+/*
+|--------------------------------------------------------------------------
+| Locate Us Page
+|--------------------------------------------------------------------------
+*/
+
+.locate-us-list li{
+    border-bottom: 1px solid #5F5F61;
+    cursor: pointer;
+}
+.locate-us-list li.active,
+.locate-us-list li:hover{
+    background: var(--color-primary);
+}
+
+#map{
+    width: 100%;
+    height: 100%;
+}
+
+/*
+|--------------------------------------------------------------------------
+| Locate Us Page
+|--------------------------------------------------------------------------
+*/
+
+/*
+|--------------------------------------------------------------------------
+| Footer
+|--------------------------------------------------------------------------
+*/
+
+.social-media svg{
+    width: 30px;
+    height: 30px;
+    padding: 5px;
+    border: 1px solid #fff;
+    transition: all .3s;
+}
+.social-media svg path{
+    transition: all .3s;
+}
+.social-media.svg-white svg:hover{
+    border-color: var(--color-primary);
+}
+.social-media.svg-white svg:hover path{
+    fill: var(--color-primary);
+}
+.social-media.svg-green svg{
+    border-color: var(--color-primary);
+}
+.social-media.svg-green svg path{
+ fill: var(--color-primary);
+}
+
+/*
+|--------------------------------------------------------------------------
+| End Footer
+|--------------------------------------------------------------------------
+*/
+
+/*
+|--------------------------------------------------------------------------
+| Slick Styling
+|--------------------------------------------------------------------------
+*/
+
+/*---------- Dots Custom ----------*/
+.slick-dots{
+    font-size: 0;
+    bottom: 30px;
+}
+.slick-dots li{
+    margin: 0 2.5px;
+}
+.slick-dots li button{
+    padding: 0;
+    background: #fff;
+    border-radius: 100%;
+    opacity: 0.5;
+}
+.slick-dots li,
+.slick-dots li button{
+    width: 7px;
+    height: 7px;
+}
+.slick-dots li button:before{
+    content: none;
+}
+.slick-dots li.slick-active button{
+    opacity: 1;
+}
+/*---------- End Dots Custom ----------*/
+
+/*---------- Testimonial Dots ----------*/
+.testimonial-slick .slick-dots{
+    bottom: 20px;
+}
+.testimonial-slick .slick-dots li{
+    margin: 0 4px;
+}
+.testimonial-slick .slick-dots li button{
+    background: var(--color-primary);
+    opacity: 1;
+}
+.testimonial-slick .slick-dots li,
+.testimonial-slick .slick-dots li button{
+    width: 6px;
+    height: 6px;
+}
+.testimonial-slick .slick-dots li.slick-active,
+.testimonial-slick .slick-dots li.slick-active button{
+    width: 10px;
+    height: 10px;
+}
+.testimonial-slick .slick-dots li.slick-active button{
+    background: #fff;
+}
+/*---------- End Testimonial Dots ----------*/
+
+/*---------- Success Story Dots ----------*/
+.success-story-slick .slick-dots{
+    bottom: -25px;
+}
+.success-story-slick .slick-dots li button{
+    background: #D2D2D4;
+    opacity: 0.5;
+}
+.success-story-slick .slick-dots li,
+.success-story-slick .slick-dots li button{
+    width: 6px;
+    height: 6px;
+}
+.success-story-slick .slick-dots li.slick-active button{
+    opacity: 1;
+}
+/*---------- End Success Story Dots ----------*/
+
+/*---------- Our History Arrow ----------*/
+.our-history-slick .slick-prev,
+.our-history-slick .slick-next{
+    left: 50%;
+    transform: rotate(90deg) translateY(50%);
+}
+.our-history-slick .slick-prev{
+    top: 0;
+}
+.our-history-slick .slick-next{
+    top: 100%;
+}
+.our-history-slick .slick-prev:before,
+.our-history-slick .slick-next:before{
+    color: #000;
+}
+/*---------- End Our History Arrow ----------*/
+
+/*
+|--------------------------------------------------------------------------
+| End Slick Styling
+|--------------------------------------------------------------------------
+*/
+
+/*
+|--------------------------------------------------------------------------
+| Inputs & Buttons Styling
+|--------------------------------------------------------------------------
+*/
+
+/*---------- Button Custom ----------*/
+.btn-custom{
+    font-size: 0.8rem;
+    border: 1px solid var(--color-primary);
+    border-radius: 6px;
+    padding: 0.6rem 2rem;
+    transition: all .3s;
+}
+.btn-custom:hover{
+    color: #fff !important;
+    background: var(--color-primary);
+}
+
+.btn-custom.btn-filled{
+    color: #fff;
+    background: var(--color-primary);
+}
+.btn-custom.btn-filled:hover{
+    color: var(--color-primary) !important;
+    background: #fff;
+    border-color: var(--color-primary);
+}
+
+.btn-custom.btn-filled-grey{
+    color: #fff;
+    background: var(--color-secondary);
+    border-color: var(--color-secondary);
+}
+.btn-custom.btn-filled-grey:hover{
+    color: var(--color-secondary) !important;
+    background: #fff;
+    border-color: var(--color-secondary);
+}
+
+.btn-custom.btn-white{
+    color: #000 !important;
+    background: #fff !important;
+}
+.btn-custom.btn-white:hover{
+    opacity: 0.75;
+}
+/*---------- End Button Custom ----------*/
+
+/*---------- Input Custom ----------*/
+.form-group {
+    position: relative;
+}
+.form-group img{
+    position: absolute;
+    width: auto;
+    height: 15px;
+    top: 50%;
+    right: 15px;
+    transform: translateY(-50%);
+}
+
+.form-control:focus{
+    box-shadow: none !important;
+    border-color: inherit;
+}
+
+.form-custom{
+    height: 50px;
+    border: none;
+    font-size: 13px;
+    padding: .375rem 2.5rem 0.375rem 1.75rem;
+}
+.form-custom.input-height-45{
+    height: 45px;
+}
+.form-custom::-webkit-input-placeholder {
+  color: #787878;
+  font-size: 13px;
+}
+.form-custom::-moz-placeholder {
+  color: #787878;
+  font-size: 13px;
+}
+.form-custom:-ms-input-placeholder {
+  color: #787878;
+  font-size: 13px;
+}
+.form-custom:-moz-placeholder {
+  color: #787878;
+  font-size: 13px;
+}
+textarea{
+    resize: none;
+    height: 200px !important;
+}
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button{
+  -webkit-appearance: none;
+}
+
+/**********/
+.like-input{
+    min-height: 50px;
+    height: auto;
+    line-height: calc(48px - 0.75em);
+    border: none;
+    border-radius: 0;
+    padding: .375rem 1rem .375rem 1.75rem;
+    border-radius: .25rem;
+    overflow: hidden;
+}
+/*---------- End Input Custom ----------*/
+
+/*---------- Select Custom ----------*/
+.custom-select-wrapper {
+    position: relative;
+}
+.custom-select-wrapper input[readonly]{
+    background: #fff;
+    cursor: pointer;
+}
+.custom-select-wrapper ul {
+    display: none;
+    list-style: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    max-height: 200px;
+    background: #eee;
+    padding: 0;
+    overflow: auto;
+    z-index: 1;
+}
+.custom-select-wrapper ul li {
+    padding: 10px 15px;
+    border-bottom: 1px solid #e7e7e7;
+    cursor: pointer;
+    transition: .3s all;
+}
+.custom-select-wrapper ul li:last-child {
+    border-bottom: none;
+}
+.custom-select-wrapper ul li:hover {
+    opacity: 0.5;
+}
+.custom-select-wrapper svg {
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    top: 50%;
+    right: 15px;
+    background: #E8E8E8;
+    border-radius: 100%;
+    padding: 3px;
+    transform: translateY(-50%) rotate(0deg);
+    transition: .5s all;
+}
+.custom-select-wrapper ul.d-block + svg {
+    transform: translateY(-50%) rotate(180deg);
+}
+/*---------- End Select Custom ----------*/
+
+/*---------- Type File Custom ----------*/
+.inputfile {
+    display: none;
+}
+.inputfile + label {
+    width: 100%;
+    height: 50px;
+    line-height: calc(50px - 0.75rem);
+    border: none;
+    font-size: 13px;
+    padding: .375rem 2.5rem 0.375rem 1.75rem;
+    background: #fff;
+    border-radius: .25rem;
+}
+.inputfile + label * {
+    pointer-events: none;
+}
+/*---------- End Type File Custom ----------*/
+
+/*---------- Checkbox Custom ----------*/
+.switch {
+    position: relative;
+    width: 40px;
+    height: 10px;
+}
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #E4E4E5;
+    transform: translateY(16px);
+}
+.slider:before {
+    content: "";
+    position: absolute;
+    height: 25px;
+    width: 25px;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+    background-color: var(--color-primary);
+    -webkit-transition: all .4s;
+    transition: all .4s;
+}
+input:checked + .slider:before {
+    transform: translateY(-50%) translateX(-15px);
+}
+.slider.round {
+    border-radius: 34px;
+}
+.slider.round:before {
+    border-radius: 50%;
+}
+/*---------- End Checkbox Custom ----------*/
+
+/*
+|--------------------------------------------------------------------------
+| End Inputs & Buttons Styling
+|--------------------------------------------------------------------------
+*/
+
+/*
+|--------------------------------------------------------------------------
+| Responsiveness Media Queries
+|--------------------------------------------------------------------------
+*/
+
+
+@media (min-width: 1200px) {
+
+
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+
+    .our-history-slider .info{
+        width: auto;
+    }
+
+}
+
+@media (max-width: 991px) {
+
+    nav .navbar-brand {
+        width: 125px;
+    }
+    .navbar-toggler{
+        background: var(--color-secondary);
+        transition: all .3s;
+    }
+    .navbar-toggler span{
+        position: relative;
+        display: block;
+        background: #fff;
+        width: 25px;
+        height: 2px;
+        margin: 5px 0;
+        transition: all .3s;
+    }
+    .navbar-toggler[aria-expanded="true"] span:nth-child(1){
+        transform: rotate(45deg);
+        top: 6.6px;
+    }
+    .navbar-toggler[aria-expanded="true"] span:nth-child(2){
+        background: transparent !important;
+    }
+    .navbar-toggler[aria-expanded="true"] span:nth-child(3){
+        transform: rotate(-45deg);
+        top: -6.6px;
+    }
+
+}
+
+@media (max-width: 767px) {
+
+    .custom-slider .info{
+        width: 100%;
+        right: auto;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        padding: 0 15px;
+    }
+
+    .our-history-slider > div,
+    .our-history-slider .info{
+        width: 100%;
+    }
+    .our-history-slider:nth-child(odd) > div {
+        padding-right: 0;
+    }
+    .our-history-slider:nth-child(even) > div {
+        padding-left: 0;
+    }
+    .our-history-slider .picture{
+        position: relative !important;
+        transform: translateX(0) !important;
+        margin-bottom: 15px;
+    }
+    .our-history-slider:nth-child(odd) .picture{
+        margin-left: auto;
+    }
+
+    #map{
+        height: 500px;
+    }
+
+}
+
+/*
+|--------------------------------------------------------------------------
+| End Responsiveness Media Queries
+|--------------------------------------------------------------------------
+*/
