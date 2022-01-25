@@ -22,7 +22,7 @@ class FAQ extends Model
 {
     protected $table = 'faq';
     protected $guarded = [];
-    protected $hidden = ['updated_at','created_at','question_en','question_ar','answer_en','answer_ar','item_order'];
+    protected $hidden = ['updated_at','created_at','question_en','question_ar','answer_en','answer_ar','item_order','is_published'];
     protected $appends = ['question','answer'];
 
     public function getQuestionAttribute(){

@@ -35,7 +35,7 @@ class Users extends Model
         'code','created_at','pin','registration','unread_memos_count','profile_type_id','employee_id','total_points','blood_type',
         'device_name','browser_name','browser_version','platform_name','platform_version','is_mobile','is_tablet','is_desktop','user_agent','ip',
     'snapchat_username','instagram_username','facebook_username','registration_number','company_name','coupon_amount','coupon_type','coupon_id',
-        'profile_registration','profile_pin','profile_verified_at','deleted_at'];
+        'profile_registration','profile_pin','profile_verified_at','deleted_at','cart_restaurant_id','cart_supplier_id'];
 
     protected $casts = [
         'is_new_user' => 'boolean',

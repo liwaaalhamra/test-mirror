@@ -77,12 +77,21 @@ class ProfileController extends Controller
         $new_phone_number = null;
         $new_country_code = null;
         $country_id = null;
+        $access_type = null;
         if (Input::has('first_name')) {
             $first_name = $request->first_name;
         }
 
         if (Input::has('last_name')) {
             $last_name = $request->last_name;
+        }
+
+        if (Input::has('access_type')) {
+            $access_type = $request->access_type;
+            $access_possible_values = ['company','individual'];
+            if(!in_array($access_type,$access_possible_values)){
+                return parent::return_error("Access Wrong Value", 402, 'messages.invalid_parameters');
+            }
         }
 
         $gender = isset($request->gender) && !empty($request->gender) ? $request->gender : null;
@@ -103,6 +112,7 @@ class ProfileController extends Controller
                 return parent::return_error("Gender Wrong Value", 402, 'messages.invalid_parameters');
             }
         }
+
         if($user->account_type == 'email'){
             $email = $user->email;
             if(isset($request->country_code) && isset($request->phone_number)){
@@ -178,6 +188,7 @@ class ProfileController extends Controller
         $user->country_code = $new_country_code;
         $user->email = $email;
         $user->dob = $dob;
+        $user->access_type = $access_type;
         $user->gender = $gender;
 //        $user->registration_number = $registration_number;
 //        $user->company_name = $company_name;
