@@ -112,15 +112,24 @@ Route::group(['prefix' => 'supplier'],function () {
 /**
  * Items Routes
  */
-Route::group(['prefix' => 'items'],function () {
-    Route::post('', 'ItemsController@items');
-    Route::post('pagination', 'ItemsController@items_with_pagination');
-    Route::get('sizes', 'ItemsController@sizes');
-    Route::post('gifts', 'ItemsController@gifts');
-    Route::post('single', 'ItemsController@single_item');
-    Route::post('reserve_table', 'ItemsController@reserve_table');
-    Route::post('review', 'ItemsController@review');
-    Route::post('review/action', 'ItemsController@review_action');
+Route::group(['prefix' => 'products/items'],function () {
+    Route::post('', 'ItemsController@product_items');
+    Route::post('pagination', 'ItemsController@product_items_with_pagination');
+    Route::post('single', 'ItemsController@single_product_item');
+
+    /**
+     * Favorites Routes
+     */
+    Route::group(['prefix' => 'favorites'],function () {
+        Route::post('/', 'ItemsController@favorites');
+        Route::post('/action', 'ItemsController@favorites_action');
+    });
+});
+Route::group(['prefix' => 'services/items'],function () {
+    Route::post('', 'ItemsController@service_items');
+    Route::post('pagination', 'ItemsController@service_items_with_pagination');
+    Route::post('single', 'ItemsController@single_service_item');
+
     /**
      * Favorites Routes
      */
@@ -137,6 +146,8 @@ Route::group(['prefix' => 'items'],function () {
 Route::post('/products', 'ItemsController@products');
 Route::post('/services', 'ItemsController@services');
 Route::post('/category_subs', 'ItemsController@category_subs');
+Route::post('/filters', 'ItemsController@filters');
+Route::post('/custom_fields', 'ItemsController@custom_fields');
 
 Route::get('/cuisines', 'ItemsController@cuisines');
 Route::get('/review_tags', 'ItemsController@review_tags');

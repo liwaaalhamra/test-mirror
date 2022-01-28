@@ -22,12 +22,14 @@ class Item extends Model
 
     protected $table = "items";
     protected $guarded = [];
-    protected $hidden = ['updated_at','deleted_at','pivot','item_order','meta_name','is_available',
-        'name_en','name_ar','description_en','description_ar',
+    protected $hidden = ['updated_at','deleted_at','pivot','item_order','meta_name','is_available','location_id',
+        'name_en','name_ar','description_en','description_ar','pdf','share_link','country_id','latitude','longitude','address','country_code','phone_number'
     ];
     protected $casts = [
         'is_available' => 'boolean',
+        'is_sale' => 'boolean',
     ];
+    protected $with = ['location'];
     protected $appends = ['name','description','discount_amount','currency','price_formatted','discounted_price_formatted','discount_amount_formatted','barcode'];
 
     protected function getCurrencyAttribute(){
@@ -67,6 +69,11 @@ class Item extends Model
         return $value == null ? null : \Carbon\Carbon::parse($value)->getTimestamp();
     }
 
+    public function getDeliveryTimeAttribute($value)
+    {
+        return $value == null ? null : \Carbon\Carbon::parse($value)->getTimestamp();
+    }
+
     public function sub_category(){
         return $this->belongsTo(SubCategory::class,'sub_category_id');
     }
@@ -76,6 +83,10 @@ class Item extends Model
 
     public function category(){
         return $this->belongsTo(Category::class,'category_id');
+    }
+
+    public function location(){
+        return $this->belongsTo(Location::class,'location_id');
     }
 
     protected static function boot()
