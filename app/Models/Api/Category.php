@@ -22,7 +22,7 @@ class Category extends Model
 {
     protected $table = 'categories';
     protected $guarded = [];
-    protected $hidden = ['created_at','updated_at','item_order','name_en','name_ar'];
+    protected $hidden = ['created_at','updated_at','item_order','name_en','name_ar','type','is_published'];
     protected $appends = ['name'];
 
     public function getNameAttribute(){
@@ -45,5 +45,9 @@ class Category extends Model
 
     public function sub_categories(){
         return $this->hasMany(SubCategory::class,'category_id','id');
+    }
+
+    public function items(){
+        return $this->hasMany(Item::class,'category_id','id')->whereIsAvailable(1)->orderby('item_order','asc');
     }
 }

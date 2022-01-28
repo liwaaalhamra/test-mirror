@@ -24,18 +24,18 @@ class SubCategory extends Model
     protected $table = 'sub_categories';
     protected $guarded = [];
     protected $hidden = ['created_at','updated_at','item_order','category_id','name_en','name_ar','is_published','subtitle_en','subtitle_ar','category_type'];
-    protected $appends = ['name','subtitle'];
-    protected $with = ['items'];
+    protected $appends = ['name'];
+    protected $with = ['sub_sub_categories'];
 
     public function getNameAttribute(){
         $locale = App::getLocale();
         return $this->attributes['name_'.$locale];
     }
 
-    public function getSubtitleAttribute(){
-        $locale = App::getLocale();
-        return $this->attributes['subtitle_'.$locale];
-    }
+//    public function getSubtitleAttribute(){
+//        $locale = App::getLocale();
+//        return $this->attributes['subtitle_'.$locale];
+//    }
 
     public function getCreatedAtAttribute($value)
     {
@@ -46,8 +46,12 @@ class SubCategory extends Model
         return $this->hasMany(Item::class,'sub_category_id','id')->whereIsAvailable(1)->orderby('item_order','asc');
     }
 
+    public function sub_sub_categories(){
+        return $this->hasMany(SubSubCategory::class,'sub_category_id','id')->whereIsPublished(1)->orderby('item_order','asc');
+    }
+
     public function category(){
-        return $this->attributes['category_type'] == 'restaurant' ? $this->belongsTo(Restaurant::class,'category_id') : $this->belongsTo(SupplierFoodGroup::class,'category_id');
+        return $this->belongsTo(Category::class,'category_id');
     }
 
 }

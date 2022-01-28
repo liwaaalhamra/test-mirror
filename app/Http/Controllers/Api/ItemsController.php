@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 
 use App\Models\Api\Brand;
+use App\Models\Api\Category;
 use App\Models\Api\CollectionCategory;
 use App\Models\Api\CostLevel;
 use App\Models\Api\Craving;
@@ -44,58 +45,21 @@ class ItemsController extends Controller
 {
     use HITrait;
 
-    public function brands(Request $request) {
-//        $user = $this->validate_user($request);
-        $brands = Brand::get();
-        return response()->json($brands);
-    }
-
-    public function product_types(Request $request) {
-//        $user = $this->validate_user($request);
-        $product_types = ProductType::get();
-        return response()->json($product_types);
-    }
-
-    public function tags(Request $request) {
-//        $user = $this->validate_user($request);
-        $tags = Tag::whereIsPublished(1)->Orderby('item_order','asc')->get();
-        return response()->json($tags);
-    }
-
-    public function cravings(Request $request) {
-//        $user = $this->validate_user($request);
-        $cravings = Craving::whereIsPublished(1)->Orderby('item_order','asc')->get();
-        return response()->json($cravings);
-    }
-
-    public function cuisines(Request $request) {
-//        $user = $this->validate_user($request);
-        $cuisines = Cuisine::whereIsPublished(1)->Orderby('item_order','asc')->get();
-        return response()->json($cuisines);
+    public function products(Request $request) {
+        $query = Category::whereType('products')->whereIsPublished(1)->orderBy('item_order','asc');
+        if(Input::has('search')){
+            $search = Input::get('search');
+            $query->where(function($query) use ($search){
+                $query->whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])
+                    ->orwhereRaw("LOWER(name_ar) like ? ", [ "%".strtolower($search)."%"]);
+            });
+        }
+        $categories = $query->get();
+        return response()->json($categories);
     }
 
     public function services(Request $request) {
-//        $user = $this->validate_user($request);
-        $services = Service::whereIsPublished(1)->Orderby('item_order','asc')->get();
-        return response()->json($services);
-    }
-
-    public function review_tags(Request $request) {
-//        $user = $this->validate_user($request);
-        $list = [];
-        $list['like_tags'] = ReviewTag::whereType('like')->whereIsPublished(1)->Orderby('item_order','asc')->get();
-        $list['dislike_tags'] = ReviewTag::whereType('dislike')->whereIsPublished(1)->Orderby('item_order','asc')->get();
-        return response()->json($list);
-    }
-
-    public function cost_levels(Request $request) {
-//        $user = $this->validate_user($request);
-        $levels = CostLevel::Orderby('amount','asc')->pluck('amount');
-        return response()->json($levels);
-    }
-
-    public function categories(Request $request) {
-        $query = CollectionCategory::whereIsPublished(1)->orderBy('item_order','asc');
+        $query = Category::whereType('services')->whereIsPublished(1)->orderBy('item_order','asc');
         if(Input::has('search')){
             $search = Input::get('search');
             $query->where(function($query) use ($search){
@@ -126,17 +90,8 @@ class ItemsController extends Controller
         return response()->json($reviews);
     }
 
-    public function collections(Request $request) {
-        $query = CuratedCollection::whereIsPublished(1)->orderBy('item_order','asc');
-        if(Input::has('search')){
-            $search = Input::get('search');
-            $query->where(function($query) use ($search){
-                $query->whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])
-                    ->orwhereRaw("LOWER(name_ar) like ? ", [ "%".strtolower($search)."%"])
-                    ->orwhereRaw("LOWER(description_en) like ? ", [ "%".strtolower($search)."%"])
-                    ->orwhereRaw("LOWER(description_ar) like ? ", [ "%".strtolower($search)."%"]);
-            });
-        }
+    public function category_subs(Request $request) {
+        $query = SubCategory::whereIsPublished(1)->orderBy('item_order','asc');
         if(Input::has('category_id')){
             $category_id = Input::get('category_id');
             $query->where(function($query) use ($category_id){

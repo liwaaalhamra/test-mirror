@@ -23,14 +23,12 @@ class Item extends Model
     protected $table = "items";
     protected $guarded = [];
     protected $hidden = ['updated_at','deleted_at','pivot','item_order','meta_name','is_available',
-        'is_gift','sub_category_id','name_en','name_ar','description_en','description_ar',
-        'category_id','brand_id','product_type_id','item_size_id','supplier_food_group_id'];
+        'name_en','name_ar','description_en','description_ar',
+    ];
     protected $casts = [
         'is_available' => 'boolean',
     ];
-    protected $appends = ['name','description','discount_amount','currency','price_formatted','discounted_price_formatted','discount_amount_formatted'];
-
-    protected $with = ['customizations'];
+    protected $appends = ['name','description','discount_amount','currency','price_formatted','discounted_price_formatted','discount_amount_formatted','barcode'];
 
     protected function getCurrencyAttribute(){
         return env('APP_CURRENCY');
@@ -69,29 +67,15 @@ class Item extends Model
         return $value == null ? null : \Carbon\Carbon::parse($value)->getTimestamp();
     }
 
-    public function getExpiryDateAttribute($value)
-    {
-        return $value == null ? null : \Carbon\Carbon::parse($value)->getTimestamp();
-    }
-    public function setExpiryDateAttribute($item_datetime)
-    {
-        $this->attributes['expiry_date'] = $item_datetime == null ? null : Carbon::createFromTimestamp($item_datetime)->format('Y-m-d H:i:s');
-    }
-
     public function sub_category(){
         return $this->belongsTo(SubCategory::class,'sub_category_id');
     }
-
-    public function supplier_food_group(){
-        return $this->belongsTo(SupplierFoodGroup::class,'supplier_food_group_id');
+    public function sub_sub_category(){
+        return $this->belongsTo(SubSubCategory::class,'sub_sub_category_id');
     }
 
-    public function restaurant(){
-        return $this->belongsTo(Restaurant::class,'category_id');
-    }
-
-    public function customizations(){
-        return $this->hasMany(ItemCustomization::class,'item_id','id')->whereIsPublished(1)->orderby('item_order');
+    public function category(){
+        return $this->belongsTo(Category::class,'category_id');
     }
 
     protected static function boot()
@@ -105,15 +89,36 @@ class Item extends Model
     }
 
     public function generateCode(){
-        $this->attributes['code'] = Controller::number_generator(6);
+        $this->attributes['code'] = '113228'.Controller::number_generator(9);
     }
 
     public function getImageAttribute($value){
-       return ($value == null) ? null : secure_url('public/uploads/images/items/'.$value);
+        return ($value == null) ? null : secure_url('public/uploads/images/items/'.$value);
     }
 
     public function getMediaName(){
         return $this->attributes['image'];
+    }
+
+    public function getPdfAttribute($value){
+        return ($value == null) ? null : secure_url('public/uploads/documents/items/'.$value);
+    }
+
+    public function getPdfName(){
+        return $this->attributes['pdf'];
+    }
+
+    public function images(){
+        return $this->hasMany(Media::class,'meta_id','id')->where('meta_name','items')->where('media_type','images');
+    }
+
+    public function getBarcodeAttribute()
+    {
+        return secure_url('barcode.php?f=png&s=code-128&sf=1&sy=0.5&sx=2&ts=4&th=20&p=20&pt=2&pr=0&pl=0&d='.$this->attributes['code']);
+    }
+
+    public function getBarcodeValue(){
+        return $this->attributes['code'];
     }
 
 }

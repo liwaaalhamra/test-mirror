@@ -134,7 +134,10 @@ Route::group(['prefix' => 'items'],function () {
  * Categories Route
  */
 
-Route::post('/categories', 'ItemsController@categories');
+Route::post('/products', 'ItemsController@products');
+Route::post('/services', 'ItemsController@services');
+Route::post('/category_subs', 'ItemsController@category_subs');
+
 Route::get('/cuisines', 'ItemsController@cuisines');
 Route::get('/review_tags', 'ItemsController@review_tags');
 Route::get('/cost_levels', 'ItemsController@cost_levels');
