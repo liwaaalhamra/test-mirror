@@ -338,6 +338,32 @@ class Controller extends BaseController
         } // if function exists
     }
 
+    protected function cast_field_value($value,$type){
+        $new_value = null;
+        switch ($type)
+        {
+            case $type == 'integer':
+                $new_value = intval($value);
+                break;
+            case $type == 'list':
+                $new_value = intval($value);
+                break;
+            case $type == 'boolean':
+                $new_value = (Boolean) $value;
+                break;
+            case $type == 'string':
+                $new_value = strval($value);
+                break;
+            case $type == 'double':
+                $new_value = floatval($value);
+                break;
+            default:
+                $new_value = intval($value);
+                break;
+        }
+        return $new_value;
+    }
+
     function distance($lat1, $lon1, $lat2, $lon2, $unit = 'K') {
 
         $theta = $lon1 - $lon2;

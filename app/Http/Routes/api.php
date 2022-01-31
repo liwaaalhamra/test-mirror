@@ -115,7 +115,7 @@ Route::group(['prefix' => 'supplier'],function () {
 Route::group(['prefix' => 'products/items'],function () {
     Route::post('', 'ItemsController@product_items');
     Route::post('pagination', 'ItemsController@product_items_with_pagination');
-    Route::post('single', 'ItemsController@single_product_item');
+    Route::post('single', 'ItemsController@product_single_item');
 
     /**
      * Favorites Routes
@@ -128,7 +128,7 @@ Route::group(['prefix' => 'products/items'],function () {
 Route::group(['prefix' => 'services/items'],function () {
     Route::post('', 'ItemsController@service_items');
     Route::post('pagination', 'ItemsController@service_items_with_pagination');
-    Route::post('single', 'ItemsController@single_service_item');
+    Route::post('single', 'ItemsController@service_single_item');
 
     /**
      * Favorites Routes
@@ -140,7 +140,7 @@ Route::group(['prefix' => 'services/items'],function () {
 });
 
 /**
- * Categories Route
+ * Categories Routes
  */
 
 Route::post('/products', 'ItemsController@products');
@@ -149,14 +149,13 @@ Route::post('/category_subs', 'ItemsController@category_subs');
 Route::post('/filters', 'ItemsController@filters');
 Route::post('/custom_fields', 'ItemsController@custom_fields');
 
-Route::get('/cuisines', 'ItemsController@cuisines');
-Route::get('/review_tags', 'ItemsController@review_tags');
-Route::get('/cost_levels', 'ItemsController@cost_levels');
-Route::post('/collections', 'ItemsController@collections');
-Route::get('/tags', 'ItemsController@tags');
-Route::get('/services', 'ItemsController@services');
-Route::get('/cravings', 'ItemsController@cravings');
-Route::get('/product_types', 'ItemsController@product_types');
+Route::get('/conditions', 'ItemsController@conditions');
+Route::get('/fuel_types', 'ItemsController@fuel_types');
+Route::get('/body_types', 'ItemsController@body_types');
+Route::get('/transmission_types', 'ItemsController@transmission_types');
+Route::get('/door_types', 'ItemsController@door_types');
+Route::get('/colors', 'ItemsController@colors');
+Route::get('/rent_periods', 'ItemsController@rent_periods');
 
 /**
  * Location Routes

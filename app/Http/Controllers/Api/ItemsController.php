@@ -3,17 +3,24 @@
 namespace App\Http\Controllers\Api;
 
 
+use App\Models\Api\BodyType;
 use App\Models\Api\Brand;
 use App\Models\Api\Category;
 use App\Models\Api\CollectionCategory;
+use App\Models\Api\Color;
+use App\Models\Api\Condition;
 use App\Models\Api\CostLevel;
 use App\Models\Api\Craving;
 use App\Models\Api\Cuisine;
 use App\Models\Api\CuratedCollection;
 use App\Models\Api\CustomField;
+use App\Models\Api\DoorType;
+use App\Models\Api\FuelType;
 use App\Models\Api\Inbox;
 use App\Models\Api\Item;
+use App\Models\Api\ItemCustomField;
 use App\Models\Api\PackageItem;
+use App\Models\Api\RentPeriod;
 use App\Models\Api\Restaurant;
 use App\Models\Api\ProductType;
 use App\Models\Api\RestaurantEventType;
@@ -23,6 +30,7 @@ use App\Models\Api\SubCategory;
 use App\Models\Api\SupplierFoodGroup;
 use App\Models\Api\SupplierSubCategory;
 use App\Models\Api\Tag;
+use App\Models\Api\TransmissionType;
 use App\Models\Api\UserFavorite;
 use App\Models\Api\UserPush;
 use App\Models\Api\UserRating;
@@ -45,6 +53,35 @@ use Propaganistas\LaravelPhone\PhoneNumber;
 class ItemsController extends Controller
 {
     use HITrait;
+
+    public function conditions(Request $request){
+        $data = Condition::get();
+        return response()->json($data);
+    }
+    public function fuel_types(Request $request){
+        $data = FuelType::get();
+        return response()->json($data);
+    }
+    public function body_types(Request $request){
+        $data = BodyType::get();
+        return response()->json($data);
+    }
+    public function transmission_types(Request $request){
+        $data = TransmissionType::get();
+        return response()->json($data);
+    }
+    public function door_types(Request $request){
+        $data = DoorType::get();
+        return response()->json($data);
+    }
+    public function colors(Request $request){
+        $data = Color::get();
+        return response()->json($data);
+    }
+    public function rent_periods(Request $request){
+        $data = RentPeriod::get();
+        return response()->json($data);
+    }
 
     public function products(Request $request) {
         $query = Category::whereType('products')->whereIsPublished(1)->orderBy('item_order','asc');
@@ -129,23 +166,21 @@ class ItemsController extends Controller
         $query->when($sub_sub_category_id, function ($query) use ($sub_sub_category_id) {
             $query->whereSubSubCategoryId($sub_sub_category_id);
         });
-
-        $items = $query->orderby('item_order','asc')->get()->map(function ($value, $key) {
+        $currency = env('APP_CURRENCY');
+        $items = $query->orderby('item_order','asc')->get()->map(function ($value, $key) use ($currency) {
             unset($value->quantity);
-            unset($value->delivery_time);
-            unset($value->delivery_time_unit);
-            unset($value->delivery_time_value);
-            $value->custom_fields = CustomField::whereCategoryId($value->category_id)->whereSubCategoryId($value->sub_category_id)->get();
+            $value->currency = $currency;
+            $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
+            $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
+            $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
+//            $value->custom_fields = CustomField::whereCategoryId($value->category_id)->whereSubCategoryId($value->sub_category_id)->get();
             return $value;
         })->values();;
         $user = null;
         if($request->header('token')){
 //            $user = $this->validate_user($request);
         }
-        $currency = env('APP_CURRENCY');
-        foreach ($items as $item){
 
-        }
         return response()->json($items);
     }
 
@@ -173,21 +208,20 @@ class ItemsController extends Controller
         $query->when($sub_sub_category_id, function ($query) use ($sub_sub_category_id) {
             $query->whereSubSubCategoryId($sub_sub_category_id);
         });
-
-        $items = $query->orderby('item_order','asc')->get()->map(function ($value, $key) {
-            unset($value->is_sale);
-            unset($value->rent_period);
-            $value->custom_fields = CustomField::whereCategoryId($value->category_id)->whereSubCategoryId($value->sub_category_id)->get();
+        $currency = env('APP_CURRENCY');
+        $items = $query->orderby('item_order','asc')->get()->map(function ($value, $key) use ($currency) {
+//            $value->custom_fields = CustomField::whereCategoryId($value->category_id)->whereSubCategoryId($value->sub_category_id)->get();
+            $value->currency = $currency;
+            $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
+            $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
+            $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
             return $value;
         })->values();;
         $user = null;
         if($request->header('token')){
 //            $user = $this->validate_user($request);
         }
-        $currency = env('APP_CURRENCY');
-        foreach ($items as $item){
 
-        }
         return response()->json($items);
     }
 
@@ -208,7 +242,7 @@ class ItemsController extends Controller
             $query->whereSubSubCategoryId($sub_sub_category_id);
         });
 
-        $filters = $query->get();
+        $filters = $query->orderby('item_order','asc')->get();
 
         return response()->json($filters);
     }
@@ -231,63 +265,12 @@ class ItemsController extends Controller
             $query->whereSubSubCategoryId($sub_sub_category_id);
         });
 
-        $filters = $query->get();
+        $filters = $query->orderby('item_order','asc')->get();
 
         return response()->json($filters);
     }
 
-    public function supplier_items_with_pagination(Request $request) {
-        $query = Item::whereIsAvailable(1);
-        if(Input::has('search')){
-            $search = Input::get('search');
-            $query->where(function($query) use ($search){
-                $query->whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])
-                    ->orwhereRaw("LOWER(name_ar) like ? ", [ "%".strtolower($search)."%"])
-                    ->orwhereRaw("LOWER(description_en) like ? ", [ "%".strtolower($search)."%"])
-                    ->orwhereRaw("LOWER(description_ar) like ? ", [ "%".strtolower($search)."%"]);
-            });
-        }
-
-        if(!Input::has('food_group_id')){
-            return parent::return_error('Missing Food Group ID',401,'messages.missing_parameter');
-        }
-        if(!$food_group = SupplierFoodGroup::whereIsPublished(1)->whereId($request->food_group_id)->first()){
-            return parent::return_error("Invalid Food Group", 402, 'messages.invalid_parameters');
-        }
-        $food_group_id = Input::get('food_group_id');
-        $query->where(function($query) use ($food_group_id){
-            $query->whereSupplierFoodGroupId($food_group_id);
-        });
-
-        $user = null;
-        if($request->header('token')){
-            $user = $this->validate_user($request);
-        }
-        $items = $query->orderby('item_order','asc')->paginate(20);
-        $currency = env('APP_CURRENCY');
-        foreach ($items as $item){
-            $item->out_of_stock = false;
-            if ($item->quantity < 1) {
-                $item->out_of_stock = true;
-            }
-            if($user){
-                $currency = env('APP_CURRENCY');
-                if($package_item = PackageItem::whereNull('order_id')->whereItemId($item->id)->whereUserId($user->id)->first()) {
-                    if ($item->quantity <= $package_item->quantity) {
-                        $item->out_of_stock = true;
-                    }
-                }
-            }
-            $item->currency = $currency;
-            $item->price_formatted = number_format($item->price,0) . ' ' . $currency;
-            $item->discounted_price_formatted = $item->discounted_price ? number_format($item->discounted_price,0) . ' ' . $currency : null;
-            $item->discount_amount_formatted = $item->discount_amount ? number_format($item->discount_amount,0) . ' ' . $currency : null;
-
-        }
-        return response()->json($items);
-    }
-
-    public function supplier_single_item(Request $request) {
+    public function product_single_item(Request $request) {
         if(!Input::has('item_id')){
             return parent::return_error('Missing Item ID',401,'messages.missing_parameter');
         }
@@ -297,14 +280,53 @@ class ItemsController extends Controller
         $currency = env('APP_CURRENCY');
         $user = null;
         if($request->header('token')){
-            $user = $this->validate_user($request);
-            $currency = env('APP_CURRENCY');
+//            $user = $this->validate_user($request);
         }
         $item->currency = $currency;
         $item->price_formatted = number_format($item->price,3) . ' ' . $currency;
         $item->discounted_price_formatted = $item->discounted_price ? number_format($item->discounted_price,3) . ' ' . $currency : null;
         $item->discount_amount_formatted = $item->discount_amount ? number_format($item->discount_amount,3) . ' ' . $currency : null;
+        unset($item->quantity);
+        $item->custom_fields = CustomField::whereCategoryId($item->category_id)->whereSubCategoryId($item->sub_category_id)->get()->map(function ($value, $key) use ($item) {
+            $custom_field_value = ItemCustomField::whereFieldName($value->field_name)->whereItemId($item->id)->whereCustomFieldId($value->id)->first();
+            $value->field_value = $custom_field_value ? $this->cast_field_value($custom_field_value->field_value, $value->field_type) : null;
+            $custom_extra_field_value = null;
+            if($value->has_extra_field){
+                $custom_extra_field_value = ItemCustomField::whereExtraFieldName($value->extra_field_name)->whereItemId($item->id)->whereCustomFieldId($value->id)->first();
+            }
+            $value->extra_field_value = $custom_extra_field_value ? $this->cast_field_value($custom_extra_field_value->extra_field_value, $value->extra_field_type) : null;
+            return $value;
+        })->values();
+        return response()->json($item);
+    }
 
+    public function service_single_item(Request $request) {
+        if(!Input::has('item_id')){
+            return parent::return_error('Missing Item ID',401,'messages.missing_parameter');
+        }
+        if(!$item = Item::whereIsAvailable(1)->whereId($request->item_id)->first()){
+            return parent::return_error("Invalid Item", 402, 'messages.invalid_parameters');
+        }
+        $currency = env('APP_CURRENCY');
+        $user = null;
+        if($request->header('token')){
+//            $user = $this->validate_user($request);
+        }
+        $item->currency = $currency;
+        $item->price_formatted = number_format($item->price,3) . ' ' . $currency;
+        $item->discounted_price_formatted = $item->discounted_price ? number_format($item->discounted_price,3) . ' ' . $currency : null;
+        $item->discount_amount_formatted = $item->discount_amount ? number_format($item->discount_amount,3) . ' ' . $currency : null;
+        unset($item->quantity);
+        $item->custom_fields = CustomField::whereCategoryId($item->category_id)->whereSubCategoryId($item->sub_category_id)->get()->map(function ($value, $key) use ($item) {
+            $custom_field_value = ItemCustomField::whereFieldName($value->field_name)->whereItemId($item->id)->whereCustomFieldId($value->id)->first();
+            $value->field_value = $custom_field_value ? $this->cast_field_value($custom_field_value->field_value, $value->field_type) : null;
+            $custom_extra_field_value = null;
+            if($value->has_extra_field){
+                $custom_extra_field_value = ItemCustomField::whereExtraFieldName($value->extra_field_name)->whereItemId($item->id)->whereCustomFieldId($value->id)->first();
+            }
+            $value->extra_field_value = $custom_extra_field_value ? $this->cast_field_value($custom_extra_field_value->extra_field_value, $value->extra_field_type) : null;
+            return $value;
+        })->values();
         return response()->json($item);
     }
 
