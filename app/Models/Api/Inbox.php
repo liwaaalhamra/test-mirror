@@ -36,6 +36,9 @@ class Inbox extends Model
         return \Carbon\Carbon::parse($value)->getTimestamp();
     }
 
+    public function push_read(){
+        return $this->hasMany(UserInbox::class,'inbox_id','id');
+    }
 
     public function user(){
         if($this->attributes['user_type'] == 'restaurant'){
