@@ -144,7 +144,7 @@ Route::group(['prefix' => 'services/items'],function () {
  */
 Route::group(['prefix' => 'chat'],function () {
     Route::get('/friends', 'ChatController@friends');
-    Route::get('/conversations', 'ChatController@conversations');
+    Route::post('/conversations', 'ChatController@conversations');
     Route::post('/messages', 'ChatController@messages');
     Route::post('/send_message', 'ChatController@send');
 });
