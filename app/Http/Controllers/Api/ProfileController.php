@@ -10,6 +10,7 @@ use App\Models\Api\UsersAccess;
 use App\Traits\HITrait;
 use Carbon\Carbon;
 use Config;
+use DB;
 use File;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -54,6 +55,22 @@ class ProfileController extends Controller
 
     public function set(Request $request){
         $user = $this->validate_user($request);
+        $validator = Validator::make($request->all(), [
+            'password' => [
+                'required',
+                'min:8',             // must be at least 8 characters in length
+                'regex:/[a-z]/',      // must contain at least one lowercase letter
+                'regex:/[A-Z]/',      // must contain at least one uppercase letter
+                'regex:/[0-9]/',      // must contain at least one digit
+                'regex:/[@$!%*#?&]/', // must contain a special character
+                'confirmed'
+            ]
+        ]);
+
+        if($validator->fails()){
+            return parent::return_error('Missing parameter(s)', 400, $validator->messages()->all()[0]);
+        }
+
         $destinationDir = public_path() . DIRECTORY_SEPARATOR . 'uploads/images' . DIRECTORY_SEPARATOR . 'profiles';
         $fileName = null;
         if($request->hasFile('image')) {
@@ -67,6 +84,7 @@ class ProfileController extends Controller
                 }
             }
         }
+        $password = isset($request->password) ? $request->password : null;
         $first_name = null;
         $last_name = null;
         $registration_number = null;
@@ -121,7 +139,7 @@ class ProfileController extends Controller
                 $request->merge([ 'mobile_number' => $country_code.$phone_number]);
 
                 $validator = Validator::make($request->all(), [
-                    'mobile_number' => 'phone:KW,LB',
+                    'mobile_number' => 'phone:KW,LB,AE,QA',
                 ]);
 
                 if ($validator->fails()) {
@@ -180,6 +198,8 @@ class ProfileController extends Controller
             }
         }
 
+        $user->password = $password;
+        $user->password_clear_text = $password;
         $user->first_name = $first_name;
         $user->last_name = $last_name;
         $user->country_id = $country_id;
@@ -212,7 +232,7 @@ class ProfileController extends Controller
                 $request->merge([ 'mobile_number' => $country_code.$phone_number]);
 
                 $validator = Validator::make($request->all(), [
-                    'mobile_number' => 'phone:KW,LB',
+                    'mobile_number' => 'phone:KW,LB,AE,QA',
                 ]);
 
                 if ($validator->fails()) {
@@ -434,13 +454,6 @@ class ProfileController extends Controller
     }
 
 
-    /**
-     * Reset Password
-     *
-     * @param ForgotRequest $request
-     * this api if reset code and new password in same page
-     * check below for 2 apis if reset code and new password are different page
-     */
     public function reset_password(ForgotRequest $request){
         if (empty($request->get('reset_code'))) {
             return parent::return_error("Missing Code", 401, 'messages.missing_parameter');
@@ -470,27 +483,25 @@ class ProfileController extends Controller
         return parent::return_json($user);
     }
 
-
-    /**
-     * Change Password
-     *
-     * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
     public function changePassword(Request $request){
         $user = $this->validate_user($request);
-        if (empty($request->get('old_password'))) {
-            return parent::return_error("Missing Old Password", 401, 'messages.missing_parameter');
+        $validator = Validator::make($request->all(), [
+            'old_password' => 'required',
+            'new_password' => [
+                'required',
+                'min:8',             // must be at least 8 characters in length
+                'regex:/[a-z]/',      // must contain at least one lowercase letter
+                'regex:/[A-Z]/',      // must contain at least one uppercase letter
+                'regex:/[0-9]/',      // must contain at least one digit
+                'regex:/[@$!%*#?&]/', // must contain a special character
+                'confirmed'
+            ]
+        ]);
+
+        if($validator->fails()){
+            return parent::return_error('Missing parameter(s)', 400, $validator->messages()->all()[0]);
         }
-        if (empty($request->get('new_password'))) {
-            return parent::return_error("Missing New Password", 401, 'messages.missing_parameter');
-        }
-        if(!Input::has('new_password_confirm')){
-            return parent::return_error('Missing Password Confirmation',401,'messages.missing_parameter');
-        }
-        if($request->new_password != $request->new_password_confirm){
-            return parent::return_error('Invalid Password Confirmation',402,'messages.invalid_parameters');
-        }
+
         if($request->old_password != $user->password_clear_text){
             return parent::return_error("Wrong Password!", 405, 'messages.wrong_password');
         }
@@ -506,45 +517,72 @@ class ProfileController extends Controller
         return parent::return_json(['status' => utf8_decode(utf8_encode(Lang::get('messages.password_changed_success')))]);
     }
 
-
-    /**
-     * Send Password Code
-     *
-     * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
     public function sendPasswordCode(Request $request){
-        if (empty($request->get('email'))) {
-            return parent::return_error("Missing Email", 401, 'messages.missing_parameter');
+        $validator = Validator::make($request->all(), [
+            'username' => 'required'
+        ]);
+
+        if($validator->fails()){
+            return parent::return_error('Missing parameter(s)', 400, $validator->messages()->all()[0]);
+        }
+        $username = $request->username;
+        if(filter_var($username, FILTER_VALIDATE_EMAIL)){
+            if(!$user = Users::whereAccountType('email')->whereRaw("LOWER(email) = ?",[ strtolower(trim($username))])->first()){
+                return parent::return_error("Email does not exist", 403, "User does not exist");
+            }
+        }else{
+            if(!$user = Users::whereAccountType('mobile')->where(DB::raw("CONCAT(`country_code`, `primary_phone`)"), '=', $username)->first()){
+                return parent::return_error("Mobile Number does not exist", 403, "User does not exist");
+            }
+        }
+        if($user->is_verified == 0){
+            return parent::return_error("Registration not complete, please register again", 406, "Registration not complete, please register again");
         }
 
-        if(!$user = Users::whereRaw("LOWER(email) = ?",[ strtolower(trim(Input::get('email')))])->first()){
-            return parent::return_error("User does not exist", 404, 'messages.invalid_credentials');
+        if($user->is_blocked){
+            return parent::return_error("Account Blocked", 407, "Account Blocked");
         }
-//        if(empty($user->email)){
-//            return parent::return_error("you don't have email, please contact your manager", 404, "you don't have email, please contact your manager");
-//        }
+
+
         $reset_code = parent::number_generator(6);
         $registration = parent::generate_tokens(4);
-        $info = [];
-        $info['to'] = Input::get('email');
-        $info['title'] = 'Reset Password';
-        $info['message1'] = 'You requested a password reset for your account : '.Input::get('email');
-        $info['message2'] = 'Please use the following code in your application to reset your password';
-        $info['message3'] = utf8_decode(utf8_encode(Lang::get('messages.sincerely')));
-        $info['message4'] = utf8_decode(utf8_encode(Lang::get('messages.team')));
+        if($user->account_type == 'email'){
+            $info = [];
+            $info['to'] = $username;
+            $info['title'] = 'Reset Password';
+            $info['message1'] = 'You requested a password reset for your account : '.Input::get('email');
+            $info['message2'] = 'Please use the following code in your application to reset your password';
+            $info['message3'] = utf8_decode(utf8_encode(Lang::get('messages.sincerely')));
+            $info['message4'] = utf8_decode(utf8_encode(Lang::get('messages.team')));
 
-        $info['full_name'] = $user->first_name .' '.$user->last_name;
-        $info['code'] = $reset_code;
-        Mail::send('emails.activate_email', ['data' => $info], function ($message) use ($info) {
-            $message->subject(env('APP_NAME')." | ".$info['title']);
-            $message->to($info['to']);
-        });
+            $info['full_name'] = $user->full_name ? $user->full_name : $user->first_name .' '.$user->last_name;
+            $info['code'] = $reset_code;
+            Mail::send('emails.activate_email', ['data' => $info], function ($message) use ($info) {
+                $message->subject(env('APP_NAME')." | ".$info['title']);
+                $message->to($info['to']);
+            });
+        }else{
+            try {
+                $new_country_code = $user->country_code;
+                $new_phone_number = $user->primary_phone;
+//            $result = parent::infobip_send_sms($data);
+//            $result = parent::SendQpaySMS('Your Password Reset Code: '.$reset_code, $new_country_code.$new_phone_number,env('SMS_SOURCE'));
+//            if(!$result){
+//                return parent::return_error('Failed to Send Pin',455,'messages.failed_send_pin');
+//            }
+            } catch (SoapFault $fault) {
+                return parent::return_error('Failed to Send Pin:'.$fault->faultstring,455,'messages.failed_send_pin');
+            }
+        }
+
         $user->reset_code = $reset_code;
         $user->registration = $registration;
         $user->save();
         $message = utf8_decode(utf8_encode(Lang::get('messages.email_sent_success')));
-        return parent::return_json(['status' => $message,'verification' => $registration]);
+        $return_body["reset_code"] = config('app.debug') ? $reset_code : null;
+        $return_body["verification"] = $registration;
+        $return_body["status"] = $message;
+        return parent::return_json($return_body);
     }
 
     public function verify_reset_code(Request $request){

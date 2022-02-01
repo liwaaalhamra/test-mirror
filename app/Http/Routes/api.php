@@ -216,6 +216,7 @@ Route::post('rating', 'RatingController@index');
  */
 Route::post('register', 'LoginController@register');
 Route::post('resend_code', 'LoginController@resend_code');
+Route::post('login', 'LoginController@login_password');
 Route::post('login_email', 'LoginController@login_email');
 Route::post('login_mobile', 'LoginController@login_mobile');
 Route::post('login_google', 'LoginController@login_google');

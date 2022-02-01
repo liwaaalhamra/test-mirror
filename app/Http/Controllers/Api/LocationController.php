@@ -95,7 +95,7 @@ class LocationController extends Controller
                     $request->merge([ 'mobile_number' => $country_code.$mobile_number]);
 
                     $validator = Validator::make($request->all(), [
-                        'mobile_number' => 'phone:KW,LB',
+                        'mobile_number' => 'phone:KW,LB,AE,QA',
                     ]);
 
                     if ($validator->fails()) {
@@ -207,7 +207,7 @@ class LocationController extends Controller
                     $request->merge([ 'mobile_number' => $country_code.$mobile_number]);
 
                     $validator = Validator::make($request->all(), [
-                        'mobile_number' => 'phone:KW,LB',
+                        'mobile_number' => 'phone:KW,LB,AE,QA',
                     ]);
 
                     if ($validator->fails()) {

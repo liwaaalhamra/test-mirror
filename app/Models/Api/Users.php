@@ -100,13 +100,6 @@ class Users extends Model
     public function country(){
         return $this->belongsTo(Country::class,'country_id');
     }
-    public function cart_restaurant(){
-        return $this->belongsTo(Restaurant::class,'cart_restaurant_id');
-    }
-
-    public function cart_supplier(){
-        return $this->belongsTo(SupplierFoodGroup::class,'cart_supplier_id');
-    }
     public function coupon(){
         return $this->belongsTo(Coupon::class,'coupon_id');
     }

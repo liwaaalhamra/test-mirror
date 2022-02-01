@@ -29,7 +29,7 @@ class Item extends Model
         'is_available' => 'boolean',
         'is_sale' => 'boolean',
     ];
-    protected $with = ['location'];
+    protected $with = ['location','images'];
     protected $appends = ['name','description','discount_amount','currency','price_formatted','discounted_price_formatted','discount_amount_formatted','barcode'];
 
     protected function getCurrencyAttribute(){

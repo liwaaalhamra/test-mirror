@@ -38,6 +38,77 @@ class LoginController extends Controller
 {
     use HITrait;
 
+    public function login_password(Request $request) {
+        $validator = Validator::make($request->all(), [
+            'username' => 'required',
+            'password' => 'required',
+        ]);
+
+        if($validator->fails()){
+            return parent::return_error('Missing parameter(s)', 400, $validator->messages()->all()[0]);
+        }
+        $username = $request->username;
+        $password = $request->password;
+        if(filter_var($username, FILTER_VALIDATE_EMAIL)){
+            if(!$user = Users::whereAccountType('email')->whereRaw("LOWER(email) = ?",[ strtolower(trim($username))])->first()){
+                return parent::return_error("Email does not exist", 403, "User does not exist");
+            }
+        }else{
+            if(!$user = Users::whereAccountType('mobile')->where(DB::raw("CONCAT(`country_code`, `primary_phone`)"), '=', $username)->first()){
+                return parent::return_error("Mobile Number does not exist", 403, "User does not exist");
+            }
+        }
+
+        if($user->is_verified == 0){
+            return parent::return_error("Registration not complete, please register again", 406, "Registration not complete, please register again");
+        }
+
+        if($user->is_blocked){
+            return parent::return_error("Account Blocked", 407, "Account Blocked");
+        }
+
+        /**
+         * password clear text is now sha256
+         */
+        if( $user->password_clear_text != $password){
+            return parent::return_error("Invalid Credentials", 405, "Invalid Credentials");
+        }
+
+
+        $agent = new Agent();
+        $device_name = $agent->device();
+        $browser_name = $agent->browser();
+        $browser_version = $agent->version($agent->browser());
+        $platform_name = $agent->platform();
+        $platform_version = $agent->version($agent->platform());
+        $is_mobile = $agent->isMobile();
+        $is_tablet = $agent->isTablet();
+        $is_desktop = $agent->isDesktop();
+        $ip = isset($agent->getHttpHeaders()['HTTP_X_FORWARDED_FOR']) ? $agent->getHttpHeaders()['HTTP_X_FORWARDED_FOR'] : null;
+        $user->device_name = $device_name;
+        $user->browser_name = $browser_name;
+        $user->browser_version = $browser_version;
+        $user->platform_name = $platform_name;
+        $user->platform_version = $platform_version;
+        $user->is_mobile = $is_mobile;
+        $user->is_tablet = $is_tablet;
+        $user->is_desktop = $is_desktop;
+        $user->ip = $ip;
+        $user->user_agent = $agent->getUserAgent();
+        $user->save();
+
+        UsersAccess::where("user_id", "=", $user->id)->delete();
+        $access_token = str_random(64);
+        UsersAccess::create([
+            'access_token' => $access_token,
+            'user_id' => $user->id,
+            'expired_at' => Carbon::now()->addMinutes(Config::get('session.api_lifetime'))->format('Y-m-d H:i:s')
+
+        ]);
+        $user->token = $access_token;
+        return parent::return_json($user);
+    }
+
     public function login_email(Request $request) {
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
@@ -118,13 +189,13 @@ class LoginController extends Controller
 
         $new_country_code = null;
         $new_phone_number = null;
-        $country_id = 368;//by default bcz mobile number is optional and app is based in kuwait
+        $country_id = 422;//by default
         $phone_number = $request->phone_number;
         $country_code = $request->country_code;
         $request->merge([ 'mobile_number' => $country_code.$phone_number]);
 
         $validator = Validator::make($request->all(), [
-            'mobile_number' => 'phone:IQ,LB',
+            'mobile_number' => 'phone:KW,LB,AE,QA',
         ]);
 
         if ($validator->fails()) {
@@ -416,7 +487,7 @@ class LoginController extends Controller
             $request->merge([ 'mobile_number' => $country_code.$phone_number]);
 
             $validator = Validator::make($request->all(), [
-                'mobile_number' => 'phone:KW,LB',
+                'mobile_number' =>'phone:KW,LB,AE,QA',
             ]);
 
             if ($validator->fails()) {
