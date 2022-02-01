@@ -166,6 +166,18 @@ class ItemsController extends Controller
         $query->when($sub_sub_category_id, function ($query) use ($sub_sub_category_id) {
             $query->whereSubSubCategoryId($sub_sub_category_id);
         });
+        if($request->sort){
+            $sort = Input::get('sort');
+            if($sort == 'price_lowest'){
+                $query->orderBy('price','asc');
+            }elseif ($sort == 'price_highest'){
+                $query->orderBy('price','desc');
+            }elseif ($sort == 'most_recent'){
+                $query->orderBy('created_at','desc');
+            }
+        }else{
+            $query->orderBy('item_order','desc');
+        }
         $currency = env('APP_CURRENCY');
         $items = $query->orderby('item_order','asc')->get()->map(function ($value, $key) use ($currency) {
             unset($value->quantity);
@@ -180,6 +192,64 @@ class ItemsController extends Controller
         if($request->header('token')){
 //            $user = $this->validate_user($request);
         }
+
+        return response()->json($items);
+    }
+
+    public function product_items_with_pagination(Request $request) {
+        $query = Item::whereIsAvailable(1);
+        if(Input::has('search')){
+            $search = Input::get('search');
+            $query->where(function($query) use ($search){
+                $query->whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])
+                    ->orwhereRaw("LOWER(name_ar) like ? ", [ "%".strtolower($search)."%"])
+                    ->orwhereRaw("LOWER(description_en) like ? ", [ "%".strtolower($search)."%"])
+                    ->orwhereRaw("LOWER(description_ar) like ? ", [ "%".strtolower($search)."%"]);
+            });
+        }
+        $category_id = isset($request->category_id) ? $request->category_id : null;
+        $sub_category_id = isset($request->sub_category_id) ? $request->sub_category_id : null;
+        $sub_sub_category_id = isset($request->sub_sub_category_id) ? $request->sub_sub_category_id : null;
+
+        $query->when($category_id, function ($query) use ($category_id) {
+            $query->whereCategoryId($category_id);
+        });
+        $query->when($sub_category_id, function ($query) use ($sub_category_id) {
+            $query->whereSubCategoryId($sub_category_id);
+        });
+        $query->when($sub_sub_category_id, function ($query) use ($sub_sub_category_id) {
+            $query->whereSubSubCategoryId($sub_sub_category_id);
+        });
+        if($request->sort){
+            $sort = Input::get('sort');
+            if($sort == 'price_lowest'){
+                $query->orderBy('price','asc');
+            }elseif ($sort == 'price_highest'){
+                $query->orderBy('price','desc');
+            }elseif ($sort == 'most_recent'){
+                $query->orderBy('created_at','desc');
+            }
+        }else{
+            $query->orderBy('item_order','desc');
+        }
+        $currency = env('APP_CURRENCY');
+        $items = $query->orderby('item_order','asc')->get()->map(function ($value, $key) use ($currency) {
+            unset($value->quantity);
+            $value->currency = $currency;
+            $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
+            $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
+            $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
+//            $value->custom_fields = CustomField::whereCategoryId($value->category_id)->whereSubCategoryId($value->sub_category_id)->get();
+            return $value;
+        })->values();
+        $user = null;
+        if($request->header('token')){
+//            $user = $this->validate_user($request);
+        }
+        $limit = 20;
+        $items = new LengthAwarePaginator(
+            $items->forPage(LengthAwarePaginator::resolveCurrentPage(), $limit)->values(), $items->count(), $limit, LengthAwarePaginator::resolveCurrentPage(), ['path' => secure_url('/api/products/items/pagination')]
+        );
 
         return response()->json($items);
     }
@@ -208,6 +278,18 @@ class ItemsController extends Controller
         $query->when($sub_sub_category_id, function ($query) use ($sub_sub_category_id) {
             $query->whereSubSubCategoryId($sub_sub_category_id);
         });
+        if($request->sort){
+            $sort = Input::get('sort');
+            if($sort == 'price_lowest'){
+                $query->orderBy('price','asc');
+            }elseif ($sort == 'price_highest'){
+                $query->orderBy('price','desc');
+            }elseif ($sort == 'most_recent'){
+                $query->orderBy('created_at','desc');
+            }
+        }else{
+            $query->orderBy('item_order','desc');
+        }
         $currency = env('APP_CURRENCY');
         $items = $query->orderby('item_order','asc')->get()->map(function ($value, $key) use ($currency) {
 //            $value->custom_fields = CustomField::whereCategoryId($value->category_id)->whereSubCategoryId($value->sub_category_id)->get();
@@ -222,6 +304,62 @@ class ItemsController extends Controller
 //            $user = $this->validate_user($request);
         }
 
+        return response()->json($items);
+    }
+
+    public function service_items_with_pagination(Request $request) {
+        $query = Item::whereIsAvailable(1);
+        if(Input::has('search')){
+            $search = Input::get('search');
+            $query->where(function($query) use ($search){
+                $query->whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])
+                    ->orwhereRaw("LOWER(name_ar) like ? ", [ "%".strtolower($search)."%"])
+                    ->orwhereRaw("LOWER(description_en) like ? ", [ "%".strtolower($search)."%"])
+                    ->orwhereRaw("LOWER(description_ar) like ? ", [ "%".strtolower($search)."%"]);
+            });
+        }
+        $category_id = isset($request->category_id) ? $request->category_id : null;
+        $sub_category_id = isset($request->sub_category_id) ? $request->sub_category_id : null;
+        $sub_sub_category_id = isset($request->sub_sub_category_id) ? $request->sub_sub_category_id : null;
+
+        $query->when($category_id, function ($query) use ($category_id) {
+            $query->whereCategoryId($category_id);
+        });
+        $query->when($sub_category_id, function ($query) use ($sub_category_id) {
+            $query->whereSubCategoryId($sub_category_id);
+        });
+        $query->when($sub_sub_category_id, function ($query) use ($sub_sub_category_id) {
+            $query->whereSubSubCategoryId($sub_sub_category_id);
+        });
+        if($request->sort){
+            $sort = Input::get('sort');
+            if($sort == 'price_lowest'){
+                $query->orderBy('price','asc');
+            }elseif ($sort == 'price_highest'){
+                $query->orderBy('price','desc');
+            }elseif ($sort == 'most_recent'){
+                $query->orderBy('created_at','desc');
+            }
+        }else{
+            $query->orderBy('item_order','desc');
+        }
+        $currency = env('APP_CURRENCY');
+        $items = $query->orderby('item_order','asc')->get()->map(function ($value, $key) use ($currency) {
+//            $value->custom_fields = CustomField::whereCategoryId($value->category_id)->whereSubCategoryId($value->sub_category_id)->get();
+            $value->currency = $currency;
+            $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
+            $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
+            $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
+            return $value;
+        })->values();;
+        $user = null;
+        if($request->header('token')){
+//            $user = $this->validate_user($request);
+        }
+        $limit = 20;
+        $items = new LengthAwarePaginator(
+            $items->forPage(LengthAwarePaginator::resolveCurrentPage(), $limit)->values(), $items->count(), $limit, LengthAwarePaginator::resolveCurrentPage(), ['path' => secure_url('/api/services/items/pagination')]
+        );
         return response()->json($items);
     }
 
@@ -287,7 +425,7 @@ class ItemsController extends Controller
         $item->discounted_price_formatted = $item->discounted_price ? number_format($item->discounted_price,3) . ' ' . $currency : null;
         $item->discount_amount_formatted = $item->discount_amount ? number_format($item->discount_amount,3) . ' ' . $currency : null;
         unset($item->quantity);
-        $item->custom_fields = CustomField::whereCategoryId($item->category_id)->whereSubCategoryId($item->sub_category_id)->get()->map(function ($value, $key) use ($item) {
+        $item->custom_fields = CustomField::whereCategoryId($item->category_id)->whereSubCategoryId($item->sub_category_id)->orderby('item_order','asc')->get()->map(function ($value, $key) use ($item) {
             $custom_field_value = ItemCustomField::whereFieldName($value->field_name)->whereItemId($item->id)->whereCustomFieldId($value->id)->first();
             $value->field_value = $custom_field_value ? $this->cast_field_value($custom_field_value->field_value, $value->field_type) : null;
             $custom_extra_field_value = null;
@@ -317,7 +455,7 @@ class ItemsController extends Controller
         $item->discounted_price_formatted = $item->discounted_price ? number_format($item->discounted_price,3) . ' ' . $currency : null;
         $item->discount_amount_formatted = $item->discount_amount ? number_format($item->discount_amount,3) . ' ' . $currency : null;
         unset($item->quantity);
-        $item->custom_fields = CustomField::whereCategoryId($item->category_id)->whereSubCategoryId($item->sub_category_id)->get()->map(function ($value, $key) use ($item) {
+        $item->custom_fields = CustomField::whereCategoryId($item->category_id)->whereSubCategoryId($item->sub_category_id)->orderby('item_order','asc')->get()->map(function ($value, $key) use ($item) {
             $custom_field_value = ItemCustomField::whereFieldName($value->field_name)->whereItemId($item->id)->whereCustomFieldId($value->id)->first();
             $value->field_value = $custom_field_value ? $this->cast_field_value($custom_field_value->field_value, $value->field_type) : null;
             $custom_extra_field_value = null;
@@ -330,460 +468,6 @@ class ItemsController extends Controller
         return response()->json($item);
     }
 
-    public function supplier_menu_categories(Request $request) {
-        if(!Input::has('food_group_id')){
-            return parent::return_error('Missing Food Group ID',401,'messages.missing_parameter');
-        }
-        if(!$item = SupplierFoodGroup::whereIsPublished(1)->whereId($request->food_group_id)->first()){
-            return parent::return_error("Invalid Food Group", 402, 'messages.invalid_parameters');
-        }
-        $query = SubCategory::whereCategoryType('supplier')->whereCategoryId($item->id)->whereIsPublished(1)->orderBy('item_order','asc');
-        $categories = $query->get();
-        return response()->json($categories);
-    }
-
-    public function restaurant_menu_categories(Request $request) {
-        if(!Input::has('restaurant_id')){
-            return parent::return_error('Missing Restaurant ID',401,'messages.missing_parameter');
-        }
-        if(!$item = Restaurant::whereIsAvailable(1)->whereId($request->restaurant_id)->first()){
-            return parent::return_error("Invalid Restaurant", 402, 'messages.invalid_parameters');
-        }
-        $query = SubCategory::whereCategoryType('restaurant')->whereCategoryId($item->id)->whereIsPublished(1)->orderBy('item_order','asc');
-        $categories = $query->get();
-        return response()->json($categories);
-    }
-
-    public function items(Request $request) {
-        $query = Item::whereIsAvailable(1);
-        if(Input::has('search')){
-            $search = Input::get('search');
-            $query->where(function($query) use ($search){
-                $query->whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])
-                    ->orwhereRaw("LOWER(name_ar) like ? ", [ "%".strtolower($search)."%"])
-                    ->orwhereRaw("LOWER(description_en) like ? ", [ "%".strtolower($search)."%"])
-                    ->orwhereRaw("LOWER(description_ar) like ? ", [ "%".strtolower($search)."%"]);
-            });
-        }
-
-        if(!Input::has('menu_category_id')){
-            return parent::return_error('Missing Menu Category ID',401,'messages.missing_parameter');
-        }
-        if(!$menu_Category = SubCategory::whereIsPublished(1)->whereId($request->menu_category_id)->first()){
-            return parent::return_error("Invalid Menu Category", 402, 'messages.invalid_parameters');
-        }
-        $menu_category_id = Input::get('menu_category_id');
-        $query->where(function($query) use ($menu_category_id){
-            $query->whereSubCategoryId($menu_category_id);
-        });
-
-        if(Input::has('restaurant_id')){
-            $category_id = Input::get('restaurant_id');
-            $query->where(function($query) use ($category_id){
-                $query->whereCategoryId($category_id);
-            });
-        }
-
-        $items = $query->orderby('item_order','asc')->get();
-        $user = null;
-        if($request->header('token')){
-            $user = $this->validate_user($request);
-        }
-        $currency = env('APP_CURRENCY');
-        foreach ($items as $item){
-            $item->out_of_stock = false;
-            if ($item->quantity < 1) {
-                $item->out_of_stock = true;
-            }
-            if($user){
-                $currency = env('APP_CURRENCY');
-                if($package_item = PackageItem::whereNull('order_id')->whereItemId($item->id)->whereUserId($user->id)->first()) {
-                    if ($item->quantity <= $package_item->quantity) {
-                        $item->out_of_stock = true;
-                    }
-                }
-            }
-            $item->currency = $currency;
-            $item->price_formatted = number_format($item->price,0) . ' ' . $currency;
-            $item->discounted_price_formatted = $item->discounted_price ? number_format($item->discounted_price,0) . ' ' . $currency : null;
-            $item->discount_amount_formatted = $item->discount_amount ? number_format($item->discount_amount,0) . ' ' . $currency : null;
-        }
-        return response()->json($items);
-    }
-
-    public function items_with_pagination(Request $request) {
-        $query = Item::whereIsAvailable(1);
-        if(Input::has('search')){
-            $search = Input::get('search');
-            $query->where(function($query) use ($search){
-                $query->whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])
-                    ->orwhereRaw("LOWER(name_ar) like ? ", [ "%".strtolower($search)."%"])
-                    ->orwhereRaw("LOWER(description_en) like ? ", [ "%".strtolower($search)."%"])
-                    ->orwhereRaw("LOWER(description_ar) like ? ", [ "%".strtolower($search)."%"]);
-            });
-        }
-
-        if(!Input::has('menu_category_id')){
-            return parent::return_error('Missing Menu Category ID',401,'messages.missing_parameter');
-        }
-        if(!$menu_Category = SubCategory::whereIsPublished(1)->whereId($request->menu_category_id)->first()){
-            return parent::return_error("Invalid Menu Category", 402, 'messages.invalid_parameters');
-        }
-        $menu_category_id = Input::get('menu_category_id');
-        $query->where(function($query) use ($menu_category_id){
-            $query->whereSubCategoryId($menu_category_id);
-        });
-
-        if(Input::has('restaurant_id')){
-            $category_id = Input::get('restaurant_id');
-            $query->where(function($query) use ($category_id){
-                $query->whereCategoryId($category_id);
-            });
-        }
-
-        $user = null;
-        if($request->header('token')){
-            $user = $this->validate_user($request);
-        }
-        $items = $query->orderby('item_order','asc')->paginate(20);
-        $currency = env('APP_CURRENCY');
-        foreach ($items as $item){
-            $item->out_of_stock = false;
-            if ($item->quantity < 1) {
-                $item->out_of_stock = true;
-            }
-            if($user){
-                $currency = env('APP_CURRENCY');
-                if($package_item = PackageItem::whereNull('order_id')->whereItemId($item->id)->whereUserId($user->id)->first()) {
-                    if ($item->quantity <= $package_item->quantity) {
-                        $item->out_of_stock = true;
-                    }
-                }
-            }
-            $item->currency = $currency;
-            $item->price_formatted = number_format($item->price,0) . ' ' . $currency;
-            $item->discounted_price_formatted = $item->discounted_price ? number_format($item->discounted_price,0) . ' ' . $currency : null;
-            $item->discount_amount_formatted = $item->discount_amount ? number_format($item->discount_amount,0) . ' ' . $currency : null;
-
-        }
-        return response()->json($items);
-    }
-
-    public function single_item(Request $request) {
-        if(!Input::has('item_id')){
-            return parent::return_error('Missing Item ID',401,'messages.missing_parameter');
-        }
-        if(!$item = Item::whereIsAvailable(1)->whereId($request->item_id)->first()){
-            return parent::return_error("Invalid Item", 402, 'messages.invalid_parameters');
-        }
-        $currency = env('APP_CURRENCY');
-        $user = null;
-        if($request->header('token')){
-            $user = $this->validate_user($request);
-            $currency = env('APP_CURRENCY');
-        }
-        $item->currency = $currency;
-        $item->price_formatted = number_format($item->price,3) . ' ' . $currency;
-        $item->discounted_price_formatted = $item->discounted_price ? number_format($item->discounted_price,3) . ' ' . $currency : null;
-        $item->discount_amount_formatted = $item->discount_amount ? number_format($item->discount_amount,3) . ' ' . $currency : null;
-
-        return response()->json($item);
-    }
-
-
-    public function restaurants(Request $request) {
-//        DB::connection()->enableQueryLog();
-        $query = Restaurant::whereIsAvailable(1);
-        if(Input::has('search')){
-            $search = Input::get('search');
-            $query->where(function($query) use ($search){
-                $query->whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])
-                ->orwhereRaw("LOWER(name_ar) like ? ", [ "%".strtolower($search)."%"])
-                ->orwhereRaw("LOWER(description_en) like ? ", [ "%".strtolower($search)."%"])
-                ->orwhereRaw("LOWER(description_ar) like ? ", [ "%".strtolower($search)."%"]);
-            });
-        }
-        if(Input::has('sub_category_id')){
-            $sub_category_id = Input::get('sub_category_id');
-            $query->where(function($query) use ($sub_category_id){
-                $query->whereSubCategoryId($sub_category_id);
-            });
-        }
-        if(Input::has('is_partner')){
-            $is_partner = Input::get('is_partner') == 'yes' ? true : false;
-            $query->where(function($query) use ($is_partner){
-                $query->whereIsPartner($is_partner);
-            });
-        }
-        if(Input::has('has_delivery')){
-            $has_delivery = Input::get('has_delivery') == 'yes' ? true : false;
-            $query->where(function($query) use ($has_delivery){
-                $query->whereHasDelivery($has_delivery);
-            });
-        }
-        if(Input::has('has_reserve_table')){
-            $has_reserve_table = Input::get('has_reserve_table') == 'yes' ? true : false;
-            $query->where(function($query) use ($has_reserve_table){
-                $query->whereHasReserveTable($has_reserve_table);
-            });
-        }
-
-        if(Input::has('tag_ids')){
-            $tag_ids = Input::get('tag_ids');
-            $query->Where(function ($query) use($tag_ids) {
-                foreach($tag_ids as $id){
-                    $query->orwhere('tag_ids', 'like',  '%' . $id .'%');
-                }
-            });
-        }
-
-        if(Input::has('craving_ids')){
-            $craving_ids = Input::get('craving_ids');
-            $query->Where(function ($query) use($craving_ids) {
-                foreach($craving_ids as $id){
-                    $query->orwhere('craving_ids', 'like',  '%' . $id .'%');
-                }
-            });
-        }
-
-        if(Input::has('cuisine_ids')){
-            $cuisine_ids = Input::get('cuisine_ids');
-            $query->Where(function ($query) use($cuisine_ids) {
-                foreach($cuisine_ids as $id){
-                    $query->orwhere('cuisine_ids', 'like',  '%' . $id .'%');
-                }
-            });
-        }
-
-        if(Input::has('category_id')){
-            $category_id = Input::get('category_id');
-            $query->where(function($query) use ($category_id){
-                $query->whereCategoryId($category_id);
-            });
-        }
-        if($request->sort){
-            $sort = Input::get('sort');
-            if($sort == 'price_lowest'){
-                $query->orderBy('cost','asc');
-            }elseif ($sort == 'price_highest'){
-                $query->orderBy('cost','desc');
-            }elseif ($sort == 'most_recent'){
-                $query->orderBy('created_at','desc');
-            }
-        }else{
-            $query->orderBy('item_order','desc');
-        }
-
-        if($request->latitude && $request->longitude){
-            $latitude = $request->latitude;
-            $longitude = $request->longitude;
-            $items = $query->selectRaw("*,(6371 * 2 * ASIN(SQRT( POWER(SIN(( $latitude - latitude) *  pi()/180 / 2), 2) +COS( $latitude * pi()/180) * COS(latitude * pi()/180) * POWER(SIN(( $longitude - longitude) * pi()/180 / 2), 2) ))) as distance")->orderbyRaw("(6371 * 2 * ASIN(SQRT( POWER(SIN(( $latitude - latitude) *  pi()/180 / 2), 2) +COS( $latitude * pi()/180) * COS(latitude * pi()/180) * POWER(SIN(( $longitude - longitude) * pi()/180 / 2), 2) ))) asc")->get();
-        }else{
-            $items = $query->selectRaw("*,NULL as distance")->get();
-        }
-
-        if($request->rating){
-            $rating = floatval($request->rating);
-            $items = $items->filter(function ($item,$item_key) use ($rating){
-                return $item->reviews_average_stars >= $rating;
-            });
-        }
-        if(Input::has('service_ids')){
-            $service_ids = $request->service_ids;
-            $items = $items->filter(function ($item,$item_key) use ($service_ids){
-                $restaurant_service_ids = $item->services()->pluck('restaurant_services.service_id')->toarray();
-                return !array_diff($service_ids, $restaurant_service_ids);
-            });
-        }
-
-        if($request->cost_min){
-            $cost_min = $request->cost_min;
-            $cost_max = isset($request->cost_max) ? $request->cost_max : null;
-            $items = $items->filter(function ($item,$item_key) use ($cost_min,$cost_max){
-                if($cost_max){
-                    return $item->cost >= $cost_min && $item->cost <=$cost_max;
-                }else{
-                    return $item->cost >= $cost_min;
-                }
-            });
-        }
-        if($request->sort){
-            $sort = Input::get('sort');
-            if($sort == 'popularity'){
-                $items = $items->sortBy('reviews_total');
-            }elseif ($sort == 'rating_lowest'){
-                $items = $items->sortBy('reviews_average_stars');
-            }elseif ($sort == 'rating_highest'){
-                $items = $items->sortByDesc('reviews_average_stars');
-            }
-        }
-        $items = $items->values();
-
-//        dd(DB::getQueryLog());
-        $user = null;
-        if($request->header('token')){
-            $user = $this->validate_user($request);
-        }
-
-        foreach ($items as $item){
-            $item->is_favorite = false;
-            if($user){
-                if(UserFavorite::whereMetaName('restaurants')->whereMetaId($item->id)->whereUserId($user->id)->first()){
-                    $item->is_favorite = true;
-                }
-            }
-        }
-        return response()->json($items);
-	}
-
-    public function restaurants_with_pagination(Request $request) {
-        $query = Restaurant::whereIsAvailable(1);
-        if(Input::has('search')){
-            $search = Input::get('search');
-            $query->where(function($query) use ($search){
-                $query->whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])
-                    ->orwhereRaw("LOWER(name_ar) like ? ", [ "%".strtolower($search)."%"])
-                    ->orwhereRaw("LOWER(description_en) like ? ", [ "%".strtolower($search)."%"])
-                    ->orwhereRaw("LOWER(description_ar) like ? ", [ "%".strtolower($search)."%"]);
-            });
-        }
-        if(Input::has('sub_category_id')){
-            $sub_category_id = Input::get('sub_category_id');
-            $query->where(function($query) use ($sub_category_id){
-                $query->whereSubCategoryId($sub_category_id);
-            });
-        }
-        if(Input::has('is_partner')){
-            $is_partner = Input::get('is_partner') == 'yes' ? true : false;
-            $query->where(function($query) use ($is_partner){
-                $query->whereIsPartner($is_partner);
-            });
-        }
-        if(Input::has('has_delivery')){
-            $has_delivery = Input::get('has_delivery') == 'yes' ? true : false;
-            $query->where(function($query) use ($has_delivery){
-                $query->whereHasDelivery($has_delivery);
-            });
-        }
-        if(Input::has('has_reserve_table')){
-            $has_reserve_table = Input::get('has_reserve_table') == 'yes' ? true : false;
-            $query->where(function($query) use ($has_reserve_table){
-                $query->whereHasReserveTable($has_reserve_table);
-            });
-        }
-        if(Input::has('tag_ids')){
-            $tag_ids = Input::get('tag_ids');
-            $query->Where(function ($query) use($tag_ids) {
-                foreach($tag_ids as $id){
-                    $query->orwhere('tag_ids', 'like',  '%' . $id .'%');
-                }
-            });
-        }
-
-        if(Input::has('craving_ids')){
-            $craving_ids = Input::get('craving_ids');
-            $query->Where(function ($query) use($craving_ids) {
-                foreach($craving_ids as $id){
-                    $query->orwhere('craving_ids', 'like',  '%' . $id .'%');
-                }
-            });
-        }
-
-        if(Input::has('cuisine_ids')){
-            $cuisine_ids = Input::get('cuisine_ids');
-            $query->Where(function ($query) use($cuisine_ids) {
-                foreach($cuisine_ids as $id){
-                    $query->orwhere('cuisine_ids', 'like',  '%' . $id .'%');
-                }
-            });
-        }
-
-        if(Input::has('category_id')){
-            $category_id = Input::get('category_id');
-            $query->where(function($query) use ($category_id){
-                $query->whereCategoryId($category_id);
-            });
-        }
-        if($request->sort){
-            $sort = Input::get('sort');
-            if($sort == 'price_lowest'){
-                $query->orderBy('cost','asc');
-            }elseif ($sort == 'price_highest'){
-                $query->orderBy('cost','desc');
-            }elseif ($sort == 'most_recent'){
-                $query->orderBy('created_at','desc');
-            }
-        }else{
-            $query->orderBy('item_order','desc');
-        }
-
-        if($request->latitude && $request->longitude){
-            $latitude = $request->latitude;
-            $longitude = $request->longitude;
-            $items = $query->selectRaw("*,(6371 * 2 * ASIN(SQRT( POWER(SIN(( $latitude - latitude) *  pi()/180 / 2), 2) +COS( $latitude * pi()/180) * COS(latitude * pi()/180) * POWER(SIN(( $longitude - longitude) * pi()/180 / 2), 2) ))) as distance")->orderbyRaw("(6371 * 2 * ASIN(SQRT( POWER(SIN(( $latitude - latitude) *  pi()/180 / 2), 2) +COS( $latitude * pi()/180) * COS(latitude * pi()/180) * POWER(SIN(( $longitude - longitude) * pi()/180 / 2), 2) ))) asc")->get();
-        }else{
-            $items = $query->selectRaw("*,NULL as distance")->get();
-        }
-
-        if($request->rating){
-            $rating = floatval($request->rating);
-            $items = $items->filter(function ($item,$item_key) use ($rating){
-                return $item->reviews_average_stars >= $rating;
-            });
-        }
-
-        if(Input::has('service_ids')){
-            $service_ids = $request->service_ids;
-            $items = $items->filter(function ($item,$item_key) use ($service_ids){
-                $restaurant_service_ids = $item->services()->pluck('restaurant_services.id')->toarray();
-                return !array_diff($service_ids, $restaurant_service_ids);
-            });
-        }
-
-        if($request->cost_min){
-            $cost_min = $request->cost_min;
-            $cost_max = isset($request->cost_max) ? $request->cost_max : null;
-            $items = $items->filter(function ($item,$item_key) use ($cost_min,$cost_max){
-                if($cost_max){
-                    return $item->cost >= $cost_min && $item->cost <=$cost_max;
-                }else{
-                    return $item->cost >= $cost_min;
-                }
-            });
-        }
-        if($request->sort){
-            $sort = Input::get('sort');
-            if($sort == 'popularity'){
-                $items = $items->sortBy('reviews_total');
-            }elseif ($sort == 'rating_lowest'){
-                $items = $items->sortBy('reviews_average_stars');
-            }elseif ($sort == 'rating_highest'){
-                $items = $items->sortByDesc('reviews_average_stars');
-            }
-        }
-        $items = $items->values();
-
-//        dd(DB::getQueryLog());
-        $user = null;
-        if($request->header('token')){
-            $user = $this->validate_user($request);
-        }
-
-        foreach ($items as $item){
-            $item->is_favorite = false;
-            if($user){
-                if(UserFavorite::whereMetaName('restaurants')->whereMetaId($item->id)->whereUserId($user->id)->first()){
-                    $item->is_favorite = true;
-                }
-            }
-        }
-
-        $limit = 20;
-        $items = new LengthAwarePaginator(
-            $items->forPage(LengthAwarePaginator::resolveCurrentPage(), $limit)->values(), $items->count(), $limit, LengthAwarePaginator::resolveCurrentPage(), ['path' => secure_url('/api/items/pagination')]
-        );
-        return response()->json($items);
-    }
 
     public function gifts(Request $request) {
         $user = $this->validate_user($request);
@@ -816,34 +500,6 @@ class ItemsController extends Controller
 //                }
         return response()->json($items);
 
-    }
-
-    public function single_restaurant(Request $request) {
-        if(Input::has('barcode')){
-            $scan_code = $request->barcode;
-            if(!$item = Restaurant::whereIsAvailable(1)->where('code','=',$scan_code)->first()){
-                return parent::return_error("Item Not Found", 402, 'messages.invalid_parameters');
-            }
-        }else{
-            if(!Input::has('item_id')){
-                return parent::return_error('Missing Restaurant ID',401,'messages.missing_parameter');
-            }
-            if(!$item = Restaurant::whereIsAvailable(1)->whereId($request->item_id)->first()){
-                return parent::return_error("Invalid Restaurant", 402, 'messages.invalid_parameters');
-            }
-        }
-
-
-
-        $item->is_favorite = false;
-        $user = null;
-        if($request->header('token')){
-            $user = $this->validate_user($request);
-            if(UserFavorite::whereMetaId($item->id)->whereUserId($user->id)->first()){
-                $item->is_favorite = true;
-            }
-        }
-        return response()->json($item);
     }
 
     public function favorites(Request $request) {

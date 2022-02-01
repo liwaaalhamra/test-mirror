@@ -20,7 +20,7 @@ class CustomField extends Model
 {
     protected $table = "custom_fields";
     protected $guarded = [];
-    protected $hidden = ['updated_at','category_id','sub_category_id','sub_sub_category_id','in_return','in_filters','item_order'];
+    protected $hidden = ['updated_at','category_id','sub_category_id','sub_sub_category_id','in_return','item_order'];
     protected $casts = [
         'has_extra_field' => 'boolean',
     ];
