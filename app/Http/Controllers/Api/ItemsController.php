@@ -142,98 +142,20 @@ class ItemsController extends Controller
         return response()->json($categories);
     }
 
-    public function product_items(Request $request) {
-        $query = Item::whereIsAvailable(1);
-        if(Input::has('search')){
-            $search = Input::get('search');
-            $query->where(function($query) use ($search){
-                $query->whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])
-                    ->orwhereRaw("LOWER(name_ar) like ? ", [ "%".strtolower($search)."%"])
-                    ->orwhereRaw("LOWER(description_en) like ? ", [ "%".strtolower($search)."%"])
-                    ->orwhereRaw("LOWER(description_ar) like ? ", [ "%".strtolower($search)."%"]);
-            });
-        }
-        $category_id = isset($request->category_id) ? $request->category_id : null;
-        $sub_category_id = isset($request->sub_category_id) ? $request->sub_category_id : null;
-        $sub_sub_category_id = isset($request->sub_sub_category_id) ? $request->sub_sub_category_id : null;
-
-        $query->when($category_id, function ($query) use ($category_id) {
-            $query->whereCategoryId($category_id);
-        });
-        $query->when($sub_category_id, function ($query) use ($sub_category_id) {
-            $query->whereSubCategoryId($sub_category_id);
-        });
-        $query->when($sub_sub_category_id, function ($query) use ($sub_sub_category_id) {
-            $query->whereSubSubCategoryId($sub_sub_category_id);
-        });
-        if($request->sort){
-            $sort = Input::get('sort');
-            if($sort == 'price_lowest'){
-                $query->orderBy('price','asc');
-            }elseif ($sort == 'price_highest'){
-                $query->orderBy('price','desc');
-            }elseif ($sort == 'most_recent'){
-                $query->orderBy('created_at','desc');
-            }
-        }else{
-            $query->orderBy('item_order','desc');
-        }
-        $currency = env('APP_CURRENCY');
-        $items = $query->orderby('item_order','asc')->get()->map(function ($value, $key) use ($currency) {
-            unset($value->quantity);
-            $value->currency = $currency;
-            $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
-            $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
-            $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
-//            $value->custom_fields = CustomField::whereCategoryId($value->category_id)->whereSubCategoryId($value->sub_category_id)->get();
-            return $value;
-        })->values();;
+    public function home_top_categories(Request $request) {
         $user = null;
         if($request->header('token')){
-//            $user = $this->validate_user($request);
+            $user = $this->validate_user($request);
         }
+        $categories = [];
+        $new_arrival_items = [];
+        $latest_services_items = [];
 
-        return response()->json($items);
-    }
-
-    public function product_items_with_pagination(Request $request) {
-        $query = Item::whereIsAvailable(1);
-        if(Input::has('search')){
-            $search = Input::get('search');
-            $query->where(function($query) use ($search){
-                $query->whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])
-                    ->orwhereRaw("LOWER(name_ar) like ? ", [ "%".strtolower($search)."%"])
-                    ->orwhereRaw("LOWER(description_en) like ? ", [ "%".strtolower($search)."%"])
-                    ->orwhereRaw("LOWER(description_ar) like ? ", [ "%".strtolower($search)."%"]);
-            });
-        }
-        $category_id = isset($request->category_id) ? $request->category_id : null;
-        $sub_category_id = isset($request->sub_category_id) ? $request->sub_category_id : null;
-        $sub_sub_category_id = isset($request->sub_sub_category_id) ? $request->sub_sub_category_id : null;
-
-        $query->when($category_id, function ($query) use ($category_id) {
-            $query->whereCategoryId($category_id);
-        });
-        $query->when($sub_category_id, function ($query) use ($sub_category_id) {
-            $query->whereSubCategoryId($sub_category_id);
-        });
-        $query->when($sub_sub_category_id, function ($query) use ($sub_sub_category_id) {
-            $query->whereSubSubCategoryId($sub_sub_category_id);
-        });
-        if($request->sort){
-            $sort = Input::get('sort');
-            if($sort == 'price_lowest'){
-                $query->orderBy('price','asc');
-            }elseif ($sort == 'price_highest'){
-                $query->orderBy('price','desc');
-            }elseif ($sort == 'most_recent'){
-                $query->orderBy('created_at','desc');
-            }
-        }else{
-            $query->orderBy('item_order','desc');
-        }
+        $query = Item::whereHas('category', function ($q) {
+            $q->whereType('products');
+        })->whereIsAvailable(1)->orderby('created_at','desc');
         $currency = env('APP_CURRENCY');
-        $items = $query->orderby('item_order','asc')->get()->map(function ($value, $key) use ($currency) {
+        $new_arrival_items = $query->take(10)->get()->map(function ($value, $key) use ($currency) {
             unset($value->quantity);
             $value->currency = $currency;
             $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
@@ -242,10 +164,182 @@ class ItemsController extends Controller
 //            $value->custom_fields = CustomField::whereCategoryId($value->category_id)->whereSubCategoryId($value->sub_category_id)->get();
             return $value;
         })->values();
+
+        $query = Item::whereHas('category', function ($q) {
+            $q->whereType('services');
+        })->whereIsAvailable(1)->orderby('created_at','desc');
+        $currency = env('APP_CURRENCY');
+        $latest_services_items = $query->take(10)->get()->map(function ($value, $key) use ($currency) {
+            $value->currency = $currency;
+            $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
+            $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
+            $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
+//            $value->custom_fields = CustomField::whereCategoryId($value->category_id)->whereSubCategoryId($value->sub_category_id)->get();
+            return $value;
+        })->values();
+
+
+        $category1 = [
+            'slug' => 'latest-services',
+            'title' => 'Latest Services',
+            'top_items' => $latest_services_items
+        ];
+        $category2 = [
+            'slug' => 'new-arrivals',
+            'title' => 'New Arrivals',
+            'items' => $new_arrival_items
+        ];
+        array_push($categories,$category2);
+        array_push($categories,$category1);
+
+        return response()->json($categories);
+    }
+
+    public function home_top_categories_items(Request $request,$slug) {
         $user = null;
         if($request->header('token')){
-//            $user = $this->validate_user($request);
+            $user = $this->validate_user($request);
         }
+        if($slug == 'new-arrivals'){
+            $query = Item::whereHas('category', function ($q) {
+                $q->whereType('products');
+            })->whereIsAvailable(1)->orderby('created_at','desc');
+            $currency = env('APP_CURRENCY');
+            $items = $query->take(50)->get()->map(function ($value, $key) use ($currency) {
+                unset($value->quantity);
+                $value->currency = $currency;
+                $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
+                $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
+                $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
+                return $value;
+            })->values();
+        }elseif ($slug == 'latest-services'){
+            $query = Item::whereHas('category', function ($q) {
+                $q->whereType('services');
+            })->whereIsAvailable(1)->orderby('created_at','desc');
+            $currency = env('APP_CURRENCY');
+            $items = $query->take(50)->get()->map(function ($value, $key) use ($currency) {
+                $value->currency = $currency;
+                $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
+                $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
+                $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
+                return $value;
+            })->values();
+        }
+
+        $limit = 20;
+        $items = new LengthAwarePaginator(
+            $items->forPage(LengthAwarePaginator::resolveCurrentPage(), $limit)->values(), $items->count(), $limit, LengthAwarePaginator::resolveCurrentPage(), ['path' => secure_url('/api/products/items/pagination')]
+        );
+
+        return response()->json($items);
+    }
+
+    public function product_items(Request $request) {
+        $user = null;
+        if($request->header('token')){
+            $user = $this->validate_user($request);
+        }
+
+        $query = Item::whereIsAvailable(1);
+        if(Input::has('search')){
+            $search = Input::get('search');
+            $query->where(function($query) use ($search){
+                $query->whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])
+                    ->orwhereRaw("LOWER(name_ar) like ? ", [ "%".strtolower($search)."%"])
+                    ->orwhereRaw("LOWER(description_en) like ? ", [ "%".strtolower($search)."%"])
+                    ->orwhereRaw("LOWER(description_ar) like ? ", [ "%".strtolower($search)."%"]);
+            });
+        }
+        $category_id = isset($request->category_id) ? $request->category_id : null;
+        $sub_category_id = isset($request->sub_category_id) ? $request->sub_category_id : null;
+        $sub_sub_category_id = isset($request->sub_sub_category_id) ? $request->sub_sub_category_id : null;
+
+        $query->when($category_id, function ($query) use ($category_id) {
+            $query->whereCategoryId($category_id);
+        });
+        $query->when($sub_category_id, function ($query) use ($sub_category_id) {
+            $query->whereSubCategoryId($sub_category_id);
+        });
+        $query->when($sub_sub_category_id, function ($query) use ($sub_sub_category_id) {
+            $query->whereSubSubCategoryId($sub_sub_category_id);
+        });
+        if($request->sort){
+            $sort = Input::get('sort');
+            if($sort == 'price_lowest'){
+                $query->orderBy('price','asc');
+            }elseif ($sort == 'price_highest'){
+                $query->orderBy('price','desc');
+            }elseif ($sort == 'most_recent'){
+                $query->orderBy('created_at','desc');
+            }
+        }else{
+            $query->orderBy('item_order','desc');
+        }
+        $currency = env('APP_CURRENCY');
+        $items = $query->get()->map(function ($value, $key) use ($currency) {
+            unset($value->quantity);
+            $value->currency = $currency;
+            $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
+            $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
+            $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
+            return $value;
+        })->values();
+
+        return response()->json($items);
+    }
+
+    public function product_items_with_pagination(Request $request) {
+        $user = null;
+        if($request->header('token')){
+            $user = $this->validate_user($request);
+        }
+
+        $query = Item::whereIsAvailable(1);
+        if(Input::has('search')){
+            $search = Input::get('search');
+            $query->where(function($query) use ($search){
+                $query->whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])
+                    ->orwhereRaw("LOWER(name_ar) like ? ", [ "%".strtolower($search)."%"])
+                    ->orwhereRaw("LOWER(description_en) like ? ", [ "%".strtolower($search)."%"])
+                    ->orwhereRaw("LOWER(description_ar) like ? ", [ "%".strtolower($search)."%"]);
+            });
+        }
+        $category_id = isset($request->category_id) ? $request->category_id : null;
+        $sub_category_id = isset($request->sub_category_id) ? $request->sub_category_id : null;
+        $sub_sub_category_id = isset($request->sub_sub_category_id) ? $request->sub_sub_category_id : null;
+
+        $query->when($category_id, function ($query) use ($category_id) {
+            $query->whereCategoryId($category_id);
+        });
+        $query->when($sub_category_id, function ($query) use ($sub_category_id) {
+            $query->whereSubCategoryId($sub_category_id);
+        });
+        $query->when($sub_sub_category_id, function ($query) use ($sub_sub_category_id) {
+            $query->whereSubSubCategoryId($sub_sub_category_id);
+        });
+        if($request->sort){
+            $sort = Input::get('sort');
+            if($sort == 'price_lowest'){
+                $query->orderBy('price','asc');
+            }elseif ($sort == 'price_highest'){
+                $query->orderBy('price','desc');
+            }elseif ($sort == 'most_recent'){
+                $query->orderBy('created_at','desc');
+            }
+        }else{
+            $query->orderBy('item_order','desc');
+        }
+        $currency = env('APP_CURRENCY');
+        $items = $query->get()->map(function ($value, $key) use ($currency) {
+            unset($value->quantity);
+            $value->currency = $currency;
+            $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
+            $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
+            $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
+            return $value;
+        })->values();
+
         $limit = 20;
         $items = new LengthAwarePaginator(
             $items->forPage(LengthAwarePaginator::resolveCurrentPage(), $limit)->values(), $items->count(), $limit, LengthAwarePaginator::resolveCurrentPage(), ['path' => secure_url('/api/products/items/pagination')]
@@ -255,6 +349,11 @@ class ItemsController extends Controller
     }
 
     public function service_items(Request $request) {
+        $user = null;
+        if($request->header('token')){
+            $user = $this->validate_user($request);
+        }
+
         $query = Item::whereIsAvailable(1);
         if(Input::has('search')){
             $search = Input::get('search');
@@ -291,23 +390,23 @@ class ItemsController extends Controller
             $query->orderBy('item_order','desc');
         }
         $currency = env('APP_CURRENCY');
-        $items = $query->orderby('item_order','asc')->get()->map(function ($value, $key) use ($currency) {
-//            $value->custom_fields = CustomField::whereCategoryId($value->category_id)->whereSubCategoryId($value->sub_category_id)->get();
+        $items = $query->get()->map(function ($value, $key) use ($currency) {
             $value->currency = $currency;
             $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
             $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
             $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
             return $value;
-        })->values();;
-        $user = null;
-        if($request->header('token')){
-//            $user = $this->validate_user($request);
-        }
+        })->values();
 
         return response()->json($items);
     }
 
     public function service_items_with_pagination(Request $request) {
+        $user = null;
+        if($request->header('token')){
+            $user = $this->validate_user($request);
+        }
+
         $query = Item::whereIsAvailable(1);
         if(Input::has('search')){
             $search = Input::get('search');
@@ -344,18 +443,14 @@ class ItemsController extends Controller
             $query->orderBy('item_order','desc');
         }
         $currency = env('APP_CURRENCY');
-        $items = $query->orderby('item_order','asc')->get()->map(function ($value, $key) use ($currency) {
-//            $value->custom_fields = CustomField::whereCategoryId($value->category_id)->whereSubCategoryId($value->sub_category_id)->get();
+        $items = $query->get()->map(function ($value, $key) use ($currency) {
             $value->currency = $currency;
             $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
             $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
             $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
             return $value;
-        })->values();;
-        $user = null;
-        if($request->header('token')){
-//            $user = $this->validate_user($request);
-        }
+        })->values();
+
         $limit = 20;
         $items = new LengthAwarePaginator(
             $items->forPage(LengthAwarePaginator::resolveCurrentPage(), $limit)->values(), $items->count(), $limit, LengthAwarePaginator::resolveCurrentPage(), ['path' => secure_url('/api/services/items/pagination')]
@@ -409,6 +504,11 @@ class ItemsController extends Controller
     }
 
     public function product_single_item(Request $request) {
+        $user = null;
+        if($request->header('token')){
+            $user = $this->validate_user($request);
+        }
+
         if(!Input::has('item_id')){
             return parent::return_error('Missing Item ID',401,'messages.missing_parameter');
         }
@@ -416,10 +516,6 @@ class ItemsController extends Controller
             return parent::return_error("Invalid Item", 402, 'messages.invalid_parameters');
         }
         $currency = env('APP_CURRENCY');
-        $user = null;
-        if($request->header('token')){
-//            $user = $this->validate_user($request);
-        }
         $item->currency = $currency;
         $item->price_formatted = number_format($item->price,3) . ' ' . $currency;
         $item->discounted_price_formatted = $item->discounted_price ? number_format($item->discounted_price,3) . ' ' . $currency : null;
@@ -439,6 +535,11 @@ class ItemsController extends Controller
     }
 
     public function service_single_item(Request $request) {
+        $user = null;
+        if($request->header('token')){
+            $user = $this->validate_user($request);
+        }
+
         if(!Input::has('item_id')){
             return parent::return_error('Missing Item ID',401,'messages.missing_parameter');
         }
@@ -446,10 +547,6 @@ class ItemsController extends Controller
             return parent::return_error("Invalid Item", 402, 'messages.invalid_parameters');
         }
         $currency = env('APP_CURRENCY');
-        $user = null;
-        if($request->header('token')){
-//            $user = $this->validate_user($request);
-        }
         $item->currency = $currency;
         $item->price_formatted = number_format($item->price,3) . ' ' . $currency;
         $item->discounted_price_formatted = $item->discounted_price ? number_format($item->discounted_price,3) . ' ' . $currency : null;
@@ -467,7 +564,6 @@ class ItemsController extends Controller
         })->values();
         return response()->json($item);
     }
-
 
     public function gifts(Request $request) {
         $user = $this->validate_user($request);

@@ -148,6 +148,8 @@ Route::post('/services', 'ItemsController@services');
 Route::post('/category_subs', 'ItemsController@category_subs');
 Route::post('/filters', 'ItemsController@filters');
 Route::post('/custom_fields', 'ItemsController@custom_fields');
+Route::get('/home_top_categories', 'ItemsController@home_top_categories');
+Route::get('/home_top_categories/{slug}/items', 'ItemsController@home_top_categories_items');
 
 Route::get('/conditions', 'ItemsController@conditions');
 Route::get('/fuel_types', 'ItemsController@fuel_types');
