@@ -140,6 +140,16 @@ Route::group(['prefix' => 'services/items'],function () {
 });
 
 /**
+ * Chat Routes
+ */
+Route::group(['prefix' => 'chat'],function () {
+    Route::get('/friends', 'ChatController@friends');
+    Route::get('/conversations', 'ChatController@conversations');
+    Route::post('/messages', 'ChatController@messages');
+    Route::post('/send_message', 'ChatController@send');
+});
+
+/**
  * Categories Routes
  */
 
