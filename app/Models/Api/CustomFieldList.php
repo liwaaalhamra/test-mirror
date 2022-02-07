@@ -7,14 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
 /**
- * App\Models\Api\BodyType
+ * App\Models\Api\CustomFieldList
  * @mixin \Eloquent
  */
-class BodyType extends Model
+class CustomFieldList extends Model
 {
-    protected $table = 'body_types';
+    protected $table = 'custom_field_lists';
     protected $guarded = [];
-    protected $hidden = ['created_at','updated_at','name_en','name_ar'];
+    protected $hidden = ['updated_at','field_name','name_en','name_ar'];
     protected $appends = ['name'];
 
     public function getNameAttribute(){
@@ -24,6 +24,6 @@ class BodyType extends Model
 
     public function getCreatedAtAttribute($value)
     {
-        return \Carbon\Carbon::parse($value)->getTimestamp();
+        return $value == null ? null : \Carbon\Carbon::parse($value)->getTimestamp();
     }
 }

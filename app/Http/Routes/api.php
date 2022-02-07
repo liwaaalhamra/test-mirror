@@ -156,13 +156,7 @@ Route::post('/custom_fields', 'ItemsController@custom_fields');
 Route::get('/home_top_categories', 'ItemsController@home_top_categories');
 Route::get('/home_top_categories/{slug}/items', 'ItemsController@home_top_categories_items');
 
-Route::get('/conditions', 'ItemsController@conditions');
-Route::get('/fuel_types', 'ItemsController@fuel_types');
-Route::get('/body_types', 'ItemsController@body_types');
-Route::get('/transmission_types', 'ItemsController@transmission_types');
-Route::get('/door_types', 'ItemsController@door_types');
-Route::get('/colors', 'ItemsController@colors');
-Route::get('/rent_periods', 'ItemsController@rent_periods');
+Route::get('/lists/{list_type}', 'ItemsController@lists');
 
 /**
  * Location Routes

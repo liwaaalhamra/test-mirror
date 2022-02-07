@@ -3,22 +3,16 @@
 namespace App\Http\Controllers\Api;
 
 
-use App\Models\Api\BodyType;
 use App\Models\Api\Category;
-use App\Models\Api\Color;
-use App\Models\Api\Condition;
 use App\Models\Api\CustomField;
-use App\Models\Api\DoorType;
-use App\Models\Api\FuelType;
+use App\Models\Api\CustomFieldList;
 use App\Models\Api\Inbox;
 use App\Models\Api\Item;
 use App\Models\Api\ItemCustomField;
-use App\Models\Api\RentPeriod;
 use App\Models\Api\Restaurant;
 use App\Models\Api\RestaurantEventType;
 use App\Models\Api\ReviewTag;
 use App\Models\Api\SubCategory;
-use App\Models\Api\TransmissionType;
 use App\Models\Api\UserFavorite;
 use App\Models\Api\UserPush;
 use App\Models\Api\UserRating;
@@ -42,32 +36,8 @@ class ItemsController extends Controller
 {
     use HITrait;
 
-    public function conditions(Request $request){
-        $data = Condition::get();
-        return response()->json($data);
-    }
-    public function fuel_types(Request $request){
-        $data = FuelType::get();
-        return response()->json($data);
-    }
-    public function body_types(Request $request){
-        $data = BodyType::get();
-        return response()->json($data);
-    }
-    public function transmission_types(Request $request){
-        $data = TransmissionType::get();
-        return response()->json($data);
-    }
-    public function door_types(Request $request){
-        $data = DoorType::get();
-        return response()->json($data);
-    }
-    public function colors(Request $request){
-        $data = Color::get();
-        return response()->json($data);
-    }
-    public function rent_periods(Request $request){
-        $data = RentPeriod::get();
+    public function lists($type){
+        $data = CustomFieldList::whereFieldName($type)->get();
         return response()->json($data);
     }
 
@@ -561,39 +531,6 @@ class ItemsController extends Controller
         return response()->json($item);
     }
 
-    public function gifts(Request $request) {
-        $user = $this->validate_user($request);
-        $query = Restaurant::whereIsAvailable(1)->whereIsGift(1);
-        if(Input::has('search')){
-            $search = Input::get('search');
-            $query->where(function($query) use ($search){
-                $query->whereRaw("LOWER(name) like ? ", [ "%".strtolower($search)."%"]);
-            });
-        }
-        if($request->sort){
-            $sort = Input::get('sort');
-            if($sort == 'low_to_high'){
-                $query->orderBy('price','asc');
-            }elseif ($sort == 'high_to_low'){
-                $query->orderBy('price','desc');
-            }elseif ($sort == 'most_recent'){
-                $query->orderBy('created_at','desc');
-            }
-        }else{
-            $query->orderBy('item_order','asc');
-        }
-
-        $items = $query->get();
-//                foreach ($items as $item){
-//                    $item->is_favorite = false;
-//                    if(UserFavorite::whereMetaName($section)->whereMetaId($item->id)->whereUserId($user->id)->first()){
-//                        $item->is_favorite = true;
-//                    }
-//                }
-        return response()->json($items);
-
-    }
-
     public function favorites(Request $request) {
         $user = $this->validate_user($request);
         $query = Category::whereIsPublished(1)->orderBy('item_order','asc');
@@ -608,7 +545,6 @@ class ItemsController extends Controller
 
         return response()->json($categories);
     }
-
 
     public function favorites_action(Request $request){
         $user = $this->validate_user($request);
