@@ -69,6 +69,15 @@ class Item extends Model
         return $value == null ? null : \Carbon\Carbon::parse($value)->getTimestamp();
     }
 
+    public function getExpiredAtAttribute($value)
+    {
+        return $value == null ? null : \Carbon\Carbon::parse($value)->getTimestamp();
+    }
+    public function setExpiredAtAttribute($item_datetime)
+    {
+        $this->attributes['expired_at'] = $item_datetime == null ? null : Carbon::createFromTimestamp($item_datetime)->format('Y-m-d H:i:s');
+    }
+
     public function getDeliveryTimeAttribute($value)
     {
         return $value == null ? null : \Carbon\Carbon::parse($value)->getTimestamp();

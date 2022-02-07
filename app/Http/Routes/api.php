@@ -110,6 +110,15 @@ Route::group(['prefix' => 'supplier'],function () {
 });
 
 /**
+ * Favorites Routes
+ */
+Route::group(['prefix' => 'categories'],function () {
+    Route::get('/all', 'ItemsController@all_categories');
+    Route::get('/favorites', 'ItemsController@favorites');
+    Route::post('/favorites/action', 'ItemsController@favorites_action');
+});
+
+/**
  * Items Routes
  */
 Route::group(['prefix' => 'products/items'],function () {
@@ -117,26 +126,12 @@ Route::group(['prefix' => 'products/items'],function () {
     Route::post('pagination', 'ItemsController@product_items_with_pagination');
     Route::post('single', 'ItemsController@product_single_item');
 
-    /**
-     * Favorites Routes
-     */
-    Route::group(['prefix' => 'favorites'],function () {
-        Route::post('/', 'ItemsController@favorites');
-        Route::post('/action', 'ItemsController@favorites_action');
-    });
+
 });
 Route::group(['prefix' => 'services/items'],function () {
     Route::post('', 'ItemsController@service_items');
     Route::post('pagination', 'ItemsController@service_items_with_pagination');
     Route::post('single', 'ItemsController@service_single_item');
-
-    /**
-     * Favorites Routes
-     */
-    Route::group(['prefix' => 'favorites'],function () {
-        Route::post('/', 'ItemsController@favorites');
-        Route::post('/action', 'ItemsController@favorites_action');
-    });
 });
 
 /**

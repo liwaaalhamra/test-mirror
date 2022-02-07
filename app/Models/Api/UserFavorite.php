@@ -7,16 +7,6 @@ use Illuminate\Database\Eloquent\Model;
  * App\Models\Api\UserFavorite
  *
  * @mixin \Eloquent
- * @property integer $id
- * @property integer $user_id
- * @property integer $meta_id
- * @property string $meta_name
- * @property \Carbon\Carbon $created_at
- * @property \Carbon\Carbon $updated_at
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Api\UserFavorite whereId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Api\UserFavorite whereUserId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Api\UserFavorite whereMetaId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Api\UserFavorite whereMetaName($value)
  */
 class UserFavorite extends Model
 {

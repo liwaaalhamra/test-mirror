@@ -4,32 +4,20 @@ namespace App\Http\Controllers\Api;
 
 
 use App\Models\Api\BodyType;
-use App\Models\Api\Brand;
 use App\Models\Api\Category;
-use App\Models\Api\CollectionCategory;
 use App\Models\Api\Color;
 use App\Models\Api\Condition;
-use App\Models\Api\CostLevel;
-use App\Models\Api\Craving;
-use App\Models\Api\Cuisine;
-use App\Models\Api\CuratedCollection;
 use App\Models\Api\CustomField;
 use App\Models\Api\DoorType;
 use App\Models\Api\FuelType;
 use App\Models\Api\Inbox;
 use App\Models\Api\Item;
 use App\Models\Api\ItemCustomField;
-use App\Models\Api\PackageItem;
 use App\Models\Api\RentPeriod;
 use App\Models\Api\Restaurant;
-use App\Models\Api\ProductType;
 use App\Models\Api\RestaurantEventType;
 use App\Models\Api\ReviewTag;
-use App\Models\Api\Service;
 use App\Models\Api\SubCategory;
-use App\Models\Api\SupplierFoodGroup;
-use App\Models\Api\SupplierSubCategory;
-use App\Models\Api\Tag;
 use App\Models\Api\TransmissionType;
 use App\Models\Api\UserFavorite;
 use App\Models\Api\UserPush;
@@ -81,6 +69,12 @@ class ItemsController extends Controller
     public function rent_periods(Request $request){
         $data = RentPeriod::get();
         return response()->json($data);
+    }
+
+    public function all_categories(Request $request) {
+        $query = Category::whereIsPublished(1)->orderBy('item_order','asc');
+        $categories = $query->get()->groupBy('type');
+        return response()->json($categories);
     }
 
     public function products(Request $request) {
@@ -240,8 +234,8 @@ class ItemsController extends Controller
         if($request->header('token')){
             $user = $this->validate_user($request);
         }
-
-        $query = Item::whereIsAvailable(1);
+        $now = Carbon::now()->format('Y-m-d');
+        $query = Item::whereDate('expired_at','>=',$now)->whereIsAvailable(1);
         if(Input::has('search')){
             $search = Input::get('search');
             $query->where(function($query) use ($search){
@@ -252,14 +246,14 @@ class ItemsController extends Controller
             });
         }
         $category_id = isset($request->category_id) ? $request->category_id : null;
-        $sub_category_id = isset($request->sub_category_id) ? $request->sub_category_id : null;
+        $sub_category_ids = isset($request->sub_category_ids) ? $request->sub_category_ids : null;
         $sub_sub_category_id = isset($request->sub_sub_category_id) ? $request->sub_sub_category_id : null;
 
         $query->when($category_id, function ($query) use ($category_id) {
             $query->whereCategoryId($category_id);
         });
-        $query->when($sub_category_id, function ($query) use ($sub_category_id) {
-            $query->whereSubCategoryId($sub_category_id);
+        $query->when($sub_category_ids, function ($query) use ($sub_category_ids) {
+            $query->whereIn('sub_category_id',$sub_category_ids);
         });
         $query->when($sub_sub_category_id, function ($query) use ($sub_sub_category_id) {
             $query->whereSubSubCategoryId($sub_sub_category_id);
@@ -294,8 +288,8 @@ class ItemsController extends Controller
         if($request->header('token')){
             $user = $this->validate_user($request);
         }
-
-        $query = Item::whereIsAvailable(1);
+        $now = Carbon::now()->format('Y-m-d');
+        $query = Item::whereDate('expired_at','>=',$now)->whereIsAvailable(1);
         if(Input::has('search')){
             $search = Input::get('search');
             $query->where(function($query) use ($search){
@@ -306,14 +300,14 @@ class ItemsController extends Controller
             });
         }
         $category_id = isset($request->category_id) ? $request->category_id : null;
-        $sub_category_id = isset($request->sub_category_id) ? $request->sub_category_id : null;
+        $sub_category_ids = isset($request->sub_category_ids) ? $request->sub_category_ids : null;
         $sub_sub_category_id = isset($request->sub_sub_category_id) ? $request->sub_sub_category_id : null;
 
         $query->when($category_id, function ($query) use ($category_id) {
             $query->whereCategoryId($category_id);
         });
-        $query->when($sub_category_id, function ($query) use ($sub_category_id) {
-            $query->whereSubCategoryId($sub_category_id);
+        $query->when($sub_category_ids, function ($query) use ($sub_category_ids) {
+            $query->whereIn('sub_category_id',$sub_category_ids);
         });
         $query->when($sub_sub_category_id, function ($query) use ($sub_sub_category_id) {
             $query->whereSubSubCategoryId($sub_sub_category_id);
@@ -353,8 +347,8 @@ class ItemsController extends Controller
         if($request->header('token')){
             $user = $this->validate_user($request);
         }
-
-        $query = Item::whereIsAvailable(1);
+        $now = Carbon::now()->format('Y-m-d');
+        $query = Item::whereDate('expired_at','>=',$now)->whereIsAvailable(1);
         if(Input::has('search')){
             $search = Input::get('search');
             $query->where(function($query) use ($search){
@@ -365,14 +359,14 @@ class ItemsController extends Controller
             });
         }
         $category_id = isset($request->category_id) ? $request->category_id : null;
-        $sub_category_id = isset($request->sub_category_id) ? $request->sub_category_id : null;
+        $sub_category_ids = isset($request->sub_category_ids) ? $request->sub_category_ids : null;
         $sub_sub_category_id = isset($request->sub_sub_category_id) ? $request->sub_sub_category_id : null;
 
         $query->when($category_id, function ($query) use ($category_id) {
             $query->whereCategoryId($category_id);
         });
-        $query->when($sub_category_id, function ($query) use ($sub_category_id) {
-            $query->whereSubCategoryId($sub_category_id);
+        $query->when($sub_category_ids, function ($query) use ($sub_category_ids) {
+            $query->whereIn('sub_category_id',$sub_category_ids);
         });
         $query->when($sub_sub_category_id, function ($query) use ($sub_sub_category_id) {
             $query->whereSubSubCategoryId($sub_sub_category_id);
@@ -406,8 +400,8 @@ class ItemsController extends Controller
         if($request->header('token')){
             $user = $this->validate_user($request);
         }
-
-        $query = Item::whereIsAvailable(1);
+        $now = Carbon::now()->format('Y-m-d');
+        $query = Item::whereDate('expired_at','>=',$now)->whereIsAvailable(1);
         if(Input::has('search')){
             $search = Input::get('search');
             $query->where(function($query) use ($search){
@@ -418,14 +412,14 @@ class ItemsController extends Controller
             });
         }
         $category_id = isset($request->category_id) ? $request->category_id : null;
-        $sub_category_id = isset($request->sub_category_id) ? $request->sub_category_id : null;
+        $sub_category_ids = isset($request->sub_category_ids) ? $request->sub_category_ids : null;
         $sub_sub_category_id = isset($request->sub_sub_category_id) ? $request->sub_sub_category_id : null;
 
         $query->when($category_id, function ($query) use ($category_id) {
             $query->whereCategoryId($category_id);
         });
-        $query->when($sub_category_id, function ($query) use ($sub_category_id) {
-            $query->whereSubCategoryId($sub_category_id);
+        $query->when($sub_category_ids, function ($query) use ($sub_category_ids) {
+            $query->whereIn('sub_category_id',$sub_category_ids);
         });
         $query->when($sub_sub_category_id, function ($query) use ($sub_sub_category_id) {
             $query->whereSubSubCategoryId($sub_sub_category_id);
@@ -512,7 +506,8 @@ class ItemsController extends Controller
         if(!Input::has('item_id')){
             return parent::return_error('Missing Item ID',401,'messages.missing_parameter');
         }
-        if(!$item = Item::whereIsAvailable(1)->whereId($request->item_id)->first()){
+        $now = Carbon::now()->format('Y-m-d');
+        if(!$item = Item::whereDate('expired_at','>=',$now)->whereIsAvailable(1)->whereId($request->item_id)->first()){
             return parent::return_error("Invalid Item", 402, 'messages.invalid_parameters');
         }
         $currency = env('APP_CURRENCY');
@@ -543,7 +538,8 @@ class ItemsController extends Controller
         if(!Input::has('item_id')){
             return parent::return_error('Missing Item ID',401,'messages.missing_parameter');
         }
-        if(!$item = Item::whereIsAvailable(1)->whereId($request->item_id)->first()){
+        $now = Carbon::now()->format('Y-m-d');
+        if(!$item = Item::whereDate('expired_at','>=',$now)->whereIsAvailable(1)->whereId($request->item_id)->first()){
             return parent::return_error("Invalid Item", 402, 'messages.invalid_parameters');
         }
         $currency = env('APP_CURRENCY');
@@ -600,33 +596,24 @@ class ItemsController extends Controller
 
     public function favorites(Request $request) {
         $user = $this->validate_user($request);
-        $search = isset($request->search) && !empty($request->search) ? trim($request->search) : null;
-        $favorites = $user->favorites($search);
-        $currency = env('APP_CURRENCY');
-        foreach ($favorites as $item){
-            $item->out_of_stock = false;
-            if ($item->quantity < 1) {
-                $item->out_of_stock = true;
+        $query = Category::whereIsPublished(1)->orderBy('item_order','asc');
+        $favorites = UserFavorite::whereUserId($user->id)->whereMetaName('interests')->pluck('meta_id')->toarray();
+        $categories = $query->get()->map(function ($value, $key) use ($favorites) {
+            $value->is_favorite = false;
+            if(in_array($value->id, $favorites)){
+                $value->is_favorite = true;
             }
-            if($package_item = PackageItem::whereNull('order_id')->whereItemId($item->id)->whereUserId($user->id)->first()) {
-                if ($item->quantity <= $package_item->quantity) {
-                    $item->out_of_stock = true;
-                }
-            }
-            $item->currency = $currency;
-            $item->price_formatted = number_format($item->price,3) . ' ' . $currency;
-            $item->discounted_price_formatted = $item->discounted_price ? number_format($item->discounted_price,3) . ' ' . $currency : null;
-            $item->discount_amount_formatted = $item->discount_amount ? number_format($item->discount_amount,3) . ' ' . $currency : null;
-            $item->is_favorite = true;
-        }
-        return response()->json($favorites);
+            return $value;
+        })->groupBy('type');
+
+        return response()->json($categories);
     }
 
 
     public function favorites_action(Request $request){
         $user = $this->validate_user($request);
         if(!Input::has('item_id')){
-            return parent::return_error('Missing Restaurant ID',401,'messages.missing_parameter');
+            return parent::return_error('Missing Category ID',401,'messages.missing_parameter');
         }
         if(!Input::has('action')){
             return parent::return_error('Missing Action',401,'messages.missing_parameter');
@@ -634,20 +621,21 @@ class ItemsController extends Controller
         if(!in_array(Input::get('action'),['add','remove'])){
             return parent::return_error('Invalid Action Value',402,'messages.invalid_parameters');
         }
-        if(!$item = Restaurant::whereIsAvailable(1)->whereId($request->item_id)->first()){
-            return parent::return_error("Invalid Restaurant", 402, 'messages.invalid_parameters');
+        if(!$item = Category::whereIsPublished(1)->whereId($request->item_id)->first()){
+            return parent::return_error("Invalid Category", 402, 'messages.invalid_parameters');
         }
         $action = Input::get('action');
         $user_favorite = UserFavorite::whereMetaId($item->id)->whereUserId($user->id)->first();
         if($action == 'add'){
             if($user_favorite){
-                return parent::return_error('ITem already in favorites list',401,'messages.already_favorite');
+                return parent::return_error('Item already in favorites list',401,'messages.already_favorite');
             }
 
             UserFavorite::create([
                 'user_id' => $user->id,
                 'meta_id' => Input::get('item_id'),
-                'meta_name' => 'restaurants'
+                'meta_name' => 'interests',
+                'meta_type' => $item->type
             ]);
         }else{
             if($user_favorite){
