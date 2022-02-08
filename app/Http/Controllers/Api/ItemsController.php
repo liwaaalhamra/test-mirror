@@ -564,7 +564,7 @@ class ItemsController extends Controller
         $user_favorite = UserFavorite::whereMetaId($item->id)->whereUserId($user->id)->first();
         if($action == 'add'){
             if($user_favorite){
-                return parent::return_error('Item already in favorites list',401,'messages.already_favorite');
+                return parent::return_error('Category already in Interest list',401,'Category already in Interest list');
             }
 
             UserFavorite::create([
@@ -577,7 +577,52 @@ class ItemsController extends Controller
             if($user_favorite){
                 $user_favorite->delete();
             }else{
-                return parent::return_error('Restaurant does not exist in favorites list',408,'messages.item_not_exist_favorite');
+                return parent::return_error('Category does not exist in Interest list',408,'Category does not exist in Interest list');
+            }
+        }
+        return parent::return_json(['status' => 'success']);
+    }
+
+    public function item_favorites(Request $request) {
+        $user = $this->validate_user($request);
+        $search = isset($request->search) && !empty($request->search) ? trim($request->search) : null;
+        $favorites = $user->favorites($search);
+
+        return response()->json($favorites);
+    }
+
+    public function item_favorites_action(Request $request){
+        $user = $this->validate_user($request);
+        if(!Input::has('item_id')){
+            return parent::return_error('Missing Category ID',401,'messages.missing_parameter');
+        }
+        if(!Input::has('action')){
+            return parent::return_error('Missing Action',401,'messages.missing_parameter');
+        }
+        if(!in_array(Input::get('action'),['add','remove'])){
+            return parent::return_error('Invalid Action Value',402,'messages.invalid_parameters');
+        }
+        if(!$item = Item::whereIsAvailable(1)->whereId($request->item_id)->first()){
+            return parent::return_error("Invalid Item", 402, 'messages.invalid_parameters');
+        }
+        $action = Input::get('action');
+        $user_favorite = UserFavorite::whereMetaId($item->id)->whereUserId($user->id)->first();
+        if($action == 'add'){
+            if($user_favorite){
+                return parent::return_error('Item already in favorites list',401,'messages.already_favorite');
+            }
+
+            UserFavorite::create([
+                'user_id' => $user->id,
+                'meta_id' => Input::get('item_id'),
+                'meta_name' => 'items',
+                'meta_type' => null
+            ]);
+        }else{
+            if($user_favorite){
+                $user_favorite->delete();
+            }else{
+                return parent::return_error('Item does not exist in favorites list',408,'messages.item_not_exist_favorite');
             }
         }
         return parent::return_json(['status' => 'success']);

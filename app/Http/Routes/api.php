@@ -119,6 +119,14 @@ Route::group(['prefix' => 'categories'],function () {
 });
 
 /**
+ * Posts Favorites Routes
+ */
+Route::group(['prefix' => 'items'],function () {
+    Route::post('/favorites', 'ItemsController@item_favorites');
+    Route::post('/favorites/action', 'ItemsController@item_favorites_action');
+});
+
+/**
  * Items Routes
  */
 Route::group(['prefix' => 'products/items'],function () {
