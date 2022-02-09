@@ -93,8 +93,8 @@ Route::post('/category_subs', 'ItemsController@category_subs');
 Route::post('/price_limit', 'ItemsController@price_limit');
 Route::post('/filters', 'ItemsController@filters');
 Route::post('/custom_fields', 'ItemsController@custom_fields');
-Route::get('/home_top_categories', 'ItemsController@home_top_categories');
-Route::get('/home_top_categories/{slug}/items', 'ItemsController@home_top_categories_items');
+Route::post('/home_top_categories', 'ItemsController@home_top_categories');
+Route::post('/home_top_categories/{slug}/items', 'ItemsController@home_top_categories_items');
 
 Route::get('/lists/{list_type}', 'ItemsController@lists');
 

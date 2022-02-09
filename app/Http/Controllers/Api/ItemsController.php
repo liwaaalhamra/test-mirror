@@ -14,6 +14,7 @@ use App\Models\Api\RestaurantEventType;
 use App\Models\Api\ReviewTag;
 use App\Models\Api\SubCategory;
 use App\Models\Api\UserFavorite;
+use App\Models\Api\UserPostViewed;
 use App\Models\Api\UserPush;
 use App\Models\Api\UserRating;
 use App\Models\Api\UserRatingLiker;
@@ -124,12 +125,54 @@ class ItemsController extends Controller
 
     public function home_top_categories(Request $request) {
         $user = null;
+        $items_viewed = [];
+        $latitude = isset($request->latitude) ? $request->latitude : null;
+        $longitude = isset($request->longitude) ? $request->longitude : null;
         if($request->header('token')){
             $user = $this->validate_user($request);
+            $items_viewed = UserPostViewed::whereUserId($user->id)->orderby('updated_at','desc')->pluck('item_id')->toarray();
         }
         $categories = [];
+        $recently_viewed_items = [];
         $new_arrival_items = [];
         $latest_services_items = [];
+        $nearby_items = [];
+        if($latitude && $longitude){
+            $query = Item::whereType('offer')->whereIsAvailable(1)->orderbyRaw("(6371 * 2 * ASIN(SQRT( POWER(SIN(( $latitude - latitude) *  pi()/180 / 2), 2) +COS( $latitude * pi()/180) * COS(latitude * pi()/180) * POWER(SIN(( $longitude - longitude) * pi()/180 / 2), 2) ))) asc");
+            $currency = env('APP_CURRENCY');
+            $nearby_items = $query->take(10)->get()->map(function ($value, $key) use ($currency) {
+                unset($value->quantity);
+                $value->currency = $currency;
+                $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
+                $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
+                $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
+                return $value;
+            })->values();
+        }
+
+
+
+        $query = Item::wherein('id',$items_viewed)->whereType('offer')->whereIsAvailable(1)->orderby('created_at','desc');
+        $currency = env('APP_CURRENCY');
+        $recently_viewed_items = $query->take(10)->get()->map(function ($value, $key) use ($currency) {
+            unset($value->quantity);
+            $value->currency = $currency;
+            $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
+            $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
+            $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
+            return $value;
+        })->values();
+
+        $query = Item::whereType('offer')->whereIsAvailable(1)->orderby('created_at','desc');
+        $currency = env('APP_CURRENCY');
+        $recently_viewed_items = $query->take(10)->get()->map(function ($value, $key) use ($currency) {
+            unset($value->quantity);
+            $value->currency = $currency;
+            $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
+            $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
+            $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
+            return $value;
+        })->values();
 
         $query = Item::whereType('offer')->whereHas('category', function ($q) {
             $q->whereType('products');
@@ -160,15 +203,27 @@ class ItemsController extends Controller
 
 
         $category1 = [
-            'slug' => 'latest-services',
-            'title' => 'Latest Services',
+            'slug' => 'trending-services',
+            'title' => 'Trending Services',
             'top_items' => $latest_services_items
         ];
         $category2 = [
-            'slug' => 'new-arrivals',
-            'title' => 'New Arrivals',
+            'slug' => 'trending-products',
+            'title' => 'Trending Products',
             'items' => $new_arrival_items
         ];
+        $category3 = [
+            'slug' => 'recently-viewed',
+            'title' => 'Recently Viewed',
+            'items' => $recently_viewed_items
+        ];
+        $category4 = [
+            'slug' => 'nearby',
+            'title' => 'Nearby',
+            'items' => $nearby_items
+        ];
+        array_push($categories,$category4);
+        array_push($categories,$category3);
         array_push($categories,$category2);
         array_push($categories,$category1);
 
@@ -177,10 +232,14 @@ class ItemsController extends Controller
 
     public function home_top_categories_items(Request $request,$slug) {
         $user = null;
+        $items_viewed = [];
+        $latitude = isset($request->latitude) ? $request->latitude : null;
+        $longitude = isset($request->longitude) ? $request->longitude : null;
         if($request->header('token')){
             $user = $this->validate_user($request);
+            $items_viewed = UserPostViewed::whereUserId($user->id)->orderby('updated_at','desc')->pluck('item_id')->toarray();
         }
-        if($slug == 'new-arrivals'){
+        if($slug == 'trending-products'){
             $query = Item::whereType('offer')->whereHas('category', function ($q) {
                 $q->whereType('products');
             })->whereIsAvailable(1)->orderby('created_at','desc');
@@ -193,7 +252,7 @@ class ItemsController extends Controller
                 $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
                 return $value;
             })->values();
-        }elseif ($slug == 'latest-services'){
+        }elseif ($slug == 'trending-services'){
             $query = Item::whereType('offer')->whereHas('category', function ($q) {
                 $q->whereType('services');
             })->whereIsAvailable(1)->orderby('created_at','desc');
@@ -205,6 +264,30 @@ class ItemsController extends Controller
                 $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
                 return $value;
             })->values();
+        }elseif ($slug == 'recently-viewed'){
+            $query = Item::wherein('id',$items_viewed)->whereType('offer')->whereIsAvailable(1)->orderby('created_at','desc');
+            $currency = env('APP_CURRENCY');
+            $recently_viewed_items = $query->take(50)->get()->map(function ($value, $key) use ($currency) {
+                unset($value->quantity);
+                $value->currency = $currency;
+                $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
+                $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
+                $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
+                return $value;
+            })->values();
+        }elseif ($slug == 'nearby'){
+            if($latitude && $longitude){
+                $query = Item::whereType('offer')->whereIsAvailable(1)->orderbyRaw("(6371 * 2 * ASIN(SQRT( POWER(SIN(( $latitude - latitude) *  pi()/180 / 2), 2) +COS( $latitude * pi()/180) * COS(latitude * pi()/180) * POWER(SIN(( $longitude - longitude) * pi()/180 / 2), 2) ))) asc");
+                $currency = env('APP_CURRENCY');
+                $nearby_items = $query->take(50)->get()->map(function ($value, $key) use ($currency) {
+                    unset($value->quantity);
+                    $value->currency = $currency;
+                    $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
+                    $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
+                    $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
+                    return $value;
+                })->values();
+            }
         }
 
         $limit = 20;
@@ -490,6 +573,10 @@ class ItemsController extends Controller
         $user = null;
         if($request->header('token')){
             $user = $this->validate_user($request);
+            UserPostViewed::updateOrCreate([
+                'user_id' => $user->id,
+                'item_id' => $request->item_id
+            ])->touch();
         }
 
         if(!Input::has('item_id')){
@@ -538,6 +625,10 @@ class ItemsController extends Controller
         $user = null;
         if($request->header('token')){
             $user = $this->validate_user($request);
+            UserPostViewed::updateOrCreate([
+                'user_id' => $user->id,
+                'item_id' => $request->item_id
+            ])->touch();
         }
 
         if(!Input::has('item_id')){
