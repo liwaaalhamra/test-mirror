@@ -23,17 +23,22 @@ class Item extends Model
     protected $table = "items";
     protected $guarded = [];
     protected $hidden = ['updated_at','deleted_at','pivot','item_order','meta_name','is_available','location_id',
-        'name_en','name_ar','description_en','description_ar','pdf','share_link','country_id','latitude','longitude','address','country_code','phone_number'
+        'name_en','name_ar','description_en','description_ar','pdf',
+        'share_link','country_id','latitude','longitude','address','country_code','phone_number','user','image','width','height'
     ];
     protected $casts = [
         'is_available' => 'boolean',
         'is_sale' => 'boolean',
     ];
     protected $with = ['location','images'];
-    protected $appends = ['name','description','discount_amount','currency','price_formatted','discounted_price_formatted','discount_amount_formatted','barcode'];
+    protected $appends = ['name','user_fullname','description','discount_amount','currency','price_formatted','discounted_price_formatted','discount_amount_formatted','barcode'];
 
     protected function getCurrencyAttribute(){
         return env('APP_CURRENCY');
+    }
+
+    protected function getUserFullnameAttribute(){
+        return $this->user->full_name;
     }
 
     protected function getPriceFormattedAttribute(){
@@ -81,6 +86,13 @@ class Item extends Model
     public function getDeliveryTimeAttribute($value)
     {
         return $value == null ? null : \Carbon\Carbon::parse($value)->getTimestamp();
+    }
+    public function user(){
+        return $this->belongsTo(Users::class,'user_id');
+    }
+
+    public function return_post(){
+        return $this->belongsTo(Item::class,'return_id');
     }
 
     public function sub_category(){

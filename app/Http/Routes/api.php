@@ -30,84 +30,9 @@ Route::group(['prefix' => 'cart'],function () {
     Route::get('remove_coupon_code', 'OrderController@remove_coupon_code');
 });
 
-/**
- * Supplier Cart Routes
- */
-Route::group(['prefix' => 'supplier/cart'],function () {
-    Route::get('count', 'SupplierOrderController@count');
-    Route::get('get', 'SupplierOrderController@get');
-
-    Route::get('history', 'SupplierOrderController@history');
-    Route::post('remove', 'SupplierOrderController@delete_selected_items');
-    Route::post('remove_single', 'SupplierOrderController@delete_item');
-    Route::post('add', 'SupplierOrderController@add_item');
-    Route::post('edit', 'SupplierOrderController@edit_item');
-    Route::get('clear', 'SupplierOrderController@clear');
-    Route::post('total_price', 'SupplierOrderController@total_price');
-    Route::post('book', 'SupplierOrderController@book');
-    Route::post('reorder', 'SupplierOrderController@reorder');
-    Route::post('apply_coupon_code', 'SupplierOrderController@apply_coupon_code');
-    Route::get('remove_coupon_code', 'SupplierOrderController@remove_coupon_code');
-});
-
-/**
- * Restaurants Routes
- */
-Route::group(['prefix' => 'restaurants'],function () {
-    Route::post('/login', ['uses' => 'RestaurantsController@login']);
-    Route::get('/profile', ['uses' => 'RestaurantsController@get']);
-    Route::get('/logout', ['uses' => 'RestaurantsController@logout']);
-    Route::get('/reset_orders', ['uses' => 'RestaurantsController@reset_orders']);
-    Route::post('/status', ['uses' => 'RestaurantsController@set_status']);
-    Route::post('/set_merchant_push', ['uses' => 'RestaurantsController@set_merchant_push']);
-    Route::post('/all_requests', ['uses' => 'RestaurantsController@all_requests']);
-    Route::post('/set_order_status', ['uses' => 'RestaurantsController@set_order_status']);
-    Route::post('/order_details', ['uses' => 'RestaurantsController@order_details']);
-    Route::post('/set_reservation_status', ['uses' => 'RestaurantsController@set_reservation_status']);
-
-    Route::post('menu_categories', 'ItemsController@restaurant_menu_categories');
-    Route::post('', 'ItemsController@restaurants');
-    Route::post('pagination', 'ItemsController@restaurants_with_pagination');
-    Route::get('sizes', 'ItemsController@sizes');
-    Route::post('gifts', 'ItemsController@gifts');
-    Route::post('single', 'ItemsController@single_restaurant');
-    Route::post('reserve_table', 'ItemsController@reserve_table');
-    Route::post('review', 'ItemsController@review');
-    Route::post('review/action', 'ItemsController@review_action');
-    /**
-     * Favorites Routes
-     */
-    Route::group(['prefix' => 'favorites'],function () {
-        Route::post('/', 'ItemsController@favorites');
-        Route::post('/action', 'ItemsController@favorites_action');
-    });
-});
 
 Route::post('explore_reviews', 'ItemsController@explore_reviews');
 Route::get('order_status_list', 'OrderController@order_status_list');
-
-
-/**
- * Supplier Routes
- */
-Route::group(['prefix' => 'supplier'],function () {
-    Route::post('/categories', 'ItemsController@supplier_categories');
-    Route::post('/food_groups', 'ItemsController@supplier_food_groups');
-    Route::post('/items', 'ItemsController@supplier_items');
-    Route::post('/items/single', 'ItemsController@supplier_single_item');
-    Route::post('/items/pagination', 'ItemsController@supplier_items_with_pagination');
-    Route::post('menu_categories', 'ItemsController@supplier_menu_categories');
-
-    Route::post('/login', ['uses' => 'SupplierController@login']);
-    Route::get('/profile', ['uses' => 'SupplierController@get']);
-    Route::get('/reset_orders', ['uses' => 'SupplierController@reset_orders']);
-    Route::get('/logout', ['uses' => 'SupplierController@logout']);
-    Route::post('/status', ['uses' => 'SupplierController@set_status']);
-    Route::post('/set_merchant_push', ['uses' => 'SupplierController@set_merchant_push']);
-    Route::post('/all_requests', ['uses' => 'SupplierController@all_requests']);
-    Route::post('/order_details', ['uses' => 'SupplierController@order_details']);
-    Route::post('/set_request_status', ['uses' => 'SupplierController@set_request_status']);
-});
 
 /**
  * Favorites Routes
@@ -119,9 +44,15 @@ Route::group(['prefix' => 'categories'],function () {
 });
 
 /**
- * Posts Favorites Routes
+ * Posts Favorites + Posts Routes
  */
 Route::group(['prefix' => 'items'],function () {
+    Route::post('/create', 'PostsController@create');
+    Route::post('/update', 'PostsController@update');
+    Route::post('/delete', 'PostsController@delete');
+    Route::post('/my_posts', 'PostsController@my_posts');
+
+
     Route::post('/favorites', 'ItemsController@item_favorites');
     Route::post('/favorites/action', 'ItemsController@item_favorites_action');
 });
@@ -159,6 +90,7 @@ Route::group(['prefix' => 'chat'],function () {
 Route::post('/products', 'ItemsController@products');
 Route::post('/services', 'ItemsController@services');
 Route::post('/category_subs', 'ItemsController@category_subs');
+Route::post('/price_limit', 'ItemsController@price_limit');
 Route::post('/filters', 'ItemsController@filters');
 Route::post('/custom_fields', 'ItemsController@custom_fields');
 Route::get('/home_top_categories', 'ItemsController@home_top_categories');

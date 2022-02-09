@@ -8,6 +8,7 @@ use App\Models\Api\Ad;
 use App\Models\Api\CheckoutLog;
 use App\Models\Api\Country;
 use App\Models\Api\Dashboard;
+use App\Models\Api\Item;
 use App\Models\Api\OrderStatus;
 use App\Models\Api\Restaurant;
 use App\Models\Api\Order;
@@ -453,20 +454,22 @@ class CronController extends Controller
     }
 
     public function check_expired_items(Request $request){
-        $expiry_months = env('EXPIRY_DATE_ALERT');
-        $expired_date = Carbon::now()->addMonths($expiry_months)->format('Y-m-d');
-        Restaurant::where('expiry_date','<',$expired_date)->get()->map(function($value, $key) {
-            $info = [];
-            $info['to'] = $to = explode(',', env('EXPIRY_DATE_EMAILS'));
-            $info['icon'] = 'expired.png';
-            $info['message'] = 'Expired Restaurant';
-            $info['item'] = $value;
-            $info['item_link'] = secure_url('admin/items?item_id='.$value->id);
-            $info['title'] = env('APP_NAME') . ' | Expired Restaurant';
-            Mail::send('emails.expired_item', ['data' => $info], function ($message) use ($info) {
-                $message->subject($info['title']);
-                $message->to($info['to']);
-            });
+        $now = Carbon::now()->format('Y-m-d');
+        Item::whereDate('expired_at','<',$now)->get()->map(function($value, $key) {
+//            $info = [];
+//            $info['to'] = $to = explode(',', env('EXPIRY_DATE_EMAILS'));
+//            $info['icon'] = 'expired.png';
+//            $info['message'] = 'Expired Restaurant';
+//            $info['item'] = $value;
+//            $info['item_link'] = secure_url('admin/items?item_id='.$value->id);
+//            $info['title'] = env('APP_NAME') . ' | Expired Restaurant';
+//            Mail::send('emails.expired_item', ['data' => $info], function ($message) use ($info) {
+//                $message->subject($info['title']);
+//                $message->to($info['to']);
+//            });
+            $value->status = 'expired';
+            $value->is_available = false;
+            $value->save();
             return $value;
         })->values();
         return response()->json(['status' => 'Alerts sent of expired Items']);

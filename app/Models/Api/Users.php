@@ -150,6 +150,10 @@ class Users extends Model
         return $this->attributes['photo'];
     }
 
+    public function getFullNameAttribute(){
+        return $this->attributes['full_name'] ? $this->attributes['full_name'] : $this->attributes['first_name'].' '.$this->attributes['last_name'];
+    }
+
     public function setPasswordAttribute($value) {
         $this->attributes['password'] = bcrypt($value);
     }

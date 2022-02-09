@@ -36,6 +36,22 @@ class ItemsController extends Controller
 {
     use HITrait;
 
+    public function price_limit(Request $request) {
+        if(!Input::has('price')){
+            return parent::return_error('Missing Price',401,'messages.missing_parameter');
+        }
+        $price = $request->price;
+        $limits = [];
+        if($price < 3000){
+            $limits['minimum'] = 0;
+            $limits['maximum'] = 6000;
+        }else{
+            $limits['minimum'] = $price * 0.5;
+            $limits['maximum'] = floatval($price);
+        }
+        return response()->json($limits);
+    }
+
     public function lists($type){
         $data = CustomFieldList::whereFieldName($type)->get();
         return response()->json($data);
@@ -115,7 +131,7 @@ class ItemsController extends Controller
         $new_arrival_items = [];
         $latest_services_items = [];
 
-        $query = Item::whereHas('category', function ($q) {
+        $query = Item::whereType('offer')->whereHas('category', function ($q) {
             $q->whereType('products');
         })->whereIsAvailable(1)->orderby('created_at','desc');
         $currency = env('APP_CURRENCY');
@@ -129,7 +145,7 @@ class ItemsController extends Controller
             return $value;
         })->values();
 
-        $query = Item::whereHas('category', function ($q) {
+        $query = Item::whereType('offer')->whereHas('category', function ($q) {
             $q->whereType('services');
         })->whereIsAvailable(1)->orderby('created_at','desc');
         $currency = env('APP_CURRENCY');
@@ -165,7 +181,7 @@ class ItemsController extends Controller
             $user = $this->validate_user($request);
         }
         if($slug == 'new-arrivals'){
-            $query = Item::whereHas('category', function ($q) {
+            $query = Item::whereType('offer')->whereHas('category', function ($q) {
                 $q->whereType('products');
             })->whereIsAvailable(1)->orderby('created_at','desc');
             $currency = env('APP_CURRENCY');
@@ -178,7 +194,7 @@ class ItemsController extends Controller
                 return $value;
             })->values();
         }elseif ($slug == 'latest-services'){
-            $query = Item::whereHas('category', function ($q) {
+            $query = Item::whereType('offer')->whereHas('category', function ($q) {
                 $q->whereType('services');
             })->whereIsAvailable(1)->orderby('created_at','desc');
             $currency = env('APP_CURRENCY');
@@ -205,7 +221,7 @@ class ItemsController extends Controller
             $user = $this->validate_user($request);
         }
         $now = Carbon::now()->format('Y-m-d');
-        $query = Item::whereDate('expired_at','>=',$now)->whereIsAvailable(1);
+        $query = Item::whereType('offer')->whereDate('expired_at','>=',$now)->whereIsAvailable(1);
         if(Input::has('search')){
             $search = Input::get('search');
             $query->where(function($query) use ($search){
@@ -259,7 +275,7 @@ class ItemsController extends Controller
             $user = $this->validate_user($request);
         }
         $now = Carbon::now()->format('Y-m-d');
-        $query = Item::whereDate('expired_at','>=',$now)->whereIsAvailable(1);
+        $query = Item::whereType('offer')->whereDate('expired_at','>=',$now)->whereIsAvailable(1);
         if(Input::has('search')){
             $search = Input::get('search');
             $query->where(function($query) use ($search){
@@ -318,7 +334,7 @@ class ItemsController extends Controller
             $user = $this->validate_user($request);
         }
         $now = Carbon::now()->format('Y-m-d');
-        $query = Item::whereDate('expired_at','>=',$now)->whereIsAvailable(1);
+        $query = Item::whereType('offer')->whereDate('expired_at','>=',$now)->whereIsAvailable(1);
         if(Input::has('search')){
             $search = Input::get('search');
             $query->where(function($query) use ($search){
@@ -371,7 +387,7 @@ class ItemsController extends Controller
             $user = $this->validate_user($request);
         }
         $now = Carbon::now()->format('Y-m-d');
-        $query = Item::whereDate('expired_at','>=',$now)->whereIsAvailable(1);
+        $query = Item::whereType('offer')->whereDate('expired_at','>=',$now)->whereIsAvailable(1);
         if(Input::has('search')){
             $search = Input::get('search');
             $query->where(function($query) use ($search){
@@ -445,8 +461,8 @@ class ItemsController extends Controller
     }
 
     public function custom_fields(Request $request) {
-        $is_return = isset($request->post_type) && $request->post_type == 'return' ? true : false;
-        $query = CustomField::whereInReturn($is_return);
+        $is_return = isset($request->post_type) && $request->post_type == 'return' ? true : null;
+        $query = $is_return ? CustomField::whereInReturn($is_return) : CustomField::whereIn('in_return',[0,1]);
 
         $category_id = isset($request->category_id) ? $request->category_id : null;
         $sub_category_id = isset($request->sub_category_id) ? $request->sub_category_id : null;
@@ -462,7 +478,10 @@ class ItemsController extends Controller
             $query->whereSubSubCategoryId($sub_sub_category_id);
         });
 
-        $filters = $query->orderby('item_order','asc')->get();
+        $filters = $query->orderby('item_order','asc')->get()->map(function ($value, $key) {
+            $value->section = $value->in_filters ? 'filters' : 'regular';
+            return $value;
+        })->groupBy('section');
 
         return response()->json($filters);
     }
@@ -487,6 +506,7 @@ class ItemsController extends Controller
         $item->discount_amount_formatted = $item->discount_amount ? number_format($item->discount_amount,3) . ' ' . $currency : null;
         unset($item->quantity);
         $item->custom_fields = CustomField::whereCategoryId($item->category_id)->whereSubCategoryId($item->sub_category_id)->orderby('item_order','asc')->get()->map(function ($value, $key) use ($item) {
+            $value->section = $value->in_filters ? 'filters' : 'regular';
             $custom_field_value = ItemCustomField::whereFieldName($value->field_name)->whereItemId($item->id)->whereCustomFieldId($value->id)->first();
             $value->field_value = $custom_field_value ? $this->cast_field_value($custom_field_value->field_value, $value->field_type) : null;
             $custom_extra_field_value = null;
@@ -495,7 +515,22 @@ class ItemsController extends Controller
             }
             $value->extra_field_value = $custom_extra_field_value ? $this->cast_field_value($custom_extra_field_value->extra_field_value, $value->extra_field_type) : null;
             return $value;
-        })->values();
+        })->groupBy('section');
+        $return_post = $item->return_post;
+        if($return_post){
+            $return_post->custom_fields = CustomField::whereInFilters(0)->whereInReturn(1)->whereCategoryId($return_post->category_id)->whereSubCategoryId($return_post->sub_category_id)->orderby('item_order','asc')->get()->map(function ($value, $key) use ($return_post) {
+                $value->section = $value->in_filters ? 'filters' : 'regular';
+                $custom_field_value = ItemCustomField::whereFieldName($value->field_name)->whereItemId($return_post->id)->whereCustomFieldId($value->id)->first();
+                $value->field_value = $custom_field_value ? $this->cast_field_value($custom_field_value->field_value, $value->field_type) : null;
+                $custom_extra_field_value = null;
+                if($value->has_extra_field){
+                    $custom_extra_field_value = ItemCustomField::whereExtraFieldName($value->extra_field_name)->whereItemId($return_post->id)->whereCustomFieldId($value->id)->first();
+                }
+                $value->extra_field_value = $custom_extra_field_value ? $this->cast_field_value($custom_extra_field_value->extra_field_value, $value->extra_field_type) : null;
+                return $value;
+            })->groupBy('section');
+        }
+
         return response()->json($item);
     }
 
@@ -519,6 +554,7 @@ class ItemsController extends Controller
         $item->discount_amount_formatted = $item->discount_amount ? number_format($item->discount_amount,3) . ' ' . $currency : null;
         unset($item->quantity);
         $item->custom_fields = CustomField::whereCategoryId($item->category_id)->whereSubCategoryId($item->sub_category_id)->orderby('item_order','asc')->get()->map(function ($value, $key) use ($item) {
+            $value->section = $value->in_filters ? 'filters' : 'regular';
             $custom_field_value = ItemCustomField::whereFieldName($value->field_name)->whereItemId($item->id)->whereCustomFieldId($value->id)->first();
             $value->field_value = $custom_field_value ? $this->cast_field_value($custom_field_value->field_value, $value->field_type) : null;
             $custom_extra_field_value = null;
@@ -527,7 +563,22 @@ class ItemsController extends Controller
             }
             $value->extra_field_value = $custom_extra_field_value ? $this->cast_field_value($custom_extra_field_value->extra_field_value, $value->extra_field_type) : null;
             return $value;
-        })->values();
+        })->groupBy('section');
+        $return_post = $item->return_post;
+        if($return_post){
+            $return_post->custom_fields = CustomField::whereInFilters(0)->whereInReturn(1)->whereCategoryId($return_post->category_id)->whereSubCategoryId($return_post->sub_category_id)->orderby('item_order','asc')->get()->map(function ($value, $key) use ($return_post) {
+                $value->section = $value->in_filters ? 'filters' : 'regular';
+                $custom_field_value = ItemCustomField::whereFieldName($value->field_name)->whereItemId($return_post->id)->whereCustomFieldId($value->id)->first();
+                $value->field_value = $custom_field_value ? $this->cast_field_value($custom_field_value->field_value, $value->field_type) : null;
+                $custom_extra_field_value = null;
+                if($value->has_extra_field){
+                    $custom_extra_field_value = ItemCustomField::whereExtraFieldName($value->extra_field_name)->whereItemId($return_post->id)->whereCustomFieldId($value->id)->first();
+                }
+                $value->extra_field_value = $custom_extra_field_value ? $this->cast_field_value($custom_extra_field_value->extra_field_value, $value->extra_field_type) : null;
+                return $value;
+            })->groupBy('section');
+        }
+
         return response()->json($item);
     }
 

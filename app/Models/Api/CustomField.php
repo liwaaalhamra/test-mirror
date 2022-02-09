@@ -20,9 +20,11 @@ class CustomField extends Model
 {
     protected $table = "custom_fields";
     protected $guarded = [];
-    protected $hidden = ['updated_at','category_id','sub_category_id','sub_sub_category_id','in_return','item_order'];
+    protected $hidden = ['updated_at','category_id','sub_category_id','sub_sub_category_id','in_return','item_order','created_at','in_filters'];
     protected $casts = [
         'has_extra_field' => 'boolean',
+        'in_return' => 'boolean',
+        'in_filters' => 'boolean',
     ];
 
     public function getCreatedAtAttribute($value)
