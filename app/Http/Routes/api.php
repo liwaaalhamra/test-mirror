@@ -51,10 +51,19 @@ Route::group(['prefix' => 'items'],function () {
     Route::post('/update', 'PostsController@update');
     Route::post('/delete', 'PostsController@delete');
     Route::post('/my_posts', 'PostsController@my_posts');
+    Route::post('/user_related_posts', 'PostsController@user_related_posts');
 
 
     Route::post('/favorites', 'ItemsController@item_favorites');
     Route::post('/favorites/action', 'ItemsController@item_favorites_action');
+});
+
+/**
+ * All Items Routes
+ */
+Route::group(['prefix' => 'search_items'],function () {
+    Route::post('', 'ItemsController@all_items');
+    Route::post('pagination', 'ItemsController@all_items_with_pagination');
 });
 
 /**
@@ -64,9 +73,8 @@ Route::group(['prefix' => 'products/items'],function () {
     Route::post('', 'ItemsController@product_items');
     Route::post('pagination', 'ItemsController@product_items_with_pagination');
     Route::post('single', 'ItemsController@product_single_item');
-
-
 });
+
 Route::group(['prefix' => 'services/items'],function () {
     Route::post('', 'ItemsController@service_items');
     Route::post('pagination', 'ItemsController@service_items_with_pagination');

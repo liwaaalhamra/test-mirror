@@ -110,6 +110,10 @@ class Item extends Model
         return $this->belongsTo(Location::class,'location_id');
     }
 
+    public function custom_fields(){
+        return $this->hasMany(ItemCustomField::class,'item_id','id');
+    }
+
     protected static function boot()
     {
         parent::boot();

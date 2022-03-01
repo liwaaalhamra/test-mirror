@@ -142,6 +142,8 @@ class ItemsController extends Controller
             $currency = env('APP_CURRENCY');
             $nearby_items = $query->take(10)->get()->map(function ($value, $key) use ($currency) {
                 unset($value->quantity);
+                $value->post_type = $value->category->type;
+                unset($value->category);
                 $value->currency = $currency;
                 $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
                 $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
@@ -157,17 +159,8 @@ class ItemsController extends Controller
         $recently_viewed_items = $query->take(10)->get()->map(function ($value, $key) use ($currency) {
             unset($value->quantity);
             $value->currency = $currency;
-            $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
-            $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
-            $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
-            return $value;
-        })->values();
-
-        $query = Item::whereType('offer')->whereIsAvailable(1)->orderby('created_at','desc');
-        $currency = env('APP_CURRENCY');
-        $recently_viewed_items = $query->take(10)->get()->map(function ($value, $key) use ($currency) {
-            unset($value->quantity);
-            $value->currency = $currency;
+            $value->post_type = $value->category->type;
+            unset($value->category);
             $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
             $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
             $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
@@ -180,6 +173,7 @@ class ItemsController extends Controller
         $currency = env('APP_CURRENCY');
         $new_arrival_items = $query->take(10)->get()->map(function ($value, $key) use ($currency) {
             unset($value->quantity);
+            $value->post_type = "products";
             $value->currency = $currency;
             $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
             $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
@@ -194,6 +188,7 @@ class ItemsController extends Controller
         $currency = env('APP_CURRENCY');
         $latest_services_items = $query->take(10)->get()->map(function ($value, $key) use ($currency) {
             $value->currency = $currency;
+            $value->post_type = "services";
             $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
             $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
             $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
@@ -247,6 +242,7 @@ class ItemsController extends Controller
             $items = $query->take(50)->get()->map(function ($value, $key) use ($currency) {
                 unset($value->quantity);
                 $value->currency = $currency;
+                $value->post_type = "products";
                 $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
                 $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
                 $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
@@ -259,6 +255,7 @@ class ItemsController extends Controller
             $currency = env('APP_CURRENCY');
             $items = $query->take(50)->get()->map(function ($value, $key) use ($currency) {
                 $value->currency = $currency;
+                $value->post_type = "services";
                 $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
                 $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
                 $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
@@ -270,6 +267,8 @@ class ItemsController extends Controller
             $recently_viewed_items = $query->take(50)->get()->map(function ($value, $key) use ($currency) {
                 unset($value->quantity);
                 $value->currency = $currency;
+                $value->post_type = $value->category->type;
+                unset($value->category);
                 $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
                 $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
                 $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
@@ -282,6 +281,8 @@ class ItemsController extends Controller
                 $nearby_items = $query->take(50)->get()->map(function ($value, $key) use ($currency) {
                     unset($value->quantity);
                     $value->currency = $currency;
+                    $value->post_type = $value->category->type;
+                    unset($value->category);
                     $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
                     $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
                     $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
@@ -289,6 +290,162 @@ class ItemsController extends Controller
                 })->values();
             }
         }
+
+        $limit = 20;
+        $items = new LengthAwarePaginator(
+            $items->forPage(LengthAwarePaginator::resolveCurrentPage(), $limit)->values(), $items->count(), $limit, LengthAwarePaginator::resolveCurrentPage(), ['path' => secure_url('/api/products/items/pagination')]
+        );
+
+        return response()->json($items);
+    }
+
+    public function all_items(Request $request) {
+        $user = null;
+        if($request->header('token')){
+            $user = $this->validate_user($request);
+        }
+        $now = Carbon::now()->format('Y-m-d');
+        $query = Item::whereType('offer')->whereDate('expired_at','>=',$now)->whereIsAvailable(1);
+        if(Input::has('search')){
+            $search = Input::get('search');
+            $query->where(function($query) use ($search){
+                $query->whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])
+                    ->orwhereRaw("LOWER(name_ar) like ? ", [ "%".strtolower($search)."%"])
+                    ->orwhereRaw("LOWER(description_en) like ? ", [ "%".strtolower($search)."%"])
+                    ->orwhereRaw("LOWER(description_ar) like ? ", [ "%".strtolower($search)."%"]);
+            });
+        }
+        $category_id = isset($request->category_id) ? $request->category_id : null;
+        $sub_category_ids = isset($request->sub_category_ids) ? $request->sub_category_ids : null;
+        $sub_sub_category_id = isset($request->sub_sub_category_id) ? $request->sub_sub_category_id : null;
+        $filters_fields = isset($request->filters_fields) ? json_decode($request->filters_fields) : null;
+
+        $query->when($category_id, function ($query) use ($category_id) {
+            $query->whereCategoryId($category_id);
+        });
+        $query->when($sub_category_ids, function ($query) use ($sub_category_ids) {
+            $query->whereIn('sub_category_id',$sub_category_ids);
+        });
+        $query->when($sub_sub_category_id, function ($query) use ($sub_sub_category_id) {
+            $query->whereSubSubCategoryId($sub_sub_category_id);
+        });
+        $query->when($filters_fields, function ($query) use ($filters_fields) {
+            $query->whereHas('custom_fields', function ($query) use ($filters_fields) {
+                foreach ($filters_fields as $filter_field){
+                    $query->where(function($query) use ($filters_fields,$filter_field){
+                        $extra_field_name = isset($filter_field->extra_field_name) ? $filter_field->extra_field_name : null;
+                        $extra_field_value = isset($filter_field->extra_field_value) ? $filter_field->extra_field_value : null;
+                        $query->whereCustomFieldId($filter_field->id)->whereFieldValue($filter_field->field_value)->when($extra_field_name, function ($query) use ($extra_field_name,$extra_field_value) {
+                            $query->whereExtraFieldName($extra_field_name)->whereExtraFieldValue($extra_field_value);
+                        });
+                    });
+                }
+            });
+        });
+        if($request->sort){
+            $sort = Input::get('sort');
+            if($sort == 'price_lowest'){
+                $query->orderBy('price','asc');
+            }elseif ($sort == 'price_highest'){
+                $query->orderBy('price','desc');
+            }elseif ($sort == 'most_recent'){
+                $query->orderBy('created_at','desc');
+            }
+        }else{
+            $query->orderBy('item_order','desc');
+        }
+        $currency = env('APP_CURRENCY');
+        $items = $query->get()->map(function ($value, $key) use ($currency) {
+            $value->return_post;
+            $post_type = $value->category->type;
+            unset($value->category);
+            if($post_type == 'products'){
+                unset($value->quantity);
+            }
+
+            $value->currency = $currency;
+            $value->post_type = $post_type;
+            $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
+            $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
+            $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
+            return $value;
+        })->values();
+
+        return response()->json($items);
+    }
+
+    public function all_items_with_pagination(Request $request) {
+        $user = null;
+        if($request->header('token')){
+            $user = $this->validate_user($request);
+        }
+        $now = Carbon::now()->format('Y-m-d');
+        $query = Item::whereType('offer')->whereDate('expired_at','>=',$now)->whereIsAvailable(1);
+        if(Input::has('search')){
+            $search = Input::get('search');
+            $query->where(function($query) use ($search){
+                $query->whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])
+                    ->orwhereRaw("LOWER(name_ar) like ? ", [ "%".strtolower($search)."%"])
+                    ->orwhereRaw("LOWER(description_en) like ? ", [ "%".strtolower($search)."%"])
+                    ->orwhereRaw("LOWER(description_ar) like ? ", [ "%".strtolower($search)."%"]);
+            });
+        }
+        $category_id = isset($request->category_id) ? $request->category_id : null;
+        $sub_category_ids = isset($request->sub_category_ids) ? $request->sub_category_ids : null;
+        $sub_sub_category_id = isset($request->sub_sub_category_id) ? $request->sub_sub_category_id : null;
+        $filters_fields = isset($request->filters_fields) ? json_decode($request->filters_fields) : null;
+
+        $query->when($category_id, function ($query) use ($category_id) {
+            $query->whereCategoryId($category_id);
+        });
+        $query->when($sub_category_ids, function ($query) use ($sub_category_ids) {
+            $query->whereIn('sub_category_id',$sub_category_ids);
+        });
+        $query->when($sub_sub_category_id, function ($query) use ($sub_sub_category_id) {
+            $query->whereSubSubCategoryId($sub_sub_category_id);
+        });
+        $query->when($filters_fields, function ($query) use ($filters_fields) {
+            $query->whereHas('custom_fields', function ($query) use ($filters_fields) {
+                foreach ($filters_fields as $filter_field){
+                    $query->where(function($query) use ($filters_fields,$filter_field){
+                        $extra_field_name = isset($filter_field->extra_field_name) ? $filter_field->extra_field_name : null;
+                        $extra_field_value = isset($filter_field->extra_field_value) ? $filter_field->extra_field_value : null;
+                        $query->whereCustomFieldId($filter_field->id)->whereFieldValue($filter_field->field_value)->when($extra_field_name, function ($query) use ($extra_field_name,$extra_field_value) {
+                            $query->whereExtraFieldName($extra_field_name)->whereExtraFieldValue($extra_field_value);
+                        });
+                    });
+                }
+            });
+        });
+        if($request->sort){
+            $sort = Input::get('sort');
+            if($sort == 'price_lowest'){
+                $query->orderBy('price','asc');
+            }elseif ($sort == 'price_highest'){
+                $query->orderBy('price','desc');
+            }elseif ($sort == 'most_recent'){
+                $query->orderBy('created_at','desc');
+            }
+        }else{
+            $query->orderBy('item_order','desc');
+        }
+        $currency = env('APP_CURRENCY');
+        $items = $query->get()->map(function ($value, $key) use ($currency) {
+            $value->return_post;
+            $post_type = $value->category->type;
+            unset($value->category);
+            if($post_type == 'products'){
+                unset($value->quantity);
+            }
+
+            $value->currency = $currency;
+            $value->post_type = $post_type;
+
+            $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
+            $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
+            $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
+            return $value;
+        })->values();
 
         $limit = 20;
         $items = new LengthAwarePaginator(
@@ -317,6 +474,7 @@ class ItemsController extends Controller
         $category_id = isset($request->category_id) ? $request->category_id : null;
         $sub_category_ids = isset($request->sub_category_ids) ? $request->sub_category_ids : null;
         $sub_sub_category_id = isset($request->sub_sub_category_id) ? $request->sub_sub_category_id : null;
+        $filters_fields = isset($request->filters_fields) ? json_decode($request->filters_fields) : null;
 
         $query->when($category_id, function ($query) use ($category_id) {
             $query->whereCategoryId($category_id);
@@ -326,6 +484,20 @@ class ItemsController extends Controller
         });
         $query->when($sub_sub_category_id, function ($query) use ($sub_sub_category_id) {
             $query->whereSubSubCategoryId($sub_sub_category_id);
+        });
+
+        $query->when($filters_fields, function ($query) use ($filters_fields) {
+            $query->whereHas('custom_fields', function ($query) use ($filters_fields) {
+                foreach ($filters_fields as $filter_field){
+                    $query->where(function($query) use ($filters_fields,$filter_field){
+                        $extra_field_name = isset($filter_field->extra_field_name) ? $filter_field->extra_field_name : null;
+                        $extra_field_value = isset($filter_field->extra_field_value) ? $filter_field->extra_field_value : null;
+                        $query->whereCustomFieldId($filter_field->id)->whereFieldValue($filter_field->field_value)->when($extra_field_name, function ($query) use ($extra_field_name,$extra_field_value) {
+                            $query->whereExtraFieldName($extra_field_name)->whereExtraFieldValue($extra_field_value);
+                        });
+                    });
+                }
+            });
         });
         if($request->sort){
             $sort = Input::get('sort');
@@ -341,14 +513,15 @@ class ItemsController extends Controller
         }
         $currency = env('APP_CURRENCY');
         $items = $query->get()->map(function ($value, $key) use ($currency) {
+            $value->return_post;
             unset($value->quantity);
             $value->currency = $currency;
+            $value->post_type = "products";
             $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
             $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
             $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
             return $value;
         })->values();
-
         return response()->json($items);
     }
 
@@ -371,6 +544,7 @@ class ItemsController extends Controller
         $category_id = isset($request->category_id) ? $request->category_id : null;
         $sub_category_ids = isset($request->sub_category_ids) ? $request->sub_category_ids : null;
         $sub_sub_category_id = isset($request->sub_sub_category_id) ? $request->sub_sub_category_id : null;
+        $filters_fields = isset($request->filters_fields) ? json_decode($request->filters_fields) : null;
 
         $query->when($category_id, function ($query) use ($category_id) {
             $query->whereCategoryId($category_id);
@@ -380,6 +554,19 @@ class ItemsController extends Controller
         });
         $query->when($sub_sub_category_id, function ($query) use ($sub_sub_category_id) {
             $query->whereSubSubCategoryId($sub_sub_category_id);
+        });
+        $query->when($filters_fields, function ($query) use ($filters_fields) {
+            $query->whereHas('custom_fields', function ($query) use ($filters_fields) {
+                foreach ($filters_fields as $filter_field){
+                    $query->where(function($query) use ($filters_fields,$filter_field){
+                        $extra_field_name = isset($filter_field->extra_field_name) ? $filter_field->extra_field_name : null;
+                        $extra_field_value = isset($filter_field->extra_field_value) ? $filter_field->extra_field_value : null;
+                        $query->whereCustomFieldId($filter_field->id)->whereFieldValue($filter_field->field_value)->when($extra_field_name, function ($query) use ($extra_field_name,$extra_field_value) {
+                            $query->whereExtraFieldName($extra_field_name)->whereExtraFieldValue($extra_field_value);
+                        });
+                    });
+                }
+            });
         });
         if($request->sort){
             $sort = Input::get('sort');
@@ -395,8 +582,10 @@ class ItemsController extends Controller
         }
         $currency = env('APP_CURRENCY');
         $items = $query->get()->map(function ($value, $key) use ($currency) {
+            $value->return_post;
             unset($value->quantity);
             $value->currency = $currency;
+            $value->post_type = "products";
             $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
             $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
             $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
@@ -430,6 +619,7 @@ class ItemsController extends Controller
         $category_id = isset($request->category_id) ? $request->category_id : null;
         $sub_category_ids = isset($request->sub_category_ids) ? $request->sub_category_ids : null;
         $sub_sub_category_id = isset($request->sub_sub_category_id) ? $request->sub_sub_category_id : null;
+        $filters_fields = isset($request->filters_fields) ? json_decode($request->filters_fields) : null;
 
         $query->when($category_id, function ($query) use ($category_id) {
             $query->whereCategoryId($category_id);
@@ -439,6 +629,19 @@ class ItemsController extends Controller
         });
         $query->when($sub_sub_category_id, function ($query) use ($sub_sub_category_id) {
             $query->whereSubSubCategoryId($sub_sub_category_id);
+        });
+        $query->when($filters_fields, function ($query) use ($filters_fields) {
+            $query->whereHas('custom_fields', function ($query) use ($filters_fields) {
+                foreach ($filters_fields as $filter_field){
+                    $query->where(function($query) use ($filters_fields,$filter_field){
+                        $extra_field_name = isset($filter_field->extra_field_name) ? $filter_field->extra_field_name : null;
+                        $extra_field_value = isset($filter_field->extra_field_value) ? $filter_field->extra_field_value : null;
+                        $query->whereCustomFieldId($filter_field->id)->whereFieldValue($filter_field->field_value)->when($extra_field_name, function ($query) use ($extra_field_name,$extra_field_value) {
+                            $query->whereExtraFieldName($extra_field_name)->whereExtraFieldValue($extra_field_value);
+                        });
+                    });
+                }
+            });
         });
         if($request->sort){
             $sort = Input::get('sort');
@@ -454,7 +657,9 @@ class ItemsController extends Controller
         }
         $currency = env('APP_CURRENCY');
         $items = $query->get()->map(function ($value, $key) use ($currency) {
+            $value->return_post;
             $value->currency = $currency;
+            $value->post_type = "services";
             $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
             $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
             $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
@@ -483,6 +688,7 @@ class ItemsController extends Controller
         $category_id = isset($request->category_id) ? $request->category_id : null;
         $sub_category_ids = isset($request->sub_category_ids) ? $request->sub_category_ids : null;
         $sub_sub_category_id = isset($request->sub_sub_category_id) ? $request->sub_sub_category_id : null;
+        $filters_fields = isset($request->filters_fields) ? json_decode($request->filters_fields) : null;
 
         $query->when($category_id, function ($query) use ($category_id) {
             $query->whereCategoryId($category_id);
@@ -492,6 +698,19 @@ class ItemsController extends Controller
         });
         $query->when($sub_sub_category_id, function ($query) use ($sub_sub_category_id) {
             $query->whereSubSubCategoryId($sub_sub_category_id);
+        });
+        $query->when($filters_fields, function ($query) use ($filters_fields) {
+            $query->whereHas('custom_fields', function ($query) use ($filters_fields) {
+                foreach ($filters_fields as $filter_field){
+                    $query->where(function($query) use ($filters_fields,$filter_field){
+                        $extra_field_name = isset($filter_field->extra_field_name) ? $filter_field->extra_field_name : null;
+                        $extra_field_value = isset($filter_field->extra_field_value) ? $filter_field->extra_field_value : null;
+                        $query->whereCustomFieldId($filter_field->id)->whereFieldValue($filter_field->field_value)->when($extra_field_name, function ($query) use ($extra_field_name,$extra_field_value) {
+                            $query->whereExtraFieldName($extra_field_name)->whereExtraFieldValue($extra_field_value);
+                        });
+                    });
+                }
+            });
         });
         if($request->sort){
             $sort = Input::get('sort');
@@ -507,7 +726,9 @@ class ItemsController extends Controller
         }
         $currency = env('APP_CURRENCY');
         $items = $query->get()->map(function ($value, $key) use ($currency) {
+            $value->return_post;
             $value->currency = $currency;
+            $value->post_type = "services";
             $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
             $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
             $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
