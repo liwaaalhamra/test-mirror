@@ -424,7 +424,13 @@ class PostsController extends Controller
         });
         $query->orderBy('item_order','desc');
         $currency = env('APP_CURRENCY');
-        $items = $query->get()->map(function ($value, $key) use ($currency) {
+        $items = $query->get()->map(function ($value, $key) use ($currency,$user) {
+            $value->is_favorite = false;
+            if($user){
+                if(UserFavorite::whereMetaName('items')->whereMetaId($value->id)->whereUserId($user->id)->first()){
+                    $value->is_favorite = true;
+                }
+            }
             $value->return_post;
             $value->currency = $currency;
             $value->post_type = $value->category->type;
@@ -472,7 +478,13 @@ class PostsController extends Controller
         });
         $query->orderBy('item_order','desc');
         $currency = env('APP_CURRENCY');
-        $items = $query->take(5)->get()->map(function ($value, $key) use ($currency) {
+        $items = $query->take(5)->get()->map(function ($value, $key) use ($currency,$user) {
+            $value->is_favorite = false;
+            if($user){
+                if(UserFavorite::whereMetaName('items')->whereMetaId($value->id)->whereUserId($user->id)->first()){
+                    $value->is_favorite = true;
+                }
+            }
             $value->return_post;
             $value->currency = $currency;
             $value->post_type = $value->category->type;

@@ -125,6 +125,9 @@ class ItemsController extends Controller
 
     public function home_top_categories(Request $request) {
         $user = null;
+        if($request->header('token')){
+            $user = $this->validate_user($request);
+        }
         $items_viewed = [];
         $latitude = isset($request->latitude) ? $request->latitude : null;
         $longitude = isset($request->longitude) ? $request->longitude : null;
@@ -140,7 +143,13 @@ class ItemsController extends Controller
         if($latitude && $longitude){
             $query = Item::whereType('offer')->whereIsAvailable(1)->orderbyRaw("(6371 * 2 * ASIN(SQRT( POWER(SIN(( $latitude - latitude) *  pi()/180 / 2), 2) +COS( $latitude * pi()/180) * COS(latitude * pi()/180) * POWER(SIN(( $longitude - longitude) * pi()/180 / 2), 2) ))) asc");
             $currency = env('APP_CURRENCY');
-            $nearby_items = $query->take(10)->get()->map(function ($value, $key) use ($currency) {
+            $nearby_items = $query->take(10)->get()->map(function ($value, $key) use ($currency,$user) {
+                $value->is_favorite = false;
+                if($user){
+                    if(UserFavorite::whereMetaName('items')->whereMetaId($value->id)->whereUserId($user->id)->first()){
+                        $value->is_favorite = true;
+                    }
+                }
                 unset($value->quantity);
                 $value->post_type = $value->category->type;
                 unset($value->category);
@@ -156,7 +165,13 @@ class ItemsController extends Controller
 
         $query = Item::wherein('id',$items_viewed)->whereType('offer')->whereIsAvailable(1)->orderby('created_at','desc');
         $currency = env('APP_CURRENCY');
-        $recently_viewed_items = $query->take(10)->get()->map(function ($value, $key) use ($currency) {
+        $recently_viewed_items = $query->take(10)->get()->map(function ($value, $key) use ($currency,$user) {
+            $value->is_favorite = false;
+            if($user){
+                if(UserFavorite::whereMetaName('items')->whereMetaId($value->id)->whereUserId($user->id)->first()){
+                    $value->is_favorite = true;
+                }
+            }
             unset($value->quantity);
             $value->currency = $currency;
             $value->post_type = $value->category->type;
@@ -171,7 +186,13 @@ class ItemsController extends Controller
             $q->whereType('products');
         })->whereIsAvailable(1)->orderby('created_at','desc');
         $currency = env('APP_CURRENCY');
-        $new_arrival_items = $query->take(10)->get()->map(function ($value, $key) use ($currency) {
+        $new_arrival_items = $query->take(10)->get()->map(function ($value, $key) use ($currency,$user) {
+            $value->is_favorite = false;
+            if($user){
+                if(UserFavorite::whereMetaName('items')->whereMetaId($value->id)->whereUserId($user->id)->first()){
+                    $value->is_favorite = true;
+                }
+            }
             unset($value->quantity);
             $value->post_type = "products";
             $value->currency = $currency;
@@ -186,7 +207,13 @@ class ItemsController extends Controller
             $q->whereType('services');
         })->whereIsAvailable(1)->orderby('created_at','desc');
         $currency = env('APP_CURRENCY');
-        $latest_services_items = $query->take(10)->get()->map(function ($value, $key) use ($currency) {
+        $latest_services_items = $query->take(10)->get()->map(function ($value, $key) use ($currency,$user) {
+            $value->is_favorite = false;
+            if($user){
+                if(UserFavorite::whereMetaName('items')->whereMetaId($value->id)->whereUserId($user->id)->first()){
+                    $value->is_favorite = true;
+                }
+            }
             $value->currency = $currency;
             $value->post_type = "services";
             $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
@@ -239,7 +266,13 @@ class ItemsController extends Controller
                 $q->whereType('products');
             })->whereIsAvailable(1)->orderby('created_at','desc');
             $currency = env('APP_CURRENCY');
-            $items = $query->take(50)->get()->map(function ($value, $key) use ($currency) {
+            $items = $query->take(50)->get()->map(function ($value, $key) use ($currency,$user) {
+                $value->is_favorite = false;
+                if($user){
+                    if(UserFavorite::whereMetaName('items')->whereMetaId($value->id)->whereUserId($user->id)->first()){
+                        $value->is_favorite = true;
+                    }
+                }
                 unset($value->quantity);
                 $value->currency = $currency;
                 $value->post_type = "products";
@@ -253,7 +286,13 @@ class ItemsController extends Controller
                 $q->whereType('services');
             })->whereIsAvailable(1)->orderby('created_at','desc');
             $currency = env('APP_CURRENCY');
-            $items = $query->take(50)->get()->map(function ($value, $key) use ($currency) {
+            $items = $query->take(50)->get()->map(function ($value, $key) use ($currency,$user) {
+                $value->is_favorite = false;
+                if($user){
+                    if(UserFavorite::whereMetaName('items')->whereMetaId($value->id)->whereUserId($user->id)->first()){
+                        $value->is_favorite = true;
+                    }
+                }
                 $value->currency = $currency;
                 $value->post_type = "services";
                 $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
@@ -264,7 +303,13 @@ class ItemsController extends Controller
         }elseif ($slug == 'recently-viewed'){
             $query = Item::wherein('id',$items_viewed)->whereType('offer')->whereIsAvailable(1)->orderby('created_at','desc');
             $currency = env('APP_CURRENCY');
-            $recently_viewed_items = $query->take(50)->get()->map(function ($value, $key) use ($currency) {
+            $recently_viewed_items = $query->take(50)->get()->map(function ($value, $key) use ($currency,$user) {
+                $value->is_favorite = false;
+                if($user){
+                    if(UserFavorite::whereMetaName('items')->whereMetaId($value->id)->whereUserId($user->id)->first()){
+                        $value->is_favorite = true;
+                    }
+                }
                 unset($value->quantity);
                 $value->currency = $currency;
                 $value->post_type = $value->category->type;
@@ -278,7 +323,13 @@ class ItemsController extends Controller
             if($latitude && $longitude){
                 $query = Item::whereType('offer')->whereIsAvailable(1)->orderbyRaw("(6371 * 2 * ASIN(SQRT( POWER(SIN(( $latitude - latitude) *  pi()/180 / 2), 2) +COS( $latitude * pi()/180) * COS(latitude * pi()/180) * POWER(SIN(( $longitude - longitude) * pi()/180 / 2), 2) ))) asc");
                 $currency = env('APP_CURRENCY');
-                $nearby_items = $query->take(50)->get()->map(function ($value, $key) use ($currency) {
+                $nearby_items = $query->take(50)->get()->map(function ($value, $key) use ($currency,$user) {
+                    $value->is_favorite = false;
+                    if($user){
+                        if(UserFavorite::whereMetaName('items')->whereMetaId($value->id)->whereUserId($user->id)->first()){
+                            $value->is_favorite = true;
+                        }
+                    }
                     unset($value->quantity);
                     $value->currency = $currency;
                     $value->post_type = $value->category->type;
@@ -355,7 +406,13 @@ class ItemsController extends Controller
             $query->orderBy('item_order','desc');
         }
         $currency = env('APP_CURRENCY');
-        $items = $query->get()->map(function ($value, $key) use ($currency) {
+        $items = $query->get()->map(function ($value, $key) use ($currency,$user) {
+            $value->is_favorite = false;
+            if($user){
+                if(UserFavorite::whereMetaName('items')->whereMetaId($value->id)->whereUserId($user->id)->first()){
+                    $value->is_favorite = true;
+                }
+            }
             $value->return_post;
             $post_type = $value->category->type;
             unset($value->category);
@@ -430,7 +487,13 @@ class ItemsController extends Controller
             $query->orderBy('item_order','desc');
         }
         $currency = env('APP_CURRENCY');
-        $items = $query->get()->map(function ($value, $key) use ($currency) {
+        $items = $query->get()->map(function ($value, $key) use ($currency,$user) {
+            $value->is_favorite = false;
+            if($user){
+                if(UserFavorite::whereMetaName('items')->whereMetaId($value->id)->whereUserId($user->id)->first()){
+                    $value->is_favorite = true;
+                }
+            }
             $value->return_post;
             $post_type = $value->category->type;
             unset($value->category);
@@ -512,7 +575,13 @@ class ItemsController extends Controller
             $query->orderBy('item_order','desc');
         }
         $currency = env('APP_CURRENCY');
-        $items = $query->get()->map(function ($value, $key) use ($currency) {
+        $items = $query->get()->map(function ($value, $key) use ($currency,$user) {
+            $value->is_favorite = false;
+            if($user){
+                if(UserFavorite::whereMetaName('items')->whereMetaId($value->id)->whereUserId($user->id)->first()){
+                    $value->is_favorite = true;
+                }
+            }
             $value->return_post;
             unset($value->quantity);
             $value->currency = $currency;
@@ -581,7 +650,13 @@ class ItemsController extends Controller
             $query->orderBy('item_order','desc');
         }
         $currency = env('APP_CURRENCY');
-        $items = $query->get()->map(function ($value, $key) use ($currency) {
+        $items = $query->get()->map(function ($value, $key) use ($currency,$user) {
+            $value->is_favorite = false;
+            if($user){
+                if(UserFavorite::whereMetaName('items')->whereMetaId($value->id)->whereUserId($user->id)->first()){
+                    $value->is_favorite = true;
+                }
+            }
             $value->return_post;
             unset($value->quantity);
             $value->currency = $currency;
@@ -656,7 +731,13 @@ class ItemsController extends Controller
             $query->orderBy('item_order','desc');
         }
         $currency = env('APP_CURRENCY');
-        $items = $query->get()->map(function ($value, $key) use ($currency) {
+        $items = $query->get()->map(function ($value, $key) use ($currency,$user) {
+            $value->is_favorite = false;
+            if($user){
+                if(UserFavorite::whereMetaName('items')->whereMetaId($value->id)->whereUserId($user->id)->first()){
+                    $value->is_favorite = true;
+                }
+            }
             $value->return_post;
             $value->currency = $currency;
             $value->post_type = "services";
@@ -725,7 +806,13 @@ class ItemsController extends Controller
             $query->orderBy('item_order','desc');
         }
         $currency = env('APP_CURRENCY');
-        $items = $query->get()->map(function ($value, $key) use ($currency) {
+        $items = $query->get()->map(function ($value, $key) use ($currency,$user) {
+            $value->is_favorite = false;
+            if($user){
+                if(UserFavorite::whereMetaName('items')->whereMetaId($value->id)->whereUserId($user->id)->first()){
+                    $value->is_favorite = true;
+                }
+            }
             $value->return_post;
             $value->currency = $currency;
             $value->post_type = "services";
@@ -808,6 +895,12 @@ class ItemsController extends Controller
             return parent::return_error("Invalid Item", 402, 'messages.invalid_parameters');
         }
         $currency = env('APP_CURRENCY');
+        $item->is_favorite = false;
+        if($user){
+            if(UserFavorite::whereMetaName('items')->whereMetaId($value->id)->whereUserId($user->id)->first()){
+                $item->is_favorite = true;
+            }
+        }
         $item->currency = $currency;
         $item->price_formatted = number_format($item->price,3) . ' ' . $currency;
         $item->discounted_price_formatted = $item->discounted_price ? number_format($item->discounted_price,3) . ' ' . $currency : null;
@@ -860,6 +953,12 @@ class ItemsController extends Controller
             return parent::return_error("Invalid Item", 402, 'messages.invalid_parameters');
         }
         $currency = env('APP_CURRENCY');
+        $item->is_favorite = false;
+        if($user){
+            if(UserFavorite::whereMetaName('items')->whereMetaId($value->id)->whereUserId($user->id)->first()){
+                $item->is_favorite = true;
+            }
+        }
         $item->currency = $currency;
         $item->price_formatted = number_format($item->price,3) . ' ' . $currency;
         $item->discounted_price_formatted = $item->discounted_price ? number_format($item->discounted_price,3) . ' ' . $currency : null;
