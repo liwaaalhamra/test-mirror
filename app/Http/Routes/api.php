@@ -105,18 +105,19 @@ Route::post('/home_top_categories', 'ItemsController@home_top_categories');
 Route::post('/home_top_categories/{slug}/items', 'ItemsController@home_top_categories_items');
 
 Route::get('/lists/{list_type}', 'ItemsController@lists');
+Route::get('/locations', 'ItemsController@locations');
 
 /**
  * Location Routes
  */
-Route::group(['prefix' => 'locations'],function () {
-    Route::post('add', 'LocationController@add');
-    Route::post('edit', 'LocationController@edit');
-    Route::post('delete', 'LocationController@delete');
-    Route::post('set_as_default', 'LocationController@set_as_default');
-    Route::get('', 'LocationController@get');
-    Route::post('regions', 'LocationController@regions');
-});
+//Route::group(['prefix' => 'locations'],function () {
+//    Route::post('add', 'LocationController@add');
+//    Route::post('edit', 'LocationController@edit');
+//    Route::post('delete', 'LocationController@delete');
+//    Route::post('set_as_default', 'LocationController@set_as_default');
+//    Route::get('', 'LocationController@get');
+//    Route::post('regions', 'LocationController@regions');
+//});
 
 /**
  * Cron Routes

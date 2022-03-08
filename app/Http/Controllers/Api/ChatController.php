@@ -25,7 +25,7 @@ class ChatController extends Controller
 	 */
 	public function conversations(Request $request) {
         $user = $this->validate_user($request);
-        $search = isset($request->search) ? $request->search : null;
+        $search = isset($request->search) && !empty($request->search) ? $request->search : null;
         $conversations = Conversation::whereFriendId($user->id)->orwhere('user_id','=',$user->id)
             //->orderby('messages.created_at','desc')
             ->get()
@@ -36,6 +36,8 @@ class ChatController extends Controller
                     }else{
                         return strpos($value['friend']->full_name, $search) !== FALSE;
                     }
+                }else{
+                    return $value;
                 }
             })
             ->map(function ($value, $key) use ($user) {

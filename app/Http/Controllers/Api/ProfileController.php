@@ -57,7 +57,7 @@ class ProfileController extends Controller
         $user = $this->validate_user($request);
         $validator = Validator::make($request->all(), [
             'password' => [
-                'required',
+//                'required',
                 'min:8',             // must be at least 8 characters in length
                 'regex:/[a-z]/',      // must contain at least one lowercase letter
                 'regex:/[A-Z]/',      // must contain at least one uppercase letter
@@ -535,9 +535,9 @@ class ProfileController extends Controller
                 return parent::return_error("Mobile Number does not exist", 403, "User does not exist");
             }
         }
-        if($user->is_verified == 0){
-            return parent::return_error("Registration not complete, please register again", 406, "Registration not complete, please register again");
-        }
+//        if($user->is_verified == 0){
+//            return parent::return_error("Registration not complete, please register again", 406, "Registration not complete, please register again");
+//        }
 
         if($user->is_blocked){
             return parent::return_error("Account Blocked", 407, "Account Blocked");

@@ -9,6 +9,7 @@ use App\Models\Api\CustomFieldList;
 use App\Models\Api\Inbox;
 use App\Models\Api\Item;
 use App\Models\Api\ItemCustomField;
+use App\Models\Api\Location;
 use App\Models\Api\Restaurant;
 use App\Models\Api\RestaurantEventType;
 use App\Models\Api\ReviewTag;
@@ -55,6 +56,10 @@ class ItemsController extends Controller
 
     public function lists($type){
         $data = CustomFieldList::whereFieldName($type)->get();
+        return response()->json($data);
+    }
+    public function locations(){
+        $data = Location::get();
         return response()->json($data);
     }
 
@@ -897,7 +902,7 @@ class ItemsController extends Controller
         $currency = env('APP_CURRENCY');
         $item->is_favorite = false;
         if($user){
-            if(UserFavorite::whereMetaName('items')->whereMetaId($value->id)->whereUserId($user->id)->first()){
+            if(UserFavorite::whereMetaName('items')->whereMetaId($item->id)->whereUserId($user->id)->first()){
                 $item->is_favorite = true;
             }
         }
@@ -930,6 +935,11 @@ class ItemsController extends Controller
                 $value->extra_field_value = $custom_extra_field_value ? $this->cast_field_value($custom_extra_field_value->extra_field_value, $value->extra_field_type) : null;
                 return $value;
             })->groupBy('section');
+        }
+        if(!$user){
+            $item->category;
+            $item->sub_category;
+            $item->sub_sub_category;
         }
 
         return response()->json($item);
@@ -955,7 +965,7 @@ class ItemsController extends Controller
         $currency = env('APP_CURRENCY');
         $item->is_favorite = false;
         if($user){
-            if(UserFavorite::whereMetaName('items')->whereMetaId($value->id)->whereUserId($user->id)->first()){
+            if(UserFavorite::whereMetaName('items')->whereMetaId($item->id)->whereUserId($user->id)->first()){
                 $item->is_favorite = true;
             }
         }
@@ -988,6 +998,11 @@ class ItemsController extends Controller
                 $value->extra_field_value = $custom_extra_field_value ? $this->cast_field_value($custom_extra_field_value->extra_field_value, $value->extra_field_type) : null;
                 return $value;
             })->groupBy('section');
+        }
+        if(!$user){
+            $item->category;
+            $item->sub_category;
+            $item->sub_sub_category;
         }
 
         return response()->json($item);
