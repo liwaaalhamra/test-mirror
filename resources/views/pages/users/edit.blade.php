@@ -25,7 +25,7 @@
                                 <div class="form-group ">
                                     <select class="form-control selectpicker" id="users" data-live-search="true" name="type_id" required>
                                         @foreach($types as $type)
-                                            <option data-tokens="{{$type}}" @if($type == $user->access_type || ($type == 'regular' && !$user->access_type)) selected @endif value="{{$type}}" >{{$type}}</option>
+                                            <option data-tokens="{{$type}}" @if($type == $user->access_type) selected @endif value="{{$type}}" >{{$type}}</option>
                                         @endforeach
                                     </select>
                                 </div>

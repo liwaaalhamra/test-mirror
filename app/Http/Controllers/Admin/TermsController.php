@@ -60,14 +60,14 @@ class TermsController extends Controller
             'description_ar' => 'required',
             'privacy_en' => 'required',
             'privacy_ar' => 'required',
-            'supplier_description_en' => 'required',
-            'supplier_description_ar' => 'required',
-            'supplier_privacy_en' => 'required',
-            'supplier_privacy_ar' => 'required',
-            'restaurant_description_en' => 'required',
-            'restaurant_description_ar' => 'required',
-            'restaurant_privacy_en' => 'required',
-            'restaurant_privacy_ar' => 'required',
+//            'supplier_description_en' => 'required',
+//            'supplier_description_ar' => 'required',
+//            'supplier_privacy_en' => 'required',
+//            'supplier_privacy_ar' => 'required',
+//            'restaurant_description_en' => 'required',
+//            'restaurant_description_ar' => 'required',
+//            'restaurant_privacy_en' => 'required',
+//            'restaurant_privacy_ar' => 'required',
         ]);
 //        $destinationDir = public_path() . DIRECTORY_SEPARATOR . 'uploads/images' . DIRECTORY_SEPARATOR . 'terms';
 //        $fileName = null;

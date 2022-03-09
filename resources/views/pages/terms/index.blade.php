@@ -29,46 +29,46 @@
                                 <textarea name="privacy_ar" rows="5" id="privacy_desc_ar" class="form-control">@if(!empty($privacy)) {{ $privacy->description_ar }} @endif</textarea>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="form-group col-sm-6">
-                                <label>Restaurant Terms English</label>
-                                <textarea name="restaurant_description_en" rows="5" id="restaurant_desc_en" class="form-control">@if(!empty($restaurant_terms)) {{ $restaurant_terms->description_en }} @endif</textarea>
-                            </div>
-                            <div class="form-group col-sm-6">
-                                <label>Restaurant Terms Arabic</label>
-                                <textarea name="restaurant_description_ar" rows="5" id="restaurant_desc_ar" class="form-control">@if(!empty($restaurant_terms)) {{ $restaurant_terms->description_ar }} @endif</textarea>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-sm-6">
-                                <label>Restaurant Privacy English</label>
-                                <textarea name="restaurant_privacy_en" rows="5" id="restaurant_privacy_desc_en" class="form-control">@if(!empty($restaurant_privacy)) {{ $restaurant_privacy->description_en }} @endif</textarea>
-                            </div>
-                            <div class="form-group col-sm-6">
-                                <label>Restaurant Privacy Arabic</label>
-                                <textarea name="restaurant_privacy_ar" rows="5" id="restaurant_privacy_desc_ar" class="form-control">@if(!empty($restaurant_privacy)) {{ $restaurant_privacy->description_ar }} @endif</textarea>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-sm-6">
-                                <label>Supplier Terms English</label>
-                                <textarea name="supplier_description_en" rows="5" id="supplier_desc_en" class="form-control">@if(!empty($supplier_terms)) {{ $supplier_terms->description_en }} @endif</textarea>
-                            </div>
-                            <div class="form-group col-sm-6">
-                                <label>Supplier Terms Arabic</label>
-                                <textarea name="supplier_description_ar" rows="5" id="supplier_desc_ar" class="form-control">@if(!empty($supplier_terms)) {{ $supplier_terms->description_ar }} @endif</textarea>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-sm-6">
-                                <label>Supplier Privacy English</label>
-                                <textarea name="supplier_privacy_en" rows="5" id="supplier_privacy_desc_en" class="form-control">@if(!empty($supplier_privacy)) {{ $supplier_privacy->description_en }} @endif</textarea>
-                            </div>
-                            <div class="form-group col-sm-6">
-                                <label>Supplier Privacy Arabic</label>
-                                <textarea name="supplier_privacy_ar" rows="5" id="supplier_privacy_desc_ar" class="form-control">@if(!empty($supplier_privacy)) {{ $supplier_privacy->description_ar }} @endif</textarea>
-                            </div>
-                        </div>
+{{--                        <div class="row">--}}
+{{--                            <div class="form-group col-sm-6">--}}
+{{--                                <label>Restaurant Terms English</label>--}}
+{{--                                <textarea name="restaurant_description_en" rows="5" id="restaurant_desc_en" class="form-control">@if(!empty($restaurant_terms)) {{ $restaurant_terms->description_en }} @endif</textarea>--}}
+{{--                            </div>--}}
+{{--                            <div class="form-group col-sm-6">--}}
+{{--                                <label>Restaurant Terms Arabic</label>--}}
+{{--                                <textarea name="restaurant_description_ar" rows="5" id="restaurant_desc_ar" class="form-control">@if(!empty($restaurant_terms)) {{ $restaurant_terms->description_ar }} @endif</textarea>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
+{{--                        <div class="row">--}}
+{{--                            <div class="form-group col-sm-6">--}}
+{{--                                <label>Restaurant Privacy English</label>--}}
+{{--                                <textarea name="restaurant_privacy_en" rows="5" id="restaurant_privacy_desc_en" class="form-control">@if(!empty($restaurant_privacy)) {{ $restaurant_privacy->description_en }} @endif</textarea>--}}
+{{--                            </div>--}}
+{{--                            <div class="form-group col-sm-6">--}}
+{{--                                <label>Restaurant Privacy Arabic</label>--}}
+{{--                                <textarea name="restaurant_privacy_ar" rows="5" id="restaurant_privacy_desc_ar" class="form-control">@if(!empty($restaurant_privacy)) {{ $restaurant_privacy->description_ar }} @endif</textarea>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
+{{--                        <div class="row">--}}
+{{--                            <div class="form-group col-sm-6">--}}
+{{--                                <label>Supplier Terms English</label>--}}
+{{--                                <textarea name="supplier_description_en" rows="5" id="supplier_desc_en" class="form-control">@if(!empty($supplier_terms)) {{ $supplier_terms->description_en }} @endif</textarea>--}}
+{{--                            </div>--}}
+{{--                            <div class="form-group col-sm-6">--}}
+{{--                                <label>Supplier Terms Arabic</label>--}}
+{{--                                <textarea name="supplier_description_ar" rows="5" id="supplier_desc_ar" class="form-control">@if(!empty($supplier_terms)) {{ $supplier_terms->description_ar }} @endif</textarea>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
+{{--                        <div class="row">--}}
+{{--                            <div class="form-group col-sm-6">--}}
+{{--                                <label>Supplier Privacy English</label>--}}
+{{--                                <textarea name="supplier_privacy_en" rows="5" id="supplier_privacy_desc_en" class="form-control">@if(!empty($supplier_privacy)) {{ $supplier_privacy->description_en }} @endif</textarea>--}}
+{{--                            </div>--}}
+{{--                            <div class="form-group col-sm-6">--}}
+{{--                                <label>Supplier Privacy Arabic</label>--}}
+{{--                                <textarea name="supplier_privacy_ar" rows="5" id="supplier_privacy_desc_ar" class="form-control">@if(!empty($supplier_privacy)) {{ $supplier_privacy->description_ar }} @endif</textarea>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
                         {{--<div class="row">--}}
                             {{--<div class="form-group col-sm-4">--}}
                                 {{--<div class="imageupload panel panel-default">--}}

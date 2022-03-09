@@ -72,7 +72,8 @@ Route::get('categories/publish/{category_id}', ['uses' => 'CategoriesController@
 Route::resource('categories', 'CategoriesController');
 Route::get('categories/sub_categories/{sub_category_id}/delete_single', ['uses' => 'CuratedCollectionsController@delete_single_image', 'as' => 'admin.categories.sub_categories.delete_single']);
 Route::get('categories/sub_categories/publish/{sub_category_id}', ['uses' => 'CuratedCollectionsController@publish', 'as' => 'admin.categories.sub_categories.publish']);
-Route::resource('categories.sub_categories', 'CuratedCollectionsController');
+//Route::resource('categories.sub_categories', 'CuratedCollectionsController');
+Route::resource('categories.sub_categories', 'SubCategoriesController');
 
 Route::get('sub_categories/supplier_sub_categories/publish/{option_id}', ['uses' => 'SupplierSubCategoriesController@publish', 'as' => 'admin.sub_categories.supplier_sub_categories.publish']);
 Route::resource('sub_categories.supplier_sub_categories', 'SupplierSubCategoriesController');

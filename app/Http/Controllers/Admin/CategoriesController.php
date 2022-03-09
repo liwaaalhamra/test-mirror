@@ -46,7 +46,7 @@ class CategoriesController extends Controller
      */
     public function index()
     {
-        $categories = CollectionCategory::orderby('item_order','asc')
+        $categories = Category::orderby('item_order','asc')
             ->get();
 
         return view('pages.categories.index', compact('categories'))

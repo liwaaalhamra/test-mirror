@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Api\Category;
 use App\Models\Api\Inbox;
 use App\Models\Api\Restaurant;
 use App\Models\Api\Notification;
@@ -39,9 +40,9 @@ class NotificationController extends Controller
     {
         $users = Users::join('user_push','users_id','=','users.id')->get();
 
-        $products = Restaurant::orderBy('id','desc')->get();
-        $suppliers = SupplierFoodGroup::orderBy('id','desc')->get();
-        return view('pages.notification.push',compact('users','products','suppliers'))
+        $products = Category::orderBy('id','desc')->get();
+//        $suppliers = SupplierFoodGroup::orderBy('id','desc')->get();
+        return view('pages.notification.push',compact('users','products'))
             ->with('section_name', 'notification')
             ->with('content_header', 'Notification: Push');
     }

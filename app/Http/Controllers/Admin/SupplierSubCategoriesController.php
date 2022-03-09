@@ -28,6 +28,7 @@ use App\Models\Api\Station;
 use App\Models\Api\StationPump;
 use App\Models\Api\StationService;
 use App\Models\Api\SubCategory;
+use App\Models\Api\SubSubCategory;
 use App\Models\Api\SupplierSubCategory;
 use App\Models\Api\UserCart;
 use Carbon\Carbon;
@@ -64,8 +65,8 @@ class SupplierSubCategoriesController extends Controller
      */
     public function index($id)
     {
-        $category = CuratedCollection::findOrFail($id);
-        $items = SupplierSubCategory::whereCategoryId($id)->latest()->get();
+        $category = SubCategory::findOrFail($id);
+        $items = SubSubCategory::whereSubCategoryId($id)->latest()->get();
         return view('pages.'.$this->parent_section_name.'.'.$this->section_name.'.'.$this->sub_section_name.'.index', compact('category','items'))
             ->with('section_name', $this->section_name)
             ->with('content_header', $this->display_name);
