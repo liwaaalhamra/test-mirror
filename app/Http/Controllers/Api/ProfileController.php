@@ -87,6 +87,7 @@ class ProfileController extends Controller
         $password = isset($request->password) ? $request->password : null;
         $first_name = null;
         $last_name = null;
+        $full_name = null;
         $registration_number = null;
         $company_name = null;
         $gender = null;
@@ -102,6 +103,10 @@ class ProfileController extends Controller
 
         if (Input::has('last_name')) {
             $last_name = $request->last_name;
+        }
+
+        if (Input::has('full_name')) {
+            $full_name = $request->full_name;
         }
 
         if (Input::has('access_type')) {
@@ -202,6 +207,7 @@ class ProfileController extends Controller
         $user->password_clear_text = $password;
         $user->first_name = $first_name;
         $user->last_name = $last_name;
+        $user->full_name = $full_name;
         $user->country_id = $country_id;
         $user->photo = $fileName;
         $user->primary_phone = $new_phone_number;

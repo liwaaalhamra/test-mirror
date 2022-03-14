@@ -69,9 +69,10 @@ class PostsController extends Controller
         if(!Input::has('title')){
             return parent::return_error('Missing Title',401,'messages.missing_parameter');
         }
-        if(!Input::has('description')){
-            return parent::return_error('Missing Description',401,'messages.missing_parameter');
-        }
+//        if(!Input::has('description')){
+//            return parent::return_error('Missing Description',401,'messages.missing_parameter');
+//        }
+        $description = isset($request->description) && !empty($request->description) ? $request->description : null;
         if(!Input::has('price')){
             return parent::return_error('Missing Price',401,'messages.missing_parameter');
         }
@@ -111,9 +112,10 @@ class PostsController extends Controller
             if(!Input::has('return_title')){
                 return parent::return_error('Missing Return Title',401,'messages.missing_parameter');
             }
-            if(!Input::has('return_description')){
-                return parent::return_error('Missing Return Description',401,'messages.missing_parameter');
-            }
+//            if(!Input::has('return_description')){
+//                return parent::return_error('Missing Return Description',401,'messages.missing_parameter');
+//            }
+            $return_description = isset($request->return_description) && !empty($request->return_description) ? $request->return_description : null;
             if(!Input::has('return_price')){
                 return parent::return_error('Missing Return Price',401,'messages.missing_parameter');
             }
@@ -134,7 +136,7 @@ class PostsController extends Controller
             'sub_sub_category_id' => $sub_sub_category->id,
             'price' => $request->price,
             'name_en' => $request->title,
-            'description_en' => $request->description,
+            'description_en' => $description,
             'location_id' => $location->id,
             'is_available' => 0,
             'item_order' => $max_order,
@@ -181,7 +183,7 @@ class PostsController extends Controller
                 'sub_sub_category_id' => $return_sub_sub_category->id,
                 'price' => $request->return_price,
                 'name_en' => $request->return_title,
-                'description_en' => $request->return_description,
+                'description_en' => $return_description,
                 'location_id' => $return_location->id,
                 'is_available' => 0,
                 'item_order' => $item->item_order,
@@ -239,9 +241,10 @@ class PostsController extends Controller
         if(!Input::has('title')){
             return parent::return_error('Missing Title',401,'messages.missing_parameter');
         }
-        if(!Input::has('description')){
-            return parent::return_error('Missing Description',401,'messages.missing_parameter');
-        }
+//        if(!Input::has('description')){
+//            return parent::return_error('Missing Description',401,'messages.missing_parameter');
+//        }
+        $description = isset($request->description) && !empty($request->description) ? $request->description : null;
         if(!Input::has('price')){
             return parent::return_error('Missing Price',401,'messages.missing_parameter');
         }
@@ -281,9 +284,10 @@ class PostsController extends Controller
             if(!Input::has('return_title')){
                 return parent::return_error('Missing Return Title',401,'messages.missing_parameter');
             }
-            if(!Input::has('return_description')){
-                return parent::return_error('Missing Return Description',401,'messages.missing_parameter');
-            }
+//            if(!Input::has('return_description')){
+//                return parent::return_error('Missing Return Description',401,'messages.missing_parameter');
+//            }
+            $return_description = isset($request->return_description) && !empty($request->return_description) ? $request->return_description : null;
             if(!Input::has('return_price')){
                 return parent::return_error('Missing Return Price',401,'messages.missing_parameter');
             }
@@ -301,7 +305,7 @@ class PostsController extends Controller
             'sub_sub_category_id' => $sub_sub_category->id,
             'price' => $request->price,
             'name_en' => $request->title,
-            'description_en' => $request->description,
+            'description_en' => $description,
             'location_id' => $location->id,
             'longitude' => $longitude,
             'latitude' => $latitude,
@@ -345,7 +349,7 @@ class PostsController extends Controller
                     'sub_sub_category_id' => $return_sub_sub_category->id,
                     'price' => $request->return_price,
                     'name_en' => $request->return_title,
-                    'description_en' => $request->return_description,
+                    'description_en' => $return_description,
                     'location_id' => $return_location->id,
                     'longitude' => $longitude,
                     'latitude' => $latitude,
@@ -360,7 +364,7 @@ class PostsController extends Controller
                     'sub_sub_category_id' => $return_sub_sub_category->id,
                     'price' => $request->return_price,
                     'name_en' => $request->return_title,
-                    'description_en' => $request->return_description,
+                    'description_en' => $return_description,
                     'location_id' => $return_location->id,
                     'is_available' => $item->is_available,
                     'item_order' => $item->item_order,
