@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Api\CheckoutLog;
+use App\Models\Api\Item;
 use App\Models\Api\Order;
 use App\Models\Api\Payment;
 use App\Models\Api\PaymentLog;
@@ -124,6 +125,11 @@ class PaymentController extends Controller
 //        $request->headers->set('post-id', [ 1 => '1']);
         $user = $this->validate_user($request);
         $post_id = $request->header("post-id");
+        $post = Item::whereId($post_id)->first();
+        if(!$post){
+            abort(401);
+        }
+        $post_id = $request->header("post-id");
         $amount = 1000;
         if($setting = Setting::whereMetaName('post_cost')->first()){
             $amount = $setting->meta_value * 100;
@@ -153,6 +159,10 @@ class PaymentController extends Controller
 //        $request->headers->set('post-id', [ 1 => '9']);
         $user = $this->validate_user($request);
         $post_id = $request->header("post-id");
+        $post = Item::whereId($post_id)->first();
+        if(!$post){
+            abort(401);
+        }
         $amount = 1000;
         if($setting = Setting::whereMetaName('post_cost')->first()){
             $amount = $setting->meta_value * 100;

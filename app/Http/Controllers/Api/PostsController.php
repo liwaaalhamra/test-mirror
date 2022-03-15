@@ -435,6 +435,9 @@ class PostsController extends Controller
                     $value->is_favorite = true;
                 }
             }
+            if($value->status == 'expired'){
+                $value->payment_url = secure_url('payment-test');
+            }
             $value->return_post;
             $value->currency = $currency;
             $value->post_type = $value->category->type;
@@ -459,7 +462,7 @@ class PostsController extends Controller
         }
         $user_id = $request->user_id;
         $search = Input::has('search') ? Input::get('search') : null;
-        $query = Item::whereType('offer')->whereUserId($user_id)->when($search, function ($query) use ($search) {
+        $query = Item::whereIsAvailable(1)->whereType('offer')->whereUserId($user_id)->when($search, function ($query) use ($search) {
             $query->where(function($query) use ($search){
                 $query->whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])
                     ->orwhereRaw("LOWER(name_ar) like ? ", [ "%".strtolower($search)."%"])

@@ -1164,7 +1164,7 @@ class PaymentController extends Controller
                 "currency" => strtolower(env('APP_CURRENCY')),
                 "source" => $customer['default_source'],
                 "customer" => $customer['id'],
-                "description" => "Charge for ".$user->email." #".$post_id." Order#".$order_id
+                "description" => $post->status == 'expired' ? "Renew for ".$user->email." #".$post_id." Order#".$order_id : "Charge for ".$user->email." #".$post_id." Order#".$order_id
             ]);
             $order->status = $response['status'];
             $order->total_price = $response['amount'];
