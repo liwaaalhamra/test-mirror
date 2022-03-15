@@ -202,7 +202,7 @@ class PostsController extends Controller
                 ]);
             }
         }
-        return parent::return_json(['status' => 'Thank you for bartering with us. The post will go live within 24 hours and valid for 30 days']);
+        return parent::return_json(['status' => 'Thank you for bartering with us. The post will go live within 24 hours and valid for 30 days','payment_url' => secure_url('payment-test'),'post_id' => $item->id]);
     }
 
     public function edit(Request $request){
