@@ -232,7 +232,7 @@ class ItemsController extends Controller
         $category1 = [
             'slug' => 'trending-services',
             'title' => 'Trending Services',
-            'top_items' => $latest_services_items
+            'items' => $latest_services_items
         ];
         $category2 = [
             'slug' => 'trending-products',

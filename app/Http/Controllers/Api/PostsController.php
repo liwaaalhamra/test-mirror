@@ -14,6 +14,7 @@ use App\Models\Api\Media;
 use App\Models\Api\Restaurant;
 use App\Models\Api\RestaurantEventType;
 use App\Models\Api\ReviewTag;
+use App\Models\Api\Setting;
 use App\Models\Api\SubCategory;
 use App\Models\Api\SubSubCategory;
 use App\Models\Api\UserFavorite;
@@ -127,6 +128,10 @@ class PostsController extends Controller
         $latitude = isset($request->latitude) ? $request->latitude : null;
         $longitude = isset($request->longitude) ? $request->longitude : null;
         $max_order = DB::table('items')->whereCategoryId($category->id)->whereSubCategoryId($sub_category->id)->whereSubSubCategoryId($sub_sub_category->id)->max('item_order') + 1;
+        $post_validity_days = 30;
+        if($setting = Setting::whereMetaName('post_validity')->first()){
+            $post_validity_days = intval($setting->meta_value);
+        }
         $item = Item::create([
             'type' => 'offer',
             'status' => 'in_review',
@@ -142,7 +147,7 @@ class PostsController extends Controller
             'item_order' => $max_order,
             'longitude' => $longitude,
             'latitude' => $latitude,
-            'expired_at' => Carbon::now()->addMonths(1)->timestamp,
+            'expired_at' => Carbon::now()->addDays($post_validity_days)->timestamp,
         ]);
         foreach ($regular_fields as $regular_field){
             ItemCustomField::create([
@@ -189,7 +194,7 @@ class PostsController extends Controller
                 'item_order' => $item->item_order,
                 'longitude' => $item->longitude,
                 'latitude' => $item->latitude,
-                'expired_at' => Carbon::now()->addMonths(1)->timestamp,
+                'expired_at' => Carbon::now()->addDays($post_validity_days)->timestamp,
             ]);
             foreach ($return_regular_fields as $return_regular_field){
                 ItemCustomField::create([
