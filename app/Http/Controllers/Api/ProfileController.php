@@ -473,7 +473,7 @@ class ProfileController extends Controller
 
         $user->password = $request->get('new_password');
         $user->reset_code = null;
-        $user->preventAttrSet = true;
+//        $user->preventAttrSet = true;
         $user->password_clear_text = $request->get('new_password');
         $user->save();
         UsersAccess::where("user_id", "=", $user->id)->delete();
@@ -511,11 +511,12 @@ class ProfileController extends Controller
         if($request->old_password != $user->password_clear_text){
             return parent::return_error("Wrong Password!", 405, 'messages.wrong_password');
         }
-        if($request->new_password == $user->password_clear_text){
+        $new_password = hash('sha256', $request->get('new_password'));
+        if($new_password == $user->password_clear_text){
             return parent::return_error("Cannot use same password", 405, "Cannot use same password");
         }
         $user->password = $request->get('new_password');
-        $user->preventAttrSet = true;
+//        $user->preventAttrSet = true;
         $user->password_clear_text = $request->get('new_password');
         $user->save();
         $user->token = $user->access_token->access_token;
