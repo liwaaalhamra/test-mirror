@@ -29,7 +29,7 @@ class Users extends Model
 
     public $preventAttrSet = false;
 
-    protected $hidden = ['updated_at','password','reset_code','activation_code','full_name','udid','cart_delivery_type',
+    protected $hidden = ['updated_at','password','reset_code','activation_code','udid','cart_delivery_type','first_name','last_name',
         'fathers_name','mothers_name','password_clear_text','barcode','is_verified','description','is_blocked','department','cost_center','job_title',
         'address','street','building','floor','secondary_phone','country_id','verified_at','google_id','facebook_id','apple_id',
         'code','created_at','pin','registration','unread_memos_count','profile_type_id','employee_id','total_points','blood_type',
@@ -151,7 +151,8 @@ class Users extends Model
     }
 
     public function getFullNameAttribute(){
-        return $this->attributes['full_name'] ? $this->attributes['full_name'] : $this->attributes['first_name'].' '.$this->attributes['last_name'];
+        $full_name = $this->attributes['full_name'] ? $this->attributes['full_name'] : $this->attributes['first_name'].' '.$this->attributes['last_name'];
+        return $full_name ;
     }
 
     public function setPasswordAttribute($value) {

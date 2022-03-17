@@ -52,6 +52,7 @@ Route::group(['prefix' => 'items'],function () {
     Route::post('/delete', 'PostsController@delete');
     Route::post('/my_posts', 'PostsController@my_posts');
     Route::post('/user_related_posts', 'PostsController@user_related_posts');
+    Route::post('/user_related_posts/pagination', 'PostsController@user_related_posts_with_pagination');
 
 
     Route::post('/favorites', 'ItemsController@item_favorites');
@@ -89,6 +90,7 @@ Route::group(['prefix' => 'chat'],function () {
     Route::post('/conversations', 'ChatController@conversations');
     Route::post('/messages', 'ChatController@messages');
     Route::post('/send_message', 'ChatController@send');
+    Route::get('/unread_count', ['uses' => 'ChatController@unread_count', 'as' => 'api.chat.unread_count']);
 });
 
 /**

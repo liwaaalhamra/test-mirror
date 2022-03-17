@@ -879,6 +879,12 @@ class ItemsController extends Controller
             return $value;
         })->groupBy('section');
 
+        if(!$filters->has('regular')){
+            $filters->put('regular', []);
+        }
+        if(!$filters->has('filters')){
+            $filters->put('filters', []);
+        }
         return response()->json($filters);
     }
 

@@ -31,7 +31,7 @@ class Item extends Model
         'is_sale' => 'boolean',
     ];
     protected $with = ['location','images'];
-    protected $appends = ['name','user_fullname','description','discount_amount','currency','price_formatted','discounted_price_formatted','discount_amount_formatted','barcode'];
+    protected $appends = ['name','user_fullname','description','discount_amount','currency','price_formatted','discounted_price_formatted','discount_amount_formatted','barcode','user_image'];
 
     protected function getCurrencyAttribute(){
         return env('APP_CURRENCY');
@@ -39,6 +39,10 @@ class Item extends Model
 
     protected function getUserFullnameAttribute(){
         return $this->user->full_name;
+    }
+
+    protected function getUserImageAttribute(){
+        return $this->user->photo;
     }
 
     protected function getPriceFormattedAttribute(){

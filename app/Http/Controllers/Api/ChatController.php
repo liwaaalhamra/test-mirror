@@ -18,6 +18,12 @@ class ChatController extends Controller
 {
     use HITrait;
 
+    public function unread_count(Request $request) {
+        $user = $this->validate_user($request);
+        $count = Conversation::whereFriendId($user->id)->orwhere('user_id','=',$user->id)->sum('unread_messages');
+        return response()->json(['unread_count' => intval($count)]);
+    }
+
 	/**
 	 * Get Conversations
 	 * @param Request $request
