@@ -129,7 +129,7 @@ class Item extends Model
     }
 
     public function generateCode(){
-        $this->attributes['code'] = '113228'.Controller::number_generator(9);
+        $this->attributes['code'] = Controller::number_generator(6);
     }
 
     public function getImageAttribute($value){

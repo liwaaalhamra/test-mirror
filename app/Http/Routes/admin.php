@@ -130,6 +130,7 @@ Route::resource('supplier_customizations.supplier_options', 'SupplierCustomizati
 Route::group(['prefix' => 'items'],function () {
     Route::post('/order', ['uses' => 'ItemsController@order', 'as' => 'admin.items.order']);
     Route::get('/publish/{item_id}',['uses' => 'ItemsController@publish', 'as' => 'admin.items.publish']);
+    Route::get('/approve/{item_id}',['uses' => 'ItemsController@approve', 'as' => 'admin.items.approve']);
     Route::post('/update_item','ItemsController@update');
     Route::get('/{item_id}/delete_single', ['uses' => 'ItemsController@delete_single_image', 'as' => 'admin.items.delete_single']);
 });
