@@ -10,6 +10,7 @@ use App\Models\Api\Restaurant;
 use App\Models\Api\PackageItem;
 use App\Models\Api\SubCategory;
 use App\Models\Api\SubSubCategory;
+use App\Models\Api\UserPush;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -366,6 +367,24 @@ class ItemsController extends Controller
 
     public function approve(Item $item){
         if($item){
+            if($item->status == 'pending'){
+                $title = "Post Approval!";
+                $message = "Your post has been approved, you can start bartering!";
+            }else{
+                $title = "Post Rejection!";
+                $message = "Your post has been rejected, please make sure your post information ethical and legit!";
+            }
+            if($user_push = UserPush::whereUsersId($item->user_id)->first()){
+                $players_ids[] = $user_push->player_id;
+                $contents = ["en" => $message];
+                $headings = ["en" => $title];
+                $info['contents'] = $contents;
+                $info['headings'] = $headings;
+                $info['player_ids'] = $players_ids;
+                $info['data'] = ['meta_id' => $item->id,'type' => 'post'];
+                $result = parent::oneSignal($info);
+            }
+
             $item->status = $item->status == 'pending' ? 'approved' : 'pending';
             $item->save();
         }
