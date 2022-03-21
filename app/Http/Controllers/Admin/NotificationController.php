@@ -57,7 +57,7 @@ class NotificationController extends Controller
          * Get All Player IDs
          */
         $users = Users::join('user_push','users_id','=','users.id')
-            ->wherein('users.id',$request->users)
+            ->wherein('user_push.id',$request->users)
             ->select('user_push.users_id','user_push.player_id')
             ->distinct()
             ->get();
@@ -202,7 +202,7 @@ class NotificationController extends Controller
                     }
                 }
             }
-            return redirect()->route('admin.notification.push')
+            return redirect()->route('admin.notification.index')
                 ->with('success', $notification_message);
         }else{
             return redirect()->route('admin.notification.index')

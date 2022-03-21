@@ -308,7 +308,7 @@ class ItemsController extends Controller
         }elseif ($slug == 'recently-viewed'){
             $query = Item::wherein('id',$items_viewed)->whereType('offer')->whereIsAvailable(1)->orderby('created_at','desc');
             $currency = env('APP_CURRENCY');
-            $recently_viewed_items = $query->take(50)->get()->map(function ($value, $key) use ($currency,$user) {
+            $items = $query->take(50)->get()->map(function ($value, $key) use ($currency,$user) {
                 $value->is_favorite = false;
                 if($user){
                     if(UserFavorite::whereMetaName('items')->whereMetaId($value->id)->whereUserId($user->id)->first()){
@@ -328,7 +328,7 @@ class ItemsController extends Controller
             if($latitude && $longitude){
                 $query = Item::whereType('offer')->whereIsAvailable(1)->orderbyRaw("(6371 * 2 * ASIN(SQRT( POWER(SIN(( $latitude - latitude) *  pi()/180 / 2), 2) +COS( $latitude * pi()/180) * COS(latitude * pi()/180) * POWER(SIN(( $longitude - longitude) * pi()/180 / 2), 2) ))) asc");
                 $currency = env('APP_CURRENCY');
-                $nearby_items = $query->take(50)->get()->map(function ($value, $key) use ($currency,$user) {
+                $items = $query->take(50)->get()->map(function ($value, $key) use ($currency,$user) {
                     $value->is_favorite = false;
                     if($user){
                         if(UserFavorite::whereMetaName('items')->whereMetaId($value->id)->whereUserId($user->id)->first()){
