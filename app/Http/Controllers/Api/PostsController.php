@@ -453,6 +453,55 @@ class PostsController extends Controller
             return $value;
         })->values();
 
+        return response()->json($items);
+    }
+
+    public function my_posts_with_pagination(Request $request) {
+        $user = $this->validate_user($request);
+        $search = Input::has('search') ? Input::get('search') : null;
+        $query = Item::whereType('offer')->whereUserId($user->id)->when($search, function ($query) use ($search) {
+            $query->where(function($query) use ($search){
+                $query->whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])
+                    ->orwhereRaw("LOWER(name_ar) like ? ", [ "%".strtolower($search)."%"])
+                    ->orwhereRaw("LOWER(description_en) like ? ", [ "%".strtolower($search)."%"])
+                    ->orwhereRaw("LOWER(description_ar) like ? ", [ "%".strtolower($search)."%"]);
+            });
+        });
+        $category_id = isset($request->category_id) ? $request->category_id : null;
+        $sub_category_ids = isset($request->sub_category_ids) ? $request->sub_category_ids : null;
+        $sub_sub_category_id = isset($request->sub_sub_category_id) ? $request->sub_sub_category_id : null;
+
+        $query->when($category_id, function ($query) use ($category_id) {
+            $query->whereCategoryId($category_id);
+        });
+        $query->when($sub_category_ids, function ($query) use ($sub_category_ids) {
+            $query->whereIn('sub_category_id',$sub_category_ids);
+        });
+        $query->when($sub_sub_category_id, function ($query) use ($sub_sub_category_id) {
+            $query->whereSubSubCategoryId($sub_sub_category_id);
+        });
+        $query->orderBy('item_order','desc');
+        $currency = env('APP_CURRENCY');
+        $items = $query->get()->map(function ($value, $key) use ($currency,$user) {
+            $value->is_favorite = false;
+            if($user){
+                if(UserFavorite::whereMetaName('items')->whereMetaId($value->id)->whereUserId($user->id)->first()){
+                    $value->is_favorite = true;
+                }
+            }
+            if($value->status == 'expired'){
+                $value->payment_url = secure_url('payment-test');
+            }
+            $value->return_post;
+            $value->currency = $currency;
+            $value->post_type = $value->category->type;
+            unset($value->category);
+            $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
+            $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
+            $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
+            return $value;
+        })->values();
+
         $limit = 20;
         $items = new LengthAwarePaginator(
             $items->forPage(LengthAwarePaginator::resolveCurrentPage(), $limit)->values(), $items->count(), $limit, LengthAwarePaginator::resolveCurrentPage(), ['path' => secure_url('/api/services/items/pagination')]

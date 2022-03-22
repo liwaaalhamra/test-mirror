@@ -51,6 +51,7 @@ Route::group(['prefix' => 'items'],function () {
     Route::post('/update', 'PostsController@update');
     Route::post('/delete', 'PostsController@delete');
     Route::post('/my_posts', 'PostsController@my_posts');
+    Route::post('/my_posts/pagination', 'PostsController@my_posts_with_pagination');
     Route::post('/user_related_posts', 'PostsController@user_related_posts');
     Route::post('/user_related_posts/pagination', 'PostsController@user_related_posts_with_pagination');
 
