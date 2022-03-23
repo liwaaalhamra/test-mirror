@@ -139,7 +139,8 @@ class PaymentController extends Controller
             'user_id' => $user->id,
             'amount' => $amount,
             'post_id' => $post_id,
-            'is_new' => $user->customer_id == null ? true :  false,
+//            'is_new' => $user->customer_id == null ? true :  false,
+            'is_new' => true,
             'is_test' =>  false
         ];
         $order = Order::create([
@@ -155,8 +156,8 @@ class PaymentController extends Controller
     public function show_test(Request $request) /*: View*/
     {
         //below for testing
-//        $request->headers->set('token', [ 0 => 'at0QIbcdDqyHjowjuUqv7mwR0JOB2Zt2KgVS3PLnSOmLuF2CYlf1xr6v0fFcqcRF']);
-//        $request->headers->set('post-id', [ 1 => '9']);
+        $request->headers->set('token', [ 0 => 'oyoqOPfmG0iTCrHbUXkVLppGyQ4QwzG5WpI2FpglPbYv92j2zu6VfFcm6Uz5dS9n']);
+        $request->headers->set('post-id', [ 1 => '22']);
         $user = $this->validate_user($request);
         $post_id = $request->header("post-id");
         $post = Item::whereId($post_id)->first();
@@ -172,7 +173,8 @@ class PaymentController extends Controller
             'user_id' => $user->id,
             'amount' => $amount,
             'post_id' => $post_id,
-            'is_new' => $user->customer_id == null ? true :  false,
+//            'is_new' => $user->customer_id == null ? true :  false,
+            'is_new' => true,
             'is_test' =>  true
         ];
         $order = Order::create([

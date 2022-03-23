@@ -20,7 +20,7 @@
 <body>
 <div class="app app-header-fixed ">
     <div style="text-align: center">
-        <h4><img src="{{secure_asset('public/uploads/images/logo.png')}}" /></h4>
+        <h4><img style="width: 100%" src="{{secure_asset('public/uploads/images/logo.png')}}" /></h4>
     </div>
     <div class="panel panel-default" style="text-align: center">
         <div class="panel-heading" style="background-color: #4EBC97;color: white;">
@@ -34,6 +34,7 @@
                         <input type="hidden" name="order_id" value="{{$data['order_id']}}">
                         <input type="hidden" name="post_id" value="{{$data['post_id']}}">
                         <input type="hidden" name="type" value="{{$data['is_test']}}">
+                        <input type="hidden" name="token" value="{{$data['token']}}">
                         <button type="submit" class="btn btn-lg btn-danger" >
                             <i class="fas fa-id-card"></i> Already A Customer
                         </button>
@@ -64,6 +65,7 @@
                         <input type="hidden" name="order_id" value="{{$data['order_id']}}">
                         <input type="hidden" name="post_id" value="{{$data['post_id']}}">
                         <input type="hidden" name="type" value="{{$data['is_test']}}">
+                        <input type="hidden" name="token" value="{{$data['token']}}">
                         <button type="submit" class="btn btn-lg btn-danger" >
                             <i class="fas fa-id-card"></i> Already A Customer
                         </button>

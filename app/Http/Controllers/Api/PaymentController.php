@@ -1093,6 +1093,7 @@ class PaymentController extends Controller
                  * need to update the card
                  */
                 $customer = Customer::retrieve($user->customer_id);
+
                 if($request->stripeToken){
                     $token_card = Token::retrieve($request->stripeToken);
                     $customer = Customer::update($user->customer_id, [
@@ -1100,6 +1101,7 @@ class PaymentController extends Controller
                     ]);
 
                 }
+                dd($user->customer_id,$customer,$request->all());
                 $token_card = $customer->sources->retrieve($customer->default_source);
 
                 $customer = json_decode(json_encode($customer),True);
