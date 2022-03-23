@@ -913,6 +913,8 @@ class ItemsController extends Controller
             }
         }
         $item->currency = $currency;
+        $post_type = $item->category->type;
+        $item->post_type = $post_type;
         $item->price_formatted = number_format($item->price,3) . ' ' . $currency;
         $item->discounted_price_formatted = $item->discounted_price ? number_format($item->discounted_price,3) . ' ' . $currency : null;
         $item->discount_amount_formatted = $item->discount_amount ? number_format($item->discount_amount,3) . ' ' . $currency : null;
@@ -930,6 +932,8 @@ class ItemsController extends Controller
         })->groupBy('section');
         $return_post = $item->return_post;
         if($return_post){
+            $return_post_type = $return_post->category->type;
+            $return_post->post_type = $return_post_type;
             $return_post->custom_fields = CustomField::whereInFilters(0)->whereInReturn(1)->whereCategoryId($return_post->category_id)->whereSubCategoryId($return_post->sub_category_id)->orderby('item_order','asc')->get()->map(function ($value, $key) use ($return_post) {
                 $value->section = $value->in_filters ? 'filters' : 'regular';
                 $custom_field_value = ItemCustomField::whereFieldName($value->field_name)->whereItemId($return_post->id)->whereCustomFieldId($value->id)->first();
@@ -976,6 +980,8 @@ class ItemsController extends Controller
             }
         }
         $item->currency = $currency;
+        $post_type = $item->category->type;
+        $item->post_type = $post_type;
         $item->price_formatted = number_format($item->price,3) . ' ' . $currency;
         $item->discounted_price_formatted = $item->discounted_price ? number_format($item->discounted_price,3) . ' ' . $currency : null;
         $item->discount_amount_formatted = $item->discount_amount ? number_format($item->discount_amount,3) . ' ' . $currency : null;
@@ -993,6 +999,8 @@ class ItemsController extends Controller
         })->groupBy('section');
         $return_post = $item->return_post;
         if($return_post){
+            $return_post_type = $return_post->category->type;
+            $return_post->post_type = $return_post_type;
             $return_post->custom_fields = CustomField::whereInFilters(0)->whereInReturn(1)->whereCategoryId($return_post->category_id)->whereSubCategoryId($return_post->sub_category_id)->orderby('item_order','asc')->get()->map(function ($value, $key) use ($return_post) {
                 $value->section = $value->in_filters ? 'filters' : 'regular';
                 $custom_field_value = ItemCustomField::whereFieldName($value->field_name)->whereItemId($return_post->id)->whereCustomFieldId($value->id)->first();
