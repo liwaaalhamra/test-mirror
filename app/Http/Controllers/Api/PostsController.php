@@ -134,7 +134,7 @@ class PostsController extends Controller
         }
         $item = Item::create([
             'type' => 'offer',
-            'status' => 'in_review',
+            'status' => 'pending',
             'user_id' => $user->id,
             'category_id' => $category->id,
             'sub_category_id' => $sub_category->id,
@@ -181,7 +181,7 @@ class PostsController extends Controller
         if($request->with_return == 'yes'){
             $return_item = Item::create([
                 'type' => 'return',
-                'status' => 'in_review',
+                'status' => 'pending',
                 'user_id' => $user->id,
                 'category_id' => $return_category->id,
                 'sub_category_id' => $return_sub_category->id,
@@ -440,7 +440,7 @@ class PostsController extends Controller
                     $value->is_favorite = true;
                 }
             }
-            if($value->status == 'expired'){
+            if(in_array($value->status, ['expired','pending'])){
                 $value->payment_url = secure_url('payment-test');
             }
             $value->return_post;
@@ -452,6 +452,26 @@ class PostsController extends Controller
             $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
             return $value;
         })->values();
+
+        return response()->json($items);
+    }
+
+    public function my_postsx(Request $request) {
+        $items = Item::whereType('offer')->get()->map(function ($value, $key) {
+            $value->total = 0;
+            if($value->category_id == 1){
+                $value->total = $value->total + 10;
+            }
+            if($value->sub_category_id == 1){
+                $value->total = $value->total + 10;
+            }
+            if($value->sub_sub_category_id == 1){
+                $value->total = $value->total + 10;
+            }
+            return $value;
+        })->sortbydesc("total")->values();
+
+        
 
         return response()->json($items);
     }

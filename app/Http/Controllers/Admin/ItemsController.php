@@ -367,7 +367,7 @@ class ItemsController extends Controller
 
     public function approve(Item $item){
         if($item){
-            if($item->status == 'pending'){
+            if($item->status == 'in_review'){
                 $title = "Post Approval!";
                 $message = "Your post has been approved, you can start bartering!";
             }else{
@@ -385,7 +385,7 @@ class ItemsController extends Controller
                 $result = parent::oneSignal($info);
             }
 
-            $item->status = $item->status == 'pending' ? 'approved' : 'pending';
+            $item->status = $item->status == 'in_review' ? 'approved' : 'in_review';
             $item->save();
         }
         return redirect()->route('admin.'.$this->section_name.'.index')

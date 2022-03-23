@@ -1173,7 +1173,7 @@ class PaymentController extends Controller
             $order->save();
             $response = json_decode(json_encode($response),True);
             if($response['status'] == 'succeeded'){
-                $post->status = "approved";
+                $post->status = "in_review";
                 $post->save();
                 $result['message'] = 'Payment Success';
                 $result['result'] = 'success';
