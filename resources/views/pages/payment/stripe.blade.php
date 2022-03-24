@@ -54,6 +54,7 @@
                             data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
                             data-name="{{env('APP_NAME')}}, LLC"
                             data-amount="{{$data['amount']}}"
+                            data-currency="{{env('APP_CURRENCY')}}"
                             data-locale="auto"></script>
                 </form>
             </div>
@@ -85,6 +86,7 @@
                             data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
                             data-name="{{env('APP_NAME')}}, LLC"
                             data-amount="{{$data['amount']}}"
+                            data-currency="{{env('APP_CURRENCY')}}"
                             data-locale="auto"></script>
                 </form>
             </div>

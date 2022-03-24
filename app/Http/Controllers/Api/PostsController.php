@@ -70,9 +70,9 @@ class PostsController extends Controller
         if(!Input::has('title')){
             return parent::return_error('Missing Title',401,'messages.missing_parameter');
         }
-//        if(!Input::has('description')){
-//            return parent::return_error('Missing Description',401,'messages.missing_parameter');
-//        }
+        if(!Input::has('description')){
+            return parent::return_error('Missing Description',401,'messages.missing_parameter');
+        }
         $description = isset($request->description) && !empty($request->description) ? $request->description : null;
         if(!Input::has('price')){
             return parent::return_error('Missing Price',401,'messages.missing_parameter');
@@ -117,8 +117,11 @@ class PostsController extends Controller
 //                return parent::return_error('Missing Return Description',401,'messages.missing_parameter');
 //            }
             $return_description = isset($request->return_description) && !empty($request->return_description) ? $request->return_description : null;
-            if(!Input::has('return_price')){
-                return parent::return_error('Missing Return Price',401,'messages.missing_parameter');
+            if(!Input::has('return_price_from')){
+                return parent::return_error('Missing Return Price From',401,'messages.missing_parameter');
+            }
+            if(!Input::has('return_price_to')){
+                return parent::return_error('Missing Return Price To',401,'messages.missing_parameter');
             }
             $return_regular_fields = [];
             if(Input::has('return_regular_fields')){
@@ -155,8 +158,8 @@ class PostsController extends Controller
                 'custom_field_id' => $regular_field->id,
                 'field_name' => $regular_field->field_name,
                 'field_value' => $regular_field->field_value,
-                'extra_field_name' => $regular_field->extra_field_name,
-                'extra_field_value' => $regular_field->extra_field_value,
+                'extra_field_name' => isset($regular_field->extra_field_name) ? $regular_field->extra_field_name : null,
+                'extra_field_value' => isset($regular_field->extra_field_value) ? $regular_field->extra_field_value : null,
             ]);
         }
         foreach ($filters_fields as $filter_field){
@@ -165,8 +168,8 @@ class PostsController extends Controller
                 'custom_field_id' => $filter_field->id,
                 'field_name' => $filter_field->field_name,
                 'field_value' => $filter_field->field_value,
-                'extra_field_name' => $filter_field->extra_field_name,
-                'extra_field_value' => $filter_field->extra_field_value,
+                'extra_field_name' => isset($filter_field->extra_field_name) ? $filter_field->extra_field_name : null,
+                'extra_field_value' => isset($filter_field->extra_field_value) ? $filter_field->extra_field_value : null,
             ]);
         }
         if(Input::has('media_ids')){
@@ -186,7 +189,8 @@ class PostsController extends Controller
                 'category_id' => $return_category->id,
                 'sub_category_id' => $return_sub_category->id,
                 'sub_sub_category_id' => $return_sub_sub_category->id,
-                'price' => $request->return_price,
+                'price_from' => $request->return_price_from,
+                'price_to' => $request->return_price_to,
                 'name_en' => $request->return_title,
                 'description_en' => $return_description,
                 'location_id' => $return_location->id,
@@ -202,8 +206,8 @@ class PostsController extends Controller
                     'custom_field_id' => $return_regular_field->id,
                     'field_name' => $return_regular_field->field_name,
                     'field_value' => $return_regular_field->field_value,
-                    'extra_field_name' => $return_regular_field->extra_field_name,
-                    'extra_field_value' => $return_regular_field->extra_field_value,
+                    'extra_field_name' => isset($return_regular_field->extra_field_name) ? $return_regular_field->extra_field_name : null,
+                    'extra_field_value' => isset($return_regular_field->extra_field_value) ? $return_regular_field->extra_field_value : null,
                 ]);
             }
         }
@@ -246,9 +250,9 @@ class PostsController extends Controller
         if(!Input::has('title')){
             return parent::return_error('Missing Title',401,'messages.missing_parameter');
         }
-//        if(!Input::has('description')){
-//            return parent::return_error('Missing Description',401,'messages.missing_parameter');
-//        }
+        if(!Input::has('description')){
+            return parent::return_error('Missing Description',401,'messages.missing_parameter');
+        }
         $description = isset($request->description) && !empty($request->description) ? $request->description : null;
         if(!Input::has('price')){
             return parent::return_error('Missing Price',401,'messages.missing_parameter');
@@ -293,8 +297,11 @@ class PostsController extends Controller
 //                return parent::return_error('Missing Return Description',401,'messages.missing_parameter');
 //            }
             $return_description = isset($request->return_description) && !empty($request->return_description) ? $request->return_description : null;
-            if(!Input::has('return_price')){
-                return parent::return_error('Missing Return Price',401,'messages.missing_parameter');
+            if(!Input::has('return_price_from')){
+                return parent::return_error('Missing Return Price From',401,'messages.missing_parameter');
+            }
+            if(!Input::has('return_price_to')){
+                return parent::return_error('Missing Return Price To',401,'messages.missing_parameter');
             }
             $return_regular_fields = [];
             if(Input::has('return_regular_fields')){
@@ -322,8 +329,8 @@ class PostsController extends Controller
                 'custom_field_id' => $regular_field->id,
                 'field_name' => $regular_field->field_name,
                 'field_value' => $regular_field->field_value,
-                'extra_field_name' => $regular_field->extra_field_name,
-                'extra_field_value' => $regular_field->extra_field_value,
+                'extra_field_name' => isset($regular_field->extra_field_name) ? $regular_field->extra_field_name : null,
+                'extra_field_value' => isset($regular_field->extra_field_value) ? $regular_field->extra_field_value : null,
             ]);
         }
         foreach ($filters_fields as $filter_field){
@@ -332,8 +339,8 @@ class PostsController extends Controller
                 'custom_field_id' => $filter_field->id,
                 'field_name' => $filter_field->field_name,
                 'field_value' => $filter_field->field_value,
-                'extra_field_name' => $filter_field->extra_field_name,
-                'extra_field_value' => $filter_field->extra_field_value,
+                'extra_field_name' => isset($filter_field->extra_field_name) ? $filter_field->extra_field_name : null,
+                'extra_field_value' => isset($filter_field->extra_field_value) ? $filter_field->extra_field_value : null,
             ]);
         }
         if(Input::has('media_ids')){
@@ -352,7 +359,8 @@ class PostsController extends Controller
                     'category_id' => $return_category->id,
                     'sub_category_id' => $return_sub_category->id,
                     'sub_sub_category_id' => $return_sub_sub_category->id,
-                    'price' => $request->return_price,
+                    'price_from' => $request->return_price_from,
+                    'price_to' => $request->return_price_to,
                     'name_en' => $request->return_title,
                     'description_en' => $return_description,
                     'location_id' => $return_location->id,
@@ -367,7 +375,8 @@ class PostsController extends Controller
                     'category_id' => $return_category->id,
                     'sub_category_id' => $return_sub_category->id,
                     'sub_sub_category_id' => $return_sub_sub_category->id,
-                    'price' => $request->return_price,
+                    'price_from' => $request->return_price_from,
+                    'price_to' => $request->return_price_to,
                     'name_en' => $request->return_title,
                     'description_en' => $return_description,
                     'location_id' => $return_location->id,
@@ -385,8 +394,8 @@ class PostsController extends Controller
                     'custom_field_id' => $return_regular_field->id,
                     'field_name' => $return_regular_field->field_name,
                     'field_value' => $return_regular_field->field_value,
-                    'extra_field_name' => $return_regular_field->extra_field_name,
-                    'extra_field_value' => $return_regular_field->extra_field_value,
+                    'extra_field_name' => isset($return_regular_field->extra_field_name) ? $return_regular_field->extra_field_name : null,
+                    'extra_field_value' => isset($return_regular_field->extra_field_value) ? $return_regular_field->extra_field_value : null,
                 ]);
             }
 
@@ -447,9 +456,9 @@ class PostsController extends Controller
             $value->currency = $currency;
             $value->post_type = $value->category->type;
             unset($value->category);
-            $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
-            $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
-            $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
+//            $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
+//            $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
+//            $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
             return $value;
         })->values();
 
@@ -516,9 +525,9 @@ class PostsController extends Controller
             $value->currency = $currency;
             $value->post_type = $value->category->type;
             unset($value->category);
-            $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
-            $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
-            $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
+//            $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
+//            $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
+//            $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
             return $value;
         })->values();
 
@@ -573,9 +582,9 @@ class PostsController extends Controller
             $value->currency = $currency;
             $value->post_type = $value->category->type;
             unset($value->category);
-            $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
-            $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
-            $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
+//            $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
+//            $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
+//            $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
             return $value;
         })->values();
 
@@ -630,9 +639,9 @@ class PostsController extends Controller
             $value->currency = $currency;
             $value->post_type = $value->category->type;
             unset($value->category);
-            $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
-            $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
-            $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
+//            $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
+//            $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
+//            $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
             return $value;
         })->values();
 

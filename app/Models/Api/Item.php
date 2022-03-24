@@ -31,7 +31,8 @@ class Item extends Model
         'is_sale' => 'boolean',
     ];
     protected $with = ['location','images'];
-    protected $appends = ['name','user_fullname','description','discount_amount','currency','price_formatted','discounted_price_formatted','discount_amount_formatted','barcode','user_image'];
+    protected $appends = ['name','user_fullname','description','discount_amount','currency',
+        'price_formatted','discounted_price_formatted','discount_amount_formatted','barcode','user_image','price_from_formatted','price_to_formatted'];
 
     protected function getCurrencyAttribute(){
         return env('APP_CURRENCY');
@@ -46,7 +47,13 @@ class Item extends Model
     }
 
     protected function getPriceFormattedAttribute(){
-        return number_format($this->attributes['price'],0) . ' ' . env('APP_CURRENCY');
+        return $this->attributes['price'] ? number_format($this->attributes['price'],0) . ' ' . env('APP_CURRENCY') : null;
+    }
+    protected function getPriceFromFormattedAttribute(){
+        return $this->attributes['price_from'] ? number_format($this->attributes['price_from'],0) . ' ' . env('APP_CURRENCY') : null;
+    }
+    protected function getPriceToFormattedAttribute(){
+        return $this->attributes['price_to'] ? number_format($this->attributes['price_to'],0) . ' ' . env('APP_CURRENCY') : null;
     }
 
     protected function getDiscountedPriceFormattedAttribute(){

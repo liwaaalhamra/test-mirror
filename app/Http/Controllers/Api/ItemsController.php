@@ -159,9 +159,9 @@ class ItemsController extends Controller
                 $value->post_type = $value->category->type;
                 unset($value->category);
                 $value->currency = $currency;
-                $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
-                $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
-                $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
+//                $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
+//                $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
+//                $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
                 return $value;
             })->values();
         }
@@ -181,9 +181,9 @@ class ItemsController extends Controller
             $value->currency = $currency;
             $value->post_type = $value->category->type;
             unset($value->category);
-            $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
-            $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
-            $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
+//            $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
+//            $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
+//            $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
             return $value;
         })->values();
 
@@ -201,9 +201,9 @@ class ItemsController extends Controller
             unset($value->quantity);
             $value->post_type = "products";
             $value->currency = $currency;
-            $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
-            $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
-            $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
+//            $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
+//            $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
+//            $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
 //            $value->custom_fields = CustomField::whereCategoryId($value->category_id)->whereSubCategoryId($value->sub_category_id)->get();
             return $value;
         })->values();
@@ -221,9 +221,9 @@ class ItemsController extends Controller
             }
             $value->currency = $currency;
             $value->post_type = "services";
-            $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
-            $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
-            $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
+//            $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
+//            $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
+//            $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
 //            $value->custom_fields = CustomField::whereCategoryId($value->category_id)->whereSubCategoryId($value->sub_category_id)->get();
             return $value;
         })->values();
@@ -281,9 +281,9 @@ class ItemsController extends Controller
                 unset($value->quantity);
                 $value->currency = $currency;
                 $value->post_type = "products";
-                $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
-                $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
-                $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
+//                $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
+//                $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
+//                $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
                 return $value;
             })->values();
         }elseif ($slug == 'trending-services'){
@@ -300,9 +300,9 @@ class ItemsController extends Controller
                 }
                 $value->currency = $currency;
                 $value->post_type = "services";
-                $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
-                $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
-                $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
+//                $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
+//                $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
+//                $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
                 return $value;
             })->values();
         }elseif ($slug == 'recently-viewed'){
@@ -319,9 +319,9 @@ class ItemsController extends Controller
                 $value->currency = $currency;
                 $value->post_type = $value->category->type;
                 unset($value->category);
-                $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
-                $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
-                $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
+//                $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
+//                $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
+//                $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
                 return $value;
             })->values();
         }elseif ($slug == 'nearby'){
@@ -339,9 +339,9 @@ class ItemsController extends Controller
                     $value->currency = $currency;
                     $value->post_type = $value->category->type;
                     unset($value->category);
-                    $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
-                    $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
-                    $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
+//                    $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
+//                    $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
+//                    $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
                     return $value;
                 })->values();
             }
@@ -923,11 +923,27 @@ class ItemsController extends Controller
             $value->section = $value->in_filters ? 'filters' : 'regular';
             $custom_field_value = ItemCustomField::whereFieldName($value->field_name)->whereItemId($item->id)->whereCustomFieldId($value->id)->first();
             $value->field_value = $custom_field_value ? $this->cast_field_value($custom_field_value->field_value, $value->field_type) : null;
+            $field_display_name = null;
+            if($custom_field_value && $value->field_type == 'list'){
+                $list_item = CustomFieldList::whereFieldName($value->field_name)->whereId($value->field_value)->first();
+                if($list_item){
+                    $field_display_name = $list_item->name_en;
+                }
+            }
+            $value->field_display_name = $field_display_name;
             $custom_extra_field_value = null;
             if($value->has_extra_field){
                 $custom_extra_field_value = ItemCustomField::whereExtraFieldName($value->extra_field_name)->whereItemId($item->id)->whereCustomFieldId($value->id)->first();
             }
             $value->extra_field_value = $custom_extra_field_value ? $this->cast_field_value($custom_extra_field_value->extra_field_value, $value->extra_field_type) : null;
+            $extra_field_display_name = null;
+            if($custom_extra_field_value && $value->extra_field_type == 'list'){
+                $extra_list_item = CustomFieldList::whereFieldName($value->extra_field_name)->whereId($value->extra_field_value)->first();
+                if($extra_list_item){
+                    $extra_field_display_name = $extra_list_item->name_en;
+                }
+            }
+            $value->extra_field_display_name = $extra_field_display_name;
             return $value;
         })->groupBy('section');
         $return_post = $item->return_post;
@@ -938,11 +954,27 @@ class ItemsController extends Controller
                 $value->section = $value->in_filters ? 'filters' : 'regular';
                 $custom_field_value = ItemCustomField::whereFieldName($value->field_name)->whereItemId($return_post->id)->whereCustomFieldId($value->id)->first();
                 $value->field_value = $custom_field_value ? $this->cast_field_value($custom_field_value->field_value, $value->field_type) : null;
+                $field_display_name = null;
+                if($custom_field_value && $value->field_type == 'list'){
+                    $list_item = CustomFieldList::whereFieldName($value->field_name)->whereId($value->field_value)->first();
+                    if($list_item){
+                        $field_display_name = $list_item->name_en;
+                    }
+                }
+                $value->field_display_name = $field_display_name;
                 $custom_extra_field_value = null;
                 if($value->has_extra_field){
                     $custom_extra_field_value = ItemCustomField::whereExtraFieldName($value->extra_field_name)->whereItemId($return_post->id)->whereCustomFieldId($value->id)->first();
                 }
                 $value->extra_field_value = $custom_extra_field_value ? $this->cast_field_value($custom_extra_field_value->extra_field_value, $value->extra_field_type) : null;
+                $extra_field_display_name = null;
+                if($custom_extra_field_value && $value->extra_field_type == 'list'){
+                    $extra_list_item = CustomFieldList::whereFieldName($value->extra_field_name)->whereId($value->extra_field_value)->first();
+                    if($extra_list_item){
+                        $extra_field_display_name = $extra_list_item->name_en;
+                    }
+                }
+                $value->extra_field_display_name = $extra_field_display_name;
                 return $value;
             })->groupBy('section');
         }
@@ -990,11 +1022,27 @@ class ItemsController extends Controller
             $value->section = $value->in_filters ? 'filters' : 'regular';
             $custom_field_value = ItemCustomField::whereFieldName($value->field_name)->whereItemId($item->id)->whereCustomFieldId($value->id)->first();
             $value->field_value = $custom_field_value ? $this->cast_field_value($custom_field_value->field_value, $value->field_type) : null;
+            $field_display_name = null;
+            if($custom_field_value && $value->field_type == 'list'){
+                $list_item = CustomFieldList::whereFieldName($value->field_name)->whereId($value->field_value)->first();
+                if($list_item){
+                    $field_display_name = $list_item->name_en;
+                }
+            }
+            $value->field_display_name = $field_display_name;
             $custom_extra_field_value = null;
             if($value->has_extra_field){
                 $custom_extra_field_value = ItemCustomField::whereExtraFieldName($value->extra_field_name)->whereItemId($item->id)->whereCustomFieldId($value->id)->first();
             }
             $value->extra_field_value = $custom_extra_field_value ? $this->cast_field_value($custom_extra_field_value->extra_field_value, $value->extra_field_type) : null;
+            $extra_field_display_name = null;
+            if($custom_extra_field_value && $value->extra_field_type == 'list'){
+                $extra_list_item = CustomFieldList::whereFieldName($value->extra_field_name)->whereId($value->extra_field_value)->first();
+                if($extra_list_item){
+                    $extra_field_display_name = $extra_list_item->name_en;
+                }
+            }
+            $value->extra_field_display_name = $extra_field_display_name;
             return $value;
         })->groupBy('section');
         $return_post = $item->return_post;
@@ -1005,11 +1053,27 @@ class ItemsController extends Controller
                 $value->section = $value->in_filters ? 'filters' : 'regular';
                 $custom_field_value = ItemCustomField::whereFieldName($value->field_name)->whereItemId($return_post->id)->whereCustomFieldId($value->id)->first();
                 $value->field_value = $custom_field_value ? $this->cast_field_value($custom_field_value->field_value, $value->field_type) : null;
+                $field_display_name = null;
+                if($custom_field_value && $value->field_type == 'list'){
+                    $list_item = CustomFieldList::whereFieldName($value->field_name)->whereId($value->field_value)->first();
+                    if($list_item){
+                        $field_display_name = $list_item->name_en;
+                    }
+                }
+                $value->field_display_name = $field_display_name;
                 $custom_extra_field_value = null;
                 if($value->has_extra_field){
                     $custom_extra_field_value = ItemCustomField::whereExtraFieldName($value->extra_field_name)->whereItemId($return_post->id)->whereCustomFieldId($value->id)->first();
                 }
                 $value->extra_field_value = $custom_extra_field_value ? $this->cast_field_value($custom_extra_field_value->extra_field_value, $value->extra_field_type) : null;
+                $extra_field_display_name = null;
+                if($custom_extra_field_value && $value->extra_field_type == 'list'){
+                    $extra_list_item = CustomFieldList::whereFieldName($value->extra_field_name)->whereId($value->extra_field_value)->first();
+                    if($extra_list_item){
+                        $extra_field_display_name = $extra_list_item->name_en;
+                    }
+                }
+                $value->extra_field_display_name = $extra_field_display_name;
                 return $value;
             })->groupBy('section');
         }

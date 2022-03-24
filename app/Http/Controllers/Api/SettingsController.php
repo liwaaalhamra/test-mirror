@@ -76,6 +76,7 @@ class SettingsController extends Controller
             $info['force_update_message'] = $version_update_message;
             $info[$key] = $value;
         }
+        $info['currency'] = env('APP_CURRENCY');
         unset($info['force_update_message_ar']);
         unset($info['force_update_message_en']);
         unset($info['force_update_title_ar']);
