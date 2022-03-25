@@ -946,6 +946,12 @@ class ItemsController extends Controller
             $value->extra_field_display_name = $extra_field_display_name;
             return $value;
         })->groupBy('section');
+        if(!$item->custom_fields->has('regular')){
+            $item->custom_fields->put('regular', []);
+        }
+        if(!$item->custom_fields->has('filters')){
+            $item->custom_fields->put('filters', []);
+        }
         $return_post = $item->return_post;
         if($return_post){
             $return_post_type = $return_post->category->type;
@@ -977,6 +983,12 @@ class ItemsController extends Controller
                 $value->extra_field_display_name = $extra_field_display_name;
                 return $value;
             })->groupBy('section');
+            if(!$return_post->custom_fields->has('regular')){
+                $return_post->custom_fields->put('regular', []);
+            }
+            if(!$return_post->custom_fields->has('filters')){
+                $return_post->custom_fields->put('filters', []);
+            }
         }
         if(!$user){
             $item->category;
@@ -1045,6 +1057,12 @@ class ItemsController extends Controller
             $value->extra_field_display_name = $extra_field_display_name;
             return $value;
         })->groupBy('section');
+        if(!$item->custom_fields->has('regular')){
+            $item->custom_fields->put('regular', []);
+        }
+        if(!$item->custom_fields->has('filters')){
+            $item->custom_fields->put('filters', []);
+        }
         $return_post = $item->return_post;
         if($return_post){
             $return_post_type = $return_post->category->type;
@@ -1076,6 +1094,12 @@ class ItemsController extends Controller
                 $value->extra_field_display_name = $extra_field_display_name;
                 return $value;
             })->groupBy('section');
+            if(!$return_post->custom_fields->has('regular')){
+                $return_post->custom_fields->put('regular', []);
+            }
+            if(!$return_post->custom_fields->has('filters')){
+                $return_post->custom_fields->put('filters', []);
+            }
         }
         if(!$user){
             $item->category;
