@@ -142,9 +142,9 @@ class CategoriesController extends Controller
         $order = $max_order + 1;
         Category::create([
             'item_order' => $order,
-//            'image' => $fileName,
-//            'width' => $width,
-//            'height' => $height,
+            'image' => $fileName,
+            'width' => $width,
+            'height' => $height,
             'type' => $type,
             'is_published' => 1,
             'name_en' => empty($request->name_en) ? null : trim($request->name_en),
@@ -157,7 +157,7 @@ class CategoriesController extends Controller
 
     public function delete_single_image($id)
     {
-        $category = CollectionCategory::findOrFail($id);
+        $category = Category::findOrFail($id);
         if($category->image != null) {
             $filePath = public_path() . DIRECTORY_SEPARATOR . 'uploads/images'  . DIRECTORY_SEPARATOR . 'categories' . DIRECTORY_SEPARATOR . $category->getMediaName();
             File::delete($filePath);
@@ -189,7 +189,7 @@ class CategoriesController extends Controller
      */
     public function edit($id)
     {
-        $category = CollectionCategory::findOrFail($id);
+        $category = Category::findOrFail($id);
 
         return view('pages.categories.edit', compact('category'))
             ->with('content_header', 'Update Category');
@@ -204,7 +204,7 @@ class CategoriesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $category = CollectionCategory::findOrFail($id);
+        $category = Category::findOrFail($id);
 
         // public/files/{random_file_name}
         $destinationDir = public_path() . DIRECTORY_SEPARATOR . 'uploads/images'  . DIRECTORY_SEPARATOR . 'categories';
@@ -245,18 +245,18 @@ class CategoriesController extends Controller
                 }
             }
         }
-        $is_supplier = false;
-        if(isset($request->is_supplier) && $request->is_supplier == 'on'){
-            $is_supplier = true;
+        $type = 'products';
+        if(isset($request->type) && $request->type == 'on'){
+            $type = 'services';
         }
         $category->update([
             'image' => $fileName,
             'width' => $width,
             'height' => $height,
-            'is_supplier' => $is_supplier,
+            'type' => $type,
             'name_en' => empty($request->name_en) ? null : trim($request->name_en),
-            'name_ar' => empty($request->name_ar) ? null : trim($request->name_ar),
-            'item_order' => empty($request->item_order) ? 1 : trim($request->item_order),
+//            'name_ar' => empty($request->name_ar) ? null : trim($request->name_ar),
+//            'item_order' => empty($request->item_order) ? 1 : trim($request->item_order),
         ]);
         return redirect()->route('admin.categories.index')
             ->with('success', 'Successfully updated the Category');

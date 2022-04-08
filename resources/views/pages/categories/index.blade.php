@@ -36,7 +36,7 @@
 {{--                    <th>Name Arabic</th>--}}
                     <th>Type</th>
 {{--                    <th>Is Supplier</th>--}}
-                    {{--<th>Image</th>--}}
+                    <th>Image</th>
                     <th>Status</th>
                     <th>Date Added</th>
                     <th></th>
@@ -56,27 +56,27 @@
 {{--                                <h4><span class="label label-warning">NO</span></h4>--}}
 {{--                            @endif--}}
 {{--                        </td>--}}
-                        {{--<td>--}}
-                            {{--@if($item->image != null)--}}
-                                {{--<img src="{{ secure_url('admin/medias/categories/'. $item->id.'/view_media') }}" width="100px" data-toggle="modal" data-target="#myModal_{{$item->id}}"  style="cursor: pointer;"/>--}}
-                                {{--<div id="myModal_{{$item->id}}" class="modal fade" role="dialog">--}}
-                                    {{--<div class="modal-dialog">--}}
-                                        {{--<div class="modal-content">--}}
-                                            {{--<div class="modal-header">--}}
-                                                {{--<button type="button" class="close" data-dismiss="modal">&times;</button>--}}
-                                            {{--</div>--}}
-                                            {{--<div class="modal-body">--}}
-                                                {{--<img src="{{ secure_url('admin/medias/categories/'. $item->id.'/view_media') }}" width="100%;">--}}
-                                            {{--</div>--}}
-                                            {{--<div class="modal-footer">--}}
-                                                {{--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>--}}
-                                            {{--</div>--}}
-                                        {{--</div>--}}
+                        <td>
+                            @if($item->image != null)
+                                <img src="{{ secure_url('admin/medias/categories/'. $item->id.'/view_media') }}" width="100px" data-toggle="modal" data-target="#myModal_{{$item->id}}"  style="cursor: pointer;"/>
+                                <div id="myModal_{{$item->id}}" class="modal fade" role="dialog">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <img src="{{ secure_url('admin/medias/categories/'. $item->id.'/view_media') }}" width="100%;">
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
 
-                                    {{--</div>--}}
-                                {{--</div>--}}
-                            {{--@endif--}}
-                        {{--</td>--}}
+                                    </div>
+                                </div>
+                            @endif
+                        </td>
                         <td>
                             @if($item->is_published)
                                 <h4><span class="label label-success">Online</span></h4>
@@ -98,7 +98,7 @@
                                 @endif
                             @endif
                             @if(in_array('edit',auth()->user()->role->hasAccess($section_name)))
-{{--                                <a href="{{ route('admin.categories.edit', $item->id) }}" class="btn btn-xs btn-info"><i class="fa fa-edit"> Edit</i></a>--}}
+                                <a href="{{ route('admin.categories.edit', $item->id) }}" class="btn btn-xs btn-info"><i class="fa fa-edit"> Edit</i></a>
                                 <a href="{{ route('admin.categories.sub_categories.index',$item->id) }}" class="btn btn-xs btn-primary"><i class="fa fa-arrows-alt">  View Sub Categories</i></a>
                             @endif
                             @if(in_array('delete',auth()->user()->role->hasAccess($section_name)))
