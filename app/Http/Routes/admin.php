@@ -32,6 +32,7 @@ Route::get('orders/{order_id}/print_invoice',['uses' => 'OrdersController@print_
 Route::get('orders/action/{order_id}/{status}',['uses' => 'OrdersController@action', 'as' => 'admin.orders.action']);
 Route::get('orders/{order_id}/status/{status}',['uses' => 'OrdersController@status', 'as' => 'admin.orders.status']);
 
+Route::resource('dynamic_fields', 'DynamicFieldsController');
 Route::resource('roles', 'RolesController');
 Route::resource('promo_codes', 'PromoCodesController');
 Route::get('/promo_codes/publish/{promo_id}',['uses' => 'PromoCodesController@publish', 'as' => 'admin.promo_codes.publish']);
@@ -71,7 +72,7 @@ Route::get('categories/{category_id}/list_collections', ['uses' => 'CategoriesCo
 Route::get('categories/publish/{category_id}', ['uses' => 'CategoriesController@publish', 'as' => 'admin.categories.publish']);
 Route::resource('categories', 'CategoriesController');
 Route::get('categories/sub_categories/{sub_category_id}/delete_single', ['uses' => 'CuratedCollectionsController@delete_single_image', 'as' => 'admin.categories.sub_categories.delete_single']);
-Route::get('categories/sub_categories/publish/{sub_category_id}', ['uses' => 'CuratedCollectionsController@publish', 'as' => 'admin.categories.sub_categories.publish']);
+Route::get('categories/sub_categories/publish/{sub_category_id}', ['uses' => 'SubCategoriesController@publish', 'as' => 'admin.categories.sub_categories.publish']);
 //Route::resource('categories.sub_categories', 'CuratedCollectionsController');
 Route::resource('categories.sub_categories', 'SubCategoriesController');
 

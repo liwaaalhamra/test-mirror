@@ -10,8 +10,8 @@
                         {{ csrf_field() }}
                         <div class="row">
                             <div class="form-group col-md-4">
-                                <label>Is Supplier?</label>
-                                <input name="is_supplier" type="checkbox" data-toggle="toggle" data-on="YES" data-off="NO" data-onstyle="success" data-offstyle="danger" data-size="large">
+                                <label>Type?</label>
+                                <input name="type" type="checkbox" data-toggle="toggle" data-on="Service" data-off="Product" data-onstyle="success" data-offstyle="danger" data-size="large">
                             </div>
                         </div>
                         <div class="row">
@@ -19,10 +19,10 @@
                                 <label>Name English</label>
                                 <input type="text" name="name_en" required id="name_en" class="form-control" placeholder="Name English" value="{{ old('name_en') }}">
                             </div>
-                            <div class="form-group col-sm-6">
-                                <label>Name Arabic</label>
-                                <input type="text" name="name_ar" required id="name_ar" class="form-control" placeholder="Name Arabic" value="{{ old('name_ar') }}">
-                            </div>
+{{--                            <div class="form-group col-sm-6">--}}
+{{--                                <label>Name Arabic</label>--}}
+{{--                                <input type="text" name="name_ar" required id="name_ar" class="form-control" placeholder="Name Arabic" value="{{ old('name_ar') }}">--}}
+{{--                            </div>--}}
                         </div>
 
                         {{--<div class="row">--}}

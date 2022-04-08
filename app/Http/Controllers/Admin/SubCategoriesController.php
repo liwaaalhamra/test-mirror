@@ -110,16 +110,27 @@ class SubCategoriesController extends Controller
         $max_order = DB::table('sub_categories')->where('category_id','=',$id)->max('item_order');
         $order = $max_order + 1;
         $item = $category->sub_categories()->create([
-            'image' => $image,
+//            'image' => $image,
             'item_order' => $order,
+            'is_published' => 1,
             'name_en' => empty(trim($request->name_en)) ? null : trim($request->name_en),
             'name_ar' => empty(trim($request->name_ar)) ? null : trim($request->name_ar),
-            'description_en' => empty(trim($request->description_en)) ? null : trim($request->description_en),
-            'description_ar' => empty(trim($request->description_ar)) ? null : trim($request->description_ar),
+//            'description_en' => empty(trim($request->description_en)) ? null : trim($request->description_en),
+//            'description_ar' => empty(trim($request->description_ar)) ? null : trim($request->description_ar),
         ]);
 
         return redirect()->route('admin.categories.sub_categories.index',$id)
             ->with('success', 'Successfully create the Sub Category');
+    }
+
+    public function publish($id){
+        $item = SubCategory::find($id);
+        if($item){
+            $item->is_published = !$item->is_published;
+            $item->save();
+        }
+        return redirect()->back()
+            ->with('success', 'Sub Category Status Successfully updated');
     }
 
     /**

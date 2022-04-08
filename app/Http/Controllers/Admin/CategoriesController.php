@@ -88,7 +88,7 @@ class CategoriesController extends Controller
     }
 
     public function publish($id){
-        $item = CollectionCategory::find($id);
+        $item = Category::find($id);
         if($item){
             $item->is_published = !$item->is_published;
             $item->save();
@@ -134,18 +134,19 @@ class CategoriesController extends Controller
                 list($width, $height, $type, $attr) = getimagesize($destinationDir.'/'.$fileName);
             }
         }
-        $is_supplier = false;
-        if(isset($request->is_supplier) && $request->is_supplier == 'on'){
-            $is_supplier = true;
+        $type = 'products';
+        if(isset($request->type) && $request->type == 'on'){
+            $type = 'services';
         }
-        $max_order = DB::table('collection_categories')->max('item_order');
+        $max_order = DB::table('categories')->max('item_order');
         $order = $max_order + 1;
-        CollectionCategory::create([
+        Category::create([
             'item_order' => $order,
-            'image' => $fileName,
-            'width' => $width,
-            'height' => $height,
-            'is_supplier' => $is_supplier,
+//            'image' => $fileName,
+//            'width' => $width,
+//            'height' => $height,
+            'type' => $type,
+            'is_published' => 1,
             'name_en' => empty($request->name_en) ? null : trim($request->name_en),
             'name_ar' => empty($request->name_ar) ? null : trim($request->name_ar),
         ]);
