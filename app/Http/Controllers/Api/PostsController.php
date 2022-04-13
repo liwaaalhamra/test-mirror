@@ -124,6 +124,7 @@ class PostsController extends Controller
         if(!in_array($request->status,$status_possible_values)){
             return parent::return_error("Status Wrong Value", 402, 'messages.invalid_parameters');
         }
+        $status_at = $barter->status_at;
         $status_at[$request->status.'_at'] = Carbon::now()->format('Y-m-d H:i:s');
         $barter->status = $request->status;
         $barter->status_at = $status_at;
@@ -174,7 +175,7 @@ class PostsController extends Controller
         }else{
             return parent::return_error("Invalid Barter", 403, 'messages.invalid_parameters');
         }
-
+        $status_at = $barter->status_at;
         $status_at['completed_at'] = Carbon::now()->format('Y-m-d H:i:s');
         $barter->status = 'completed';
         $barter->status_at = $status_at;
@@ -204,7 +205,7 @@ class PostsController extends Controller
         $user = $this->validate_user($request);
 
         $barters = Barter::wherenotin('status',['completed'])->where(function ($query) use ($user) {
-            $query->whereReceiverId($user->id)->orwhereSenderId($user->id);
+            $query->whereReceiverId($user->id)->orWhere('sender_id',$user->id);
         })->get();
 
         return parent::return_json($barters);
@@ -215,7 +216,7 @@ class PostsController extends Controller
         $user = $this->validate_user($request);
 
         $barters = Barter::wherein('status',['completed'])->where(function ($query) use ($user) {
-            $query->whereReceiverId($user->id)->orwhereSenderId($user->id);
+            $query->whereReceiverId($user->id)->orWhere('sender_id',$user->id);
         })->get();
 
         return parent::return_json($barters);
