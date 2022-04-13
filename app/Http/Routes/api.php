@@ -44,6 +44,17 @@ Route::group(['prefix' => 'categories'],function () {
 });
 
 /**
+ * Barter Routes
+ */
+Route::group(['prefix' => 'barter'],function () {
+    Route::post('/submit', 'PostsController@barter');
+    Route::post('/action', 'PostsController@barter_action');
+    Route::post('/done', 'PostsController@barter_done');
+    Route::get('/my_barters', 'PostsController@my_barters');
+    Route::get('/my_finalized_barters', 'PostsController@my_finalized_barters');
+});
+
+/**
  * Posts Favorites + Posts Routes
  */
 Route::group(['prefix' => 'items'],function () {

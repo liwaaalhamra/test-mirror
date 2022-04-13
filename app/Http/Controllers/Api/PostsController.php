@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 
+use App\Models\Api\Barter;
 use App\Models\Api\Category;
 use App\Models\Api\CustomField;
 use App\Models\Api\CustomFieldList;
@@ -40,6 +41,185 @@ class PostsController extends Controller
 {
     use HITrait;
 
+    /**
+     * Post Status
+     * pending: on creation
+     * in_review: after payment success
+     * approved: from cms
+     * completed: in case flagged as done deal => post will be in finalized barter
+     * expired
+     *
+     * barter status
+     * pending: request sent from user1 to user2
+     * accepted/rejected: user2 action on request
+     * completed: done deal
+     */
+
+    public function barter(Request $request)
+    {
+        $sender = $this->validate_user($request);
+
+        if (!Input::has('sender_item_id')) {
+            return parent::return_error('Missing Sender Item ID', 401, 'messages.missing_parameter');
+        }
+        if (!$sender_item = Item::whereUserId($sender->id)->whereStatus('approved')->whereId($request->sender_item_id)->first()) {
+            return parent::return_error("Invalid Sender Item", 402, 'messages.invalid_parameters');
+        }
+
+        if (!Input::has('receiver_item_id')) {
+            return parent::return_error('Missing Receiver Item ID', 401, 'messages.missing_parameter');
+        }
+        if (!$receiver_item = Item::whereStatus('approved')->whereId($request->receiver_item_id)->first()) {
+            return parent::return_error("Invalid Receiver Item", 402, 'messages.invalid_parameters');
+        }
+        $receiver = $receiver_item->user;
+
+        if($existing_barter = Barter::whereSenderId($sender->id)->whereReceiverId($receiver->id)->whereSenderPostId($sender_item->id)->whereReceiverPostId($receiver_item->id)->first()){
+            return parent::return_error("Barter Request already Sent,check status in My Barters section", 402, "Barter Request already Sent");
+        }
+
+        $status_at['pending_at'] = Carbon::now()->format('Y-m-d H:i:s');
+        $barter = Barter::create([
+            'sender_id' => $sender->id,
+            'receiver_id' => $receiver->id,
+            'sender_post_id' => $sender_item->id,
+            'receiver_post_id' => $receiver_item->id,
+            'status' => 'pending',
+            'status_at' => $status_at
+        ]);
+        $sender_full_name = $sender->full_name;
+        $receiver_full_name = $receiver->full_name;
+        $title = "Barter Request!";
+        $message = "Hello $receiver_full_name, it's $sender_full_name I thought you might be interested with my request !";
+
+        if($user_push = UserPush::whereUsersId($receiver->id)->first()){
+            $players_ids[] = $user_push->player_id;
+            $contents = ["en" => $message];
+            $headings = ["en" => $title];
+            $info['contents'] = $contents;
+            $info['headings'] = $headings;
+            $info['player_ids'] = $players_ids;
+            $info['data'] = ['meta_id' => $barter->id,'type' => 'barter'];
+            $result = parent::oneSignal($info);
+        }
+
+        return parent::return_json(['status' => 'your request has been submitted successfully, you can check status in My Barters section']);
+    }
+
+    public function barter_action(Request $request)
+    {
+        $user = $this->validate_user($request);
+
+        if (!Input::has('barter_id')) {
+            return parent::return_error('Missing Barter ID', 401, 'messages.missing_parameter');
+        }
+        if (!$barter = Barter::whereReceiverId($user->id)->whereStatus('pending')->whereId($request->barter_id)->first()) {
+            return parent::return_error("Invalid Barter", 402, 'messages.invalid_parameters');
+        }
+
+        if (!Input::has('status')) {
+            return parent::return_error('Missing Status', 401, 'messages.missing_parameter');
+        }
+        $status_possible_values = ['accepted','rejected'];
+        if(!in_array($request->status,$status_possible_values)){
+            return parent::return_error("Status Wrong Value", 402, 'messages.invalid_parameters');
+        }
+        $status_at[$request->status.'_at'] = Carbon::now()->format('Y-m-d H:i:s');
+        $barter->status = $request->status;
+        $barter->status_at = $status_at;
+        $barter->save();
+
+        $receiver = $barter->receiver;
+        $sender = $barter->sender;
+
+
+        $sender_full_name = $sender->full_name;
+        $receiver_full_name = $receiver->full_name;
+        $title = "Barter Request ".ucwords($request->status).' !';
+        $message = "Hello $sender_full_name, $receiver_full_name has ".$request->status." your request!";
+
+        if($user_push = UserPush::whereUsersId($sender->id)->first()){
+            $players_ids[] = $user_push->player_id;
+            $contents = ["en" => $message];
+            $headings = ["en" => $title];
+            $info['contents'] = $contents;
+            $info['headings'] = $headings;
+            $info['player_ids'] = $players_ids;
+            $info['data'] = ['meta_id' => $barter->id,'type' => 'barter'];
+            $result = parent::oneSignal($info);
+        }
+
+        return parent::return_json(['status' => 'your request status has been updated successfully']);
+    }
+
+    public function barter_done(Request $request)
+    {
+        $user = $this->validate_user($request);
+
+        if (!Input::has('barter_id')) {
+            return parent::return_error('Missing Barter ID', 401, 'messages.missing_parameter');
+        }
+        if (!$barter = Barter::whereStatus('accepted')->whereId($request->barter_id)->first()) {
+            return parent::return_error("Invalid Barter", 402, 'messages.invalid_parameters');
+        }
+        $user_push_id = null;
+        if($user->id == $barter->sender_id){
+            $receiver = $barter->receiver;
+            $sender = $barter->sender;
+            $user_push_id = $barter->receiver_id;
+        }elseif ($user->id == $barter->receiver_id){
+            $receiver = $barter->sender;
+            $sender = $barter->receiver;
+            $user_push_id = $barter->sender_id;
+        }else{
+            return parent::return_error("Invalid Barter", 403, 'messages.invalid_parameters');
+        }
+
+        $status_at['completed_at'] = Carbon::now()->format('Y-m-d H:i:s');
+        $barter->status = 'completed';
+        $barter->status_at = $status_at;
+        $barter->save();
+
+        $sender_full_name = $sender->full_name;
+        $receiver_full_name = $receiver->full_name;
+        $title = "Barter ".ucwords($request->status).' !';
+        $message = "Hello $receiver_full_name, $sender_full_name has flagged the barter as done!";
+
+        if($user_push = UserPush::whereUsersId($user_push_id)->first()){
+            $players_ids[] = $user_push->player_id;
+            $contents = ["en" => $message];
+            $headings = ["en" => $title];
+            $info['contents'] = $contents;
+            $info['headings'] = $headings;
+            $info['player_ids'] = $players_ids;
+            $info['data'] = ['meta_id' => $barter->id,'type' => 'barter'];
+            $result = parent::oneSignal($info);
+        }
+
+        return parent::return_json(['status' => 'your request status has been updated successfully']);
+    }
+
+    public function my_barters(Request $request)
+    {
+        $user = $this->validate_user($request);
+
+        $barters = Barter::wherenotin('status',['completed'])->where(function ($query) use ($user) {
+            $query->whereReceiverId($user->id)->orwhereSenderId($user->id);
+        })->get();
+
+        return parent::return_json($barters);
+    }
+
+    public function my_finalized_barters(Request $request)
+    {
+        $user = $this->validate_user($request);
+
+        $barters = Barter::wherein('status',['completed'])->where(function ($query) use ($user) {
+            $query->whereReceiverId($user->id)->orwhereSenderId($user->id);
+        })->get();
+
+        return parent::return_json($barters);
+    }
 
     public function create(Request $request){
         $user = $this->validate_user($request);
