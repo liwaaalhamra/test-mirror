@@ -51,31 +51,30 @@ class SheetsController extends Controller
                  * for car models set startRow to 1
                  */
                 $sheets = $sheets;
-                foreach ($sheets as $item){
-                    if($item['brand_id'] == null || $item['brand_name'] == null || $item['model_name'] == null){
-                        continue;
-                    }
-                    CustomFieldList::create([
-                        'field_name' => "car_models",
-                        'parent_id' => intval($item['brand_id']),
-                        'name_en' => $item['model_name'],
-                        'name_ar' => $item['model_name'],
-                    ]);
-                }
-                dd('done');
-//                CustomFieldList::truncate();
-//                foreach ($sheets as $index => $sheet){
-//                    $sheet_name = $sheets_name[$index];
-//
-//                    foreach ($sheet as $item){
-//                        CustomFieldList::create([
-//                            'field_name' => $sheet_name,
-//                            'name_en' => $item[0],
-//                            'name_ar' => $item[0],
-//                        ]);
-//                    }
-//                }
 
+//                foreach ($sheets as $item){
+//                    if($item['brand_id'] == null || $item['brand_name'] == null){
+//                        continue;
+//                    }
+//                    CustomFieldList::create([
+//                        'field_name' => "car_models",
+//                        'parent_id' => intval($item['brand_id']),
+//                        'name_en' => isset($item['model_name']) && !empty($item['model_name']) ? trim($item['model_name']) : trim($item['brand_name']),
+//                        'name_ar' => isset($item['model_name']) && !empty($item['model_name']) ? trim($item['model_name']) : trim($item['brand_name']),
+//                    ]);
+//                }
+//                CustomFieldList::truncate();
+                foreach ($sheets as $index => $sheet){
+                    $sheet_name = $sheets_name[$index];
+
+                    foreach ($sheet as $item){
+                        CustomFieldList::create([
+                            'field_name' => $sheet_name,
+                            'name_en' => $item[0],
+                            'name_ar' => $item[0],
+                        ]);
+                    }
+                }
                 dd('done');
 //                DB::table('users')->delete();
                 foreach ($items as $item){

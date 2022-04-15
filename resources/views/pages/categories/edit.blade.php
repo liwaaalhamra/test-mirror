@@ -20,10 +20,10 @@
 {{--                            </div>--}}
                         </div>
                         <div class="row">
-{{--                            <div class="form-group col-sm-4">--}}
-{{--                                <label>Order</label>--}}
-{{--                                <input type="text" name="item_order" required id="item_order" class="form-control" placeholder="Order" value="{{ $category->item_order }}">--}}
-{{--                            </div>--}}
+                            <div class="form-group col-sm-4">
+                                <label>Order</label>
+                                <input type="text" name="item_order" required id="item_order" class="form-control" placeholder="Order" value="{{ $category->item_order }}">
+                            </div>
                             <div class="form-group col-md-4">
                                 <label>Type?</label>
                                 <input name="type" type="checkbox" data-toggle="toggle" @if($category->type == 'services') checked @endif  data-on="Service" data-off="Product" data-onstyle="success" data-offstyle="danger" data-size="large">

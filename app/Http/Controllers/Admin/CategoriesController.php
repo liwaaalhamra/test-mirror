@@ -256,7 +256,7 @@ class CategoriesController extends Controller
             'type' => $type,
             'name_en' => empty($request->name_en) ? null : trim($request->name_en),
 //            'name_ar' => empty($request->name_ar) ? null : trim($request->name_ar),
-//            'item_order' => empty($request->item_order) ? 1 : trim($request->item_order),
+            'item_order' => empty($request->item_order) ? 1 : trim($request->item_order),
         ]);
         return redirect()->route('admin.categories.index')
             ->with('success', 'Successfully updated the Category');

@@ -9,6 +9,7 @@ use App\Models\Api\Category;
 use App\Models\Api\Client;
 use App\Models\Api\ContactUsCategory;
 use App\Models\Api\CustomField;
+use App\Models\Api\CustomFieldList;
 use App\Models\Api\EventType;
 use App\Models\Api\Game;
 use App\Models\Api\PlaceTypes;
@@ -47,7 +48,12 @@ class DynamicFieldsController extends Controller
      */
     public function index(Request $request) /*: View*/
     {
-        $items = CustomField::get();
+        $items = CustomField::get()->map(function ($value, $key){
+            $value->field_name = strtolower(str_slug($value->field_name));
+            $value->extra_field_name = strtolower(str_slug($value->extra_field_name));
+            $value->save();
+            return $value;
+        });
         return view('pages.dynamic_fields.index', compact('items'))
             ->with('section_name', 'dynamic_fields')
             ->with('content_header', 'Dynamic Fields');
@@ -71,6 +77,12 @@ class DynamicFieldsController extends Controller
             'text' => 'Free Text'
         ];
         $endpoints = [
+            'Conditions' => 'lists/conditions',
+            'Fuel Types' => 'lists/fuel_types',
+            'Body Types' => 'lists/body_types',
+            'Transmission Types' => 'lists/transmission_types',
+            'Door Types' => 'lists/door_types',
+            'Colors' => 'lists/colors',
             'Completion' => 'lists/completion',
             'Bedrooms' => 'lists/bedrooms',
             'Furnished Types' => 'lists/furnished',
@@ -186,6 +198,12 @@ class DynamicFieldsController extends Controller
             'text' => 'Free Text'
         ];
         $endpoints = [
+            'Conditions' => 'lists/conditions',
+            'Fuel Types' => 'lists/fuel_types',
+            'Body Types' => 'lists/body_types',
+            'Transmission Types' => 'lists/transmission_types',
+            'Door Types' => 'lists/door_types',
+            'Colors' => 'lists/colors',
             'Completion' => 'lists/completion',
             'Bedrooms' => 'lists/bedrooms',
             'Furnished Types' => 'lists/furnished',
