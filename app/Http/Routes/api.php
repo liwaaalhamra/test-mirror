@@ -119,7 +119,7 @@ Route::post('/custom_fields', 'ItemsController@custom_fields');
 Route::post('/home_top_categories', 'ItemsController@home_top_categories');
 Route::post('/home_top_categories/{slug}/items', 'ItemsController@home_top_categories_items');
 
-Route::get('/lists/{list_type}', 'ItemsController@lists');
+Route::get('/lists/{list_type}/{parent_id?}', 'ItemsController@lists');
 Route::get('/locations', 'ItemsController@locations');
 
 /**

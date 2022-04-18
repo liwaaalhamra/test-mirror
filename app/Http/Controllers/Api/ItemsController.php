@@ -55,8 +55,10 @@ class ItemsController extends Controller
         return response()->json($limits);
     }
 
-    public function lists($type){
-        $data = CustomFieldList::whereFieldName($type)->get();
+    public function lists($type,$parent_id = null){
+        $data = CustomFieldList::when($parent_id, function ($query) use ($parent_id) {
+                return $query->whereParentId($parent_id);
+        })->whereFieldName($type)->get();
         return response()->json($data);
     }
     public function locations(){
@@ -1089,9 +1091,9 @@ class ItemsController extends Controller
         $query->when($sub_category_id, function ($query) use ($sub_category_id) {
             $query->whereSubCategoryId($sub_category_id);
         });
-        $query->when($sub_sub_category_id, function ($query) use ($sub_sub_category_id) {
-            $query->whereSubSubCategoryId($sub_sub_category_id);
-        });
+//        $query->when($sub_sub_category_id, function ($query) use ($sub_sub_category_id) {
+//            $query->whereSubSubCategoryId($sub_sub_category_id);
+//        });
 
         $filters = $query->orderby('item_order','asc')->get()->map(function ($value, $key){
             if($value->field_type == 'boolean'){
@@ -1126,9 +1128,9 @@ class ItemsController extends Controller
         $query->when($sub_category_id, function ($query) use ($sub_category_id) {
             $query->whereSubCategoryId($sub_category_id);
         });
-        $query->when($sub_sub_category_id, function ($query) use ($sub_sub_category_id) {
-            $query->whereSubSubCategoryId($sub_sub_category_id);
-        });
+//        $query->when($sub_sub_category_id, function ($query) use ($sub_sub_category_id) {
+//            $query->whereSubSubCategoryId($sub_sub_category_id);
+//        });
 
         $filters = $query->orderby('item_order','asc')->get()->map(function ($value, $key) {
             $value->section = $value->in_filters ? 'filters' : 'regular';
