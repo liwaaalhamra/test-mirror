@@ -62,8 +62,11 @@ class PostsController extends Controller
         if (!Input::has('sender_item_id')) {
             return parent::return_error('Missing Sender Item ID', 401, 'messages.missing_parameter');
         }
-        if (!$sender_item = Item::whereUserId($sender->id)->whereStatus('approved')->whereId($request->sender_item_id)->first()) {
+        if (!$sender_item = Item::whereUserId($sender->id)->whereId($request->sender_item_id)->first()) {
             return parent::return_error("Invalid Sender Item", 402, 'messages.invalid_parameters');
+        }
+        if($sender_item->status != 'approved'){
+            return parent::return_error("Post not approved yet", 402, "Post not approved yet");
         }
 
         if (!Input::has('receiver_item_id')) {
