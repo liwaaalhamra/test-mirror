@@ -1176,7 +1176,7 @@ class PaymentController extends Controller
             if($response['status'] == 'succeeded'){
                 $post->status = "in_review";
                 $post->save();
-                $result['message'] = 'Payment Success';
+                $result['message'] = 'Thank you for bartering with us. Your post will be reviewed within 24 hours. You will be updated once it is live';
                 $result['result'] = 'success';
                 parent::redirect(secure_url('/api/check_result'),$result);
 
