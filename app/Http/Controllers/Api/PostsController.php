@@ -93,7 +93,7 @@ class PostsController extends Controller
         $sender_full_name = $sender->full_name;
         $receiver_full_name = $receiver->full_name;
         $title = "Barter Request!";
-        $message = "Hello $receiver_full_name, it's $sender_full_name I thought you might be interested with my request !";
+        $message = "$receiver_full_name is interested in your post, would you like to accept the request";
 
         if($user_push = UserPush::whereUsersId($receiver->id)->first()){
             $players_ids[] = $user_push->player_id;
@@ -106,7 +106,7 @@ class PostsController extends Controller
             $result = parent::oneSignal($info);
         }
 
-        return parent::return_json(['status' => 'your request has been submitted successfully, you can check status in My Barters section']);
+        return parent::return_json(['status' => ' thank you for bartering with us. Your barter request has been sent to '.$receiver_full_name.'. You will be able to chat with '.$receiver_full_name.' once they accept your barter.']);
     }
 
     public function barter_action(Request $request)
@@ -395,7 +395,7 @@ class PostsController extends Controller
                 ]);
             }
         }
-        return parent::return_json(['status' => 'Thank you for bartering with us. The post will go live within 24 hours and valid for 30 days','payment_url' => secure_url('payment-test'),'post_id' => $item->id]);
+        return parent::return_json(['status' => 'Thank you for bartering with us. Your post will be reviewed within 24 hours. You will be updated once it is live','payment_url' => secure_url('payment-test'),'post_id' => $item->id]);
     }
 
     public function edit(Request $request){

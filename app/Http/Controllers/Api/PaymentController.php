@@ -1096,13 +1096,12 @@ class PaymentController extends Controller
 
                 if($request->stripeToken){
                     $token_card = Token::retrieve($request->stripeToken);
+
                     $customer = Customer::update($user->customer_id, [
                         'source' => $token_card->id,
                     ]);
-
                 }
-                dd($user->customer_id,$customer,$request->all());
-                $token_card = $customer->sources->retrieve($customer->default_source);
+                $token_card = Customer::retrieveSource($user->customer_id, $customer->default_source);
 
                 $customer = json_decode(json_encode($customer),True);
                 $token_card = json_decode(json_encode($token_card),True);
