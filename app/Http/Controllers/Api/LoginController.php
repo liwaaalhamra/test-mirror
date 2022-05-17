@@ -166,10 +166,15 @@ class LoginController extends Controller
         if($user->is_blocked){
             return parent::return_error("Account Blocked", 407, "Account Blocked");
         }
-        Mail::send('emails.activate_email', ['data' => $info], function ($message) use ($info) {
-            $message->subject(env('APP_NAME')." | ".$info['title']);
-            $message->to($info['to']);
-        });
+        try {
+            Mail::send('emails.activate_email', ['data' => $info], function ($message) use ($info) {
+                $message->subject(env('APP_NAME')." | ".$info['title']);
+                $message->to($info['to']);
+            });
+        }catch (\Exception $ex){
+
+        }
+
 
 
         $return_body["pin"] = config('app.debug') ? $pin : null;
