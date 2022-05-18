@@ -95,7 +95,7 @@ class Users extends Model
     }
 
 	public function getAgeAttribute(){
-        return $this->attributes['dob'] == null ? null : Carbon::parse($this->attributes['dob'])->age;
+        return !isset($this->attributes['dob']) || $this->attributes['dob'] == null ? null : Carbon::parse($this->attributes['dob'])->age;
     }
     public function country(){
         return $this->belongsTo(Country::class,'country_id');

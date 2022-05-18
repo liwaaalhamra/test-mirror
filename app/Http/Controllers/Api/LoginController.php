@@ -397,11 +397,16 @@ class LoginController extends Controller
         }
     }
 
-    public function explore(){
-        if(!Input::has('udid')){
-            return parent::return_error('Missing UDID',401,'messages.missing_parameter');
+    public function explore(Request $request){
+        $validator = Validator::make($request->all(), [
+            'udid' => 'required'
+
+        ]);
+
+        if($validator->fails()){
+            return parent::return_error('Missing parameter(s)', 400, $validator->messages()->all()[0]);
         }
-        $udid = Input::get('udid');
+        $udid = $request->udid;
 
         $user = Users::where(['udid' => $udid])->orderBy('created_at','desc')->first();
         $agent = new Agent();
