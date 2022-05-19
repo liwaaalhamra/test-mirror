@@ -25,6 +25,7 @@ class CustomField extends Model
         'has_extra_field' => 'boolean',
         'in_return' => 'boolean',
         'in_filters' => 'boolean',
+        'in_browsing_filters' => 'boolean',
     ];
 
     public function getCreatedAtAttribute($value)

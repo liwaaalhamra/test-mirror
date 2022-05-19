@@ -50,8 +50,12 @@
                             <input name="in_return" id="select_row" type="checkbox" data-toggle="toggle" data-on="YES" data-off="NO" data-onstyle="success" data-offstyle="danger" data-size="large">
                         </div>
                         <div class="form-group">
-                            <label>Field exists in Filters ?</label>
+                            <label>Field exists in Posting Filters ?</label>
                             <input name="in_filters" id="select_row" type="checkbox" data-toggle="toggle" data-on="YES" data-off="NO" data-onstyle="success" data-offstyle="danger" data-size="large">
+                        </div>
+                        <div class="form-group">
+                            <label>Field exists in Browsing Filters ?</label>
+                            <input name="in_browsing_filters" id="select_row" type="checkbox" data-toggle="toggle" data-on="YES" data-off="NO" data-onstyle="success" data-offstyle="danger" data-size="large">
                         </div>
 
                         <div class="form-group">

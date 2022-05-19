@@ -37,6 +37,7 @@
                     <th>Sub Category</th>
                     <th>in Return ?</th>
                     <th>in Fitlers ?</th>
+                    <th>in Browsing Fitlers ?</th>
                     <th>Field Name</th>
                     <th>Field Title</th>
                     <th>Field Type</th>
@@ -57,6 +58,7 @@
                         <td>{{ $item->sub_category->name_en }}</td>
                         <td>@if($item->in_return) YES @else NO @endif</td>
                         <td>@if($item->in_filters) YES @else NO @endif</td>
+                        <td>@if($item->in_browsing_filters) YES @else NO @endif</td>
                         <td>{{$item->field_name}}</td>
                         <td>{{$item->field_title}}</td>
                         <td>{{$item->field_type}}</td>

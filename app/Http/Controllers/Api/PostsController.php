@@ -330,6 +330,7 @@ class PostsController extends Controller
             'name_en' => $request->title,
             'description_en' => $description,
             'location_id' => $location->id,
+            'country_id' => $location->country_id,
             'is_available' => 0,
             'item_order' => $max_order,
             'longitude' => $longitude,
@@ -378,6 +379,7 @@ class PostsController extends Controller
                 'name_en' => $request->return_title,
                 'description_en' => $return_description,
                 'location_id' => $return_location->id,
+                'country_id' => $return_location->country_id,
                 'is_available' => 0,
                 'item_order' => $item->item_order,
                 'longitude' => $item->longitude,
@@ -503,6 +505,7 @@ class PostsController extends Controller
             'name_en' => $request->title,
             'description_en' => $description,
             'location_id' => $location->id,
+            'country_id' => $location->country_id,
             'longitude' => $longitude,
             'latitude' => $latitude,
         ]);
@@ -548,6 +551,7 @@ class PostsController extends Controller
                     'name_en' => $request->return_title,
                     'description_en' => $return_description,
                     'location_id' => $return_location->id,
+                    'country_id' => $return_location->country_id,
                     'longitude' => $longitude,
                     'latitude' => $latitude,
                 ]);

@@ -44,8 +44,12 @@
                             <input name="in_return" id="select_row" type="checkbox" @if($item->in_return) checked @endif data-toggle="toggle" data-on="YES" data-off="NO" data-onstyle="success" data-offstyle="danger" data-size="large">
                         </div>
                         <div class="form-group">
-                            <label>Field exists in Filters ?</label>
+                            <label>Field exists in Posting Filters ?</label>
                             <input name="in_filters" id="select_row" type="checkbox" @if($item->in_filters) checked @endif data-toggle="toggle" data-on="YES" data-off="NO" data-onstyle="success" data-offstyle="danger" data-size="large">
+                        </div>
+                        <div class="form-group">
+                            <label>Field exists in Browsing Filters ?</label>
+                            <input name="in_browsing_filters" id="select_row" type="checkbox" @if($item->in_browsing_filters) checked @endif data-toggle="toggle" data-on="YES" data-off="NO" data-onstyle="success" data-offstyle="danger" data-size="large">
                         </div>
 
                         <div class="form-group">
@@ -93,6 +97,8 @@
                             <label>Extra Field Endpoint  (Needed in case of Field of Type "List", Refer to list on Top of page)</label>
                             <input type="text" name="extra_field_endpoint" id="extra_field_endpoint" class="form-control" placeholder="Extra Field Endpoint" value="{{ $item->extra_field_endpoint }}">
                         </div>
+                        <button type="submit" class="btn btn-sm btn-primary">Save</button>
+                        <a href="{{ route('admin.dynamic_fields.index') }}" class="btn btn-sm btn-dark">Back</a>
                     </form>
                 </div>
             </div>

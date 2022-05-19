@@ -61,8 +61,9 @@ class ItemsController extends Controller
         })->whereFieldName($type)->get();
         return response()->json($data);
     }
-    public function locations(){
-        $data = Location::get();
+    public function locations(Request $request){
+        $country_id = isset($request->country_id) && !empty($request->country_id) ? $request->country_id : 784;
+        $data = Location::without('country')->whereCountryId($country_id)->orderByRaw("LOWER(name_en) asc")->get();
         return response()->json($data);
     }
 
@@ -1079,7 +1080,7 @@ class ItemsController extends Controller
     }
 
     public function filters(Request $request) {
-        $query = CustomField::whereInFilters(1);
+        $query = CustomField::whereInBrowsingFilters(1);
 
         $category_id = isset($request->category_id) ? $request->category_id : null;
         $sub_category_id = isset($request->sub_category_id) ? $request->sub_category_id : null;
