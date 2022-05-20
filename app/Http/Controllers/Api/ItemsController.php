@@ -61,6 +61,7 @@ class ItemsController extends Controller
         })->whereFieldName($type)->get();
         return response()->json($data);
     }
+
     public function locations(Request $request){
         $country_id = isset($request->country_id) && !empty($request->country_id) ? $request->country_id : 784;
         $data = Location::without('country')->whereCountryId($country_id)->orderByRaw("LOWER(name_en) asc")->get();
@@ -149,6 +150,7 @@ class ItemsController extends Controller
         $new_arrival_items = [];
         $latest_services_items = [];
         $nearby_items = [];
+        $matches = [];
         if($latitude && $longitude){
             $query = Item::whereType('offer')->whereIsAvailable(1)->orderbyRaw("(6371 * 2 * ASIN(SQRT( POWER(SIN(( $latitude - latitude) *  pi()/180 / 2), 2) +COS( $latitude * pi()/180) * COS(latitude * pi()/180) * POWER(SIN(( $longitude - longitude) * pi()/180 / 2), 2) ))) asc");
             $currency = env('APP_CURRENCY');
@@ -163,9 +165,6 @@ class ItemsController extends Controller
                 $value->post_type = $value->category->type;
                 unset($value->category);
                 $value->currency = $currency;
-//                $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
-//                $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
-//                $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
                 return $value;
             })->values();
         }
@@ -185,9 +184,6 @@ class ItemsController extends Controller
             $value->currency = $currency;
             $value->post_type = $value->category->type;
             unset($value->category);
-//            $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
-//            $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
-//            $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
             return $value;
         })->values();
 
@@ -205,10 +201,6 @@ class ItemsController extends Controller
             unset($value->quantity);
             $value->post_type = "products";
             $value->currency = $currency;
-//            $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
-//            $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
-//            $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
-//            $value->custom_fields = CustomField::whereCategoryId($value->category_id)->whereSubCategoryId($value->sub_category_id)->get();
             return $value;
         })->values();
 
@@ -225,10 +217,20 @@ class ItemsController extends Controller
             }
             $value->currency = $currency;
             $value->post_type = "services";
-//            $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
-//            $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
-//            $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
-//            $value->custom_fields = CustomField::whereCategoryId($value->category_id)->whereSubCategoryId($value->sub_category_id)->get();
+            return $value;
+        })->values();
+
+        $query = Item::whereType('offer')->whereIsAvailable(1)->orderby('created_at','desc');
+        $currency = env('APP_CURRENCY');
+        $matches = $query->take(10)->get()->map(function ($value, $key) use ($currency,$user) {
+            $value->is_favorite = false;
+            if($user){
+                if(UserFavorite::whereMetaName('items')->whereMetaId($value->id)->whereUserId($user->id)->first()){
+                    $value->is_favorite = true;
+                }
+            }
+            $value->currency = $currency;
+            $value->post_type = "services";
             return $value;
         })->values();
 
@@ -253,7 +255,13 @@ class ItemsController extends Controller
             'title' => 'Nearby',
             'items' => $nearby_items
         ];
+        $category5 = [
+            'slug' => 'matches',
+            'title' => 'My Matches',
+            'items' => $matches
+        ];
 
+        array_push($categories,$category5);
         array_push($categories,$category2);
         array_push($categories,$category1);
         array_push($categories,$category3);
@@ -286,9 +294,6 @@ class ItemsController extends Controller
                 unset($value->quantity);
                 $value->currency = $currency;
                 $value->post_type = "products";
-//                $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
-//                $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
-//                $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
                 return $value;
             })->values();
         }elseif ($slug == 'trending-services'){
@@ -305,9 +310,6 @@ class ItemsController extends Controller
                 }
                 $value->currency = $currency;
                 $value->post_type = "services";
-//                $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
-//                $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
-//                $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
                 return $value;
             })->values();
         }elseif ($slug == 'recently-viewed'){
@@ -324,9 +326,6 @@ class ItemsController extends Controller
                 $value->currency = $currency;
                 $value->post_type = $value->category->type;
                 unset($value->category);
-//                $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
-//                $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
-//                $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
                 return $value;
             })->values();
         }elseif ($slug == 'nearby'){
@@ -344,12 +343,25 @@ class ItemsController extends Controller
                     $value->currency = $currency;
                     $value->post_type = $value->category->type;
                     unset($value->category);
-//                    $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
-//                    $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
-//                    $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
                     return $value;
                 })->values();
             }
+        }elseif ($slug == 'matches'){
+            $query = Item::whereType('offer')->whereIsAvailable(1)->orderby('created_at','desc');
+            $currency = env('APP_CURRENCY');
+            $items = $query->take(50)->get()->map(function ($value, $key) use ($currency,$user) {
+                $value->is_favorite = false;
+                if($user){
+                    if(UserFavorite::whereMetaName('items')->whereMetaId($value->id)->whereUserId($user->id)->first()){
+                        $value->is_favorite = true;
+                    }
+                }
+                unset($value->quantity);
+                $value->currency = $currency;
+                $value->post_type = $value->category->type;
+                unset($value->category);
+                return $value;
+            })->values();
         }
 
         $limit = 20;
