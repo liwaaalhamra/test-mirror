@@ -1201,7 +1201,7 @@ class ItemsController extends Controller
             if(Barter::wherein('status',['completed','accepted'])->where(function ($query) use ($user) {
                 $query->whereReceiverId($user->id)->orWhere('sender_id',$user->id);
             })->first()){
-                $can_chat->true;
+                $can_chat = true;
             }
         }
 
@@ -1333,7 +1333,7 @@ class ItemsController extends Controller
             if(Barter::wherein('status',['completed','accepted'])->where(function ($query) use ($user) {
                 $query->whereReceiverId($user->id)->orWhere('sender_id',$user->id);
             })->first()){
-                $can_chat->true;
+                $can_chat = true;
             }
         }
 
