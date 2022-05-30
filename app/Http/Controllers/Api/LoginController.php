@@ -119,6 +119,7 @@ class LoginController extends Controller
         }
         $email = strtolower(trim(Input::get('email')));
         $pin = parent::number_generator(6);
+        $pin = 111111;
         $registration = parent::generate_tokens(4);
         $info = [];
         $info['to'] = Input::get('email');
@@ -213,7 +214,7 @@ class LoginController extends Controller
         $new_phone_number = $phone_details->getNationalNumber();
 
         $pin = parent::number_generator(6);
-        $pin = 1111;
+        $pin = 111111;
         $registration = parent::generate_tokens(4);
 
         $agent = new Agent();
