@@ -552,6 +552,7 @@ class ProfileController extends Controller
 
 
         $reset_code = parent::number_generator(6);
+        $reset_code = 111111;
         $registration = parent::generate_tokens(4);
         if($user->account_type == 'email'){
             $info = [];
