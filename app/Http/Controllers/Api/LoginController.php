@@ -119,7 +119,6 @@ class LoginController extends Controller
         }
         $email = strtolower(trim(Input::get('email')));
         $pin = parent::number_generator(6);
-        $pin = 111111;
         $registration = parent::generate_tokens(4);
         $info = [];
         $info['to'] = Input::get('email');
