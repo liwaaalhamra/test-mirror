@@ -386,6 +386,8 @@ class PostsController extends Controller
                 'latitude' => $item->latitude,
                 'expired_at' => Carbon::now()->addDays($post_validity_days)->timestamp,
             ]);
+            $item->return_id = $return_item->id;
+            $item->save();
             foreach ($return_regular_fields as $return_regular_field){
                 ItemCustomField::create([
                     'item_id' => $return_item->id,
@@ -575,6 +577,8 @@ class PostsController extends Controller
                     'expired_at' => $item->expired_at,
                 ]);
             }
+            $item->return_id = $return_item->id;
+            $item->save();
             ItemCustomField::whereItemId($return_item->id)->delete();
             foreach ($return_regular_fields as $return_regular_field){
                 ItemCustomField::create([
