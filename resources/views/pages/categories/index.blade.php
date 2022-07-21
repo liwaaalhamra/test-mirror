@@ -37,6 +37,7 @@
                     <th>Type</th>
 {{--                    <th>Is Supplier</th>--}}
                     <th>Image</th>
+                    <th>Selected Image</th>
                     <th>Status</th>
                     <th>Date Added</th>
                     <th></th>
@@ -67,6 +68,27 @@
                                             </div>
                                             <div class="modal-body">
                                                 <img src="{{ secure_url('admin/medias/categories/'. $item->id.'/view_media') }}" width="100%;">
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            @endif
+                        </td>
+                        <td>
+                            @if($item->selected_image != null)
+                                <img src="{{ secure_url('admin/medias/categories/'. $item->id.'/view_media/selected_image') }}" width="100px" data-toggle="modal" data-target="#myModal1_{{$item->id}}"  style="cursor: pointer;"/>
+                                <div id="myModal1_{{$item->id}}" class="modal fade" role="dialog">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <img src="{{ secure_url('admin/medias/categories/'. $item->id.'/view_media/selected_image') }}" width="100%;">
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

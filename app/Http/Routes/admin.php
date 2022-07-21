@@ -67,7 +67,7 @@ Route::get('tags/{tags_id}/delete_single', ['uses' => 'TagsController@delete_sin
 Route::resource('tags', 'TagsController');
 
 Route::post('categories/order/items', ['uses' => 'CategoriesController@order', 'as' => 'admin.categories.order']);
-Route::get('categories/{category_id}/delete_single', ['uses' => 'CategoriesController@delete_single_image', 'as' => 'admin.categories.delete_single']);
+Route::get('categories/{category_id}/{type}/delete_single', ['uses' => 'CategoriesController@delete_single_image', 'as' => 'admin.categories.delete_single']);
 Route::get('categories/{category_id}/list_collections', ['uses' => 'CategoriesController@list_collections', 'as' => 'admin.categories.list_collections']);
 Route::get('categories/publish/{category_id}', ['uses' => 'CategoriesController@publish', 'as' => 'admin.categories.publish']);
 Route::resource('categories', 'CategoriesController');
