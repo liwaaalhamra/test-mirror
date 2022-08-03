@@ -40,11 +40,11 @@
                 <tr>
                     <th>Order</th>
                     <th>Name English</th>
-                    <th>Name Arabic</th>
-                    <th>Description English</th>
-                    <th>Description Arabic</th>
-                    <th>Image</th>
-                    <th>Is Featured ?</th>
+{{--                    <th>Name Arabic</th>--}}
+{{--                    <th>Description English</th>--}}
+{{--                    <th>Description Arabic</th>--}}
+{{--                    <th>Image</th>--}}
+{{--                    <th>Is Featured ?</th>--}}
                     <th>Status</th>
                     <th>Created At</th>
                     <th></th>
@@ -56,37 +56,37 @@
 
                         <td># {{ $item->item_order }}</td>
                         <td>{{ ucwords($item->name_en) }}</td>
-                        <td>{{ $item->name_ar }}</td>
-                        <td>{!! $item->description_en !!}</td>
-                        <td>{!! $item->description_ar !!}</td>
-                        <td>
-                            @if($item->getMediaName() != null)
-                                <img src="{{$item->image}}" width="100px" data-toggle="modal" data-target="#myModal_{{$item->id}}"  style="cursor: pointer;"/>
-                                <div id="myModal_{{$item->id}}" class="modal fade" role="dialog">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <img src="{{$item->image}}" width="100%;">
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                            </div>
-                                        </div>
+{{--                        <td>{{ $item->name_ar }}</td>--}}
+{{--                        <td>{!! $item->description_en !!}</td>--}}
+{{--                        <td>{!! $item->description_ar !!}</td>--}}
+{{--                        <td>--}}
+{{--                            @if($item->getMediaName() != null)--}}
+{{--                                <img src="{{$item->image}}" width="100px" data-toggle="modal" data-target="#myModal_{{$item->id}}"  style="cursor: pointer;"/>--}}
+{{--                                <div id="myModal_{{$item->id}}" class="modal fade" role="dialog">--}}
+{{--                                    <div class="modal-dialog">--}}
+{{--                                        <div class="modal-content">--}}
+{{--                                            <div class="modal-header">--}}
+{{--                                                <button type="button" class="close" data-dismiss="modal">&times;</button>--}}
+{{--                                            </div>--}}
+{{--                                            <div class="modal-body">--}}
+{{--                                                <img src="{{$item->image}}" width="100%;">--}}
+{{--                                            </div>--}}
+{{--                                            <div class="modal-footer">--}}
+{{--                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>--}}
+{{--                                            </div>--}}
+{{--                                        </div>--}}
 
-                                    </div>
-                                </div>
-                            @endif
-                        </td>
-                        <td>
-                            @if($item->is_featured)
-                                <h4><span class="label label-success">YES</span></h4>
-                            @else
-                                <h4><span class="label label-warning">NO</span></h4>
-                            @endif
-                        </td>
+{{--                                    </div>--}}
+{{--                                </div>--}}
+{{--                            @endif--}}
+{{--                        </td>--}}
+{{--                        <td>--}}
+{{--                            @if($item->is_featured)--}}
+{{--                                <h4><span class="label label-success">YES</span></h4>--}}
+{{--                            @else--}}
+{{--                                <h4><span class="label label-warning">NO</span></h4>--}}
+{{--                            @endif--}}
+{{--                        </td>--}}
                         <td>
                             @if($item->is_published)
                                 <h4><span class="label label-success">Online</span></h4>
@@ -108,20 +108,21 @@
                                 @endif
                             @endif
                             @if(in_array('edit',auth()->user()->role->hasAccess($section_name)))
-                                @if($item->category->is_supplier)
-                                    <a href="{{ route('admin.sub_categories.supplier_sub_categories.index',$item->id) }}" class="btn btn-xs btn-primary"><i class="fa fa-arrows-alt"> View Sub Categories</i></a>
-                                @endif
-                                <a href="{{ route('admin.categories.sub_categories.edit', [$category->id,$item->id]) }}" class="btn btn-xs btn-info"><i class="fa fa-edit"> Edit</i></a>
+                                <a href="{{ route('admin.sub_categories.supplier_sub_categories.index',$item->id) }}" class="btn btn-xs btn-primary"><i class="fa fa-arrows-alt"> View Sub Sub Categories</i></a>
+{{--                                @if($item->category->is_supplier)--}}
+{{--                                    <a href="{{ route('admin.sub_categories.supplier_sub_categories.index',$item->id) }}" class="btn btn-xs btn-primary"><i class="fa fa-arrows-alt"> View Sub Categories</i></a>--}}
+{{--                                @endif--}}
+{{--                                <a href="{{ route('admin.categories.sub_categories.edit', [$category->id,$item->id]) }}" class="btn btn-xs btn-info"><i class="fa fa-edit"> Edit</i></a>--}}
                             @endif
                             @if(in_array('delete',auth()->user()->role->hasAccess($section_name)))
-                                <form action="{{ secure_url('admin/categories/'.$category->id.'/sub_categories/'. $item->id) }}" method="POST" class="pull-left delete" style="margin-right: 3px">
-                                    {{ csrf_field() }}
-                                    {{ method_field('DELETE') }}
+{{--                                <form action="{{ secure_url('admin/categories/'.$category->id.'/sub_categories/'. $item->id) }}" method="POST" class="pull-left delete" style="margin-right: 3px">--}}
+{{--                                    {{ csrf_field() }}--}}
+{{--                                    {{ method_field('DELETE') }}--}}
 
-                                    <button type="submit" class="btn btn-xs btn-danger">
-                                        <i class="fa fa-trash"></i> Delete
-                                    </button>
-                                </form>
+{{--                                    <button type="submit" class="btn btn-xs btn-danger">--}}
+{{--                                        <i class="fa fa-trash"></i> Delete--}}
+{{--                                    </button>--}}
+{{--                                </form>--}}
                             @endif
                         </td>
                     </tr>

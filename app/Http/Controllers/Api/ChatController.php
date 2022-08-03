@@ -18,6 +18,12 @@ class ChatController extends Controller
 {
     use HITrait;
 
+    public function unread_count(Request $request) {
+        $user = $this->validate_user($request);
+        $count = ConversationMessage::whereIsRead(0)->whereReceiverId($user->id)->count();
+        return response()->json(['unread_count' => intval($count)]);
+    }
+
 	/**
 	 * Get Conversations
 	 * @param Request $request
@@ -25,7 +31,7 @@ class ChatController extends Controller
 	 */
 	public function conversations(Request $request) {
         $user = $this->validate_user($request);
-        $search = isset($request->search) ? $request->search : null;
+        $search = isset($request->search) && !empty($request->search) ? $request->search : null;
         $conversations = Conversation::whereFriendId($user->id)->orwhere('user_id','=',$user->id)
             //->orderby('messages.created_at','desc')
             ->get()
@@ -36,6 +42,8 @@ class ChatController extends Controller
                     }else{
                         return strpos($value['friend']->full_name, $search) !== FALSE;
                     }
+                }else{
+                    return $value;
                 }
             })
             ->map(function ($value, $key) use ($user) {
@@ -98,6 +106,10 @@ class ChatController extends Controller
         $messages = ConversationMessage::whereConversationId($conversation->id)->orderby('id','desc')
             ->get()
             ->map(function ($value, $key) use ($user) {
+                if($user->id == $value['receiver_id']){
+                    $value->is_read = true;
+                    $value->save();
+                }
                 $value['is_my_message'] = $user->id == $value['sender_id'] ? true : false;
                 return $value;
             });
@@ -149,7 +161,7 @@ class ChatController extends Controller
             'message' => trim($request->message),
             //'is_my_message' => $conversation->user_id == $user->id ? 1 : 0
         ]);
-        if($user_push = UserPush::whereUsersId($request->friend_id)->first()){
+        if($user_push = UserPush::whereType('user')->whereUsersId($request->friend_id)->first()){
             $players_ids[] = $user_push->player_id;
             $contents = ["en" => trim($request->message)];
             $headings = ["en" => $user->full_name .' sent you a new message'];

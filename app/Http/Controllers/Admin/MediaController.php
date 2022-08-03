@@ -40,7 +40,12 @@ class MediaController extends Controller
                 break;
             case "categories":
                 $item = Category::find($item_id);
-                $path = public_path('uploads/images/categories/'.$item->getMediaName());
+                if($media_type == 'selected_image'){
+                    $path = public_path('uploads/images/categories/'.$item->getSelectedMediaName());
+                }else{
+                    $path = public_path('uploads/images/categories/'.$item->getMediaName());
+                }
+
                 break;
             default:
                 $item = null;

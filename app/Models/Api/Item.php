@@ -31,7 +31,8 @@ class Item extends Model
         'is_sale' => 'boolean',
     ];
     protected $with = ['location','images'];
-    protected $appends = ['name','user_fullname','description','discount_amount','currency','price_formatted','discounted_price_formatted','discount_amount_formatted','barcode'];
+    protected $appends = ['name','user_fullname','description','discount_amount','currency',
+        'price_formatted','discounted_price_formatted','discount_amount_formatted','barcode','user_image','price_from_formatted','price_to_formatted'];
 
     protected function getCurrencyAttribute(){
         return env('APP_CURRENCY');
@@ -41,8 +42,18 @@ class Item extends Model
         return $this->user->full_name;
     }
 
+    protected function getUserImageAttribute(){
+        return $this->user->photo;
+    }
+
     protected function getPriceFormattedAttribute(){
-        return number_format($this->attributes['price'],0) . ' ' . env('APP_CURRENCY');
+        return $this->attributes['price'] ? number_format($this->attributes['price'],0) . ' ' . env('APP_CURRENCY') : null;
+    }
+    protected function getPriceFromFormattedAttribute(){
+        return $this->attributes['price_from'] ? number_format($this->attributes['price_from'],0) . ' ' . env('APP_CURRENCY') : null;
+    }
+    protected function getPriceToFormattedAttribute(){
+        return $this->attributes['price_to'] ? number_format($this->attributes['price_to'],0) . ' ' . env('APP_CURRENCY') : null;
     }
 
     protected function getDiscountedPriceFormattedAttribute(){
@@ -110,6 +121,10 @@ class Item extends Model
         return $this->belongsTo(Location::class,'location_id');
     }
 
+    public function custom_fields(){
+        return $this->hasMany(ItemCustomField::class,'item_id','id');
+    }
+
     protected static function boot()
     {
         parent::boot();
@@ -121,7 +136,7 @@ class Item extends Model
     }
 
     public function generateCode(){
-        $this->attributes['code'] = '113228'.Controller::number_generator(9);
+        $this->attributes['code'] = Controller::number_generator(6);
     }
 
     public function getImageAttribute($value){

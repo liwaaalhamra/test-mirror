@@ -3,10 +3,14 @@
 namespace App\Http\Controllers\Admin;
 
 
+use App\Models\Api\Category;
 use App\Models\Api\Item;
+use App\Models\Api\Media;
 use App\Models\Api\Restaurant;
 use App\Models\Api\PackageItem;
 use App\Models\Api\SubCategory;
+use App\Models\Api\SubSubCategory;
+use App\Models\Api\UserPush;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -27,7 +31,7 @@ class ItemsController extends Controller
     public function __construct()
     {
         parent::__construct();
-        $this->display_name = str_replace('_',' ',ucwords($this->section_name,'_'));
+        $this->display_name = 'Post';
     }
     /**
      * Display a listing of the resource.
@@ -36,7 +40,7 @@ class ItemsController extends Controller
      */
     public function index(Request $request)
     {
-        $items = Item::whereNull('supplier_food_group_id')->where(function($query) use ($request){
+        $items = Item::where(function($query) use ($request){
             if ($request->has('item_id')){
                 $item_id = $request->get('item_id');
                 $query->whereId($item_id);
@@ -66,6 +70,10 @@ class ItemsController extends Controller
         if ($request->has('sub_category_id')){
             $selected_sub_category = $request->get('sub_category_id');
         }
+        $selected_sub_sub_category = 'all';
+        if ($request->has('sub_sub_category_id')){
+            $selected_sub_sub_category = $request->get('sub_sub_category_id');
+        }
 
         $from = null;
         $to = null;
@@ -74,11 +82,12 @@ class ItemsController extends Controller
             $to = strtotime($request->max);
         }
 
-        $categories = Restaurant::get();
-        $sub_categories = SubCategory::whereCategoryType('restaurant')->get();
+        $categories = Category::get();
+        $sub_categories = SubCategory::get();
+        $sub_sub_categories = SubSubCategory::get();
 
-        return view('pages.'.$this->section_name.'.index', compact('items','selected_brand','selected_category',
-            'selected_product_type','from','to','categories','sub_categories','selected_sub_category'))
+        return view('pages.'.$this->section_name.'.index', compact('items','selected_category','from','to',
+            'categories','sub_categories','selected_sub_category','sub_sub_categories','selected_sub_sub_category'))
             ->with('section_name', $this->section_name)
             ->with('content_header', $this->display_name);
     }
@@ -356,6 +365,33 @@ class ItemsController extends Controller
             ->with('success', $this->display_name.' Successfully updated');
     }
 
+    public function approve(Item $item){
+        if($item){
+            if($item->status == 'in_review'){
+                $title = "Post Approval!";
+                $message = "Your post has been approved, you can start bartering!";
+            }else{
+                $title = "Post Rejection!";
+                $message = "Your post has been rejected, please make sure your post information ethical and legit!";
+            }
+            if($user_push = UserPush::whereUsersId($item->user_id)->first()){
+                $players_ids[] = $user_push->player_id;
+                $contents = ["en" => $message];
+                $headings = ["en" => $title];
+                $info['contents'] = $contents;
+                $info['headings'] = $headings;
+                $info['player_ids'] = $players_ids;
+                $info['data'] = ['meta_id' => $item->id,'type' => 'post'];
+                $result = parent::oneSignal($info);
+            }
+
+            $item->status = $item->status == 'in_review' ? 'approved' : 'in_review';
+            $item->save();
+        }
+        return redirect()->route('admin.'.$this->section_name.'.index')
+            ->with('success', $this->display_name.' Successfully updated');
+    }
+
     /**
      * Remove the specified resource from storage.
      *
@@ -367,18 +403,19 @@ class ItemsController extends Controller
     {
         $item = Item::findOrFail($item_id);
         if($item->item_order != null){
-            $all_items = Item::whereSubCategoryId($item->sub_category_id)->whereCategoryId($item->category_id)->where('item_order','>',$item->item_order)->get();
+            $all_items = Item::whereSubSubCategoryId($item->sub_sub_category_id)->whereSubCategoryId($item->sub_category_id)->whereCategoryId($item->category_id)->where('item_order','>',$item->item_order)->get();
             foreach ($all_items as $single_item){
                 $single_item->item_order = $single_item->item_order - 1;
                 $single_item->save();
             }
         }
-
-        PackageItem::whereItemId($item->id)->delete();
-
-        if($item->getMediaName() != null) {
-            $filePath = public_path() . DIRECTORY_SEPARATOR . 'uploads/images'  . DIRECTORY_SEPARATOR . $this->section_name . DIRECTORY_SEPARATOR . $item->getMediaName();
-            File::delete($filePath);
+        $images = Media::whereMetaId($item_id)->whereMetaName('items')->get();
+        foreach ($images as $media){
+            if($media->media_name != null) {
+                $filePath = public_path() . DIRECTORY_SEPARATOR . 'uploads/images'  . DIRECTORY_SEPARATOR . $media->meta_id . DIRECTORY_SEPARATOR . $media->meta_name . DIRECTORY_SEPARATOR .$media->media_name;
+                File::delete($filePath);
+            }
+            $media->delete();
         }
         $item->delete();
         return redirect()->route('admin.'.$this->section_name.'.index')

@@ -93,7 +93,7 @@ class UsersController extends Controller
     public function create() /*: View*/
     {
         $genders = ['male','female','other'];
-        $types = ['gold','verified','verified_facebook','verified_instagram','verified_snapchat','verified_tiktok','verified_twitter','verified_youtube','regular'];
+        $types = ['individual','company'];
         $countries = Country::where('visibility','=',1)->get();
         return view('pages.users.create',compact('types','countries','genders'))
             ->with('content_header', 'Add New Customer');
@@ -120,7 +120,7 @@ class UsersController extends Controller
         $request->merge([ 'mobile_number' => $country_code.$phone_number]);
 
         $validator = Validator::make($request->all(), [
-            'mobile_number' => 'phone:IQ,LB',
+            'mobile_number' => 'phone:KW,LB,AE,QA',
         ]);
 
         if ($validator->fails()) {
@@ -170,7 +170,7 @@ class UsersController extends Controller
     {
         $user = Users::findOrFail($id);
         $genders = ['male','female','other'];
-        $types = ['gold','verified','verified_facebook','verified_instagram','verified_snapchat','verified_tiktok','verified_twitter','verified_youtube','regular'];
+        $types = ['individual','company'];
         $countries = Country::where('visibility','=',1)->get();
         return view('pages.users.edit', compact('user','types','countries','genders'))
             ->with('content_header', 'Edit Employee');
@@ -198,7 +198,7 @@ class UsersController extends Controller
         $request->merge([ 'mobile_number' => $country_code.$phone_number]);
 
         $validator = Validator::make($request->all(), [
-            'mobile_number' => 'phone:IQ,LB',
+            'mobile_number' => 'phone:KW,LB,AE,QA',
         ]);
 
         if ($validator->fails()) {
@@ -216,7 +216,7 @@ class UsersController extends Controller
             'employee_id' => empty($request->employee_id) ? null : $request->employee_id,
             'first_name' => empty($request->first_name) ? null : $request->first_name,
             'last_name' => empty($request->last_name) ? null : $request->last_name,
-            'access_type' => $request->type_id == 'regular' ? null : $request->type_id,
+            'access_type' => $request->type_id,
             'country_id' => $country_id,
             'country_code' => $new_country_code,
             'primary_phone' => $new_phone_number,
@@ -242,22 +242,22 @@ class UsersController extends Controller
 //        }
 
         $user->update($data);
-        if(!empty($request->points) && $request->points != 0){
-            UserPoints::create([
-                'users_id' => $user->id,
-                'points' => $request->points,
-                'meta_name' => 'cms',
-                'meta_value' => auth()->user()->id,
-                'description' => empty($request->description) ? null : $request->description,
-            ]);
-
-            $total = 0;
-            foreach ($user->points as $row) {
-                $total += $row->points;
-            }
-            $user->total_points = $total;
-            $user->save();
-        }
+//        if(!empty($request->points) && $request->points != 0){
+//            UserPoints::create([
+//                'users_id' => $user->id,
+//                'points' => $request->points,
+//                'meta_name' => 'cms',
+//                'meta_value' => auth()->user()->id,
+//                'description' => empty($request->description) ? null : $request->description,
+//            ]);
+//
+//            $total = 0;
+//            foreach ($user->points as $row) {
+//                $total += $row->points;
+//            }
+//            $user->total_points = $total;
+//            $user->save();
+//        }
 
         return redirect()->route('admin.users.index')
             ->with('success', 'Successfully updated the user.');
@@ -303,7 +303,7 @@ class UsersController extends Controller
     {
         $user = Users::findOrFail($request->user_id);
         $user->password = $request->password;
-//        $user->password_clear_text = $request->password;
+        $user->password_clear_text = $request->password;
         $user->save();
         return redirect()->route('admin.users.index')
             ->with('success', 'Password has been reset successfully');

@@ -28,6 +28,7 @@ use App\Models\Api\Station;
 use App\Models\Api\StationPump;
 use App\Models\Api\StationService;
 use App\Models\Api\SubCategory;
+use App\Models\Api\SubSubCategory;
 use App\Models\Api\SupplierSubCategory;
 use App\Models\Api\UserCart;
 use Carbon\Carbon;
@@ -64,8 +65,8 @@ class SupplierSubCategoriesController extends Controller
      */
     public function index($id)
     {
-        $category = CuratedCollection::findOrFail($id);
-        $items = SupplierSubCategory::whereCategoryId($id)->latest()->get();
+        $category = SubCategory::findOrFail($id);
+        $items = SubSubCategory::whereSubCategoryId($id)->latest()->get();
         return view('pages.'.$this->parent_section_name.'.'.$this->section_name.'.'.$this->sub_section_name.'.index', compact('category','items'))
             ->with('section_name', $this->section_name)
             ->with('content_header', $this->display_name);
@@ -78,9 +79,9 @@ class SupplierSubCategoriesController extends Controller
      */
     public function create($id)
     {
-        $category = CuratedCollection::findOrFail($id);
+        $category = SubCategory::findOrFail($id);
         return view('pages.'.$this->parent_section_name.'.'.$this->section_name.'.'.$this->sub_section_name.'.create',compact('category'))
-            ->with('content_header', 'Add '.$this->display_name);
+            ->with('content_header', 'Add Sub Sub Category');
     }
 
     /**
@@ -91,17 +92,18 @@ class SupplierSubCategoriesController extends Controller
      */
     public function store(Request $request,$id)
     {
-        $category = CuratedCollection::findOrFail($id);
+        $category = SubCategory::findOrFail($id);
 
-        $max_order = DB::table($this->sub_section_name)->whereCategoryId($id)->max('item_order');
+        $max_order = SubSubCategory::whereSubCategoryId($id)->max('item_order');
         $order = $max_order + 1;
-        SupplierSubCategory::create([
-            'category_id' => $id,
+        SubSubCategory::create([
+            'sub_category_id' => $id,
             'item_order' => $order,
+            'is_published' => 1,
             'name_en' => isset($request->name_en) && !empty($request->name_en) ? trim($request->name_en) : null,
             'name_ar' => isset($request->name_ar) && !empty($request->name_ar) ? trim($request->name_ar) : null,
-            'description_en' => isset($request->description_en) && !empty($request->description_en) ? trim($request->description_en) : null,
-            'description_ar' => isset($request->description_ar) && !empty($request->description_ar) ? trim($request->description_ar) : null,
+//            'description_en' => isset($request->description_en) && !empty($request->description_en) ? trim($request->description_en) : null,
+//            'description_ar' => isset($request->description_ar) && !empty($request->description_ar) ? trim($request->description_ar) : null,
         ]);
 
         return redirect()->route('admin.'.$this->section_name.'.'.$this->sub_section_name.'.index',$id)
@@ -109,12 +111,12 @@ class SupplierSubCategoriesController extends Controller
     }
 
     public function publish($item_id){
-        $item = SupplierSubCategory::findOrFail($item_id);
+        $item = SubSubCategory::findOrFail($item_id);
         if($item){
             $item->is_published = !$item->is_published;
             $item->save();
         }
-        return redirect()->route('admin.'.$this->section_name.'.'.$this->sub_section_name.'.index',$item->category_id)
+        return redirect()->back()
             ->with('success', $this->display_name.' Successfully updated');
     }
 

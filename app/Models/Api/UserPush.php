@@ -19,7 +19,7 @@ use Illuminate\Database\Eloquent\Model;
 class UserPush extends Model
 {
     protected $table = "user_push";
-    protected $fillable = ['users_id','player_id'];
+    protected $guarded = [];
     public function user(){
         return $this->belongsTo(Users::class,'users_id');
     }

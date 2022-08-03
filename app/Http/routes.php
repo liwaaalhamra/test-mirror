@@ -64,7 +64,9 @@ Route::get('/', function () {
 });
 Route::group(['middleware' => ['web']], function () {
 
-    Route::get('payment/{user_id?}/{order_id?}', ['uses' => 'Admin\PaymentController@show', 'as' => 'admin.payment.show']);
+//    Route::get('payment/{user_id?}/{order_id?}', ['uses' => 'Admin\PaymentController@show', 'as' => 'admin.payment.show']);
+    Route::get('payment', ['uses' => 'Admin\PaymentController@show', 'as' => 'admin.payment.show']);
+    Route::get('payment-test', ['uses' => 'Admin\PaymentController@show_test', 'as' => 'admin.payment-test.show']);
 
 });
 

@@ -47,7 +47,7 @@ class SubCategory extends Model
     }
 
     public function sub_sub_categories(){
-        return $this->hasMany(SubSubCategory::class,'sub_category_id','id')->whereIsPublished(1)->orderby('item_order','asc');
+        return $this->hasMany(SubSubCategory::class,'sub_category_id','id')->whereIsPublished(1)->orderByRaw("LOWER(name_en) asc");
     }
 
     public function category(){

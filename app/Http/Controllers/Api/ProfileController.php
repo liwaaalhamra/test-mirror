@@ -57,7 +57,7 @@ class ProfileController extends Controller
         $user = $this->validate_user($request);
         $validator = Validator::make($request->all(), [
             'password' => [
-                'required',
+//                'required',
                 'min:8',             // must be at least 8 characters in length
                 'regex:/[a-z]/',      // must contain at least one lowercase letter
                 'regex:/[A-Z]/',      // must contain at least one uppercase letter
@@ -68,7 +68,7 @@ class ProfileController extends Controller
         ]);
 
         if($validator->fails()){
-            return parent::return_error('Missing parameter(s)', 400, $validator->messages()->all()[0]);
+            return parent::return_error('Missing parameter(s)', 400, 'Should contain 8 characters or more. At least one Upper case letter, one number and symbol (like ! @ # $ %..)');
         }
 
         $destinationDir = public_path() . DIRECTORY_SEPARATOR . 'uploads/images' . DIRECTORY_SEPARATOR . 'profiles';
@@ -87,6 +87,7 @@ class ProfileController extends Controller
         $password = isset($request->password) ? $request->password : null;
         $first_name = null;
         $last_name = null;
+        $full_name = null;
         $registration_number = null;
         $company_name = null;
         $gender = null;
@@ -102,6 +103,10 @@ class ProfileController extends Controller
 
         if (Input::has('last_name')) {
             $last_name = $request->last_name;
+        }
+
+        if (Input::has('full_name')) {
+            $full_name = $request->full_name;
         }
 
         if (Input::has('access_type')) {
@@ -202,6 +207,7 @@ class ProfileController extends Controller
         $user->password_clear_text = $password;
         $user->first_name = $first_name;
         $user->last_name = $last_name;
+        $user->full_name = $full_name;
         $user->country_id = $country_id;
         $user->photo = $fileName;
         $user->primary_phone = $new_phone_number;
@@ -467,7 +473,7 @@ class ProfileController extends Controller
 
         $user->password = $request->get('new_password');
         $user->reset_code = null;
-        $user->preventAttrSet = true;
+//        $user->preventAttrSet = true;
         $user->password_clear_text = $request->get('new_password');
         $user->save();
         UsersAccess::where("user_id", "=", $user->id)->delete();
@@ -499,17 +505,18 @@ class ProfileController extends Controller
         ]);
 
         if($validator->fails()){
-            return parent::return_error('Missing parameter(s)', 400, $validator->messages()->all()[0]);
+            return parent::return_error('Missing parameter(s)', 400, 'Should contain 8 characters or more. At least one Upper case letter, one number and symbol (like ! @ # $ %..)');
         }
 
         if($request->old_password != $user->password_clear_text){
             return parent::return_error("Wrong Password!", 405, 'messages.wrong_password');
         }
-        if($request->new_password == $user->password_clear_text){
+        $new_password = hash('sha256', $request->get('new_password'));
+        if($new_password == $user->password_clear_text){
             return parent::return_error("Cannot use same password", 405, "Cannot use same password");
         }
         $user->password = $request->get('new_password');
-        $user->preventAttrSet = true;
+//        $user->preventAttrSet = true;
         $user->password_clear_text = $request->get('new_password');
         $user->save();
         $user->token = $user->access_token->access_token;
@@ -535,9 +542,9 @@ class ProfileController extends Controller
                 return parent::return_error("Mobile Number does not exist", 403, "User does not exist");
             }
         }
-        if($user->is_verified == 0){
-            return parent::return_error("Registration not complete, please register again", 406, "Registration not complete, please register again");
-        }
+//        if($user->is_verified == 0){
+//            return parent::return_error("Registration not complete, please register again", 406, "Registration not complete, please register again");
+//        }
 
         if($user->is_blocked){
             return parent::return_error("Account Blocked", 407, "Account Blocked");

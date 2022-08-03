@@ -166,10 +166,15 @@ class LoginController extends Controller
         if($user->is_blocked){
             return parent::return_error("Account Blocked", 407, "Account Blocked");
         }
-        Mail::send('emails.activate_email', ['data' => $info], function ($message) use ($info) {
-            $message->subject(env('APP_NAME')." | ".$info['title']);
-            $message->to($info['to']);
-        });
+        try {
+            Mail::send('emails.activate_email', ['data' => $info], function ($message) use ($info) {
+                $message->subject(env('APP_NAME')." | ".$info['title']);
+                $message->to($info['to']);
+            });
+        }catch (\Exception $ex){
+
+        }
+
 
 
         $return_body["pin"] = config('app.debug') ? $pin : null;
@@ -208,7 +213,7 @@ class LoginController extends Controller
         $new_phone_number = $phone_details->getNationalNumber();
 
         $pin = parent::number_generator(6);
-        $pin = 1111;
+        $pin = 111111;
         $registration = parent::generate_tokens(4);
 
         $agent = new Agent();
@@ -392,11 +397,16 @@ class LoginController extends Controller
         }
     }
 
-    public function explore(){
-        if(!Input::has('udid')){
-            return parent::return_error('Missing UDID',401,'messages.missing_parameter');
+    public function explore(Request $request){
+        $validator = Validator::make($request->all(), [
+            'udid' => 'required'
+
+        ]);
+
+        if($validator->fails()){
+            return parent::return_error('Missing parameter(s)', 400, $validator->messages()->all()[0]);
         }
-        $udid = Input::get('udid');
+        $udid = $request->udid;
 
         $user = Users::where(['udid' => $udid])->orderBy('created_at','desc')->first();
         $agent = new Agent();
@@ -461,6 +471,10 @@ class LoginController extends Controller
         $last_name = null;
         if(Input::has('last_name')){
             $last_name = trim($request->last_name);
+        }
+        $full_name = null;
+        if(Input::has('full_name')){
+            $full_name = trim($request->full_name);
         }
 
         if(!Input::has('email')){
@@ -534,6 +548,7 @@ class LoginController extends Controller
                 $user->country_id = $country_id;
                 $user->first_name = $first_name;
                 $user->last_name = $last_name;
+                $user->full_name = $full_name;
                 $user->country_code = $new_country_code;
                 $user->primary_phone = $new_phone_number;
                 $user->save();
@@ -558,6 +573,7 @@ class LoginController extends Controller
                     $user->country_id = $country_id;
                     $user->first_name = $first_name;
                     $user->last_name = $last_name;
+                    $user->full_name = $full_name;
                     $user->country_code = $new_country_code;
                     $user->primary_phone = $new_phone_number;
                     $user->save();
@@ -579,6 +595,7 @@ class LoginController extends Controller
                         'country_id' => $country_id,
                         'first_name' => $first_name,
                         'last_name' => $last_name,
+                        'full_name' => $full_name,
                         'country_code' => $new_country_code,
                         'primary_phone' => $new_phone_number,
                     ]);
@@ -602,6 +619,7 @@ class LoginController extends Controller
                     'country_id' => $country_id,
                     'first_name' => $first_name,
                     'last_name' => $last_name,
+                    'full_name' => $full_name,
                     'country_code' => $new_country_code,
                     'primary_phone' => $new_phone_number,
                 ]);
@@ -620,7 +638,7 @@ class LoginController extends Controller
         $info['message3'] = utf8_decode(utf8_encode(Lang::get('messages.sincerely')));
         $info['message4'] = utf8_decode(utf8_encode(Lang::get('messages.team')));
 
-        $info['full_name'] = $request->first_name .' '.$request->last_name;
+        $info['full_name'] = isset($request->full_name) ? $request->full_name : $request->first_name .' '.$request->last_name;
         $info['code'] = $pin;
         Mail::send('emails.activate_email', ['data' => $info], function ($message) use ($info) {
             $message->subject(env('APP_NAME')." | ".$info['title']);
@@ -670,7 +688,7 @@ class LoginController extends Controller
         $info['message3'] = utf8_decode(utf8_encode(Lang::get('messages.sincerely')));
         $info['message4'] = utf8_decode(utf8_encode(Lang::get('messages.team')));
 
-        $info['full_name'] = $request->first_name .' '.$request->last_name;
+        $info['full_name'] = isset($request->full_name) ? $request->full_name : $request->first_name .' '.$request->last_name;
         $info['code'] = $pin;
         Mail::send('emails.activate_email', ['data' => $info], function ($message) use ($info) {
             $message->subject(env('APP_NAME')." | ".$info['title']);

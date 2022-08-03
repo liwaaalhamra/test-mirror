@@ -43,6 +43,14 @@ class Category extends Model
         return $this->attributes['image'];
     }
 
+    public function getSelectedImageAttribute($value){
+        return ($value == null) ? null : secure_url('public/uploads/images/categories/'.$value);
+    }
+
+    public function getSelectedMediaName(){
+        return $this->attributes['selected_image'];
+    }
+
     public function sub_categories(){
         return $this->hasMany(SubCategory::class,'category_id','id');
     }

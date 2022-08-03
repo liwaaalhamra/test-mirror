@@ -44,17 +44,40 @@ Route::group(['prefix' => 'categories'],function () {
 });
 
 /**
+ * Barter Routes
+ */
+Route::group(['prefix' => 'barter'],function () {
+    Route::post('/submit', 'PostsController@barter');
+    Route::post('/action', 'PostsController@barter_action');
+    Route::post('/done', 'PostsController@barter_done');
+    Route::get('/my_barters', 'PostsController@my_barters');
+    Route::get('/my_finalized_barters', 'PostsController@my_finalized_barters');
+});
+
+/**
  * Posts Favorites + Posts Routes
  */
 Route::group(['prefix' => 'items'],function () {
     Route::post('/create', 'PostsController@create');
     Route::post('/update', 'PostsController@update');
     Route::post('/delete', 'PostsController@delete');
+    Route::post('/my_postsx', 'PostsController@my_postsx');
     Route::post('/my_posts', 'PostsController@my_posts');
+    Route::post('/my_posts/pagination', 'PostsController@my_posts_with_pagination');
+    Route::post('/user_related_posts', 'PostsController@user_related_posts');
+    Route::post('/user_related_posts/pagination', 'PostsController@user_related_posts_with_pagination');
 
 
     Route::post('/favorites', 'ItemsController@item_favorites');
     Route::post('/favorites/action', 'ItemsController@item_favorites_action');
+});
+
+/**
+ * All Items Routes
+ */
+Route::group(['prefix' => 'search_items'],function () {
+    Route::post('', 'ItemsController@all_items');
+    Route::post('pagination', 'ItemsController@all_items_with_pagination');
 });
 
 /**
@@ -64,9 +87,8 @@ Route::group(['prefix' => 'products/items'],function () {
     Route::post('', 'ItemsController@product_items');
     Route::post('pagination', 'ItemsController@product_items_with_pagination');
     Route::post('single', 'ItemsController@product_single_item');
-
-
 });
+
 Route::group(['prefix' => 'services/items'],function () {
     Route::post('', 'ItemsController@service_items');
     Route::post('pagination', 'ItemsController@service_items_with_pagination');
@@ -81,6 +103,7 @@ Route::group(['prefix' => 'chat'],function () {
     Route::post('/conversations', 'ChatController@conversations');
     Route::post('/messages', 'ChatController@messages');
     Route::post('/send_message', 'ChatController@send');
+    Route::get('/unread_count', ['uses' => 'ChatController@unread_count', 'as' => 'api.chat.unread_count']);
 });
 
 /**
@@ -96,19 +119,20 @@ Route::post('/custom_fields', 'ItemsController@custom_fields');
 Route::post('/home_top_categories', 'ItemsController@home_top_categories');
 Route::post('/home_top_categories/{slug}/items', 'ItemsController@home_top_categories_items');
 
-Route::get('/lists/{list_type}', 'ItemsController@lists');
+Route::get('/lists/{list_type}/{parent_id?}', 'ItemsController@lists');
+Route::post('/locations', 'ItemsController@locations');
 
 /**
  * Location Routes
  */
-Route::group(['prefix' => 'locations'],function () {
-    Route::post('add', 'LocationController@add');
-    Route::post('edit', 'LocationController@edit');
-    Route::post('delete', 'LocationController@delete');
-    Route::post('set_as_default', 'LocationController@set_as_default');
-    Route::get('', 'LocationController@get');
-    Route::post('regions', 'LocationController@regions');
-});
+//Route::group(['prefix' => 'locations'],function () {
+//    Route::post('add', 'LocationController@add');
+//    Route::post('edit', 'LocationController@edit');
+//    Route::post('delete', 'LocationController@delete');
+//    Route::post('set_as_default', 'LocationController@set_as_default');
+//    Route::get('', 'LocationController@get');
+//    Route::post('regions', 'LocationController@regions');
+//});
 
 /**
  * Cron Routes
@@ -129,9 +153,10 @@ Route::get('success_response', 'PaymentController@success_response');
 Route::get('error_response', 'PaymentController@error_response');
 Route::get('payment_methods/', 'PaymentController@payment_methods');
 Route::get('payment_response/{order_id}', 'PaymentController@payment_response');
+Route::post('stripe_payment_response', 'PaymentController@stripe_payment_response');
 Route::get('payment_success_response', 'PaymentController@payment_success_response');
 Route::get('payment_error_response', 'PaymentController@payment_error_response');
-Route::get('order/check_purchased', 'PaymentController@check_result');
+Route::get('check_result', 'PaymentController@check_result');
 Route::post('order/items', 'OrderController@order_cart_items');
 Route::post('supplier/order/items', 'SupplierOrderController@order_cart_items');
 Route::post('pay', 'PaymentController@pay');
