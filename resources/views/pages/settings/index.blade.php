@@ -28,14 +28,24 @@
                     <div class="panel-body">
                         <form action="{{ route('admin.app_settings') }}" method="post" enctype="multipart/form-data">
                             {{ csrf_field() }}
+{{--                            <div class="row">--}}
+{{--                                <div class="form-group col-sm-4">--}}
+{{--                                    <label>Delivery Charge</label>--}}
+{{--                                    <input type="number" name="delivery_charge" class="form-control" placeholder="Delivery Charge" required @if(isset($settings['delivery_charge'])) value="{{$settings['delivery_charge']}}" @endif>--}}
+{{--                                </div>--}}
+{{--                                <div class="form-group col-sm-4">--}}
+{{--                                    <label>Delivery Threshold</label>--}}
+{{--                                    <input type="number" name="delivery_threshold" class="form-control" placeholder="Delivery Threshold" required @if(isset($settings['delivery_threshold'])) value="{{$settings['delivery_threshold']}}" @endif>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
                             <div class="row">
                                 <div class="form-group col-sm-4">
-                                    <label>Delivery Charge</label>
-                                    <input type="number" name="delivery_charge" class="form-control" placeholder="Delivery Charge" required @if(isset($settings['delivery_charge'])) value="{{$settings['delivery_charge']}}" @endif>
+                                    <label>Post Cost</label>
+                                    <input type="number" name="post_cost" class="form-control" placeholder="Post Cost" required @if(isset($settings['post_cost'])) value="{{$settings['post_cost']}}" @endif>
                                 </div>
                                 <div class="form-group col-sm-4">
-                                    <label>Delivery Threshold</label>
-                                    <input type="number" name="delivery_threshold" class="form-control" placeholder="Delivery Threshold" required @if(isset($settings['delivery_threshold'])) value="{{$settings['delivery_threshold']}}" @endif>
+                                    <label>Post Validity Days</label>
+                                    <input type="number" name="post_validity" class="form-control" placeholder="Post Validity Days" required @if(isset($settings['post_validity'])) value="{{$settings['post_validity']}}" @endif>
                                 </div>
                             </div>
                             <div class="row">

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Api\CustomFieldList;
 use App\Models\Api\Restaurant;
 use App\Models\Api\SyndicatePayment;
 use App\Models\Api\UserExpences;
@@ -42,10 +43,39 @@ class SheetsController extends Controller
             if($request->file('excel')->isValid()) {
                 //UploadDate::create(['last_upload_date' => Carbon::now()]);
 
-                $sheets = Excel::load($request->file('excel'))
-                    ->formatDates(true)
+                $sheets = Excel::load($request->file('excel'));
+                $sheets_name = $sheets->getSheetNames();
+                $sheets = $sheets->formatDates(true)
                     ->get()->toarray();
-                $items = $sheets[0];
+                /**
+                 * for car models set startRow to 1
+                 */
+                $sheets = $sheets;
+
+//                foreach ($sheets as $item){
+//                    if($item['brand_id'] == null || $item['brand_name'] == null){
+//                        continue;
+//                    }
+//                    CustomFieldList::create([
+//                        'field_name' => "car_models",
+//                        'parent_id' => intval($item['brand_id']),
+//                        'name_en' => isset($item['model_name']) && !empty($item['model_name']) ? trim($item['model_name']) : trim($item['brand_name']),
+//                        'name_ar' => isset($item['model_name']) && !empty($item['model_name']) ? trim($item['model_name']) : trim($item['brand_name']),
+//                    ]);
+//                }
+//                CustomFieldList::truncate();
+                foreach ($sheets as $index => $sheet){
+                    $sheet_name = $sheets_name[$index];
+
+                    foreach ($sheet as $item){
+                        CustomFieldList::create([
+                            'field_name' => $sheet_name,
+                            'name_en' => $item[0],
+                            'name_ar' => $item[0],
+                        ]);
+                    }
+                }
+                dd('done');
 //                DB::table('users')->delete();
                 foreach ($items as $item){
                     if($item['sku'] == null || $item['price'] == null || $item['name_en'] == null

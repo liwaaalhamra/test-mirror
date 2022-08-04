@@ -15,30 +15,30 @@
 
     <div class="row">
         @if(in_array('export',auth()->user()->role->hasAccess($section_name)))
-            <div class="col-sm-3">
-                <div class="panel panel-default">
-                    <div class="panel-heading font-bold">Export Excels</div>
-                    <div class="panel-body">
-                        <a href="{{ route('admin.export_items') }}" class="btn btn-lg btn-info"><i class="fa fa-edit"> Export All Items</i></a>
-                    </div>
-                </div>
-            </div>
+{{--            <div class="col-sm-3">--}}
+{{--                <div class="panel panel-default">--}}
+{{--                    <div class="panel-heading font-bold">Export Excels</div>--}}
+{{--                    <div class="panel-body">--}}
+{{--                        <a href="{{ route('admin.export_items') }}" class="btn btn-lg btn-info"><i class="fa fa-edit"> Export All Items</i></a>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+{{--            </div>--}}
         @endif
         @if(in_array('export',auth()->user()->role->hasAccess($section_name)))
-            <div class="col-sm-3">
-                <div class="panel panel-default">
-                    <div class="panel-heading font-bold">Import Excels</div>
-                    <div class="panel-body">
-                        <form action="{{ route('admin.import_items') }}" method="POST" enctype="multipart/form-data">
-                            {{ csrf_field() }}
-                            <input type="file" name="excel" />
-                            <button type="submit" class="btn m-b-xs btn-sm btn-success btn-addon">
-                                <i class="fa fa-upload"></i>Import Items
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
+{{--            <div class="col-sm-3">--}}
+{{--                <div class="panel panel-default">--}}
+{{--                    <div class="panel-heading font-bold">Import Excels</div>--}}
+{{--                    <div class="panel-body">--}}
+{{--                        <form action="{{ route('admin.import_items') }}" method="POST" enctype="multipart/form-data">--}}
+{{--                            {{ csrf_field() }}--}}
+{{--                            <input type="file" name="excel" />--}}
+{{--                            <button type="submit" class="btn m-b-xs btn-sm btn-success btn-addon">--}}
+{{--                                <i class="fa fa-upload"></i>Import Items--}}
+{{--                            </button>--}}
+{{--                        </form>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+{{--            </div>--}}
         @endif
     </div>
 
@@ -50,29 +50,38 @@
             <div class="row">
                 <div class="col-sm-1 m-b-xs">
                     @if(in_array('add',auth()->user()->role->hasAccess($section_name)))
-                        <a href="{{ route('admin.items.create') }}" class="btn m-b-xs btn-sm btn-default btn-addon">
-                            <i class="fa fa-plus"></i>Add {{$content_header}}
-                        </a>
+{{--                        <a href="{{ route('admin.items.create') }}" class="btn m-b-xs btn-sm btn-default btn-addon">--}}
+{{--                            <i class="fa fa-plus"></i>Add {{$content_header}}--}}
+{{--                        </a>--}}
                     @endif
                 </div>
             </div>
             <div class="row wrapper">
                 <form action="{{ route('admin.items.index') }}" method="get" role="search" id="filter_form" >
                     <div class="col-sm-2 m-b-xs">
-                        <label><strong>Filter by Restaurant</strong></label>
+                        <label><strong>Filter by Category</strong></label>
                         <select class="form-control selectpicker" id="category_id" data-live-search="true" name="category_id" >
                             <option data-tokens="" value="" selected>All</option>
                             @foreach($categories as $category)
-                                <option data-tokens="{{$category->name_en}}" value="{{$category->id}}" @if($selected_category == $category->id) selected @endif > {{$category->name_en}}</option>
+                                <option data-tokens="{{$category->name}}" value="{{$category->id}}" @if($selected_category == $category->id) selected @endif > {{$category->name}}</option>
                             @endforeach
                         </select>
                     </div>
                     <div class="col-sm-2 m-b-xs">
-                        <label><strong>Filter by Menu Category</strong></label>
+                        <label><strong>Filter by Sub Category</strong></label>
                         <select class="form-control selectpicker" id="sub_category_id" data-live-search="true" name="sub_category_id" >
                             <option data-tokens="" value="" selected>All</option>
                             @foreach($sub_categories as $sub_category)
-                                <option data-tokens="{{$sub_category->name_en}}" value="{{$sub_category->id}}" @if($selected_sub_category == $sub_category->id) selected @endif > {{$sub_category->name_en}}</option>
+                                <option data-tokens="{{$sub_category->name}}" value="{{$sub_category->id}}" @if($selected_sub_category == $sub_category->id) selected @endif > {{$sub_category->name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-sm-2 m-b-xs">
+                        <label><strong>Filter by Sub Sub Category</strong></label>
+                        <select class="form-control selectpicker" id="sub_sub_category_id" data-live-search="true" name="sub_sub_category_id" >
+                            <option data-tokens="" value="" selected>All</option>
+                            @foreach($sub_sub_categories as $sub_sub_category)
+                                <option data-tokens="{{$sub_sub_category->name}}" value="{{$sub_sub_category->id}}" @if($selected_sub_sub_category == $sub_sub_category->id) selected @endif > {{$sub_sub_category->name}}</option>
                             @endforeach
                         </select>
                     </div>
@@ -101,23 +110,20 @@
             </div>
         </div>
         <div class="table-responsive">
-            <table id="table" class="table table-hover b-t b-light">
+            <table id="table" class="table b-t b-light">
                 <thead>
                 <tr>
                     <th>Order</th>
                     <th>SKU</th>
                     <th>Name</th>
-                    <th>Restaurant</th>
-                    <th>Menu Category</th>
-                    <th>Unit Type</th>
-                    <th>Unit Value</th>
+                    <th>Category</th>
+                    <th>Sub Category</th>
+                    <th>Sub Sub Category</th>
                     <th>Price</th>
-                    <th>Discounted Price</th>
-                    <th>Quantity</th>
                     <th>Description</th>
-                    <th>Image</th>
-                    <th>Share Link</th>
+                    <th>Images</th>
                     <th>Status</th>
+                    <th>Is Available ?</th>
                     <th>Expiry Date</th>
                     <th>Date Added</th>
                     <th></th>
@@ -125,91 +131,112 @@
                 </thead>
                 <tbody>
                 @foreach($items as $item)
-                    <tr >
-                        <td>#SHOP {{ $item->item_order }}</td>
+                    <tr class="@if($item->status == 'approved') success @elseif($item->status == 'pending') default @elseif($item->status == 'expired') warning @elseif($item->status == 'paid') success @endif" >
+                        <td>#POST {{ $item->item_order }}</td>
                         <td>{{ $item->code }}</td>
-                        <td>{{ ucwords($item->name_en) }}
-                            <br>{{ ucwords($item->name_ar) }}
-                        </td>
+                        <td>{{ ucwords($item->name_en) }}</td>
                         <td>
-                            @if($item->restaurant)
-                                {{ ucwords($item->restaurant->name_en) }}
-                                <br>{{ ucwords($item->restaurant->name_ar) }}
+                            @if($item->category)
+                                {{ ucwords($item->category->name) }}
                             @else
-                                Restaurant Not Assigned yet
+                                Category Not Assigned
                             @endif
                         </td>
                         <td>
                             @if($item->sub_category)
-                                {{ ucwords($item->sub_category->name_en) }}<br>{{ ucwords($item->sub_category->name_ar) }}
+                                {{ ucwords($item->sub_category->name) }}
                             @else
-                                Sub Category Not Assigned yet
+                                Sub Category Not Assigned
                             @endif
                         </td>
-                        <td>{{ ucwords($item->unit_type) }}</td>
-                        <td>{{ ucwords($item->unit_value) }}</td>
-                        <td>{{ $item->price_formatted }} </td>
-                        <td>{{ $item->discounted_price_formatted }}</td>
-                        <td>{{ $item->quantity }} Piece(s)</td>
                         <td>
-                            {!!  $item->description_en !!}<br>
-                            {!!  $item->description_ar !!}
+                            @if($item->sub_sub_category)
+                                {{ ucwords($item->sub_sub_category->name) }}
+                            @else
+                                Sub Category Not Assigned
+                            @endif
+                        </td>
+                        <td>{{ $item->price_formatted }} </td>
+                        <td>
+                            {!!  $item->description_en !!}
                         </td>
                         <td>
-                            @if($item->getMediaName() != null)
-                                <img src="{{$item->image}}" width="100px" data-toggle="modal" data-target="#myModal_{{$item->id}}"  style="cursor: pointer;"/>
-                                <div id="myModal_{{$item->id}}" class="modal fade" role="dialog">
+                            @if(count($item->images) > 0)
+                                <a title="Image 1" href="#">
+                                    <img class="thumbnail img-responsive" id="{{$item->id}}" src="{{ $item->images[0]->media_name }}" style="width: 100px">
+                                </a>
+                                <div class="hidden" id="img-repo">
+                                    @foreach($item->images as $i => $image)
+                                        <div class="item" id="{{$item->id}}">
+                                            <img class="thumbnail img-responsive" title="Image {{$i+1}}" src="{{ $image->media_name }}" style="width: 100%">
+                                        </div>
+                                    @endforeach
+                                </div>
+                                <div class="modal" id="modal-gallery" role="dialog">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                <button class="close" type="button" data-dismiss="modal">×</button>
+                                                <h3 class="modal-title"></h3>
                                             </div>
                                             <div class="modal-body">
-                                                <img src="{{$item->image}}" width="100%;">
+                                                <div id="modal-carousel" class="carousel">
+
+                                                    <div class="carousel-inner">
+                                                    </div>
+
+                                                    <a class="carousel-control left" href="#modal-carousel" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
+                                                    <a class="carousel-control right" href="#modal-carousel" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
+
+                                                </div>
                                             </div>
                                             <div class="modal-footer">
-                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                <button class="btn btn-default" data-dismiss="modal">Close</button>
                                             </div>
                                         </div>
-
                                     </div>
                                 </div>
                             @endif
                         </td>
                         <td>
-                            @if($item->share_link)
-                                <h3>
-                                <span class="label label-success">
-                                    <a target="_blank" href="{{$item->share_link}}"> <i aria-hidden="true" style="display: inline-block" class="fa fa-share-alt"></i> Share Link</a>
-                                </span>
-                                </h3>
-                            @endif
+                            <h4>{{ucwords($item->status)}}</h4>
                         </td>
                         <td>
                             @if($item->is_available)
-                                <h4><span class="label label-success">Available</span></h4>
+                                <h4><span class="label label-success">Online</span></h4>
                             @else
-                                <h4><span class="label label-warning">Not Available</span></h4>
+                                <h4><span class="label label-warning">Offline</span></h4>
                             @endif
                         </td>
 
-                        <td>@if($item->expiry_date){{ \Carbon\Carbon::createFromTimestamp($item->expiry_date)->format('Y-m-d H:i:s') }}@endif</td>
+                        <td>@if($item->expired_at){{ \Carbon\Carbon::createFromTimestamp($item->expired_at)->format('Y-m-d H:i:s') }}@endif</td>
                         <td>{{ \Carbon\Carbon::createFromTimestamp($item->created_at)->format('Y-m-d H:i:s') }}</td>
                         <td>
                             @if(in_array('publish',auth()->user()->role->hasAccess($section_name)))
-                            @if($item->is_available)
-                                <a href="{{ route('admin.items.publish', $item->id) }}" class="btn btn-md btn-warning">
-                                    Set As Not Available
-                                </a>
-                            @else
-                                <a href="{{ route('admin.items.publish', $item->id) }}" class="btn btn-md btn-success">
-                                    Set As Available
-                                </a>
-                            @endif
+                                @if($item->is_available)
+                                    <a href="{{ route('admin.items.publish', $item->id) }}" class="btn btn-md btn-warning">
+                                        UnPublish
+                                    </a>
+                                @else
+                                    <a href="{{ route('admin.items.publish', $item->id) }}" class="btn btn-md btn-success">
+                                        Publish
+                                    </a>
+                                @endif
+                                @if($item->status != 'pending')
+                                    @if($item->status != 'in_review')
+                                        <a href="{{ route('admin.items.approve', $item->id) }}" class="btn btn-md btn-primary">
+                                            Reject
+                                        </a>
+                                    @else
+                                        <a href="{{ route('admin.items.approve', $item->id) }}" class="btn btn-md btn-success">
+                                            Approve
+                                        </a>
+                                    @endif
+                                @endif
                             @endif
                             @if(in_array('edit',auth()->user()->role->hasAccess($section_name)))
-                                <a href="{{ route('admin.items.customizations.index',$item->id) }}" class="btn btn-xs btn-primary"><i class="fa fa-arrows-alt"> Manage Customizations</i></a>
-                                <a href="{{ route('admin.items.edit', $item->id) }}" class="btn btn-md btn-info"><i class="fa fa-edit"> Edit</i></a>
+{{--                                <a href="{{ route('admin.items.customizations.index',$item->id) }}" class="btn btn-xs btn-primary"><i class="fa fa-arrows-alt"> Manage Customizations</i></a>--}}
+{{--                                <a href="{{ route('admin.items.edit', $item->id) }}" class="btn btn-md btn-info"><i class="fa fa-edit"> Edit</i></a>--}}
                             @endif
                             @if(in_array('delete',auth()->user()->role->hasAccess($section_name)))
                             <form action="{{ secure_url('admin/items/'. $item->id) }}" method="POST" class="pull-left delete" style="margin-right: 3px">
@@ -231,6 +258,43 @@
 @endsection
 @section('scripts')
     @parent
+    <script>
+        $(document).ready(function() {
+
+            /* activate the carousel */
+            $("#modal-carousel").carousel({interval:false});
+
+            /* change modal title when slide changes */
+            $("#modal-carousel").on("slid.bs.carousel",       function () {
+                $(".modal-title")
+                    .html($(this)
+                        .find(".active img")
+                        .attr("title"));
+            });
+
+            /* when clicking a thumbnail */
+            $(".thumbnail").click(function(){
+                var content = $(".carousel-inner");
+                var title = $(".modal-title");
+
+                content.empty();
+                title.empty();
+
+                var id = this.id;
+                var repo = $("#img-repo .item");
+                var repoCopy = repo.filter("#" + id).clone();
+                var active = repoCopy.first();
+
+                active.addClass("active");
+                title.html(active.find("img").attr("title"));
+                content.append(repoCopy);
+
+                // show the modal
+                $("#modal-gallery").modal("show");
+            });
+
+        });
+    </script>
     <script>
         $(function() {
             var from_datetime = "{{$from}}";
@@ -272,7 +336,7 @@
                 "ordering": true,
                 "bAutoWidth": true,
                 "pagingType": "full_numbers",
-
+                order: [12,'desc'],
                 dom: 'Bfrtip',
                 buttons: [
                     'copy', 'csv', 'excel', 'print'
@@ -290,6 +354,7 @@
                 "ordering": true,
                 "bAutoWidth": true,
                 "pagingType": "full_numbers",
+                order: [12,'desc'],
             });
         } );
         @endif

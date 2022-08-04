@@ -44,7 +44,7 @@ class Country extends Model
 
     public function getFlagAttribute($value)
     {
-        return secure_asset('vendor/webpatser/laravel-countries/src/flags/'.$value);
+        return secure_asset('public/uploads/images/flags/'.$value);
     }
     /**
      * Get the countries from the JSON file, if it hasn't already been loaded.

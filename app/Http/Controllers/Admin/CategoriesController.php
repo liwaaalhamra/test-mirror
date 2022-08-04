@@ -46,7 +46,7 @@ class CategoriesController extends Controller
      */
     public function index()
     {
-        $categories = CollectionCategory::orderby('item_order','asc')
+        $categories = Category::orderby('item_order','asc')
             ->get();
 
         return view('pages.categories.index', compact('categories'))
@@ -88,7 +88,7 @@ class CategoriesController extends Controller
     }
 
     public function publish($id){
-        $item = CollectionCategory::find($id);
+        $item = Category::find($id);
         if($item){
             $item->is_published = !$item->is_published;
             $item->save();
@@ -134,18 +134,50 @@ class CategoriesController extends Controller
                 list($width, $height, $type, $attr) = getimagesize($destinationDir.'/'.$fileName);
             }
         }
-        $is_supplier = false;
-        if(isset($request->is_supplier) && $request->is_supplier == 'on'){
-            $is_supplier = true;
+        $width1 = null;
+        $height1 = null;
+        $fileName1 = null;
+        // check if a file exist and is valid.
+        if($request->hasFile('image-file1')) {
+            if($request->file('image-file1')->isValid()) {
+                $file = $request->file('image-file1');
+                try{
+                    $data = file_get_contents($file->getPathname());
+                    $base64 = base64_encode($data);
+                    $bin = base64_decode($base64);
+                    $im = imageCreateFromString($bin);
+                }catch (\Exception $ex){
+                    return redirect()->back()
+                        ->with('error_msg', 'Document Corrupted');
+                }
+                $validator = Validator::make($request->all(), [
+                    'image-file1' => 'mimetypes:image/jpeg,image/png',
+                ]);
+                if($validator->fails()){
+                    return redirect()->back()
+                        ->with('warning', 'Invalid Media Type');
+                }
+                $fileName1 = str_slug(str_random(20)) . '.' . $file->getClientOriginalExtension();
+                $file->move($destinationDir, $fileName1);
+                list($width1, $height1, $type, $attr) = getimagesize($destinationDir.'/'.$fileName1);
+            }
         }
-        $max_order = DB::table('collection_categories')->max('item_order');
+        $type = 'products';
+        if(isset($request->type) && $request->type == 'on'){
+            $type = 'services';
+        }
+        $max_order = DB::table('categories')->max('item_order');
         $order = $max_order + 1;
-        CollectionCategory::create([
+        Category::create([
             'item_order' => $order,
             'image' => $fileName,
+            'selected_image' => $fileName1,
+            'selected_width' => $width1,
+            'selected_height' => $height1,
             'width' => $width,
             'height' => $height,
-            'is_supplier' => $is_supplier,
+            'type' => $type,
+            'is_published' => 1,
             'name_en' => empty($request->name_en) ? null : trim($request->name_en),
             'name_ar' => empty($request->name_ar) ? null : trim($request->name_ar),
         ]);
@@ -154,16 +186,27 @@ class CategoriesController extends Controller
             ->with('success', 'Successfully create a new Category');
     }
 
-    public function delete_single_image($id)
+    public function delete_single_image($id,$type)
     {
-        $category = CollectionCategory::findOrFail($id);
-        if($category->image != null) {
-            $filePath = public_path() . DIRECTORY_SEPARATOR . 'uploads/images'  . DIRECTORY_SEPARATOR . 'categories' . DIRECTORY_SEPARATOR . $category->getMediaName();
-            File::delete($filePath);
+        $category = Category::findOrFail($id);
+        if($type == 'image'){
+            if($category->image != null) {
+                $filePath = public_path() . DIRECTORY_SEPARATOR . 'uploads/images'  . DIRECTORY_SEPARATOR . 'categories' . DIRECTORY_SEPARATOR . $category->getMediaName();
+                File::delete($filePath);
+            }
+            $category->image = null;
+            $category->width = null;
+            $category->height = null;
+        }else{
+            if($category->selected_image != null) {
+                $filePath = public_path() . DIRECTORY_SEPARATOR . 'uploads/images'  . DIRECTORY_SEPARATOR . 'categories' . DIRECTORY_SEPARATOR . $category->getSelectedMediaName();
+                File::delete($filePath);
+            }
+            $category->selected_image = null;
+            $category->selected_width = null;
+            $category->selected_height = null;
         }
-        $category->image = null;
-        $category->width = null;
-        $category->height = null;
+
         $category->save();
 
         return redirect()->back()->with('success', 'Successfully deleted the image');
@@ -188,7 +231,7 @@ class CategoriesController extends Controller
      */
     public function edit($id)
     {
-        $category = CollectionCategory::findOrFail($id);
+        $category = Category::findOrFail($id);
 
         return view('pages.categories.edit', compact('category'))
             ->with('content_header', 'Update Category');
@@ -203,7 +246,7 @@ class CategoriesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $category = CollectionCategory::findOrFail($id);
+        $category = Category::findOrFail($id);
 
         // public/files/{random_file_name}
         $destinationDir = public_path() . DIRECTORY_SEPARATOR . 'uploads/images'  . DIRECTORY_SEPARATOR . 'categories';
@@ -244,17 +287,59 @@ class CategoriesController extends Controller
                 }
             }
         }
-        $is_supplier = false;
-        if(isset($request->is_supplier) && $request->is_supplier == 'on'){
-            $is_supplier = true;
+
+        $fileName1 = null;
+        $width1 = null;
+        $height1 = null;
+        if($category->getSelectedMediaName() != null) {
+            $fileName1 = $category->getSelectedMediaName();
+            $width1 = $category->selected_width;
+            $height1 = $category->selected_height;
+        }
+        // check if a file exist and is valid.
+        if($request->hasFile('image1')) {
+            if($request->file('image1')->isValid()) {
+                $file = $request->file('image1');
+                try{
+                    $data = file_get_contents($file->getPathname());
+                    $base64 = base64_encode($data);
+                    $bin = base64_decode($base64);
+                    $im = imageCreateFromString($bin);
+                }catch (\Exception $ex){
+                    return redirect()->back()
+                        ->with('error_msg', 'Document Corrupted');
+                }
+                $validator = Validator::make($request->all(), [
+                    'image1' => 'mimetypes:image/jpeg,image/png',
+                ]);
+                if($validator->fails()){
+                    return redirect()->back()
+                        ->with('warning', 'Invalid Media Type');
+                }
+                $fileName1 = str_slug(str_random(20)) . '.' . $file->getClientOriginalExtension();
+                $file->move($destinationDir, $fileName1);
+                list($width1, $height1, $type, $attr) = getimagesize($destinationDir.'/'.$fileName1);
+                if($category->getSelectedMediaName() != null) {
+                    $filePath = public_path() . DIRECTORY_SEPARATOR . 'uploads/images'  . DIRECTORY_SEPARATOR . 'categories' . DIRECTORY_SEPARATOR . $category->getSelectedMediaName();
+                    File::delete($filePath);
+                }
+            }
+        }
+
+        $type = 'products';
+        if(isset($request->type) && $request->type == 'on'){
+            $type = 'services';
         }
         $category->update([
             'image' => $fileName,
             'width' => $width,
             'height' => $height,
-            'is_supplier' => $is_supplier,
+            'selected_image' => $fileName1,
+            'selected_width' => $width1,
+            'selected_height' => $height1,
+            'type' => $type,
             'name_en' => empty($request->name_en) ? null : trim($request->name_en),
-            'name_ar' => empty($request->name_ar) ? null : trim($request->name_ar),
+//            'name_ar' => empty($request->name_ar) ? null : trim($request->name_ar),
             'item_order' => empty($request->item_order) ? 1 : trim($request->item_order),
         ]);
         return redirect()->route('admin.categories.index')
@@ -278,6 +363,10 @@ class CategoriesController extends Controller
         }
         if($category->getMediaName() != null) {
             $filePath = public_path() . DIRECTORY_SEPARATOR . 'uploads/images'  . DIRECTORY_SEPARATOR . 'categories' . DIRECTORY_SEPARATOR . $category->getMediaName();
+            File::delete($filePath);
+        }
+        if($category->getSelectedMediaName() != null) {
+            $filePath = public_path() . DIRECTORY_SEPARATOR . 'uploads/images'  . DIRECTORY_SEPARATOR . 'categories' . DIRECTORY_SEPARATOR . $category->getSelectedMediaName();
             File::delete($filePath);
         }
         $category->delete();

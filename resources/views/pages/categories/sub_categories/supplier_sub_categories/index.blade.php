@@ -15,7 +15,7 @@
     </style>
     <div class="panel panel-default">
         <div class="panel-heading">
-            {{$content_header}} of <b>{{$category->name_en}}</b>
+            Sub 2 of <b>{{$category->name_en}}</b>
         </div>
         <div class="row wrapper">
             <div class="col-sm-5 m-b-xs">
@@ -24,7 +24,7 @@
                 </a>
                 @if(in_array('add',auth()->user()->role->hasAccess($section_name)))
                     <a href="{{ route('admin.sub_categories.supplier_sub_categories.create', [$category->id]) }}" class="btn m-b-xs btn-sm btn-default btn-addon">
-                        <i class="fa fa-plus"></i>Add {{$content_header}}
+                        <i class="fa fa-plus"></i>Add Sub 2
                     </a>
                 @endif
             </div>
@@ -39,9 +39,9 @@
                 <tr>
                     <th>Order</th>
                     <th>Name En</th>
-                    <th>Name Ar</th>
-                    <th>Description En</th>
-                    <th>Description Ar</th>
+{{--                    <th>Name Ar</th>--}}
+{{--                    <th>Description En</th>--}}
+{{--                    <th>Description Ar</th>--}}
                     <th>Status</th>
                     <th>Created At</th>
                     <th></th>
@@ -52,9 +52,9 @@
                     <tr>
                         <td>#{{$item->item_order}}</td>
                         <td>{{$item->name_en}}</td>
-                        <td>{{$item->name_ar}}</td>
-                        <td>{!! $item->description_en !!}</td>
-                        <td>{!! $item->description_ar !!}</td>
+{{--                        <td>{{$item->name_ar}}</td>--}}
+{{--                        <td>{!! $item->description_en !!}</td>--}}
+{{--                        <td>{!! $item->description_ar !!}</td>--}}
                         <td>
                             @if($item->is_published)
                                 <h4><span class="label label-success">Online</span></h4>
@@ -76,18 +76,18 @@
                                 @endif
                             @endif
                             @if(in_array('edit',auth()->user()->role->hasAccess($section_name)))
-                                <a href="{{ route('admin.sub_categories.supplier_sub_categories.edit', [$category->id,$item->id]) }}" class="btn btn-xs btn-info"><i class="fa fa-edit"> Edit</i></a>
+{{--                                <a href="{{ route('admin.sub_categories.supplier_sub_categories.edit', [$category->id,$item->id]) }}" class="btn btn-xs btn-info"><i class="fa fa-edit"> Edit</i></a>--}}
                             @endif
 
                             @if(in_array('delete',auth()->user()->role->hasAccess($section_name)))
-                            <form action="{{ secure_url('admin/sub_categories/'.$category->id.'/supplier_sub_categories/'. $item->id) }}" method="POST" class="pull-left delete" style="margin-right: 3px">
-                                {{ csrf_field() }}
-                                {{ method_field('DELETE') }}
+{{--                            <form action="{{ secure_url('admin/sub_categories/'.$category->id.'/supplier_sub_categories/'. $item->id) }}" method="POST" class="pull-left delete" style="margin-right: 3px">--}}
+{{--                                {{ csrf_field() }}--}}
+{{--                                {{ method_field('DELETE') }}--}}
 
-                                <button type="submit" class="btn btn-xs btn-danger">
-                                    <i class="fa fa-trash"></i> Delete
-                                </button>
-                            </form>
+{{--                                <button type="submit" class="btn btn-xs btn-danger">--}}
+{{--                                    <i class="fa fa-trash"></i> Delete--}}
+{{--                                </button>--}}
+{{--                            </form>--}}
                             @endif
                         </td>
                     </tr>

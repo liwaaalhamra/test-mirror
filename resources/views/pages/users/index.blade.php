@@ -74,7 +74,7 @@
                     <th>DOB</th>
                     <th>Gender</th>
                     <th>Email</th>
-                    <th>Number of Orders</th>
+{{--                    <th>Number of Orders</th>--}}
                     {{--<th>Registration Number</th>--}}
                     {{--<th>Company Name</th>--}}
                     {{--<th>Cost Center</th>--}}
@@ -97,34 +97,35 @@
                         <td>{{ ucwords($user->last_name) }}</td>
 {{--                        <td>@if($user->country){{ ucwords($user->country->name) }}@endif</td>--}}
 {{--                        <td>@if($user->blood_type != null){{$user->blood_type}}@else n/a @endif</td>--}}
-                        <td>
-                            @if($user->access_type == 'gold')
-                                <h3><i class="fas fa-user-shield"></i></h3>
-                            @elseif($user->access_type == 'verified')
-                            @elseif($user->access_type == 'verified_facebook')
-                                <h3><i class="fab fa-facebook"></i><i class="fa fa-user-check"></i></h3>
-                            @elseif($user->access_type == 'verified_instagram')
-                                <h3><i class="fab fa-instagram"></i><i class="fa fa-user-check"></i></h3>
-                            @elseif($user->access_type == 'verified_snapchat')
-                                <h3><i class="fab fa-snapchat"></i><i class="fa fa-user-check"></i></h3>
-                            @elseif($user->access_type == 'verified_tiktok')
-                                <h3><i class="fab fa-tiktok"></i><i class="fa fa-user-check"></i></h3>
-                            @elseif($user->access_type == 'verified_twitter')
-                                <h3><i class="fab fa-twitter"></i><i class="fa fa-user-check"></i></h3>
-                            @elseif($user->access_type == 'verified_youtube')
-                                <h3><i class="fab fa-youtube"></i><i class="fa fa-user-check"></i></h3>
-                            @else
-                                <h3><i class="fa fa-user"></i></h3>
-                            @endif
-                        </td>
+                        <td>{{$user->access_type}}</td>
+{{--                        <td>--}}
+{{--                            @if($user->access_type == 'gold')--}}
+{{--                                <h3><i class="fas fa-user-shield"></i></h3>--}}
+{{--                            @elseif($user->access_type == 'verified')--}}
+{{--                            @elseif($user->access_type == 'verified_facebook')--}}
+{{--                                <h3><i class="fab fa-facebook"></i><i class="fa fa-user-check"></i></h3>--}}
+{{--                            @elseif($user->access_type == 'verified_instagram')--}}
+{{--                                <h3><i class="fab fa-instagram"></i><i class="fa fa-user-check"></i></h3>--}}
+{{--                            @elseif($user->access_type == 'verified_snapchat')--}}
+{{--                                <h3><i class="fab fa-snapchat"></i><i class="fa fa-user-check"></i></h3>--}}
+{{--                            @elseif($user->access_type == 'verified_tiktok')--}}
+{{--                                <h3><i class="fab fa-tiktok"></i><i class="fa fa-user-check"></i></h3>--}}
+{{--                            @elseif($user->access_type == 'verified_twitter')--}}
+{{--                                <h3><i class="fab fa-twitter"></i><i class="fa fa-user-check"></i></h3>--}}
+{{--                            @elseif($user->access_type == 'verified_youtube')--}}
+{{--                                <h3><i class="fab fa-youtube"></i><i class="fa fa-user-check"></i></h3>--}}
+{{--                            @else--}}
+{{--                                <h3><i class="fa fa-user"></i></h3>--}}
+{{--                            @endif--}}
+{{--                        </td>--}}
                         <td>@if($user->primary_phone != null){{$user->primary_phone}}@else n/a @endif</td>
 {{--                        <td>@if($user->total_points != null){{$user->total_points}} Pts @else 0 Pts @endif</td>--}}
                         <td>@if($user->dob != null){{$user->dob}}@else n/a @endif</td>
                         <td>@if($user->gender != null){{$user->gender}}@else n/a @endif</td>
                         <td>@if($user->email != null){{$user->email}}@else n/a @endif</td>
-                        <td>
-                            {{$user->orders()->count()}}
-                        </td>
+{{--                        <td>--}}
+{{--                            {{$user->orders()->count()}}--}}
+{{--                        </td>--}}
 {{--                        <td>@if($user->registration_number != null){{$user->registration_number}}@else n/a @endif</td>--}}
 {{--                        <td>@if($user->company_name != null){{$user->company_name}}@else n/a @endif</td>--}}
                         {{--<td>@if($user->cost_center != null){{$user->cost_center}}@else n/a @endif</td>--}}
@@ -173,8 +174,8 @@
                             @endif
                             @if(in_array('edit',auth()->user()->role->hasAccess($section_name)))
                                 <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-xs btn-info"><i class="fa fa-edit"> Edit</i></a>
+                                <a href="{{ route('admin.users.reset', $user->id) }}" class="btn btn-xs btn-primary"><i class="fa fa-unlock"> Reset password</i></a>
                             @endif
-{{--                            <a href="{{ route('admin.users.reset', $user->id) }}" class="btn btn-xs btn-primary"><i class="fa fa-unlock"> Reset password</i></a>--}}
                             {{--<form action="{{ secure_url('admin/users/'. $user->id) }}" method="POST" class="pull-left delete" style="margin-right: 3px">--}}
                                 {{--{{ csrf_field() }}--}}
                                 {{--{{ method_field('DELETE') }}--}}
@@ -233,7 +234,7 @@
                 "ordering": true,
                 "bAutoWidth": true,
                 "pagingType": "full_numbers",
-                order:[10,'desc'],
+                order:[9,'desc'],
                 dom: 'Bfrtip',
                 buttons: [
                     'copy', 'csv', 'excel', 'print'
@@ -251,7 +252,7 @@
                 "ordering": true,
                 "bAutoWidth": true,
                 "pagingType": "full_numbers",
-                order:[10,'desc'],
+                order:[9,'desc'],
             });
         } );
         @endif

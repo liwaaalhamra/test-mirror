@@ -45,7 +45,7 @@ class DashboardController extends Controller
      */
     public function index(Request $request) /*: View*/
     {
-        $stats = Dashboard::orderby('meta_order','asc')->get();
+        $stats = Dashboard::whereIsVisible(1)->orderby('meta_order','asc')->get();
 
         return view('pages.dashboard.index', compact('stats'))
             ->with('section_name', 'dashboard')

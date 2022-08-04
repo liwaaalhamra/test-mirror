@@ -3,11 +3,14 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Api\CheckoutLog;
+use App\Models\Api\Item;
 use App\Models\Api\Order;
 use App\Models\Api\Payment;
 use App\Models\Api\PaymentLog;
 
+use App\Models\Api\Setting;
 use App\Models\Api\Users;
+use App\Traits\HITrait;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use App\Http\Controllers\Controller;
@@ -18,12 +21,13 @@ use App\Http\Controllers\Controller;
  */
 class PaymentController extends Controller
 {
+    use HITrait;
     /**
      * Show the payment page.
      *
      * @return View
      */
-    public function show(Request $request,$user_id = null,$order_id = null) /*: View*/
+    public function areeba_show(Request $request,$user_id = null,$order_id = null) /*: View*/
     {
 
         if($user_id != null && $order_id != null){
@@ -112,6 +116,75 @@ class PaymentController extends Controller
         }else{
             abort(401);
         }
+    }
+
+    public function show(Request $request) /*: View*/
+    {
+        //below for testing
+//        $request->headers->set('token', [ 0 => 'Oo0TmfrMJURjRpTHxcvbSOB4awf4SzV3NgQwQIucVT2iozKux3wN8O5GZysWBmsO']);
+//        $request->headers->set('post-id', [ 1 => '1']);
+        $user = $this->validate_user($request);
+        $post_id = $request->header("post-id");
+        $post = Item::whereId($post_id)->first();
+        if(!$post){
+            abort(401);
+        }
+        $post_id = $request->header("post-id");
+        $amount = 1000;
+        if($setting = Setting::whereMetaName('post_cost')->first()){
+            $amount = $setting->meta_value * 100;
+        }
+
+        $data = [
+            'user_id' => $user->id,
+            'amount' => $amount,
+            'post_id' => $post_id,
+//            'is_new' => $user->customer_id == null ? true :  false,
+            'is_new' => true,
+            'is_test' =>  false
+        ];
+        $order = Order::create([
+            'user_id' => $user->id,
+            'status' => 'pending',
+            'payment_initiate_request' => json_encode($data)
+        ]);
+        $data['order_id'] = $order->id;
+
+        return view('pages.payment.stripe', compact('data'));
+    }
+
+    public function show_test(Request $request) /*: View*/
+    {
+        //below for testing
+        $request->headers->set('token', [ 0 => 'oyoqOPfmG0iTCrHbUXkVLppGyQ4QwzG5WpI2FpglPbYv92j2zu6VfFcm6Uz5dS9n']);
+        $request->headers->set('post-id', [ 1 => '22']);
+        $user = $this->validate_user($request);
+        $post_id = $request->header("post-id");
+        $post = Item::whereId($post_id)->first();
+        if(!$post){
+            abort(401);
+        }
+        $amount = 1000;
+        if($setting = Setting::whereMetaName('post_cost')->first()){
+            $amount = $setting->meta_value * 100;
+        }
+
+        $data = [
+            'user_id' => $user->id,
+            'amount' => $amount,
+            'post_id' => $post_id,
+//            'is_new' => $user->customer_id == null ? true :  false,
+            'is_new' => true,
+            'is_test' =>  true
+        ];
+        $order = Order::create([
+            'user_id' => $user->id,
+            'status' => 'pending',
+            'payment_initiate_request' => json_encode($data)
+        ]);
+        $data['order_id'] = $order->id;
+
+        return view('pages.payment.stripe', compact('data'));
     }
 
 }

@@ -5,17 +5,30 @@ namespace App\Http\Controllers\Api;
 
 use App;
 use App\Models\Api\CheckoutLog;
+use App\Models\Api\Item;
 use App\Models\Api\Order;
 use App\Models\Api\PackageItem;
 use App\Models\Api\Setting;
+use App\Models\Api\UserCard;
 use App\Models\Api\Users;
 use Carbon\Carbon;
+use DB;
 use Exception;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Traits\HITrait;
+use Stripe\Charge;
+use Stripe\Customer;
+use Stripe\Error\ApiConnection;
+use Stripe\Error\Authentication;
+use Stripe\Error\Base;
+use Stripe\Error\Card;
+use Stripe\Error\InvalidRequest;
+use Stripe\Error\RateLimit;
+use Stripe\Stripe;
+use Stripe\Token;
 
 class PaymentController extends Controller
 {
@@ -1025,5 +1038,191 @@ class PaymentController extends Controller
             }
         }
         return parent::return_json(['status' => 'success']);
+    }
+
+    public function stripe_payment_response(Request $request) {
+        try{
+            $is_test = $request->type == '1' ? true : false;
+            if($is_test){
+                Stripe::setApiKey(env('STRIPE_TEST_API_KEY'));
+            }else{
+                Stripe::setApiKey(env('STRIPE_API_KEY'));
+            }
+            $user_id = $request->user_id;
+            $order_id = $request->order_id;
+            $post_id = $request->post_id;
+            $user = Users::whereId($user_id)->first();
+            if(!$user){
+                $result['message'] = 'Unable to fetch user';
+                $result['result'] = 'failure';
+                parent::redirect(secure_url('/api/check_result'),$result);
+            }
+            $order = Order::whereId($order_id)->first();
+            if(!$user){
+                $result['message'] = 'Unable to fetch order';
+                $result['result'] = 'failure';
+                parent::redirect(secure_url('/api/check_result'),$result);
+            }
+            if($order->user_id != $user_id){
+                $result['message'] = 'order and user does not match';
+                $result['result'] = 'failure';
+                parent::redirect(secure_url('/api/check_result'),$result);
+            }
+            if($order->status != 'pending'){
+                $result['message'] = 'Invalid order status';
+                $result['result'] = 'failure';
+                parent::redirect(secure_url('/api/check_result'),$result);
+            }
+            $post = Item::whereId($post_id)->first();
+            if(!$post){
+                $result['message'] = 'Unable to fetch post';
+                $result['result'] = 'failure';
+                parent::redirect(secure_url('/api/check_result'),$result);
+            }
+            if($post->user_id != $user_id){
+                $result['message'] = 'post and user does not match';
+                $result['result'] = 'failure';
+                parent::redirect(secure_url('/api/check_result'),$result);
+            }
+
+            /**
+             * create customer if new user
+             */
+            if($user->customer_id != null){
+                /**
+                 * need to update the card
+                 */
+                $customer = Customer::retrieve($user->customer_id);
+
+                if($request->stripeToken){
+                    $token_card = Token::retrieve($request->stripeToken);
+
+                    $customer = Customer::update($user->customer_id, [
+                        'source' => $token_card->id,
+                    ]);
+                }
+                $token_card = Customer::retrieveSource($user->customer_id, $customer->default_source);
+
+                $customer = json_decode(json_encode($customer),True);
+                $token_card = json_decode(json_encode($token_card),True);
+                $token_card['card'] = $token_card;
+            }else{
+
+                $stripe_token = $request->stripeToken;
+
+                $token_card = Token::retrieve($stripe_token);
+//                $token = Token::create([
+//                    "card" => array(
+//                        "number" => $request->card_number,
+//                        "exp_month" => $request->month,
+//                        "exp_year" => $request->year,
+//                        "cvc" => $request->cvv
+//                    )
+//                ]);
+                $token_card = json_decode(json_encode($token_card),True);
+                $customer = Customer::create([
+                    'description' => 'Customer for '.$user->email,
+                    'source' => $token_card['id']
+                ]);
+                $customer = json_decode(json_encode($customer),True);
+                $user->customer_id = $customer['id'];
+                $user->save();
+            }
+            if($user_card = UserCard::whereUserId($user->id)->first()){
+                $user_card->card_token = $token_card['id'];
+                $user_card->card = $token_card['card']['id'];
+                $user_card->brand = $token_card['card']['brand'];
+                $user_card->exp_month = $token_card['card']['exp_month'];
+                $user_card->exp_year = $token_card['card']['exp_year'];
+                $user_card->last4 = $token_card['card']['last4'];
+                $user_card->funding = $token_card['card']['funding'];
+                $user_card->country = $token_card['card']['country'];
+                $user_card->cvc_check = $token_card['card']['cvc_check'];
+                $user_card->finger_print = $token_card['card']['fingerprint'];
+                $user_card->save();
+            }else{
+                $user_card = UserCard::create([
+                    'user_id' => $user->id,
+                    'card' => $token_card['card']['id'],
+                    'card_token' => $token_card['id'],
+                    'brand' => $token_card['card']['brand'],
+                    'exp_month' => $token_card['card']['exp_month'],
+                    'exp_year' => $token_card['card']['exp_year'],
+                    'last4' => $token_card['card']['last4'],
+                    'funding' => $token_card['card']['funding'],
+                    'country' => $token_card['card']['country'],
+                    'cvc_check' => $token_card['card']['cvc_check'],
+                    'finger_print' => $token_card['card']['fingerprint'],
+
+                ]);
+            }
+            $amount = 1000;
+            if($setting = Setting::whereMetaName('post_cost')->first()){
+                $amount = $setting->meta_value * 100;
+            }
+            $response = Charge::create([
+                "amount" => $amount,
+                "currency" => strtolower(env('APP_CURRENCY')),
+                "source" => $customer['default_source'],
+                "customer" => $customer['id'],
+                "description" => $post->status == 'expired' ? "Renew for ".$user->email." #".$post_id." Order#".$order_id : "Charge for ".$user->email." #".$post_id." Order#".$order_id
+            ]);
+            $order->status = $response['status'];
+            $order->total_price = $response['amount'];
+            $order->payment_return_request = json_encode($request->all());
+            $order->payment_return_response = json_encode($response);
+            $order->save();
+            $response = json_decode(json_encode($response),True);
+            if($response['status'] == 'succeeded'){
+                $post->status = "in_review";
+                $post->save();
+                $result['message'] = 'Thank you for bartering with us. Your post will be reviewed within 24 hours. You will be updated once it is live';
+                $result['result'] = 'success';
+                parent::redirect(secure_url('/api/check_result'),$result);
+
+            }else{
+                $result['message'] = 'Payment Failure';
+                $result['result'] = 'failure';
+                parent::redirect(secure_url('/api/check_result'),$result);
+            }
+        }catch(Card $e) {
+            // Since it's a decline, \Stripe\Error\Card will be caught
+            $body = $e->getJsonBody();
+            $err  = $body['error'];
+            $result['message'] = $err['message'];
+            $result['result'] = 'failure';
+            parent::redirect(secure_url('/api/check_result'),$result);
+        } catch (RateLimit $e) {
+            $result['message'] = 'Too many requests made to the API too quickly';
+            $result['result'] = 'failure';
+            parent::redirect(secure_url('/api/check_result'),$result);
+        } catch (InvalidRequest $e) {
+            $result['message'] = 'Invalid parameters were supplied to Stripe API';
+            $result['result'] = 'failure';
+            parent::redirect(secure_url('/api/check_result'),$result);
+        } catch (Authentication $e) {
+            $result['message'] = 'Authentication with Stripe API failed';
+            $result['result'] = 'failure';
+            parent::redirect(secure_url('/api/check_result'),$result);
+            // (maybe you changed API keys recently)
+        } catch (ApiConnection $e) {
+            $result['message'] = 'Network communication with Stripe failed';
+            $result['result'] = 'failure';
+            parent::redirect(secure_url('/api/check_result'),$result);
+        } catch (Base $e) {
+            $result['message'] = 'Base Error';
+            $result['result'] = 'failure';
+            parent::redirect(secure_url('/api/check_result'),$result);
+            // Display a very generic error to the user, and maybe send
+            // yourself an email
+        } catch (Exception $e) {
+            $result['message'] = 'Error!';
+            $result['result'] = 'failure';
+            parent::redirect(secure_url('/api/check_result'),$result);
+            // Something else happened, completely unrelated to Stripe
+        }
+        $result['message'] = "User does not exist";
+        $result['result'] = 'failure';
+        parent::redirect(secure_url('/api/check_result'),$result);
     }
 }

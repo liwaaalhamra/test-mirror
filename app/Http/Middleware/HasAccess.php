@@ -162,7 +162,7 @@ class HasAccess
                                 if(in_array($section_name, ['restaurants','suppliers'])){
                                     $accessible_routes[] = 'admin.'.$section_name.'.clone';
                                 }
-                                if(in_array($section_name, ['cms_users','restaurants','suppliers'])){
+                                if(in_array($section_name, ['cms_users','restaurants','suppliers','users'])){
                                     $accessible_routes[] = 'admin.'.$section_name.'.reset';
                                     $accessible_routes[] = 'admin.'.$section_name.'.reset_password';
                                 }
@@ -192,6 +192,9 @@ class HasAccess
                                 }
                                 if($section_name == 'users'){
                                     $accessible_routes[] = 'admin.'.$section_name.'.block';
+                                }
+                                if($section_name == 'items'){
+                                    $accessible_routes[] = 'admin.'.$section_name.'.approve';
                                 }
                                 if(in_array($section_name, ['banners','offers','news'])){
                                     $accessible_routes[] = 'admin.'.$section_name.'.public';

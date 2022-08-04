@@ -24,7 +24,8 @@ class ConversationMessage extends Model
     protected $guarded = [];
     protected $hidden = ['conversation_id','updated_at','sender_id','receiver_id'];
     protected $casts = [
-        'is_my_message' => 'boolean'
+        'is_my_message' => 'boolean',
+        'is_read' => 'boolean',
     ];
     public function getCreatedAtAttribute($value)
     {

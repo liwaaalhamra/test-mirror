@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Api\Category;
 use App\Models\Api\Inbox;
 use App\Models\Api\Restaurant;
 use App\Models\Api\Notification;
@@ -39,9 +40,9 @@ class NotificationController extends Controller
     {
         $users = Users::join('user_push','users_id','=','users.id')->get();
 
-        $products = Restaurant::orderBy('id','desc')->get();
-        $suppliers = SupplierFoodGroup::orderBy('id','desc')->get();
-        return view('pages.notification.push',compact('users','products','suppliers'))
+        $products = Category::orderBy('id','desc')->get();
+//        $suppliers = SupplierFoodGroup::orderBy('id','desc')->get();
+        return view('pages.notification.push',compact('users','products'))
             ->with('section_name', 'notification')
             ->with('content_header', 'Notification: Push');
     }
@@ -56,7 +57,7 @@ class NotificationController extends Controller
          * Get All Player IDs
          */
         $users = Users::join('user_push','users_id','=','users.id')
-            ->wherein('users.id',$request->users)
+            ->wherein('user_push.id',$request->users)
             ->select('user_push.users_id','user_push.player_id')
             ->distinct()
             ->get();
@@ -201,7 +202,7 @@ class NotificationController extends Controller
                     }
                 }
             }
-            return redirect()->route('admin.notification.push')
+            return redirect()->route('admin.notification.index')
                 ->with('success', $notification_message);
         }else{
             return redirect()->route('admin.notification.index')

@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\Api;
 
 
+use App\Models\Api\Barter;
 use App\Models\Api\Category;
 use App\Models\Api\CustomField;
 use App\Models\Api\CustomFieldList;
 use App\Models\Api\Inbox;
 use App\Models\Api\Item;
 use App\Models\Api\ItemCustomField;
+use App\Models\Api\Location;
 use App\Models\Api\Restaurant;
 use App\Models\Api\RestaurantEventType;
 use App\Models\Api\ReviewTag;
@@ -53,8 +55,16 @@ class ItemsController extends Controller
         return response()->json($limits);
     }
 
-    public function lists($type){
-        $data = CustomFieldList::whereFieldName($type)->get();
+    public function lists($type,$parent_id = null){
+        $data = CustomFieldList::when($parent_id, function ($query) use ($parent_id) {
+                return $query->whereParentId($parent_id);
+        })->whereFieldName($type)->get();
+        return response()->json($data);
+    }
+
+    public function locations(Request $request){
+        $country_id = isset($request->country_id) && !empty($request->country_id) ? $request->country_id : 784;
+        $data = Location::without('country')->whereCountryId($country_id)->orderByRaw("LOWER(name_en) asc")->get();
         return response()->json($data);
     }
 
@@ -110,7 +120,7 @@ class ItemsController extends Controller
     }
 
     public function category_subs(Request $request) {
-        $query = SubCategory::whereIsPublished(1)->orderBy('item_order','asc');
+        $query = SubCategory::whereIsPublished(1)->orderByRaw("LOWER(name_en) asc");
         if(Input::has('category_id')){
             $category_id = Input::get('category_id');
             $query->where(function($query) use ($category_id){
@@ -125,6 +135,9 @@ class ItemsController extends Controller
 
     public function home_top_categories(Request $request) {
         $user = null;
+        if($request->header('token')){
+            $user = $this->validate_user($request);
+        }
         $items_viewed = [];
         $latitude = isset($request->latitude) ? $request->latitude : null;
         $longitude = isset($request->longitude) ? $request->longitude : null;
@@ -137,15 +150,21 @@ class ItemsController extends Controller
         $new_arrival_items = [];
         $latest_services_items = [];
         $nearby_items = [];
+        $matches = [];
         if($latitude && $longitude){
             $query = Item::whereType('offer')->whereIsAvailable(1)->orderbyRaw("(6371 * 2 * ASIN(SQRT( POWER(SIN(( $latitude - latitude) *  pi()/180 / 2), 2) +COS( $latitude * pi()/180) * COS(latitude * pi()/180) * POWER(SIN(( $longitude - longitude) * pi()/180 / 2), 2) ))) asc");
             $currency = env('APP_CURRENCY');
-            $nearby_items = $query->take(10)->get()->map(function ($value, $key) use ($currency) {
+            $nearby_items = $query->take(10)->get()->map(function ($value, $key) use ($currency,$user) {
+                $value->is_favorite = false;
+                if($user){
+                    if(UserFavorite::whereMetaName('items')->whereMetaId($value->id)->whereUserId($user->id)->first()){
+                        $value->is_favorite = true;
+                    }
+                }
                 unset($value->quantity);
+                $value->post_type = $value->category->type;
+                unset($value->category);
                 $value->currency = $currency;
-                $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
-                $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
-                $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
                 return $value;
             })->values();
         }
@@ -154,23 +173,17 @@ class ItemsController extends Controller
 
         $query = Item::wherein('id',$items_viewed)->whereType('offer')->whereIsAvailable(1)->orderby('created_at','desc');
         $currency = env('APP_CURRENCY');
-        $recently_viewed_items = $query->take(10)->get()->map(function ($value, $key) use ($currency) {
+        $recently_viewed_items = $query->take(10)->get()->map(function ($value, $key) use ($currency,$user) {
+            $value->is_favorite = false;
+            if($user){
+                if(UserFavorite::whereMetaName('items')->whereMetaId($value->id)->whereUserId($user->id)->first()){
+                    $value->is_favorite = true;
+                }
+            }
             unset($value->quantity);
             $value->currency = $currency;
-            $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
-            $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
-            $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
-            return $value;
-        })->values();
-
-        $query = Item::whereType('offer')->whereIsAvailable(1)->orderby('created_at','desc');
-        $currency = env('APP_CURRENCY');
-        $recently_viewed_items = $query->take(10)->get()->map(function ($value, $key) use ($currency) {
-            unset($value->quantity);
-            $value->currency = $currency;
-            $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
-            $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
-            $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
+            $value->post_type = $value->category->type;
+            unset($value->category);
             return $value;
         })->values();
 
@@ -178,13 +191,16 @@ class ItemsController extends Controller
             $q->whereType('products');
         })->whereIsAvailable(1)->orderby('created_at','desc');
         $currency = env('APP_CURRENCY');
-        $new_arrival_items = $query->take(10)->get()->map(function ($value, $key) use ($currency) {
+        $new_arrival_items = $query->take(10)->get()->map(function ($value, $key) use ($currency,$user) {
+            $value->is_favorite = false;
+            if($user){
+                if(UserFavorite::whereMetaName('items')->whereMetaId($value->id)->whereUserId($user->id)->first()){
+                    $value->is_favorite = true;
+                }
+            }
             unset($value->quantity);
+            $value->post_type = "products";
             $value->currency = $currency;
-            $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
-            $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
-            $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
-//            $value->custom_fields = CustomField::whereCategoryId($value->category_id)->whereSubCategoryId($value->sub_category_id)->get();
             return $value;
         })->values();
 
@@ -192,12 +208,29 @@ class ItemsController extends Controller
             $q->whereType('services');
         })->whereIsAvailable(1)->orderby('created_at','desc');
         $currency = env('APP_CURRENCY');
-        $latest_services_items = $query->take(10)->get()->map(function ($value, $key) use ($currency) {
+        $latest_services_items = $query->take(10)->get()->map(function ($value, $key) use ($currency,$user) {
+            $value->is_favorite = false;
+            if($user){
+                if(UserFavorite::whereMetaName('items')->whereMetaId($value->id)->whereUserId($user->id)->first()){
+                    $value->is_favorite = true;
+                }
+            }
             $value->currency = $currency;
-            $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
-            $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
-            $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
-//            $value->custom_fields = CustomField::whereCategoryId($value->category_id)->whereSubCategoryId($value->sub_category_id)->get();
+            $value->post_type = "services";
+            return $value;
+        })->values();
+
+        $query = Item::whereType('offer')->whereIsAvailable(1)->orderby('created_at','desc');
+        $currency = env('APP_CURRENCY');
+        $matches = $query->take(10)->get()->map(function ($value, $key) use ($currency,$user) {
+            $value->is_favorite = false;
+            if($user){
+                if(UserFavorite::whereMetaName('items')->whereMetaId($value->id)->whereUserId($user->id)->first()){
+                    $value->is_favorite = true;
+                }
+            }
+            $value->currency = $currency;
+            $value->post_type = "services";
             return $value;
         })->values();
 
@@ -205,7 +238,7 @@ class ItemsController extends Controller
         $category1 = [
             'slug' => 'trending-services',
             'title' => 'Trending Services',
-            'top_items' => $latest_services_items
+            'items' => $latest_services_items
         ];
         $category2 = [
             'slug' => 'trending-products',
@@ -222,10 +255,17 @@ class ItemsController extends Controller
             'title' => 'Nearby',
             'items' => $nearby_items
         ];
-        array_push($categories,$category4);
-        array_push($categories,$category3);
+        $category5 = [
+            'slug' => 'matches',
+            'title' => 'My Matches',
+            'items' => $matches
+        ];
+
+        array_push($categories,$category5);
         array_push($categories,$category2);
         array_push($categories,$category1);
+        array_push($categories,$category3);
+        array_push($categories,$category4);
 
         return response()->json($categories);
     }
@@ -244,12 +284,16 @@ class ItemsController extends Controller
                 $q->whereType('products');
             })->whereIsAvailable(1)->orderby('created_at','desc');
             $currency = env('APP_CURRENCY');
-            $items = $query->take(50)->get()->map(function ($value, $key) use ($currency) {
+            $items = $query->take(50)->get()->map(function ($value, $key) use ($currency,$user) {
+                $value->is_favorite = false;
+                if($user){
+                    if(UserFavorite::whereMetaName('items')->whereMetaId($value->id)->whereUserId($user->id)->first()){
+                        $value->is_favorite = true;
+                    }
+                }
                 unset($value->quantity);
                 $value->currency = $currency;
-                $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
-                $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
-                $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
+                $value->post_type = "products";
                 return $value;
             })->values();
         }elseif ($slug == 'trending-services'){
@@ -257,38 +301,316 @@ class ItemsController extends Controller
                 $q->whereType('services');
             })->whereIsAvailable(1)->orderby('created_at','desc');
             $currency = env('APP_CURRENCY');
-            $items = $query->take(50)->get()->map(function ($value, $key) use ($currency) {
+            $items = $query->take(50)->get()->map(function ($value, $key) use ($currency,$user) {
+                $value->is_favorite = false;
+                if($user){
+                    if(UserFavorite::whereMetaName('items')->whereMetaId($value->id)->whereUserId($user->id)->first()){
+                        $value->is_favorite = true;
+                    }
+                }
                 $value->currency = $currency;
-                $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
-                $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
-                $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
+                $value->post_type = "services";
                 return $value;
             })->values();
         }elseif ($slug == 'recently-viewed'){
             $query = Item::wherein('id',$items_viewed)->whereType('offer')->whereIsAvailable(1)->orderby('created_at','desc');
             $currency = env('APP_CURRENCY');
-            $recently_viewed_items = $query->take(50)->get()->map(function ($value, $key) use ($currency) {
+            $items = $query->take(50)->get()->map(function ($value, $key) use ($currency,$user) {
+                $value->is_favorite = false;
+                if($user){
+                    if(UserFavorite::whereMetaName('items')->whereMetaId($value->id)->whereUserId($user->id)->first()){
+                        $value->is_favorite = true;
+                    }
+                }
                 unset($value->quantity);
                 $value->currency = $currency;
-                $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
-                $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
-                $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
+                $value->post_type = $value->category->type;
+                unset($value->category);
                 return $value;
             })->values();
         }elseif ($slug == 'nearby'){
             if($latitude && $longitude){
                 $query = Item::whereType('offer')->whereIsAvailable(1)->orderbyRaw("(6371 * 2 * ASIN(SQRT( POWER(SIN(( $latitude - latitude) *  pi()/180 / 2), 2) +COS( $latitude * pi()/180) * COS(latitude * pi()/180) * POWER(SIN(( $longitude - longitude) * pi()/180 / 2), 2) ))) asc");
                 $currency = env('APP_CURRENCY');
-                $nearby_items = $query->take(50)->get()->map(function ($value, $key) use ($currency) {
+                $items = $query->take(50)->get()->map(function ($value, $key) use ($currency,$user) {
+                    $value->is_favorite = false;
+                    if($user){
+                        if(UserFavorite::whereMetaName('items')->whereMetaId($value->id)->whereUserId($user->id)->first()){
+                            $value->is_favorite = true;
+                        }
+                    }
                     unset($value->quantity);
                     $value->currency = $currency;
-                    $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
-                    $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
-                    $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
+                    $value->post_type = $value->category->type;
+                    unset($value->category);
                     return $value;
                 })->values();
             }
+        }elseif ($slug == 'matches'){
+            $query = Item::whereType('offer')->whereIsAvailable(1)->orderby('created_at','desc');
+            $currency = env('APP_CURRENCY');
+            $items = $query->take(50)->get()->map(function ($value, $key) use ($currency,$user) {
+                $value->is_favorite = false;
+                if($user){
+                    if(UserFavorite::whereMetaName('items')->whereMetaId($value->id)->whereUserId($user->id)->first()){
+                        $value->is_favorite = true;
+                    }
+                }
+                unset($value->quantity);
+                $value->currency = $currency;
+                $value->post_type = $value->category->type;
+                unset($value->category);
+                return $value;
+            })->values();
         }
+
+        $limit = 20;
+        $items = new LengthAwarePaginator(
+            $items->forPage(LengthAwarePaginator::resolveCurrentPage(), $limit)->values(), $items->count(), $limit, LengthAwarePaginator::resolveCurrentPage(), ['path' => secure_url('/api/products/items/pagination')]
+        );
+
+        return response()->json($items);
+    }
+
+    public function all_items(Request $request) {
+        $user = null;
+        if($request->header('token')){
+            $user = $this->validate_user($request);
+        }
+        $now = Carbon::now()->format('Y-m-d');
+        $query = Item::whereType('offer')->whereDate('expired_at','>=',$now)->whereIsAvailable(1);
+        if(Input::has('search')){
+            $search = Input::get('search');
+            $query->where(function($query) use ($search){
+                $query->whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])
+                    ->orwhereRaw("LOWER(name_ar) like ? ", [ "%".strtolower($search)."%"])
+                    ->orwhereRaw("LOWER(description_en) like ? ", [ "%".strtolower($search)."%"])
+                    ->orwhereRaw("LOWER(description_ar) like ? ", [ "%".strtolower($search)."%"]);
+            });
+        }
+        $category_id = isset($request->category_id) ? $request->category_id : null;
+        $sub_category_ids = isset($request->sub_category_ids) ? $request->sub_category_ids : null;
+        $sub_sub_category_id = isset($request->sub_sub_category_id) ? $request->sub_sub_category_id : null;
+        $filters_fields = isset($request->filters_fields) ? json_decode($request->filters_fields) : null;
+
+        $query->when($category_id, function ($query) use ($category_id) {
+            $query->whereCategoryId($category_id);
+        });
+        $query->when($sub_category_ids, function ($query) use ($sub_category_ids) {
+            $query->whereIn('sub_category_id',$sub_category_ids);
+        });
+        $query->when($sub_sub_category_id, function ($query) use ($sub_sub_category_id) {
+            $query->whereSubSubCategoryId($sub_sub_category_id);
+        });
+        $query->when($filters_fields, function ($query) use ($filters_fields) {
+            $query->whereHas('custom_fields', function ($query) use ($filters_fields) {
+                foreach ($filters_fields as $filter_field){
+                    $query->where(function($query) use ($filters_fields,$filter_field){
+                        $extra_field_name = isset($filter_field->extra_field_name) ? $filter_field->extra_field_name : null;
+                        $extra_field_value = isset($filter_field->extra_field_value) ? $filter_field->extra_field_value : null;
+                        /**
+                         * special check for min/max
+                         */
+                        if (strpos($filter_field->field_name, 'min') !== false || strpos($filter_field->field_name, 'max') !== false){
+                            if (strpos($filter_field->field_name, 'max') !== false){
+                                $min_field_name = str_replace('max', 'min', $filter_field->field_name);
+                                $query->where(function($query) use ($filter_field,$min_field_name){
+                                    $query->where($filter_field->field_name,'>=',$filter_field->field_value)->where($min_field_name,'<=',$filter_field->field_value);
+                                });
+                            }else{
+                                $max_field_name = str_replace('min', 'max', $filter_field->field_name);
+                                $query->where(function($query) use ($filter_field,$max_field_name){
+                                    $query->where($filter_field->field_name,'<=',$filter_field->field_value)->where($max_field_name,'>=',$filter_field->field_value);
+                                });
+                            }
+                        }else{
+                            $query->whereCustomFieldId($filter_field->id)->whereFieldValue($filter_field->field_value);
+                        }
+
+                        if ($extra_field_name && (strpos($extra_field_name, 'min') !== false || strpos($extra_field_name, 'max') !== false)){
+                            if (strpos($extra_field_name, 'max') !== false){
+                                $min_field_name = str_replace('max', 'min', $extra_field_name);
+                                $query->where(function($query) use ($extra_field_name,$extra_field_value,$min_field_name){
+                                    $query->where($extra_field_name,'>=',$extra_field_value)->where($min_field_name,'<=',$extra_field_value);
+                                });
+                            }else{
+                                $max_field_name = str_replace('min', 'max', $filter_field->field_name);
+                                $query->where(function($query) use ($extra_field_name,$extra_field_value,$max_field_name){
+                                    $query->where($extra_field_name,'<=',$extra_field_value)->where($max_field_name,'>=',$extra_field_value);
+                                });
+                            }
+                        }else{
+                            if($extra_field_name){
+                                $query->whereExtraFieldName($extra_field_name)->whereExtraFieldValue($extra_field_value);
+                            }
+                        }
+                    });
+                }
+            });
+        });
+        if($request->sort){
+            $sort = Input::get('sort');
+            if($sort == 'price_lowest'){
+                $query->orderBy('price','asc');
+            }elseif ($sort == 'price_highest'){
+                $query->orderBy('price','desc');
+            }elseif ($sort == 'most_recent'){
+                $query->orderBy('created_at','desc');
+            }
+        }else{
+            $query->orderBy('item_order','desc');
+        }
+        if($request->latitude && $request->longitude){
+            $latitude = $request->latitude;
+            $longitude = $request->longitude;
+            $items = $query->selectRaw("*,(6371 * 2 * ASIN(SQRT( POWER(SIN(( $latitude - latitude) *  pi()/180 / 2), 2) +COS( $latitude * pi()/180) * COS(latitude * pi()/180) * POWER(SIN(( $longitude - longitude) * pi()/180 / 2), 2) ))) as distance")->orderbyRaw("(6371 * 2 * ASIN(SQRT( POWER(SIN(( $latitude - latitude) *  pi()/180 / 2), 2) +COS( $latitude * pi()/180) * COS(latitude * pi()/180) * POWER(SIN(( $longitude - longitude) * pi()/180 / 2), 2) ))) asc");
+        }else{
+            $items = $query->selectRaw("*,NULL as distance");
+        }
+        $currency = env('APP_CURRENCY');
+        $items = $items->get()->map(function ($value, $key) use ($currency,$user) {
+            $value->is_favorite = false;
+            if($user){
+                if(UserFavorite::whereMetaName('items')->whereMetaId($value->id)->whereUserId($user->id)->first()){
+                    $value->is_favorite = true;
+                }
+            }
+            $value->return_post;
+            $post_type = $value->category->type;
+            unset($value->category);
+            if($post_type == 'products'){
+                unset($value->quantity);
+            }
+
+            $value->currency = $currency;
+            $value->post_type = $post_type;
+            $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
+            $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
+            $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
+            return $value;
+        })->values();
+
+        return response()->json($items);
+    }
+
+    public function all_items_with_pagination(Request $request) {
+        $user = null;
+        if($request->header('token')){
+            $user = $this->validate_user($request);
+        }
+        $now = Carbon::now()->format('Y-m-d');
+        $query = Item::whereType('offer')->whereDate('expired_at','>=',$now)->whereIsAvailable(1);
+        if(Input::has('search')){
+            $search = Input::get('search');
+            $query->where(function($query) use ($search){
+                $query->whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])
+                    ->orwhereRaw("LOWER(name_ar) like ? ", [ "%".strtolower($search)."%"])
+                    ->orwhereRaw("LOWER(description_en) like ? ", [ "%".strtolower($search)."%"])
+                    ->orwhereRaw("LOWER(description_ar) like ? ", [ "%".strtolower($search)."%"]);
+            });
+        }
+        $category_id = isset($request->category_id) ? $request->category_id : null;
+        $sub_category_ids = isset($request->sub_category_ids) ? $request->sub_category_ids : null;
+        $sub_sub_category_id = isset($request->sub_sub_category_id) ? $request->sub_sub_category_id : null;
+        $filters_fields = isset($request->filters_fields) ? json_decode($request->filters_fields) : null;
+
+        $query->when($category_id, function ($query) use ($category_id) {
+            $query->whereCategoryId($category_id);
+        });
+        $query->when($sub_category_ids, function ($query) use ($sub_category_ids) {
+            $query->whereIn('sub_category_id',$sub_category_ids);
+        });
+        $query->when($sub_sub_category_id, function ($query) use ($sub_sub_category_id) {
+            $query->whereSubSubCategoryId($sub_sub_category_id);
+        });
+        $query->when($filters_fields, function ($query) use ($filters_fields) {
+            $query->whereHas('custom_fields', function ($query) use ($filters_fields) {
+                foreach ($filters_fields as $filter_field){
+                    $query->where(function($query) use ($filters_fields,$filter_field){
+                        $extra_field_name = isset($filter_field->extra_field_name) ? $filter_field->extra_field_name : null;
+                        $extra_field_value = isset($filter_field->extra_field_value) ? $filter_field->extra_field_value : null;
+                        /**
+                         * special check for min/max
+                         */
+                        if (strpos($filter_field->field_name, 'min') !== false || strpos($filter_field->field_name, 'max') !== false){
+                            if (strpos($filter_field->field_name, 'max') !== false){
+                                $min_field_name = str_replace('max', 'min', $filter_field->field_name);
+                                $query->where(function($query) use ($filter_field,$min_field_name){
+                                    $query->where($filter_field->field_name,'>=',$filter_field->field_value)->where($min_field_name,'<=',$filter_field->field_value);
+                                });
+                            }else{
+                                $max_field_name = str_replace('min', 'max', $filter_field->field_name);
+                                $query->where(function($query) use ($filter_field,$max_field_name){
+                                    $query->where($filter_field->field_name,'<=',$filter_field->field_value)->where($max_field_name,'>=',$filter_field->field_value);
+                                });
+                            }
+                        }else{
+                            $query->whereCustomFieldId($filter_field->id)->whereFieldValue($filter_field->field_value);
+                        }
+
+                        if ($extra_field_name && (strpos($extra_field_name, 'min') !== false || strpos($extra_field_name, 'max') !== false)){
+                            if (strpos($extra_field_name, 'max') !== false){
+                                $min_field_name = str_replace('max', 'min', $extra_field_name);
+                                $query->where(function($query) use ($extra_field_name,$extra_field_value,$min_field_name){
+                                    $query->where($extra_field_name,'>=',$extra_field_value)->where($min_field_name,'<=',$extra_field_value);
+                                });
+                            }else{
+                                $max_field_name = str_replace('min', 'max', $filter_field->field_name);
+                                $query->where(function($query) use ($extra_field_name,$extra_field_value,$max_field_name){
+                                    $query->where($extra_field_name,'<=',$extra_field_value)->where($max_field_name,'>=',$extra_field_value);
+                                });
+                            }
+                        }else{
+                            if($extra_field_name){
+                                $query->whereExtraFieldName($extra_field_name)->whereExtraFieldValue($extra_field_value);
+                            }
+                        }
+                    });
+                }
+            });
+        });
+        if($request->sort){
+            $sort = Input::get('sort');
+            if($sort == 'price_lowest'){
+                $query->orderBy('price','asc');
+            }elseif ($sort == 'price_highest'){
+                $query->orderBy('price','desc');
+            }elseif ($sort == 'most_recent'){
+                $query->orderBy('created_at','desc');
+            }
+        }else{
+            $query->orderBy('item_order','desc');
+        }
+        if($request->latitude && $request->longitude){
+            $latitude = $request->latitude;
+            $longitude = $request->longitude;
+            $items = $query->selectRaw("*,(6371 * 2 * ASIN(SQRT( POWER(SIN(( $latitude - latitude) *  pi()/180 / 2), 2) +COS( $latitude * pi()/180) * COS(latitude * pi()/180) * POWER(SIN(( $longitude - longitude) * pi()/180 / 2), 2) ))) as distance")->orderbyRaw("(6371 * 2 * ASIN(SQRT( POWER(SIN(( $latitude - latitude) *  pi()/180 / 2), 2) +COS( $latitude * pi()/180) * COS(latitude * pi()/180) * POWER(SIN(( $longitude - longitude) * pi()/180 / 2), 2) ))) asc");
+        }else{
+            $items = $query->selectRaw("*,NULL as distance");
+        }
+        $currency = env('APP_CURRENCY');
+        $items = $items->get()->map(function ($value, $key) use ($currency,$user) {
+            $value->is_favorite = false;
+            if($user){
+                if(UserFavorite::whereMetaName('items')->whereMetaId($value->id)->whereUserId($user->id)->first()){
+                    $value->is_favorite = true;
+                }
+            }
+            $value->return_post;
+            $post_type = $value->category->type;
+            unset($value->category);
+            if($post_type == 'products'){
+                unset($value->quantity);
+            }
+
+            $value->currency = $currency;
+            $value->post_type = $post_type;
+
+            $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
+            $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
+            $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
+            return $value;
+        })->values();
 
         $limit = 20;
         $items = new LengthAwarePaginator(
@@ -317,6 +639,7 @@ class ItemsController extends Controller
         $category_id = isset($request->category_id) ? $request->category_id : null;
         $sub_category_ids = isset($request->sub_category_ids) ? $request->sub_category_ids : null;
         $sub_sub_category_id = isset($request->sub_sub_category_id) ? $request->sub_sub_category_id : null;
+        $filters_fields = isset($request->filters_fields) ? json_decode($request->filters_fields) : null;
 
         $query->when($category_id, function ($query) use ($category_id) {
             $query->whereCategoryId($category_id);
@@ -326,6 +649,53 @@ class ItemsController extends Controller
         });
         $query->when($sub_sub_category_id, function ($query) use ($sub_sub_category_id) {
             $query->whereSubSubCategoryId($sub_sub_category_id);
+        });
+
+        $query->when($filters_fields, function ($query) use ($filters_fields) {
+            $query->whereHas('custom_fields', function ($query) use ($filters_fields) {
+                foreach ($filters_fields as $filter_field){
+                    $query->where(function($query) use ($filters_fields,$filter_field){
+                        $extra_field_name = isset($filter_field->extra_field_name) ? $filter_field->extra_field_name : null;
+                        $extra_field_value = isset($filter_field->extra_field_value) ? $filter_field->extra_field_value : null;
+                        /**
+                         * special check for min/max
+                         */
+                        if (strpos($filter_field->field_name, 'min') !== false || strpos($filter_field->field_name, 'max') !== false){
+                            if (strpos($filter_field->field_name, 'max') !== false){
+                                $min_field_name = str_replace('max', 'min', $filter_field->field_name);
+                                $query->where(function($query) use ($filter_field,$min_field_name){
+                                    $query->where($filter_field->field_name,'>=',$filter_field->field_value)->where($min_field_name,'<=',$filter_field->field_value);
+                                });
+                            }else{
+                                $max_field_name = str_replace('min', 'max', $filter_field->field_name);
+                                $query->where(function($query) use ($filter_field,$max_field_name){
+                                    $query->where($filter_field->field_name,'<=',$filter_field->field_value)->where($max_field_name,'>=',$filter_field->field_value);
+                                });
+                            }
+                        }else{
+                            $query->whereCustomFieldId($filter_field->id)->whereFieldValue($filter_field->field_value);
+                        }
+
+                        if ($extra_field_name && (strpos($extra_field_name, 'min') !== false || strpos($extra_field_name, 'max') !== false)){
+                            if (strpos($extra_field_name, 'max') !== false){
+                                $min_field_name = str_replace('max', 'min', $extra_field_name);
+                                $query->where(function($query) use ($extra_field_name,$extra_field_value,$min_field_name){
+                                    $query->where($extra_field_name,'>=',$extra_field_value)->where($min_field_name,'<=',$extra_field_value);
+                                });
+                            }else{
+                                $max_field_name = str_replace('min', 'max', $filter_field->field_name);
+                                $query->where(function($query) use ($extra_field_name,$extra_field_value,$max_field_name){
+                                    $query->where($extra_field_name,'<=',$extra_field_value)->where($max_field_name,'>=',$extra_field_value);
+                                });
+                            }
+                        }else{
+                            if($extra_field_name){
+                                $query->whereExtraFieldName($extra_field_name)->whereExtraFieldValue($extra_field_value);
+                            }
+                        }
+                    });
+                }
+            });
         });
         if($request->sort){
             $sort = Input::get('sort');
@@ -339,16 +709,30 @@ class ItemsController extends Controller
         }else{
             $query->orderBy('item_order','desc');
         }
+        if($request->latitude && $request->longitude){
+            $latitude = $request->latitude;
+            $longitude = $request->longitude;
+            $items = $query->selectRaw("*,(6371 * 2 * ASIN(SQRT( POWER(SIN(( $latitude - latitude) *  pi()/180 / 2), 2) +COS( $latitude * pi()/180) * COS(latitude * pi()/180) * POWER(SIN(( $longitude - longitude) * pi()/180 / 2), 2) ))) as distance")->orderbyRaw("(6371 * 2 * ASIN(SQRT( POWER(SIN(( $latitude - latitude) *  pi()/180 / 2), 2) +COS( $latitude * pi()/180) * COS(latitude * pi()/180) * POWER(SIN(( $longitude - longitude) * pi()/180 / 2), 2) ))) asc");
+        }else{
+            $items = $query->selectRaw("*,NULL as distance");
+        }
         $currency = env('APP_CURRENCY');
-        $items = $query->get()->map(function ($value, $key) use ($currency) {
+        $items = $items->get()->map(function ($value, $key) use ($currency,$user) {
+            $value->is_favorite = false;
+            if($user){
+                if(UserFavorite::whereMetaName('items')->whereMetaId($value->id)->whereUserId($user->id)->first()){
+                    $value->is_favorite = true;
+                }
+            }
+            $value->return_post;
             unset($value->quantity);
             $value->currency = $currency;
+            $value->post_type = "products";
             $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
             $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
             $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
             return $value;
         })->values();
-
         return response()->json($items);
     }
 
@@ -371,6 +755,7 @@ class ItemsController extends Controller
         $category_id = isset($request->category_id) ? $request->category_id : null;
         $sub_category_ids = isset($request->sub_category_ids) ? $request->sub_category_ids : null;
         $sub_sub_category_id = isset($request->sub_sub_category_id) ? $request->sub_sub_category_id : null;
+        $filters_fields = isset($request->filters_fields) ? json_decode($request->filters_fields) : null;
 
         $query->when($category_id, function ($query) use ($category_id) {
             $query->whereCategoryId($category_id);
@@ -380,6 +765,52 @@ class ItemsController extends Controller
         });
         $query->when($sub_sub_category_id, function ($query) use ($sub_sub_category_id) {
             $query->whereSubSubCategoryId($sub_sub_category_id);
+        });
+        $query->when($filters_fields, function ($query) use ($filters_fields) {
+            $query->whereHas('custom_fields', function ($query) use ($filters_fields) {
+                foreach ($filters_fields as $filter_field){
+                    $query->where(function($query) use ($filters_fields,$filter_field){
+                        $extra_field_name = isset($filter_field->extra_field_name) ? $filter_field->extra_field_name : null;
+                        $extra_field_value = isset($filter_field->extra_field_value) ? $filter_field->extra_field_value : null;
+                        /**
+                         * special check for min/max
+                         */
+                        if (strpos($filter_field->field_name, 'min') !== false || strpos($filter_field->field_name, 'max') !== false){
+                            if (strpos($filter_field->field_name, 'max') !== false){
+                                $min_field_name = str_replace('max', 'min', $filter_field->field_name);
+                                $query->where(function($query) use ($filter_field,$min_field_name){
+                                    $query->where($filter_field->field_name,'>=',$filter_field->field_value)->where($min_field_name,'<=',$filter_field->field_value);
+                                });
+                            }else{
+                                $max_field_name = str_replace('min', 'max', $filter_field->field_name);
+                                $query->where(function($query) use ($filter_field,$max_field_name){
+                                    $query->where($filter_field->field_name,'<=',$filter_field->field_value)->where($max_field_name,'>=',$filter_field->field_value);
+                                });
+                            }
+                        }else{
+                            $query->whereCustomFieldId($filter_field->id)->whereFieldValue($filter_field->field_value);
+                        }
+
+                        if ($extra_field_name && (strpos($extra_field_name, 'min') !== false || strpos($extra_field_name, 'max') !== false)){
+                            if (strpos($extra_field_name, 'max') !== false){
+                                $min_field_name = str_replace('max', 'min', $extra_field_name);
+                                $query->where(function($query) use ($extra_field_name,$extra_field_value,$min_field_name){
+                                    $query->where($extra_field_name,'>=',$extra_field_value)->where($min_field_name,'<=',$extra_field_value);
+                                });
+                            }else{
+                                $max_field_name = str_replace('min', 'max', $filter_field->field_name);
+                                $query->where(function($query) use ($extra_field_name,$extra_field_value,$max_field_name){
+                                    $query->where($extra_field_name,'<=',$extra_field_value)->where($max_field_name,'>=',$extra_field_value);
+                                });
+                            }
+                        }else{
+                            if($extra_field_name){
+                                $query->whereExtraFieldName($extra_field_name)->whereExtraFieldValue($extra_field_value);
+                            }
+                        }
+                    });
+                }
+            });
         });
         if($request->sort){
             $sort = Input::get('sort');
@@ -393,10 +824,25 @@ class ItemsController extends Controller
         }else{
             $query->orderBy('item_order','desc');
         }
+        if($request->latitude && $request->longitude){
+            $latitude = $request->latitude;
+            $longitude = $request->longitude;
+            $items = $query->selectRaw("*,(6371 * 2 * ASIN(SQRT( POWER(SIN(( $latitude - latitude) *  pi()/180 / 2), 2) +COS( $latitude * pi()/180) * COS(latitude * pi()/180) * POWER(SIN(( $longitude - longitude) * pi()/180 / 2), 2) ))) as distance")->orderbyRaw("(6371 * 2 * ASIN(SQRT( POWER(SIN(( $latitude - latitude) *  pi()/180 / 2), 2) +COS( $latitude * pi()/180) * COS(latitude * pi()/180) * POWER(SIN(( $longitude - longitude) * pi()/180 / 2), 2) ))) asc");
+        }else{
+            $items = $query->selectRaw("*,NULL as distance");
+        }
         $currency = env('APP_CURRENCY');
-        $items = $query->get()->map(function ($value, $key) use ($currency) {
+        $items = $items->get()->map(function ($value, $key) use ($currency,$user) {
+            $value->is_favorite = false;
+            if($user){
+                if(UserFavorite::whereMetaName('items')->whereMetaId($value->id)->whereUserId($user->id)->first()){
+                    $value->is_favorite = true;
+                }
+            }
+            $value->return_post;
             unset($value->quantity);
             $value->currency = $currency;
+            $value->post_type = "products";
             $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
             $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
             $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
@@ -430,6 +876,7 @@ class ItemsController extends Controller
         $category_id = isset($request->category_id) ? $request->category_id : null;
         $sub_category_ids = isset($request->sub_category_ids) ? $request->sub_category_ids : null;
         $sub_sub_category_id = isset($request->sub_sub_category_id) ? $request->sub_sub_category_id : null;
+        $filters_fields = isset($request->filters_fields) ? json_decode($request->filters_fields) : null;
 
         $query->when($category_id, function ($query) use ($category_id) {
             $query->whereCategoryId($category_id);
@@ -439,6 +886,52 @@ class ItemsController extends Controller
         });
         $query->when($sub_sub_category_id, function ($query) use ($sub_sub_category_id) {
             $query->whereSubSubCategoryId($sub_sub_category_id);
+        });
+        $query->when($filters_fields, function ($query) use ($filters_fields) {
+            $query->whereHas('custom_fields', function ($query) use ($filters_fields) {
+                foreach ($filters_fields as $filter_field){
+                    $query->where(function($query) use ($filters_fields,$filter_field){
+                        $extra_field_name = isset($filter_field->extra_field_name) ? $filter_field->extra_field_name : null;
+                        $extra_field_value = isset($filter_field->extra_field_value) ? $filter_field->extra_field_value : null;
+                        /**
+                         * special check for min/max
+                         */
+                        if (strpos($filter_field->field_name, 'min') !== false || strpos($filter_field->field_name, 'max') !== false){
+                            if (strpos($filter_field->field_name, 'max') !== false){
+                                $min_field_name = str_replace('max', 'min', $filter_field->field_name);
+                                $query->where(function($query) use ($filter_field,$min_field_name){
+                                    $query->where($filter_field->field_name,'>=',$filter_field->field_value)->where($min_field_name,'<=',$filter_field->field_value);
+                                });
+                            }else{
+                                $max_field_name = str_replace('min', 'max', $filter_field->field_name);
+                                $query->where(function($query) use ($filter_field,$max_field_name){
+                                    $query->where($filter_field->field_name,'<=',$filter_field->field_value)->where($max_field_name,'>=',$filter_field->field_value);
+                                });
+                            }
+                        }else{
+                            $query->whereCustomFieldId($filter_field->id)->whereFieldValue($filter_field->field_value);
+                        }
+
+                        if ($extra_field_name && (strpos($extra_field_name, 'min') !== false || strpos($extra_field_name, 'max') !== false)){
+                            if (strpos($extra_field_name, 'max') !== false){
+                                $min_field_name = str_replace('max', 'min', $extra_field_name);
+                                $query->where(function($query) use ($extra_field_name,$extra_field_value,$min_field_name){
+                                    $query->where($extra_field_name,'>=',$extra_field_value)->where($min_field_name,'<=',$extra_field_value);
+                                });
+                            }else{
+                                $max_field_name = str_replace('min', 'max', $filter_field->field_name);
+                                $query->where(function($query) use ($extra_field_name,$extra_field_value,$max_field_name){
+                                    $query->where($extra_field_name,'<=',$extra_field_value)->where($max_field_name,'>=',$extra_field_value);
+                                });
+                            }
+                        }else{
+                            if($extra_field_name){
+                                $query->whereExtraFieldName($extra_field_name)->whereExtraFieldValue($extra_field_value);
+                            }
+                        }
+                    });
+                }
+            });
         });
         if($request->sort){
             $sort = Input::get('sort');
@@ -452,9 +945,24 @@ class ItemsController extends Controller
         }else{
             $query->orderBy('item_order','desc');
         }
+        if($request->latitude && $request->longitude){
+            $latitude = $request->latitude;
+            $longitude = $request->longitude;
+            $items = $query->selectRaw("*,(6371 * 2 * ASIN(SQRT( POWER(SIN(( $latitude - latitude) *  pi()/180 / 2), 2) +COS( $latitude * pi()/180) * COS(latitude * pi()/180) * POWER(SIN(( $longitude - longitude) * pi()/180 / 2), 2) ))) as distance")->orderbyRaw("(6371 * 2 * ASIN(SQRT( POWER(SIN(( $latitude - latitude) *  pi()/180 / 2), 2) +COS( $latitude * pi()/180) * COS(latitude * pi()/180) * POWER(SIN(( $longitude - longitude) * pi()/180 / 2), 2) ))) asc");
+        }else{
+            $items = $query->selectRaw("*,NULL as distance");
+        }
         $currency = env('APP_CURRENCY');
-        $items = $query->get()->map(function ($value, $key) use ($currency) {
+        $items = $items->get()->map(function ($value, $key) use ($currency,$user) {
+            $value->is_favorite = false;
+            if($user){
+                if(UserFavorite::whereMetaName('items')->whereMetaId($value->id)->whereUserId($user->id)->first()){
+                    $value->is_favorite = true;
+                }
+            }
+            $value->return_post;
             $value->currency = $currency;
+            $value->post_type = "services";
             $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
             $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
             $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
@@ -483,6 +991,7 @@ class ItemsController extends Controller
         $category_id = isset($request->category_id) ? $request->category_id : null;
         $sub_category_ids = isset($request->sub_category_ids) ? $request->sub_category_ids : null;
         $sub_sub_category_id = isset($request->sub_sub_category_id) ? $request->sub_sub_category_id : null;
+        $filters_fields = isset($request->filters_fields) ? json_decode($request->filters_fields) : null;
 
         $query->when($category_id, function ($query) use ($category_id) {
             $query->whereCategoryId($category_id);
@@ -492,6 +1001,52 @@ class ItemsController extends Controller
         });
         $query->when($sub_sub_category_id, function ($query) use ($sub_sub_category_id) {
             $query->whereSubSubCategoryId($sub_sub_category_id);
+        });
+        $query->when($filters_fields, function ($query) use ($filters_fields) {
+            $query->whereHas('custom_fields', function ($query) use ($filters_fields) {
+                foreach ($filters_fields as $filter_field){
+                    $query->where(function($query) use ($filters_fields,$filter_field){
+                        $extra_field_name = isset($filter_field->extra_field_name) ? $filter_field->extra_field_name : null;
+                        $extra_field_value = isset($filter_field->extra_field_value) ? $filter_field->extra_field_value : null;
+                        /**
+                         * special check for min/max
+                         */
+                        if (strpos($filter_field->field_name, 'min') !== false || strpos($filter_field->field_name, 'max') !== false){
+                            if (strpos($filter_field->field_name, 'max') !== false){
+                                $min_field_name = str_replace('max', 'min', $filter_field->field_name);
+                                $query->where(function($query) use ($filter_field,$min_field_name){
+                                    $query->where($filter_field->field_name,'>=',$filter_field->field_value)->where($min_field_name,'<=',$filter_field->field_value);
+                                });
+                            }else{
+                                $max_field_name = str_replace('min', 'max', $filter_field->field_name);
+                                $query->where(function($query) use ($filter_field,$max_field_name){
+                                    $query->where($filter_field->field_name,'<=',$filter_field->field_value)->where($max_field_name,'>=',$filter_field->field_value);
+                                });
+                            }
+                        }else{
+                            $query->whereCustomFieldId($filter_field->id)->whereFieldValue($filter_field->field_value);
+                        }
+
+                        if ($extra_field_name && (strpos($extra_field_name, 'min') !== false || strpos($extra_field_name, 'max') !== false)){
+                            if (strpos($extra_field_name, 'max') !== false){
+                                $min_field_name = str_replace('max', 'min', $extra_field_name);
+                                $query->where(function($query) use ($extra_field_name,$extra_field_value,$min_field_name){
+                                    $query->where($extra_field_name,'>=',$extra_field_value)->where($min_field_name,'<=',$extra_field_value);
+                                });
+                            }else{
+                                $max_field_name = str_replace('min', 'max', $filter_field->field_name);
+                                $query->where(function($query) use ($extra_field_name,$extra_field_value,$max_field_name){
+                                    $query->where($extra_field_name,'<=',$extra_field_value)->where($max_field_name,'>=',$extra_field_value);
+                                });
+                            }
+                        }else{
+                            if($extra_field_name){
+                                $query->whereExtraFieldName($extra_field_name)->whereExtraFieldValue($extra_field_value);
+                            }
+                        }
+                    });
+                }
+            });
         });
         if($request->sort){
             $sort = Input::get('sort');
@@ -505,9 +1060,24 @@ class ItemsController extends Controller
         }else{
             $query->orderBy('item_order','desc');
         }
+        if($request->latitude && $request->longitude){
+            $latitude = $request->latitude;
+            $longitude = $request->longitude;
+            $items = $query->selectRaw("*,(6371 * 2 * ASIN(SQRT( POWER(SIN(( $latitude - latitude) *  pi()/180 / 2), 2) +COS( $latitude * pi()/180) * COS(latitude * pi()/180) * POWER(SIN(( $longitude - longitude) * pi()/180 / 2), 2) ))) as distance")->orderbyRaw("(6371 * 2 * ASIN(SQRT( POWER(SIN(( $latitude - latitude) *  pi()/180 / 2), 2) +COS( $latitude * pi()/180) * COS(latitude * pi()/180) * POWER(SIN(( $longitude - longitude) * pi()/180 / 2), 2) ))) asc");
+        }else{
+            $items = $query->selectRaw("*,NULL as distance");
+        }
         $currency = env('APP_CURRENCY');
-        $items = $query->get()->map(function ($value, $key) use ($currency) {
+        $items = $items->get()->map(function ($value, $key) use ($currency,$user) {
+            $value->is_favorite = false;
+            if($user){
+                if(UserFavorite::whereMetaName('items')->whereMetaId($value->id)->whereUserId($user->id)->first()){
+                    $value->is_favorite = true;
+                }
+            }
+            $value->return_post;
             $value->currency = $currency;
+            $value->post_type = "services";
             $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
             $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
             $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
@@ -522,7 +1092,7 @@ class ItemsController extends Controller
     }
 
     public function filters(Request $request) {
-        $query = CustomField::whereInFilters(1);
+        $query = CustomField::whereInBrowsingFilters(1);
 
         $category_id = isset($request->category_id) ? $request->category_id : null;
         $sub_category_id = isset($request->sub_category_id) ? $request->sub_category_id : null;
@@ -534,11 +1104,25 @@ class ItemsController extends Controller
         $query->when($sub_category_id, function ($query) use ($sub_category_id) {
             $query->whereSubCategoryId($sub_category_id);
         });
-        $query->when($sub_sub_category_id, function ($query) use ($sub_sub_category_id) {
-            $query->whereSubSubCategoryId($sub_sub_category_id);
-        });
+//        $query->when($sub_sub_category_id, function ($query) use ($sub_sub_category_id) {
+//            $query->whereSubSubCategoryId($sub_sub_category_id);
+//        });
 
-        $filters = $query->orderby('item_order','asc')->get();
+        $filters = $query->orderby('item_order','asc')->get()->map(function ($value, $key){
+            if($value->field_type == 'boolean'){
+                $value->true_title = 'YES';
+                $value->false_title = 'NO';
+            }
+            if($value->extra_field_type == 'boolean'){
+                $value->extra_true_title = 'YES';
+                $value->extra_false_title = 'NO';
+            }
+            if($value->field_name == 'is-sell'){
+                $value->true_title = 'Sell';
+                $value->false_title = 'Rent';
+            }
+            return $value;
+        })->values();
 
         return response()->json($filters);
     }
@@ -557,15 +1141,33 @@ class ItemsController extends Controller
         $query->when($sub_category_id, function ($query) use ($sub_category_id) {
             $query->whereSubCategoryId($sub_category_id);
         });
-        $query->when($sub_sub_category_id, function ($query) use ($sub_sub_category_id) {
-            $query->whereSubSubCategoryId($sub_sub_category_id);
-        });
+//        $query->when($sub_sub_category_id, function ($query) use ($sub_sub_category_id) {
+//            $query->whereSubSubCategoryId($sub_sub_category_id);
+//        });
 
         $filters = $query->orderby('item_order','asc')->get()->map(function ($value, $key) {
             $value->section = $value->in_filters ? 'filters' : 'regular';
+            if($value->field_type == 'boolean'){
+                $value->true_title = 'YES';
+                $value->false_title = 'NO';
+            }
+            if($value->extra_field_type == 'boolean'){
+                $value->extra_true_title = 'YES';
+                $value->extra_false_title = 'NO';
+            }
+            if($value->field_name == 'is-sell'){
+                $value->true_title = 'Sell';
+                $value->false_title = 'Rent';
+            }
             return $value;
         })->groupBy('section');
 
+        if(!$filters->has('regular')){
+            $filters->put('regular', []);
+        }
+        if(!$filters->has('filters')){
+            $filters->put('filters', []);
+        }
         return response()->json($filters);
     }
 
@@ -583,39 +1185,119 @@ class ItemsController extends Controller
             return parent::return_error('Missing Item ID',401,'messages.missing_parameter');
         }
         $now = Carbon::now()->format('Y-m-d');
-        if(!$item = Item::whereDate('expired_at','>=',$now)->whereIsAvailable(1)->whereId($request->item_id)->first()){
+        /**
+         * do not validate post here since could be clicked from my posts which could be expired or not available yet
+         */
+        if(!$item = Item::whereId($request->item_id)->first()){
             return parent::return_error("Invalid Item", 402, 'messages.invalid_parameters');
         }
         $currency = env('APP_CURRENCY');
+        $item->is_favorite = false;
+        $can_chat = false;
+        if($user){
+            if(UserFavorite::whereMetaName('items')->whereMetaId($item->id)->whereUserId($user->id)->first()){
+                $item->is_favorite = true;
+            }
+            if(Barter::wherein('status',['completed','accepted'])->where(function ($query) use ($user) {
+                $query->whereReceiverId($user->id)->orWhere('sender_id',$user->id);
+            })->first()){
+                $can_chat = true;
+            }
+        }
+
+
+        $item->can_chat = $can_chat;
         $item->currency = $currency;
-        $item->price_formatted = number_format($item->price,3) . ' ' . $currency;
-        $item->discounted_price_formatted = $item->discounted_price ? number_format($item->discounted_price,3) . ' ' . $currency : null;
-        $item->discount_amount_formatted = $item->discount_amount ? number_format($item->discount_amount,3) . ' ' . $currency : null;
+        $post_type = $item->category->type;
+        $item->post_type = $post_type;
         unset($item->quantity);
         $item->custom_fields = CustomField::whereCategoryId($item->category_id)->whereSubCategoryId($item->sub_category_id)->orderby('item_order','asc')->get()->map(function ($value, $key) use ($item) {
             $value->section = $value->in_filters ? 'filters' : 'regular';
+            if($value->field_type == 'boolean'){
+                $value->true_title = 'YES';
+                $value->false_title = 'NO';
+            }
+            if($value->extra_field_type && $value->extra_field_type == 'boolean'){
+                $value->extra_true_title = 'YES';
+                $value->extra_false_title = 'NO';
+            }
+            if($value->field_name == 'is-sell'){
+                $value->true_title = 'Sell';
+                $value->false_title = 'Rent';
+            }
             $custom_field_value = ItemCustomField::whereFieldName($value->field_name)->whereItemId($item->id)->whereCustomFieldId($value->id)->first();
             $value->field_value = $custom_field_value ? $this->cast_field_value($custom_field_value->field_value, $value->field_type) : null;
+            $field_display_name = null;
+            if($custom_field_value && $value->field_type == 'list'){
+                $list_item = CustomFieldList::whereFieldName($value->field_name)->whereId($value->field_value)->first();
+                if($list_item){
+                    $field_display_name = $list_item->name_en;
+                }
+            }
+            $value->field_display_name = $field_display_name;
             $custom_extra_field_value = null;
             if($value->has_extra_field){
                 $custom_extra_field_value = ItemCustomField::whereExtraFieldName($value->extra_field_name)->whereItemId($item->id)->whereCustomFieldId($value->id)->first();
             }
             $value->extra_field_value = $custom_extra_field_value ? $this->cast_field_value($custom_extra_field_value->extra_field_value, $value->extra_field_type) : null;
+            $extra_field_display_name = null;
+            if($custom_extra_field_value && $value->extra_field_type == 'list'){
+                $extra_list_item = CustomFieldList::whereFieldName($value->extra_field_name)->whereId($value->extra_field_value)->first();
+                if($extra_list_item){
+                    $extra_field_display_name = $extra_list_item->name_en;
+                }
+            }
+            $value->extra_field_display_name = $extra_field_display_name;
             return $value;
         })->groupBy('section');
+        if(!$item->custom_fields->has('regular')){
+            $item->custom_fields->put('regular', []);
+        }
+        if(!$item->custom_fields->has('filters')){
+            $item->custom_fields->put('filters', []);
+        }
         $return_post = $item->return_post;
         if($return_post){
+            $return_post_type = $return_post->category->type;
+            $return_post->post_type = $return_post_type;
             $return_post->custom_fields = CustomField::whereInFilters(0)->whereInReturn(1)->whereCategoryId($return_post->category_id)->whereSubCategoryId($return_post->sub_category_id)->orderby('item_order','asc')->get()->map(function ($value, $key) use ($return_post) {
                 $value->section = $value->in_filters ? 'filters' : 'regular';
                 $custom_field_value = ItemCustomField::whereFieldName($value->field_name)->whereItemId($return_post->id)->whereCustomFieldId($value->id)->first();
                 $value->field_value = $custom_field_value ? $this->cast_field_value($custom_field_value->field_value, $value->field_type) : null;
+                $field_display_name = null;
+                if($custom_field_value && $value->field_type == 'list'){
+                    $list_item = CustomFieldList::whereFieldName($value->field_name)->whereId($value->field_value)->first();
+                    if($list_item){
+                        $field_display_name = $list_item->name_en;
+                    }
+                }
+                $value->field_display_name = $field_display_name;
                 $custom_extra_field_value = null;
                 if($value->has_extra_field){
                     $custom_extra_field_value = ItemCustomField::whereExtraFieldName($value->extra_field_name)->whereItemId($return_post->id)->whereCustomFieldId($value->id)->first();
                 }
                 $value->extra_field_value = $custom_extra_field_value ? $this->cast_field_value($custom_extra_field_value->extra_field_value, $value->extra_field_type) : null;
+                $extra_field_display_name = null;
+                if($custom_extra_field_value && $value->extra_field_type == 'list'){
+                    $extra_list_item = CustomFieldList::whereFieldName($value->extra_field_name)->whereId($value->extra_field_value)->first();
+                    if($extra_list_item){
+                        $extra_field_display_name = $extra_list_item->name_en;
+                    }
+                }
+                $value->extra_field_display_name = $extra_field_display_name;
                 return $value;
             })->groupBy('section');
+            if(!$return_post->custom_fields->has('regular')){
+                $return_post->custom_fields->put('regular', []);
+            }
+            if(!$return_post->custom_fields->has('filters')){
+                $return_post->custom_fields->put('filters', []);
+            }
+        }
+        if(!$user){
+            $item->category;
+            $item->sub_category;
+            $item->sub_sub_category;
         }
 
         return response()->json($item);
@@ -635,39 +1317,119 @@ class ItemsController extends Controller
             return parent::return_error('Missing Item ID',401,'messages.missing_parameter');
         }
         $now = Carbon::now()->format('Y-m-d');
-        if(!$item = Item::whereDate('expired_at','>=',$now)->whereIsAvailable(1)->whereId($request->item_id)->first()){
+        /**
+         * do not validate post here since could be clicked from my posts which could be expired or not available yet
+         */
+        if(!$item = Item::whereId($request->item_id)->first()){
             return parent::return_error("Invalid Item", 402, 'messages.invalid_parameters');
         }
         $currency = env('APP_CURRENCY');
+        $item->is_favorite = false;
+        $can_chat = false;
+        if($user){
+            if(UserFavorite::whereMetaName('items')->whereMetaId($item->id)->whereUserId($user->id)->first()){
+                $item->is_favorite = true;
+            }
+            if(Barter::wherein('status',['completed','accepted'])->where(function ($query) use ($user) {
+                $query->whereReceiverId($user->id)->orWhere('sender_id',$user->id);
+            })->first()){
+                $can_chat = true;
+            }
+        }
+
+
+        $item->can_chat = $can_chat;
         $item->currency = $currency;
-        $item->price_formatted = number_format($item->price,3) . ' ' . $currency;
-        $item->discounted_price_formatted = $item->discounted_price ? number_format($item->discounted_price,3) . ' ' . $currency : null;
-        $item->discount_amount_formatted = $item->discount_amount ? number_format($item->discount_amount,3) . ' ' . $currency : null;
+        $post_type = $item->category->type;
+        $item->post_type = $post_type;
         unset($item->quantity);
         $item->custom_fields = CustomField::whereCategoryId($item->category_id)->whereSubCategoryId($item->sub_category_id)->orderby('item_order','asc')->get()->map(function ($value, $key) use ($item) {
             $value->section = $value->in_filters ? 'filters' : 'regular';
+            if($value->field_type == 'boolean'){
+                $value->true_title = 'YES';
+                $value->false_title = 'NO';
+            }
+            if($value->extra_field_type && $value->extra_field_type == 'boolean'){
+                $value->extra_true_title = 'YES';
+                $value->extra_false_title = 'NO';
+            }
+            if($value->field_name == 'is-sell'){
+                $value->true_title = 'Sell';
+                $value->false_title = 'Rent';
+            }
             $custom_field_value = ItemCustomField::whereFieldName($value->field_name)->whereItemId($item->id)->whereCustomFieldId($value->id)->first();
             $value->field_value = $custom_field_value ? $this->cast_field_value($custom_field_value->field_value, $value->field_type) : null;
+            $field_display_name = null;
+            if($custom_field_value && $value->field_type == 'list'){
+                $list_item = CustomFieldList::whereFieldName($value->field_name)->whereId($value->field_value)->first();
+                if($list_item){
+                    $field_display_name = $list_item->name_en;
+                }
+            }
+            $value->field_display_name = $field_display_name;
             $custom_extra_field_value = null;
             if($value->has_extra_field){
                 $custom_extra_field_value = ItemCustomField::whereExtraFieldName($value->extra_field_name)->whereItemId($item->id)->whereCustomFieldId($value->id)->first();
             }
             $value->extra_field_value = $custom_extra_field_value ? $this->cast_field_value($custom_extra_field_value->extra_field_value, $value->extra_field_type) : null;
+            $extra_field_display_name = null;
+            if($custom_extra_field_value && $value->extra_field_type == 'list'){
+                $extra_list_item = CustomFieldList::whereFieldName($value->extra_field_name)->whereId($value->extra_field_value)->first();
+                if($extra_list_item){
+                    $extra_field_display_name = $extra_list_item->name_en;
+                }
+            }
+            $value->extra_field_display_name = $extra_field_display_name;
             return $value;
         })->groupBy('section');
+        if(!$item->custom_fields->has('regular')){
+            $item->custom_fields->put('regular', []);
+        }
+        if(!$item->custom_fields->has('filters')){
+            $item->custom_fields->put('filters', []);
+        }
         $return_post = $item->return_post;
         if($return_post){
+            $return_post_type = $return_post->category->type;
+            $return_post->post_type = $return_post_type;
             $return_post->custom_fields = CustomField::whereInFilters(0)->whereInReturn(1)->whereCategoryId($return_post->category_id)->whereSubCategoryId($return_post->sub_category_id)->orderby('item_order','asc')->get()->map(function ($value, $key) use ($return_post) {
                 $value->section = $value->in_filters ? 'filters' : 'regular';
                 $custom_field_value = ItemCustomField::whereFieldName($value->field_name)->whereItemId($return_post->id)->whereCustomFieldId($value->id)->first();
                 $value->field_value = $custom_field_value ? $this->cast_field_value($custom_field_value->field_value, $value->field_type) : null;
+                $field_display_name = null;
+                if($custom_field_value && $value->field_type == 'list'){
+                    $list_item = CustomFieldList::whereFieldName($value->field_name)->whereId($value->field_value)->first();
+                    if($list_item){
+                        $field_display_name = $list_item->name_en;
+                    }
+                }
+                $value->field_display_name = $field_display_name;
                 $custom_extra_field_value = null;
                 if($value->has_extra_field){
                     $custom_extra_field_value = ItemCustomField::whereExtraFieldName($value->extra_field_name)->whereItemId($return_post->id)->whereCustomFieldId($value->id)->first();
                 }
                 $value->extra_field_value = $custom_extra_field_value ? $this->cast_field_value($custom_extra_field_value->extra_field_value, $value->extra_field_type) : null;
+                $extra_field_display_name = null;
+                if($custom_extra_field_value && $value->extra_field_type == 'list'){
+                    $extra_list_item = CustomFieldList::whereFieldName($value->extra_field_name)->whereId($value->extra_field_value)->first();
+                    if($extra_list_item){
+                        $extra_field_display_name = $extra_list_item->name_en;
+                    }
+                }
+                $value->extra_field_display_name = $extra_field_display_name;
                 return $value;
             })->groupBy('section');
+            if(!$return_post->custom_fields->has('regular')){
+                $return_post->custom_fields->put('regular', []);
+            }
+            if(!$return_post->custom_fields->has('filters')){
+                $return_post->custom_fields->put('filters', []);
+            }
+        }
+        if(!$user){
+            $item->category;
+            $item->sub_category;
+            $item->sub_sub_category;
         }
 
         return response()->json($item);

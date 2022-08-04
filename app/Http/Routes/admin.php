@@ -32,6 +32,7 @@ Route::get('orders/{order_id}/print_invoice',['uses' => 'OrdersController@print_
 Route::get('orders/action/{order_id}/{status}',['uses' => 'OrdersController@action', 'as' => 'admin.orders.action']);
 Route::get('orders/{order_id}/status/{status}',['uses' => 'OrdersController@status', 'as' => 'admin.orders.status']);
 
+Route::resource('dynamic_fields', 'DynamicFieldsController');
 Route::resource('roles', 'RolesController');
 Route::resource('promo_codes', 'PromoCodesController');
 Route::get('/promo_codes/publish/{promo_id}',['uses' => 'PromoCodesController@publish', 'as' => 'admin.promo_codes.publish']);
@@ -66,13 +67,14 @@ Route::get('tags/{tags_id}/delete_single', ['uses' => 'TagsController@delete_sin
 Route::resource('tags', 'TagsController');
 
 Route::post('categories/order/items', ['uses' => 'CategoriesController@order', 'as' => 'admin.categories.order']);
-Route::get('categories/{category_id}/delete_single', ['uses' => 'CategoriesController@delete_single_image', 'as' => 'admin.categories.delete_single']);
+Route::get('categories/{category_id}/{type}/delete_single', ['uses' => 'CategoriesController@delete_single_image', 'as' => 'admin.categories.delete_single']);
 Route::get('categories/{category_id}/list_collections', ['uses' => 'CategoriesController@list_collections', 'as' => 'admin.categories.list_collections']);
 Route::get('categories/publish/{category_id}', ['uses' => 'CategoriesController@publish', 'as' => 'admin.categories.publish']);
 Route::resource('categories', 'CategoriesController');
 Route::get('categories/sub_categories/{sub_category_id}/delete_single', ['uses' => 'CuratedCollectionsController@delete_single_image', 'as' => 'admin.categories.sub_categories.delete_single']);
-Route::get('categories/sub_categories/publish/{sub_category_id}', ['uses' => 'CuratedCollectionsController@publish', 'as' => 'admin.categories.sub_categories.publish']);
-Route::resource('categories.sub_categories', 'CuratedCollectionsController');
+Route::get('categories/sub_categories/publish/{sub_category_id}', ['uses' => 'SubCategoriesController@publish', 'as' => 'admin.categories.sub_categories.publish']);
+//Route::resource('categories.sub_categories', 'CuratedCollectionsController');
+Route::resource('categories.sub_categories', 'SubCategoriesController');
 
 Route::get('sub_categories/supplier_sub_categories/publish/{option_id}', ['uses' => 'SupplierSubCategoriesController@publish', 'as' => 'admin.sub_categories.supplier_sub_categories.publish']);
 Route::resource('sub_categories.supplier_sub_categories', 'SupplierSubCategoriesController');
@@ -129,6 +131,7 @@ Route::resource('supplier_customizations.supplier_options', 'SupplierCustomizati
 Route::group(['prefix' => 'items'],function () {
     Route::post('/order', ['uses' => 'ItemsController@order', 'as' => 'admin.items.order']);
     Route::get('/publish/{item_id}',['uses' => 'ItemsController@publish', 'as' => 'admin.items.publish']);
+    Route::get('/approve/{item_id}',['uses' => 'ItemsController@approve', 'as' => 'admin.items.approve']);
     Route::post('/update_item','ItemsController@update');
     Route::get('/{item_id}/delete_single', ['uses' => 'ItemsController@delete_single_image', 'as' => 'admin.items.delete_single']);
 });

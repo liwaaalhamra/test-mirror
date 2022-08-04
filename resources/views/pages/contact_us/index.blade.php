@@ -48,7 +48,7 @@
                     <tr>
                         <td>
                             @if($item->user != null)
-                                Full Name: <b>{{$item->user->first_name}} {{$item->user->last_name}}</b> </br>
+                                Full Name: <b>@if($item->user->full_name) {{$item->user->full_name}} @else {{$item->user->first_name}} {{$item->user->last_name}} @endif</b> </br>
                                 Email: <b>{{$item->user->email}}</b> </br>
                                 Mobile Number: <b>{{$item->user->primary_phone}}</b> </br>
                                 DOB: <b>{{$item->user->dob}}</b> </br>
