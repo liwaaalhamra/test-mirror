@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <title>{{env('APP_NAME')}} | CMS</title>
     <meta name="description" content="{{env('APP_NAME')}} Backend"/>
-    <link rel="shortcut icon" type="image/png" href="{{asset('public/uploads/images/logo_new.png')}}"/>
+    <link rel="shortcut icon" type="image/png" href="{{asset('resources/assets/images/logo_new.png')}}"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -40,7 +40,7 @@
                     <span class="icon-bar"></span>
                 </button>
                 
-                <img style="max-width: 60px;float:left" src="{{ secure_asset('public/uploads/images/logo_new.png') }}">
+                <img style="max-width: 60px;float:left" src="{{ secure_asset('resources/assets/images/logo_new.png') }}">
 
                 <!-- Branding Image -->
                 <a class="navbar-brand" href="{{ url('/') }}" style="background-color: {{env('BACKGROUND_COLOR')}};color: {{env('TEXT_COLOR')}}">

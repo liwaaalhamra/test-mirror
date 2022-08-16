@@ -2,7 +2,7 @@
     <div class="dropdown wrapper">
         <a href="app.page.profile">
             <span class="thumb-lg w-auto-folded avatar m-t-sm">
-                <img src="{{asset('public/uploads/images/logo_new.png')}}" class="img-full">
+                <img src="{{asset('resources/assets/images/logo_new.png')}}" class="img-full">
             </span>
         </a>
         <a href="#" data-toggle="dropdown" class="dropdown-toggle hidden-folded">

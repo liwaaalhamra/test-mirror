@@ -1,5 +1,5 @@
 <a href="{{secure_url('/admin')}}" class="navbar-brand text-lt">
     {{--<i class="fa fa-car"></i>--}}
-    <img src="{{secure_asset('public/uploads/images/logo_new.png')}}">
+    <img src="{{secure_asset('resources/assets/images/logo_new.png')}}">
     <span class="hidden-folded m-l-xs">{{env('APP_NAME')}}</span>
 </a>

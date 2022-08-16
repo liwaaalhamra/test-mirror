@@ -4,7 +4,7 @@
     <meta charset="utf-8"/>
     <title>{{env('APP_NAME')}} | CMS</title>
     <meta name="description" content="{{env('APP_NAME')}} Backend"/>
-    <link rel="shortcut icon"  type="image/png" href="{{asset('public/uploads/images/logo_new.png')}}"/>
+    <link rel="shortcut icon"  type="image/png" href="{{asset('resources/assets/images/logo_new.png')}}"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="token" value="{{ csrf_token() }}">

@@ -36,7 +36,7 @@
             {{--</div>--}}
             <div class="row">
                 <div class="ibox-content  wrapper wrapper-content animated fadeInRight" style="border-width:0px 0;padding:0px 10px 0px" >
-                    <img src="{{secure_asset('public/uploads/images/logo_new.png')}}"  height="52">
+                    <img src="{{secure_asset('resources/assets/images/logo_new.png')}}"  height="52">
                     <div class="table-responsive">
                         <table class="table invoice-table">
                             <thead>
