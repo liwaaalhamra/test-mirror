@@ -192,7 +192,8 @@ class LoginController extends Controller
             return parent::return_error('Missing parameter(s)', 400, $validator->messages()->all()[0]);
         }
 
-        if(!$user = Users::whereAccountType('mobile')->where(DB::raw("CONCAT(`country_code`, `primary_phone`)"), '=', CONCAT($request->country_code, $request->phone_number))->first()){
+        $user = Users::whereAccountType('mobile')->whereCountryCode($request->country_code)->wherePrimaryPhone($request->phone_number)->first();
+        if($user){
             return parent::return_error("User Already Exists", 403, "User already exists");
         }
 
@@ -204,7 +205,7 @@ class LoginController extends Controller
         $request->merge([ 'mobile_number' => $country_code.$phone_number]);
 
         $validator = Validator::make($request->all(), [
-            'mobile_number' => 'phone:KW,LB,AE,QA',
+            'mobile_number' => 'phone:KW,LB,AE,QA'
         ]);
 
         if ($validator->fails()) {
