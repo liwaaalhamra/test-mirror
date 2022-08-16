@@ -101,34 +101,6 @@ class AppSettingsController extends Controller
     }
 
     /**
-     * Change the auth user password.
-     *
-     * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function changePassword(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'password' => [
-                'required',
-                'min:8',             // must be at least 8 characters in length
-                'regex:/[a-z]/',      // must contain at least one lowercase letter
-                'regex:/[A-Z]/',      // must contain at least one uppercase letter
-                'regex:/[0-9]/',      // must contain at least one digit
-                'regex:/[@$!%*#?&]/', // must contain a special character
-                'confirmed'
-            ],
-        ]);
-        if ($validator->fails()) {
-            return redirect()->back()->with('error_msg', 'Password must be at least 8 characters,must contain at least one lowercase letter,one uppercase letter,one digit,a special character');
-        }
-
-        auth()->user()->update(['password'=>request()->password , 'password_clear_text' => request()->password]);
-
-        return redirect()->back()->with('success', 'Successfully updated the password');
-    }
-
-    /**
      * Set Settings.
      *
      * @param Request $request
