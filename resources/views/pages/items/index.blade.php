@@ -58,7 +58,7 @@
             </div>
             <div class="row wrapper">
                 <form action="{{ route('admin.items.index') }}" method="get" role="search" id="filter_form" >
-                    <div class="col-sm-2 m-b-xs">
+                    <div class="col-sm-2">
                         <label><strong>Filter by Category</strong></label>
                         <select class="form-control selectpicker" id="category_id" data-live-search="true" name="category_id" >
                             <option data-tokens="" value="" selected>All</option>
@@ -67,8 +67,8 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="col-sm-2 m-b-xs">
-                        <label><strong>Filter by Sub Category</strong></label>
+                    <div class="col-sm-2">
+                        <label><strong>Filter by 1st level Category</strong></label>
                         <select class="form-control selectpicker" id="sub_category_id" data-live-search="true" name="sub_category_id" >
                             <option data-tokens="" value="" selected>All</option>
                             @foreach($sub_categories as $sub_category)
@@ -76,8 +76,8 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="col-sm-2 m-b-xs">
-                        <label><strong>Filter by Sub Sub Category</strong></label>
+                    <div class="col-sm-2">
+                        <label><strong>Filter by 2nd level Category</strong></label>
                         <select class="form-control selectpicker" id="sub_sub_category_id" data-live-search="true" name="sub_sub_category_id" >
                             <option data-tokens="" value="" selected>All</option>
                             @foreach($sub_sub_categories as $sub_sub_category)
@@ -85,7 +85,7 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="col-sm-2 m-b-xs">
+                    <div class="col-sm-2">
                         <label>Date From</label>
                         <div class='input-group date' id='from'>
                             <input type='text' name="min" id="min" class="form-control" />
@@ -94,7 +94,7 @@
                             </span>
                         </div>
                     </div>
-                    <div class="col-sm-2 m-b-xs">
+                    <div class="col-sm-2">
                         <label>Date To</label>
                         <div class='input-group date' id='to'>
                             <input type='text' name="max" id="max" class="form-control" />
@@ -103,8 +103,11 @@
                             </span>
                         </div>
                     </div>
-                    <div class="col-sm-2 m-b-xs">
-                        <button type="submit" class="btn btn-lg btn-primary">GO</button>
+                    <div class="col-sm-2">                   
+                        <label></label>
+                        <div class='input-group'>
+                            <button type="submit" class="btn btn-lg btn-action">GO</button>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -205,7 +208,7 @@
                             @if($item->is_available)
                                 <h4><span class="label label-success">Online</span></h4>
                             @else
-                                <h4><span class="label label-warning">Offline</span></h4>
+                                <h4><span class="label label-danger">Un-published</span></h4>
                             @endif
                         </td>
 
@@ -214,21 +217,21 @@
                         <td>
                             @if(in_array('publish',auth()->user()->role->hasAccess($section_name)))
                                 @if($item->is_available)
-                                    <a href="{{ route('admin.items.publish', $item->id) }}" class="btn btn-md btn-warning">
-                                        UnPublish
+                                    <a href="{{ route('admin.items.publish', $item->id) }}" class="btn btn-md btn-action">
+                                        Un-publish
                                     </a>
                                 @else
-                                    <a href="{{ route('admin.items.publish', $item->id) }}" class="btn btn-md btn-success">
+                                    <a href="{{ route('admin.items.publish', $item->id) }}" class="btn btn-md btn-action">
                                         Publish
                                     </a>
                                 @endif
                                 @if($item->status != 'pending')
                                     @if($item->status != 'in_review')
-                                        <a href="{{ route('admin.items.approve', $item->id) }}" class="btn btn-md btn-primary">
+                                        <a href="{{ route('admin.items.approve', $item->id) }}" class="btn btn-md btn-action">
                                             Reject
                                         </a>
                                     @else
-                                        <a href="{{ route('admin.items.approve', $item->id) }}" class="btn btn-md btn-success">
+                                        <a href="{{ route('admin.items.approve', $item->id) }}" class="btn btn-md btn-action">
                                             Approve
                                         </a>
                                     @endif
@@ -236,7 +239,7 @@
                             @endif
                             @if(in_array('edit',auth()->user()->role->hasAccess($section_name)))
 {{--                                <a href="{{ route('admin.items.customizations.index',$item->id) }}" class="btn btn-xs btn-primary"><i class="fa fa-arrows-alt"> Manage Customizations</i></a>--}}
-{{--                                <a href="{{ route('admin.items.edit', $item->id) }}" class="btn btn-md btn-info"><i class="fa fa-edit"> Edit</i></a>--}}
+{{--                                <a href="{{ route('admin.items.edit', $item->id) }}" class="btn btn-md btn-action"><i class="fa fa-edit"> Edit</i></a>--}}
                             @endif
                             @if(in_array('delete',auth()->user()->role->hasAccess($section_name)))
                             <form action="{{ secure_url('admin/items/'. $item->id) }}" method="POST" class="pull-left delete" style="margin-right: 3px">

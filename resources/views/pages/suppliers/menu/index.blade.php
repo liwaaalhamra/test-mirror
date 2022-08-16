@@ -57,26 +57,26 @@
                         <td>{{$item->subtitle_ar}}</td>
                         <td>
                             @if($item->is_published)
-                                <h4><span class="label label-success">Online</span></h4>
+                                <h4><span class="label label-success">Published</span></h4>
                             @else
-                                <h4><span class="label label-warning">Offline</span></h4>
+                                <h4><span class="label label-danger">Un-published</span></h4>
                             @endif
                         </td>
                         <td>{{ \Carbon\Carbon::createFromTimestamp($item->created_at)->format('Y-m-d H:i:s') }}</td>
                         <td>
                             @if(in_array('publish',auth()->user()->role->hasAccess($section_name)))
                                 @if(!$item->is_published)
-                                    <a href="{{ route('admin.suppliers.menu.publish', $item->id) }}" class="btn btn-md btn-success">
+                                    <a href="{{ route('admin.suppliers.menu.publish', $item->id) }}" class="btn btn-md btn-action">
                                         Publish
                                     </a>
                                 @else
-                                    <a href="{{ route('admin.suppliers.menu.publish', $item->id) }}" class="btn btn-md btn-warning">
-                                        UnPublish
+                                    <a href="{{ route('admin.suppliers.menu.publish', $item->id) }}" class="btn btn-md btn-action">
+                                        Un-publish
                                     </a>
                                 @endif
                             @endif
                             @if(in_array('edit',auth()->user()->role->hasAccess($section_name)))
-                            <a href="{{ route('admin.suppliers.menu.edit', [$restaurant->id,$item->id]) }}" class="btn btn-xs btn-info"><i class="fa fa-edit"> Edit</i></a>
+                            <a href="{{ route('admin.suppliers.menu.edit', [$restaurant->id,$item->id]) }}" class="btn btn-xs btn-action"><i class="fa fa-edit"> Edit</i></a>
                             @endif
 
                             @if(in_array('delete',auth()->user()->role->hasAccess($section_name)))

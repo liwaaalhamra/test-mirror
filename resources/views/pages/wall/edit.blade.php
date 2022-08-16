@@ -128,7 +128,7 @@
                                 <input name="post_media_type" id="post_media_type" type="checkbox" @if($item->post_media_type == 'image') checked @endif data-toggle="toggle" data-on="Image" data-off="Video" data-onstyle="success" data-offstyle="primary" data-size="large">
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-sm btn-primary">Save</button>
+                        <button type="submit" class="btn btn-sm btn-success">Save</button>
                         <a href="{{ route('admin.wall.index') }}" class="btn btn-sm btn-dark">Back</a>
                     </div>
                 </div>

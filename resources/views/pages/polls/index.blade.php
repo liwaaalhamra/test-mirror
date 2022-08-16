@@ -66,7 +66,7 @@
                                 </a>
                             @endif
                             <a href="{{ route('admin.polls.options.index', $item->id) }}" class="btn btn-md btn-primary"><i class="fa fa-arrows-alt">Options</i></a>
-                            <a href="{{ route('admin.polls.edit', $item->id) }}" class="btn btn-md btn-info"><i class="fa fa-edit"> Edit</i></a>
+                            <a href="{{ route('admin.polls.edit', $item->id) }}" class="btn btn-md btn-action"><i class="fa fa-edit"> Edit</i></a>
                             <form action="{{ secure_url('admin/polls/'. $item->id) }}" method="POST" class="pull-left delete" style="margin-right: 3px">
                                 {{ csrf_field() }}
                                 {{ method_field('DELETE') }}

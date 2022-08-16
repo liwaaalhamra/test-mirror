@@ -17,7 +17,7 @@
                             <label>Confirm Password</label>
                             <input type="text" id="password_confirmation" name="password_confirmation" class="form-control" placeholder="Confirm Password" required>
                         </div>
-                        <button type="submit" class="btn btn-sm btn-primary">Save</button>
+                        <button type="submit" class="btn btn-sm btn-success">Save</button>
                         <button style="margin-left: 40px" data-toggle="tooltip" data-placement="right" title="Generate new password" type="button" id="generate" class="btn btn-success" data-clipboard-target="#password">
                             <i class="fa fa-refresh" aria-hidden="true"></i>
                         </button>

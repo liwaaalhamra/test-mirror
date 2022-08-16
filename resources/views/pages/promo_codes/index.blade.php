@@ -62,17 +62,17 @@
                         <td>
                             @if(in_array('publish',auth()->user()->role->hasAccess($section_name)))
                                 @if($item->is_published)
-                                    <a href="{{ route('admin.promo_codes.publish', $item->id) }}" class="btn btn-md btn-warning">
-                                        UnPublish
+                                    <a href="{{ route('admin.promo_codes.publish', $item->id) }}" class="btn btn-md btn-action">
+                                        Un-publish
                                     </a>
                                 @else
-                                    <a href="{{ route('admin.promo_codes.publish', $item->id) }}" class="btn btn-md btn-success">
+                                    <a href="{{ route('admin.promo_codes.publish', $item->id) }}" class="btn btn-md btn-action">
                                         Publish
                                     </a>
                                 @endif
                             @endif
                             @if(in_array('edit',auth()->user()->role->hasAccess($section_name)))
-                                <a href="{{ route('admin.promo_codes.edit', $item->id) }}" class="btn btn-md btn-info"><i class="fa fa-edit"> Edit</i></a>
+                                <a href="{{ route('admin.promo_codes.edit', $item->id) }}" class="btn btn-md btn-action"><i class="fa fa-edit"> Edit</i></a>
                             @endif
                             @if(in_array('delete',auth()->user()->role->hasAccess($section_name)))
                                 <form action="{{ secure_url('admin/promo_codes/'. $item->id) }}" method="POST" class="pull-left delete" style="margin-right: 3px">

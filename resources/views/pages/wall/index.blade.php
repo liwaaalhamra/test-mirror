@@ -106,7 +106,7 @@
                         <td>{{ \Carbon\Carbon::createFromTimestamp($item->created_at)->format('Y-m-d H:i:s') }}</td>
                         <td>
                             @if($item->post_source == 'cms')
-                                <a href="{{ route('admin.wall.edit', $item->id) }}" class="btn btn-xs btn-info"><i class="fa fa-edit"> Edit</i></a>
+                                <a href="{{ route('admin.wall.edit', $item->id) }}" class="btn btn-xs btn-action"><i class="fa fa-edit"> Edit</i></a>
                             @endif
                             <form action="{{ secure_url('admin/wall/'. $item->id) }}" method="POST" class="pull-left delete" style="margin-right: 3px">
                                 {{ csrf_field() }}

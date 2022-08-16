@@ -40,7 +40,7 @@
 <div class="d-table w-100 h-100">
     <div class="d-table-cell align-middle">
         <div class="container">
-            <img class="logo d-block mx-auto mb-5" src="{{ secure_asset('public/uploads/images/logo.png') }}">
+            <img class="logo d-block mx-auto mb-5" src="{{ secure_asset('public/uploads/images/logo_new.png') }}">
 
             <h3 class="text-uppercase text-center mb-4"><b>Download {{ env('APP_NAME') }} App Now!</b></h3>
 

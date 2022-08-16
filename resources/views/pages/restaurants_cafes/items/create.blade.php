@@ -41,7 +41,7 @@
                             </div>
                         </div>
 
-                        <button type="submit" id="submit" class="btn btn-sm btn-primary">Save</button>
+                        <button type="submit" id="submit" class="btn btn-sm btn-success">Save</button>
                         <a href="{{ route('admin.restaurants_cafes.items.index',$category->id) }}" class="btn btn-sm btn-dark">Back</a>
                     </form>
                 </div>

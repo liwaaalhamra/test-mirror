@@ -116,7 +116,7 @@
                             {{--</div>--}}
                         {{--</div>--}}
 
-                        <button type="submit" class="btn btn-sm btn-primary">Save</button>
+                        <button type="submit" class="btn btn-sm btn-success">Save</button>
                     </form>
                     @endif
                 </div>

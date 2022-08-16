@@ -36,7 +36,7 @@
                 <tbody>
                 <tr>
                     <td style="background-color: {{env('BACKGROUND_COLOR')}}; padding-bottom: 10px; padding-top: 10px;">
-                        <p style="font-size:28px;"><img style="width: 50px;" src="{{ secure_url("public/uploads/images/logo.png") }}" /></p>
+                        <p style="font-size:28px;"><img style="width: 50px;" src="{{ secure_url("public/uploads/images/logo_new.png") }}" /></p>
                     </td>
                 </tr>
                 </tbody>

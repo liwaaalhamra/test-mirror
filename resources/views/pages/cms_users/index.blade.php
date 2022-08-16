@@ -92,8 +92,8 @@
                             @endif
                             @endif
                             @if(in_array('edit',auth()->user()->role->hasAccess($section_name)))
-                            <a href="{{ route('admin.cms_users.edit', $user->id) }}" class="btn btn-xs btn-info"><i class="fa fa-edit"> Edit</i></a>
-                            <a href="{{ route('admin.cms_users.reset', $user->id) }}" class="btn btn-xs btn-primary"><i class="fa fa-unlock"> Reset password</i></a>
+                            <a href="{{ route('admin.cms_users.edit', $user->id) }}" class="btn btn-xs btn-action"><i class="fa fa-edit"> Edit</i></a>
+                            <a href="{{ route('admin.cms_users.reset', $user->id) }}" class="btn btn-xs btn-action"><i class="fa fa-unlock"> Reset password</i></a>
                             @endif
                             @if(in_array('delete',auth()->user()->role->hasAccess($section_name)))
                             <form action="{{ secure_url('admin/cms_users/'. $user->id) }}" method="POST" class="pull-left delete" style="margin-right: 3px">

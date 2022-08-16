@@ -18,7 +18,7 @@
                             <input type="text" name="name_ar" id="name_ar" class="form-control" placeholder="Name Arabic" value="{{ old('name_ar') }}">
                         </div>
 
-                        <button type="submit" class="btn btn-sm btn-primary">Save</button>
+                        <button type="submit" class="btn btn-sm btn-success">Save</button>
                         <a href="{{ route('admin.product_types.index') }}" class="btn btn-sm btn-dark">Back</a>
                     </form>
                 </div>

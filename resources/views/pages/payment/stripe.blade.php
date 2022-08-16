@@ -20,7 +20,7 @@
 <body>
 <div class="app app-header-fixed ">
     <div style="text-align: center">
-        <h4><img style="width: 100%" src="{{secure_asset('public/uploads/images/logo.png')}}" /></h4>
+        <h4><img style="width: 100%" src="{{secure_asset('public/uploads/images/logo_new.png')}}" /></h4>
     </div>
     <div class="panel panel-default" style="text-align: center">
         <div class="panel-heading" style="background-color: #4EBC97;color: white;">

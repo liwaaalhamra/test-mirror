@@ -42,7 +42,7 @@
                             </div>
                         </div>
 
-                        <button type="submit" class="btn btn-sm btn-primary">Save</button>
+                        <button type="submit" class="btn btn-sm btn-success">Save</button>
                         <a href="{{ route('admin.promotions.index') }}" class="btn btn-sm btn-dark">Back</a>
                     </form>
                 </div>

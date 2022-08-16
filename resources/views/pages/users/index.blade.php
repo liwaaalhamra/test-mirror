@@ -16,16 +16,21 @@
         <div class="panel-heading">
             {{$content_header}}
         </div>
-        <div class="row wrapper">
-            <div class="col-sm-2 m-b-xs">
-                @if(in_array('add',auth()->user()->role->hasAccess($section_name)))
-                <a href="{{ route('admin.users.create') }}" class="btn m-b-xs btn-sm btn-default btn-addon">
-                    <i class="fa fa-plus"></i>Register {{$content_header}}
-                </a>
-                @endif
-            </div>
-            <form action="{{ secure_url('admin/users') }}" method="get" role="search" id="filter_form" >
-                <div class="col-sm-3 m-b-xs">
+        
+        <form action="{{ secure_url('admin/users') }}" method="get" role="search" id="filter_form" >
+            <div class="row wrapper">
+                <div class="col-sm-2">                    
+                    <label><strong>Register</strong></label>
+                    <div class='input-group' >
+
+                    @if(in_array('add',auth()->user()->role->hasAccess($section_name)))
+                    <a href="{{ route('admin.users.create') }}" class="btn m-b-xs btn-sm btn-default btn-addon">
+                        <i class="fa fa-plus"></i>Register {{$content_header}}
+                    </a>
+                    @endif
+                </div>
+                </div>
+                <div class="col-sm-3">
                     <label><strong>Filter by Status</strong></label>
                     <select class="form-control selectpicker" id="type" data-live-search="true" name="type" required >
                         <option data-tokens="All" @if($selected_type == '1') selected @endif value="1" >All Customers</option>
@@ -35,7 +40,7 @@
                         <option data-tokens="Not Verified" @if($selected_type == '5') selected @endif value="5" >Not Verified Customers</option>
                     </select>
                 </div>
-                <div class="col-sm-2 m-b-xs">
+                <div class="col-sm-2">
                     <label>Date From</label>
                     <div class='input-group date' id='from'>
                         <input type='text' name="min" id="min" class="form-control" />
@@ -44,7 +49,7 @@
                             </span>
                     </div>
                 </div>
-                <div class="col-sm-2 m-b-xs">
+                <div class="col-sm-2">
                     <label>Date To</label>
                     <div class='input-group date' id='to'>
                         <input type='text' name="max" id="max" class="form-control" />
@@ -53,11 +58,15 @@
                             </span>
                     </div>
                 </div>
-                <div class="col-sm-2 m-b-xs">
-                    <button type="submit" class="btn btn-lg btn-primary">GO</button>
+                <div class="col-sm-2">                    
+                    <label><strong></strong></label>
+                    <div class='input-group'>
+
+                    <button type="submit" class="btn btn-lg btn-action">GO</button>
+                    </div>
                 </div>
-            </form>
-        </div>
+            </div>
+        </form>
         <div class="table-responsive">
             <table class="table table-striped b-t b-light">
                 <thead>
@@ -173,8 +182,8 @@
                             @endif
                             @endif
                             @if(in_array('edit',auth()->user()->role->hasAccess($section_name)))
-                                <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-xs btn-info"><i class="fa fa-edit"> Edit</i></a>
-                                <a href="{{ route('admin.users.reset', $user->id) }}" class="btn btn-xs btn-primary"><i class="fa fa-unlock"> Reset password</i></a>
+                                <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-xs btn-action"><i class="fa fa-edit"> Edit</i></a>
+                                <a href="{{ route('admin.users.reset', $user->id) }}" class="btn btn-xs btn-action"><i class="fa fa-unlock"> Reset password</i></a>
                             @endif
                             {{--<form action="{{ secure_url('admin/users/'. $user->id) }}" method="POST" class="pull-left delete" style="margin-right: 3px">--}}
                                 {{--{{ csrf_field() }}--}}

@@ -134,7 +134,7 @@
                             </div>
                         </div>
                         <div class="col-sm-2 m-b-xs">
-                            <button type="submit" class="btn btn-lg btn-primary">GO</button>
+                            <button type="submit" class="btn btn-lg btn-action">GO</button>
                         </div>
                     </div>
                 </form>
@@ -351,7 +351,7 @@
                                 </a>
                             @else
                                 <a href="{{ route('admin.restaurants.publish', $item->id) }}" class="btn btn-md btn-warning">
-                                    UnPublish
+                                    Un-publish
                                 </a>
                             @endif
                             @endif
@@ -359,7 +359,7 @@
                                 <a href="{{ route('admin.restaurants.menu.index',$item->id) }}" class="btn btn-xs btn-primary"><i class="fa fa-arrows-alt"> Manage Menu</i></a>
                                 <a href="{{ route('admin.restaurants.timing.index',$item->id) }}" class="btn btn-xs btn-primary"><i class="fa fa-arrows-alt"> Manage Working Hours</i></a>
                                 <a href="{{ route('admin.restaurants.event_types.index',$item->id) }}" class="btn btn-xs btn-primary"><i class="fa fa-arrows-alt"> Manage Event Types</i></a>
-                                <a href="{{ route('admin.restaurants.edit', $item->id) }}" class="btn btn-md btn-info"><i class="fa fa-edit"> Edit</i></a>
+                                <a href="{{ route('admin.restaurants.edit', $item->id) }}" class="btn btn-md btn-action"><i class="fa fa-edit"> Edit</i></a>
                                 <a href="{{ route('admin.restaurants.clone', $item->id) }}" class="btn btn-md btn-info"><i class="far fa-clone"> Clone</i></a>
                                 <a href="{{ route('admin.restaurants.reset', $item->id) }}" class="btn btn-xs btn-default"><i class="fa fa-unlock"> Reset password</i></a>
                             @endif

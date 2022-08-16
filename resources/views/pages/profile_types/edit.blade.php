@@ -21,7 +21,7 @@
                             <label>End Color (#FFFFFF)</label>
                             <input type="text" name="end_color" class="form-control" required placeholder="End Color" value="{{ $item->end_color }}">
                         </div>
-                        <button type="submit" class="btn btn-sm btn-primary">Save</button>
+                        <button type="submit" class="btn btn-sm btn-success">Save</button>
                         <a href="{{ route('admin.profile_types.index') }}" class="btn btn-sm btn-dark">Back</a>
                     </div>
                 </div>

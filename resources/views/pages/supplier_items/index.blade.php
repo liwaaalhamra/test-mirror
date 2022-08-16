@@ -95,7 +95,7 @@
                         </div>
                     </div>
                     <div class="col-sm-2 m-b-xs">
-                        <button type="submit" class="btn btn-lg btn-primary">GO</button>
+                        <button type="submit" class="btn btn-lg btn-action">GO</button>
                     </div>
                 </form>
             </div>
@@ -209,7 +209,7 @@
                             @endif
                             @if(in_array('edit',auth()->user()->role->hasAccess($section_name)))
                                 <a href="{{ route('admin.supplier_items.supplier_customizations.index',$item->id) }}" class="btn btn-xs btn-primary"><i class="fa fa-arrows-alt"> Manage Customizations</i></a>
-                                <a href="{{ route('admin.supplier_items.edit', $item->id) }}" class="btn btn-md btn-info"><i class="fa fa-edit"> Edit</i></a>
+                                <a href="{{ route('admin.supplier_items.edit', $item->id) }}" class="btn btn-md btn-action"><i class="fa fa-edit"> Edit</i></a>
                             @endif
                             @if(in_array('delete',auth()->user()->role->hasAccess($section_name)))
                             <form action="{{ secure_url('admin/supplier_items/'. $item->id) }}" method="POST" class="pull-left delete" style="margin-right: 3px">

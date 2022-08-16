@@ -29,7 +29,7 @@
                             <label>Email</label>
                             <input type="email" name="email" class="form-control" placeholder="Email" value="{{ $user->email }}">
                         </div>
-                        <button type="submit" class="btn btn-sm btn-primary">Save</button>
+                        <button type="submit" class="btn btn-sm btn-success">Save</button>
                         <a href="{{ route('admin.users.index') }}" class="btn btn-sm btn-dark">Back</a>
                     </div>
                 </div>

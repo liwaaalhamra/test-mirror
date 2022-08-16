@@ -47,7 +47,7 @@
                         <td>{{ \Carbon\Carbon::createFromTimestamp($item->created_at)->format('Y-m-d H:i:s') }}</td>
                         <td>
                             <a href="{{ secure_url('admin/sub_categories/'.$item->id.'/items') }}" class="btn btn-md btn-primary">View Items</a>
-                            <a href="{{ route('admin.stores_shops.sub_categories.edit', [$category->id,$item->id]) }}" class="btn btn-md btn-info"><i class="fa fa-edit"> Edit</i></a>
+                            <a href="{{ route('admin.stores_shops.sub_categories.edit', [$category->id,$item->id]) }}" class="btn btn-md btn-action"><i class="fa fa-edit"> Edit</i></a>
                             <form action="{{ secure_url('admin/stores_shops/'.$category->id.'/sub_categories/'. $item->id) }}" method="POST" class="pull-left delete" style="margin-right: 3px">
                                 {{ csrf_field() }}
                                 {{ method_field('DELETE') }}

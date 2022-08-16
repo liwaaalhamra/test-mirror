@@ -14,7 +14,7 @@
                         <div class="form-group">
                             <input type="password" name="password_confirmation" class="form-control" placeholder="Confirm Password" required>
                         </div>
-                        <button type="submit" class="btn btn-sm btn-primary">Save</button>
+                        <button type="submit" class="btn btn-sm btn-success">Save</button>
                     </form>
                 </div>
             </div>
@@ -220,7 +220,7 @@
                                     <input name="ios_force_update" type="checkbox" data-toggle="toggle" data-on="On" @if(isset($settings['ios_force_update']) && $settings['ios_force_update'] == 'on') checked @endif data-off="Off" data-onstyle="success" data-size="large">
                                 </div>
                             </div>
-                            <button type="submit" class="btn btn-sm btn-primary">Save</button>
+                            <button type="submit" class="btn btn-sm btn-success">Save</button>
                         </form>
                     </div>
                 </div>

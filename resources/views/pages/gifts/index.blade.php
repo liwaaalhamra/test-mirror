@@ -87,7 +87,7 @@
                                     Enable
                                 </a>
                             @endif
-                            <a href="{{ route('admin.gifts.edit', $item->id) }}" class="btn btn-xs btn-info"><i class="fa fa-edit"> Edit</i></a>
+                            <a href="{{ route('admin.gifts.edit', $item->id) }}" class="btn btn-xs btn-action"><i class="fa fa-edit"> Edit</i></a>
                             {{--<form action="{{ secure_url('admin/gifts/'. $item->id) }}" method="POST" class="pull-left delete" style="margin-right: 3px">--}}
                                 {{--{{ csrf_field() }}--}}
                                 {{--{{ method_field('DELETE') }}--}}

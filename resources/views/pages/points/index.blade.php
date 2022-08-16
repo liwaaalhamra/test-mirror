@@ -80,14 +80,14 @@
                         <td>
                             {{--@if($item->is_published)--}}
                                 {{--<a href="{{ route('admin.jobs.publish', $item->id) }}" class="btn btn-md btn-warning">--}}
-                                    {{--UnPublish--}}
+                                    {{--Un-publish--}}
                                 {{--</a>--}}
                             {{--@else--}}
                                 {{--<a href="{{ route('admin.jobs.publish', $item->id) }}" class="btn btn-md btn-success">--}}
                                     {{--Publish--}}
                                 {{--</a>--}}
                             {{--@endif--}}
-                            {{--<a href="{{ route('admin.points.edit', $item->id) }}" class="btn btn-md btn-info"><i class="fa fa-edit"> Edit</i></a>--}}
+                            {{--<a href="{{ route('admin.points.edit', $item->id) }}" class="btn btn-md btn-action"><i class="fa fa-edit"> Edit</i></a>--}}
                             @if(in_array('delete',auth()->user()->role->hasAccess($section_name)))
                             <form action="{{ secure_url('admin/points/'. $item->id) }}" method="POST" class="pull-left delete" style="margin-right: 3px">
                                 {{ csrf_field() }}

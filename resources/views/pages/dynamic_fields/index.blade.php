@@ -35,18 +35,18 @@
                 <tr>
                     <th>Category</th>
                     <th>Sub Category</th>
-                    <th>in Return ?</th>
+                    {{-- <th>in Return ?</th>
                     <th>in Fitlers ?</th>
-                    <th>in Browsing Fitlers ?</th>
+                    <th>in Browsing Fitlers ?</th> --}}
                     <th>Field Name</th>
                     <th>Field Title</th>
-                    <th>Field Type</th>
-                    <th>Field Endpoint</th>
-                    <th>Has Extra Field ?</th>
+                    {{-- <th>Field Type</th> --}}
+                    {{-- <th>Field Endpoint</th> --}}
+                    {{-- <th>Has Extra Field ?</th> --}}
                     <th>Extra Field Name</th>
                     <th>Extra Field Title</th>
                     <th>Extra Field Type</th>
-                    <th>Extra Field Endpoint</th>
+                    {{-- <th>Extra Field Endpoint</th> --}}
                     <th>Date Added</th>
                     <th></th>
                 </tr>
@@ -56,22 +56,22 @@
                     <tr>
                         <td>{{ $item->category->name_en }}</td>
                         <td>{{ $item->sub_category->name_en }}</td>
-                        <td>@if($item->in_return) YES @else NO @endif</td>
+                        {{-- <td>@if($item->in_return) YES @else NO @endif</td>
                         <td>@if($item->in_filters) YES @else NO @endif</td>
-                        <td>@if($item->in_browsing_filters) YES @else NO @endif</td>
+                        <td>@if($item->in_browsing_filters) YES @else NO @endif</td> --}}
                         <td>{{$item->field_name}}</td>
                         <td>{{$item->field_title}}</td>
-                        <td>{{$item->field_type}}</td>
-                        <td>{{$item->field_endpoint}}</td>
-                        <td>@if($item->has_extra_field) YES @else NO @endif</td>
+                        {{-- <td>{{$item->field_type}}</td> --}}
+                        {{-- <td>{{$item->field_endpoint}}</td> --}}
+                        {{-- <td>@if($item->has_extra_field) YES @else NO @endif</td> --}}
                         <td>{{$item->extra_field_name}}</td>
                         <td>{{$item->extra_field_title}}</td>
                         <td>{{$item->extra_field_type}}</td>
-                        <td>{{$item->extra_field_endpoint}}</td>
+                        {{-- <td>{{$item->extra_field_endpoint}}</td> --}}
                         <td>{{ \Carbon\Carbon::createFromTimestamp($item->created_at)->format('Y-m-d H:i:s') }}</td>
                         <td>
                             @if(in_array('edit',auth()->user()->role->hasAccess($section_name)))
-                            <a href="{{ route('admin.dynamic_fields.edit', $item->id) }}" class="btn btn-xs btn-info"><i class="fa fa-edit"> Edit</i></a>
+                            <a href="{{ route('admin.dynamic_fields.edit', $item->id) }}" class="btn btn-xs btn-action"><i class="fa fa-edit"> Edit</i></a>
                             @endif
                             @if(in_array('delete',auth()->user()->role->hasAccess($section_name)))
                             <form action="{{ secure_url('admin/dynamic_fields/'. $item->id) }}" method="POST" class="pull-left delete" style="margin-right: 3px">

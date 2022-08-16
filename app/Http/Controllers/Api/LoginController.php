@@ -111,7 +111,7 @@ class LoginController extends Controller
 
     public function login_email(Request $request) {
         $validator = Validator::make($request->all(), [
-            'email' => 'required|email',
+            'email' => 'required|email|unique:users,email',
         ]);
 
         if($validator->fails()){
@@ -192,9 +192,13 @@ class LoginController extends Controller
             return parent::return_error('Missing parameter(s)', 400, $validator->messages()->all()[0]);
         }
 
+        if(!$user = Users::whereAccountType('mobile')->where(DB::raw("CONCAT(`country_code`, `primary_phone`)"), '=', CONCAT($request->country_code, $request->phone_number))->first()){
+            return parent::return_error("User Already Exists", 403, "User already exists");
+        }
+
         $new_country_code = null;
         $new_phone_number = null;
-        $country_id = 422;//by default
+        $country_id = 422; //by default
         $phone_number = $request->phone_number;
         $country_code = $request->country_code;
         $request->merge([ 'mobile_number' => $country_code.$phone_number]);
@@ -479,7 +483,12 @@ class LoginController extends Controller
 
         if(!Input::has('email')){
             return parent::return_error('Missing Email',401,'messages.missing_parameter');
+        }else{      
+            $validator = Validator::make($request->all(), [
+                'email' => 'required|email|max:255|unique:users',
+            ]); 
         }
+
         if(!Input::has('password')){
             return parent::return_error('Missing Password',401,'messages.missing_parameter');
         }
@@ -489,9 +498,10 @@ class LoginController extends Controller
         if($request->password != $request->password_confirm){
             return parent::return_error('Password Mismatch',401,'Password Mismatch');
         }
-        if(!filter_var(Input::get('email'), FILTER_VALIDATE_EMAIL)){
+        if(!filter_var(Input::get('email'), FILTER_VALIDATE_EMAIL)){       
             return parent::return_error("Invalid Email", 402, 'messages.invalid_parameters');
         }
+
         $new_country_code = null;
         $new_phone_number = null;
         $country_id = 414;//by default bcz mobile number is optional and app is based in kuwait

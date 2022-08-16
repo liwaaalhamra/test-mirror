@@ -17,7 +17,7 @@
                         </div>
 
                         <div class="form-group col-sm-12">
-                            <button type="submit" id="submit" class="btn btn-sm btn-primary">Save</button>
+                            <button type="submit" id="submit" class="btn btn-sm btn-success">Save</button>
                             <a href="{{ route('admin.stores_shops.sub_categories.index',$category->id) }}" class="btn btn-sm btn-dark">Back</a>
                         </div>
 
