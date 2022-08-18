@@ -117,6 +117,8 @@
                 <thead>
                 <tr>
                     <th>Order</th>
+                    <th>User</th>
+                    <th>User Email</th>
                     <th>SKU</th>
                     <th>Name</th>
                     <th>Category</th>
@@ -136,6 +138,8 @@
                 @foreach($items as $item)
                     <tr class="@if($item->status == 'approved') success @elseif($item->status == 'pending') default @elseif($item->status == 'expired') warning @elseif($item->status == 'paid') success @endif" >
                         <td>#POST {{ $item->item_order }}</td>
+                        <td>{{ $item->User->full_name }}</td>
+                        <td>{{ $item->User->email }}</td>
                         <td>{{ $item->code }}</td>
                         <td>{{ ucwords($item->name_en) }}</td>
                         <td>
