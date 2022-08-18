@@ -14,7 +14,7 @@
                                 <input type="number" name="amount" id="amount" class="form-control" required placeholder="Amount" value="{{ old('amount') }}">
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-sm btn-primary">Save</button>
+                        <button type="submit" class="btn btn-sm btn-success">Save</button>
                         <a href="{{ route('admin.cost_levels.index') }}" class="btn btn-sm btn-dark">Back</a>
                     </form>
                 </div>

@@ -14,7 +14,7 @@ class CustomFieldList extends Model
 {
     protected $table = 'custom_field_lists';
     protected $guarded = [];
-    protected $hidden = ['updated_at','field_name','name_en','name_ar','parent_id'];
+    protected $hidden = ['updated_at','field_name','name_en','name_ar'];
     protected $appends = ['name'];
 
     public function getNameAttribute(){

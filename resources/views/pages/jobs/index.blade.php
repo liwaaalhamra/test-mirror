@@ -39,7 +39,7 @@
                                 <textarea rows="3" name="intern_description" class="form-control" placeholder="Internship Description">{{ $intro->intern_description }}</textarea>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-sm btn-primary">Save</button>
+                        <button type="submit" class="btn btn-sm btn-success">Save</button>
                     </form>
                 </div>
             </div>
@@ -106,23 +106,23 @@
                         {{--<td>{{ $item->link }}</td>--}}
                         <td>
                             @if($item->is_published)
-                                <h4><span class="label label-success">Online</span></h4>
+                                <h4><span class="label label-success">Published</span></h4>
                             @else
-                                <h4><span class="label label-warning">Offline</span></h4>
+                                <h4><span class="label label-danger">Un-published</span></h4>
                             @endif
                         </td>
                         <td>{{ \Carbon\Carbon::createFromTimestamp($item->created_at)->format('Y-m-d H:i:s') }}</td>
                         <td>
                             @if($item->is_published)
                                 <a href="{{ route('admin.jobs.publish', $item->id) }}" class="btn btn-md btn-warning">
-                                    UnPublish
+                                    Un-publish
                                 </a>
                             @else
                                 <a href="{{ route('admin.jobs.publish', $item->id) }}" class="btn btn-md btn-success">
                                     Publish
                                 </a>
                             @endif
-                            <a href="{{ route('admin.jobs.edit', $item->id) }}" class="btn btn-md btn-info"><i class="fa fa-edit"> Edit</i></a>
+                            <a href="{{ route('admin.jobs.edit', $item->id) }}" class="btn btn-md btn-action"><i class="fa fa-edit"> Edit</i></a>
                             <form action="{{ secure_url('admin/jobs/'. $item->id) }}" method="POST" class="pull-left delete" style="margin-right: 3px">
                                 {{ csrf_field() }}
                                 {{ method_field('DELETE') }}

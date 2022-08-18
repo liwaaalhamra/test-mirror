@@ -49,7 +49,7 @@
                         </div>
 
                         <div class="form-group col-sm-12">
-                            <button type="submit" id="submit" class="btn btn-sm btn-primary">Save</button>
+                            <button type="submit" id="submit" class="btn btn-sm btn-success">Save</button>
                             <a href="{{ route('admin.restaurants.timing.index',$restaurant->id) }}" class="btn btn-sm btn-dark">Back</a>
                         </div>
 

@@ -42,7 +42,7 @@
                         <td>{{ $item->name }}</td>
                         <td>{{ \Carbon\Carbon::createFromTimestamp($item->created_at)->format('Y-m-d H:i:s') }}</td>
                         <td>
-                            <a href="{{ route('admin.sizes.edit', $item->id) }}" class="btn btn-md btn-info"><i class="fa fa-edit"> Edit</i></a>
+                            <a href="{{ route('admin.sizes.edit', $item->id) }}" class="btn btn-md btn-action"><i class="fa fa-edit"> Edit</i></a>
                             <form action="{{ secure_url('admin/sizes/'. $item->id) }}" method="POST" class="pull-left delete" style="margin-right: 3px">
                                 {{ csrf_field() }}
                                 {{ method_field('DELETE') }}

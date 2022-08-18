@@ -53,17 +53,17 @@
                                         {{--Show To Both--}}
                                     {{--</a>--}}
                                 @if($item->is_published)
-                                    <a href="{{ route('admin.cost_levels.publish', $item->id) }}" class="btn btn-md btn-warning">
-                                        UnPublish
+                                    <a href="{{ route('admin.cost_levels.publish', $item->id) }}" class="btn btn-md btn-action">
+                                        Un-publish
                                     </a>
                                 @else
-                                    <a href="{{ route('admin.cost_levels.publish', $item->id) }}" class="btn btn-md btn-success">
+                                    <a href="{{ route('admin.cost_levels.publish', $item->id) }}" class="btn btn-md btn-action">
                                         Publish
                                     </a>
                                 @endif
                             @endif
                             @if(in_array('edit',auth()->user()->role->hasAccess($section_name)))
-                            <a href="{{ route('admin.cost_levels.edit', $item->id) }}" class="btn btn-md btn-info"><i class="fa fa-edit"> Edit</i></a>
+                            <a href="{{ route('admin.cost_levels.edit', $item->id) }}" class="btn btn-md btn-action"><i class="fa fa-edit"> Edit</i></a>
                             @endif
                             @if(in_array('delete',auth()->user()->role->hasAccess($section_name)))
                             <form action="{{ secure_url('admin/cost_levels/'. $item->id) }}" method="POST" class="pull-left delete" style="margin-right: 3px">

@@ -1,7 +1,7 @@
 <?php
 
 //prefixed by 'admin'
-URL::forceSchema('https');
+// URL::forceSchema('https');
 
 //Route::get('/', function (){
 //    return view('vendor.layout');
@@ -199,6 +199,17 @@ Route::resource('locate_us', 'LocateUsController');
 Route::get('settings', ['uses' => 'SettingsController@index', 'as' => 'admin.settings.index']);
 Route::post('settings', ['uses' => 'SettingsController@changePassword', 'as' => 'admin.settings.changepassword']);
 Route::post('app_settings', ['uses' => 'SettingsController@app_settings', 'as' => 'admin.app_settings']);
+
+Route::get('profile', ['uses' => 'ProfileController@index', 'as' => 'admin.profile.index']);
+Route::post('profile', ['uses' => 'ProfileController@changePassword', 'as' => 'admin.profile.changepassword']);
+
+Route::get('general_settings', ['uses' => 'GeneralSettingsController@index', 'as' => 'admin.general_settings.index']);
+Route::post('general_settings', ['uses' => 'GeneralSettingsController@changePassword', 'as' => 'admin.general_settings.changepassword']);
+Route::post('app_settings', ['uses' => 'GeneralSettingsController@app_settings', 'as' => 'admin.app_settings']);
+
+Route::get('app_settings', ['uses' => 'AppSettingsController@index', 'as' => 'admin.app_settings.index']);
+Route::post('app_settings', ['uses' => 'AppSettingsController@changePassword', 'as' => 'admin.app_settings.changepassword']);
+Route::post('app_settings', ['uses' => 'AppSettingsController@app_settings', 'as' => 'admin.app_settings']);
 
 Route::resource('talk_to_us_categories', 'TalkToUsCategoriesController');
 Route::get('talk_to_us',['uses' => 'TalkToUsController@index', 'as' => 'admin.talk_to_us.index']);

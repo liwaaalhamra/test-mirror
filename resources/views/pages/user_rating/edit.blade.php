@@ -116,7 +116,7 @@
                             </div>
                         </div>
 
-                        <button type="submit" class="btn btn-sm btn-primary">Save</button>
+                        <button type="submit" class="btn btn-sm btn-success">Save</button>
                         <a href="{{ route('admin.user_rating.index') }}" class="btn btn-sm btn-dark">Back</a>
                     </div>
                 </div>

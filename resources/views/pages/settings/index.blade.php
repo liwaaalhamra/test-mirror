@@ -14,7 +14,7 @@
                         <div class="form-group">
                             <input type="password" name="password_confirmation" class="form-control" placeholder="Confirm Password" required>
                         </div>
-                        <button type="submit" class="btn btn-sm btn-primary">Save</button>
+                        <button type="submit" class="btn btn-sm btn-success">Save</button>
                     </form>
                 </div>
             </div>
@@ -220,7 +220,7 @@
                                     <input name="ios_force_update" type="checkbox" data-toggle="toggle" data-on="On" @if(isset($settings['ios_force_update']) && $settings['ios_force_update'] == 'on') checked @endif data-off="Off" data-onstyle="success" data-size="large">
                                 </div>
                             </div>
-                            <button type="submit" class="btn btn-sm btn-primary">Save</button>
+                            <button type="submit" class="btn btn-sm btn-success">Save</button>
                         </form>
                     </div>
                 </div>
@@ -228,13 +228,13 @@
         @endif
         <div class="col-sm-4">
             {{--<iframe src="https://sandbox-kw.flickapp.me/embed/tracking/3KDDYNYU961LVDEP" border="0"></iframe>--}}
-            <form action="{{ secure_url('admin/upload') }}" method="POST" enctype="multipart/form-data">
-                {{ csrf_field() }}
-                {{--<input type="file" name="excel" />--}}
-                {{--<button type="submit" class="btn m-b-xs btn-sm btn-success btn-addon">--}}
-                    {{--<i class="fa fa-upload"></i>Upload Sheets--}}
-                {{--</button>--}}
-            </form>
+{{--            <form action="{{ secure_url('admin/import_items') }}" method="POST" enctype="multipart/form-data">--}}
+{{--                {{ csrf_field() }}--}}
+{{--                <input type="file" name="excel" />--}}
+{{--                <button type="submit" class="btn m-b-xs btn-sm btn-success btn-addon">--}}
+{{--                    <i class="fa fa-upload"></i>Upload Sheets--}}
+{{--                </button>--}}
+{{--            </form>--}}
         </div>
     </div>
 @endsection

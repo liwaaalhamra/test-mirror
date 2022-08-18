@@ -88,7 +88,7 @@
                                     {{--Add To Pickup List--}}
                                 {{--</a>--}}
                             {{--@endif--}}
-                            <a href="{{ route('admin.locate_us.edit', $item->id) }}" class="btn btn-xs btn-info"><i class="fa fa-edit"> Edit</i></a>
+                            <a href="{{ route('admin.locate_us.edit', $item->id) }}" class="btn btn-xs btn-action"><i class="fa fa-edit"> Edit</i></a>
                             <form action="{{ secure_url('admin/locate_us/'. $item->id) }}" method="POST" class="pull-left delete" style="margin-right: 3px">
                                 {{ csrf_field() }}
                                 {{ method_field('DELETE') }}

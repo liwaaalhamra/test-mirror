@@ -50,32 +50,36 @@
                     @foreach($faqs as $item)
                     <tr>
                         <td>{!! $item->item_order !!}</td>
-                        <td>{!! $item->question_en !!}</td>
-                        <td>{!! $item->question_ar !!}</td>
-                        <td>{!! $item->answer_en !!}</td>
-                        <td>{!! $item->answer_ar !!}</td>
+                        {{-- <td>{!! $item->question_en !!}</td>
+                        <td>{!! $item->question_ar !!}</td> --}}
+
+                        <td>{{ substr(strip_tags($item->question_en), 0, 50) }}...</td>
+                        <td>{{ substr(strip_tags($item->question_ar), 0, 50) }}...</td>
+                        <td>{{ substr(strip_tags($item->answer_en), 0, 50) }}...</td>
+                        <td>{{ substr(strip_tags($item->answer_ar), 0, 50) }}...</td>
+
                         <td>
                             @if($item->is_published)
-                                <h4><span class="label label-success">Online</span></h4>
+                                <h4><span class="label label-success">Published</span></h4>
                             @else
-                                <h4><span class="label label-warning">Offline</span></h4>
+                                <h4><span class="label label-danger">Un-published</span></h4>
                             @endif
                         </td>
                         <td>{{ \Carbon\Carbon::createFromTimestamp($item->created_at)->format('Y-m-d H:i:s') }}</td>
                         <td>
                             @if(in_array('publish',auth()->user()->role->hasAccess($section_name)))
                                 @if($item->is_published)
-                                    <a href="{{ route('admin.faq.publish', $item->id) }}" class="btn btn-md btn-warning">
-                                        UnPublish
+                                    <a href="{{ route('admin.faq.publish', $item->id) }}" class="btn btn-md btn-action">
+                                        Un-publish
                                     </a>
                                 @else
-                                    <a href="{{ route('admin.faq.publish', $item->id) }}" class="btn btn-md btn-success">
+                                    <a href="{{ route('admin.faq.publish', $item->id) }}" class="btn btn-md btn-action">
                                         Publish
                                     </a>
                                 @endif
                             @endif
                             @if(in_array('edit',auth()->user()->role->hasAccess($section_name)))
-                            <a href="{{ route('admin.faq.edit', $item->id) }}" class="btn btn-xs btn-info"><i class="fa fa-edit"> Edit</i></a>
+                            <a href="{{ route('admin.faq.edit', $item->id) }}" class="btn btn-xs btn-action"><i class="fa fa-edit"> Edit</i></a>
                             @endif
                             @if(in_array('delete',auth()->user()->role->hasAccess($section_name)))
                             <form action="{{ secure_url('admin/faq/'. $item->id) }}" method="POST" class="pull-left delete" style="margin-right: 3px">

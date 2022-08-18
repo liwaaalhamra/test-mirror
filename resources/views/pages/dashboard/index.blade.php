@@ -36,7 +36,7 @@
     {{--</div>--}}
     {{--</div>--}}
     {{--<div class="col-sm-2 m-b-xs">--}}
-    {{--<button type="submit" class="btn btn-lg btn-primary">GO</button>--}}
+    {{--<button type="submit" class="btn btn-lg btn-action">GO</button>--}}
     {{--</div>--}}
     {{--</form>--}}
 

@@ -26,6 +26,7 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\View\View;
 use Illuminate\Pagination\Paginator;
 use App\Http\Controllers\Controller;
+use Response;
 use Validator;
 
 /**

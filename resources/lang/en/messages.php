@@ -9,7 +9,7 @@ return [
     'logout_success'     => 'You have been logged out successfully',
     'invalid_access_token'     => 'Invalid Access Token',
     'authentication_missing'     => 'Authentication Missing',
-    'request_submitted_successfully' => 'Thank you. Your ticket number is. We will get back to you shortly.',
+    'request_submitted_successfully' => 'Thank you. We will get back to you shortly.',
     'order_submitted_successfully' => 'Your order has been Submitted Successfully',
     'already_favorite' => 'Restaurant already in favorites list',
     'item_not_exist_favorite' => 'Restaurant does not exist in favorites list',

@@ -77,7 +77,7 @@
                                 </a>
                             @endif
                             <a href="{{ route('admin.surveys.questions.index', $item->id) }}" class="btn btn-md btn-primary"><i class="fa fa-arrows-alt"> Questions</i></a>
-                            <a href="{{ route('admin.surveys.edit', $item->id) }}" class="btn btn-md btn-info"><i class="fa fa-edit"> Edit</i></a>
+                            <a href="{{ route('admin.surveys.edit', $item->id) }}" class="btn btn-md btn-action"><i class="fa fa-edit"> Edit</i></a>
                             <form action="{{ secure_url('admin/surveys/'. $item->id) }}" method="POST" class="pull-left delete" style="margin-right: 3px">
                                 {{ csrf_field() }}
                                 {{ method_field('DELETE') }}

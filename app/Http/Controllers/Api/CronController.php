@@ -17,6 +17,7 @@ use App\Models\Api\Setting;
 use App\Models\Api\Users;
 use App\Models\Api\WallMedia;
 use App\Models\Api\WallPost;
+use App\Models\Api\Barter;
 use Carbon\Carbon;
 use DB;
 use Facebook\Exceptions\FacebookResponseException;
@@ -340,7 +341,14 @@ class CronController extends Controller
     public function update_dashboard(Request $request){
         $values = [];
 
-        $registered_users = Users::where('is_verified','=',1)->count();
+        $registered_users = Users::count();
+        $verified_users = Users::where('is_verified','=',1)->count();
+
+        $pending_barters = Barter::where('status','pending')->count();
+        $accepted_barters = Barter::where('status','accepted')->count();
+        $completed_barters = Barter::where('status','completed')->count();
+        $rejected_barters = Barter::where('status','rejected')->count();
+
         $values['registered_users'] = [
             'meta_type' => 'registered_users',
             'meta_name' => 'Registered Users',
@@ -350,6 +358,57 @@ class CronController extends Controller
             'meta_route' => '/admin/users?type=2',
             'meta_unit' => 'Users'
         ];
+
+        $values['verified_users'] = [
+            'meta_type' => 'verified_users',
+            'meta_name' => 'Verified Users',
+            'meta_value' => $verified_users,
+            'meta_col' => 6,
+            'meta_icon' => 'fas fa-users',
+            'meta_route' => '/admin/users?type=2',
+            'meta_unit' => 'Users'
+        ];
+
+        $values['pending_barters'] = [
+            'meta_type' => 'pending_barters',
+            'meta_name' => 'Pending Barters',
+            'meta_value' => $pending_barters,
+            'meta_col' => 3,
+            'meta_icon' => 'fas fa-tag',
+            'meta_route' => '/admin/items',
+            'meta_unit' => 'Barters'
+        ];
+
+        $values['completed_barters'] = [
+            'meta_type' => 'completed_barters',
+            'meta_name' => 'Completed Barters',
+            'meta_value' => $completed_barters,
+            'meta_col' => 3,
+            'meta_icon' => 'fas fa-tag',
+            'meta_route' => '/admin/items',
+            'meta_unit' => 'Barters'
+        ];
+
+        $values['accepted_barters'] = [
+            'meta_type' => 'accepted_barters',
+            'meta_name' => 'Accepted Barters',
+            'meta_value' => $accepted_barters,
+            'meta_col' => 3,
+            'meta_icon' => 'fas fa-tag',
+            'meta_route' => '/admin/items',
+            'meta_unit' => 'Barters'
+        ];
+
+        $values['rejected_barters'] = [
+            'meta_type' => 'rejected_barters',
+            'meta_name' => 'Rejected Barters',
+            'meta_value' => $rejected_barters,
+            'meta_col' => 3,
+            'meta_icon' => 'fas fa-tag',
+            'meta_route' => '/admin/items',
+            'meta_unit' => 'Barters'
+        ];
+
         $sales = Order::whereStatus('delivered')->sum('total_price');
         $sales = $sales ? $sales : 0;
         $values['sales'] = [

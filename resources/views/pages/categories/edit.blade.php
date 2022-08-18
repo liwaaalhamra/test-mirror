@@ -24,9 +24,9 @@
                                 <label>Order</label>
                                 <input type="text" name="item_order" required id="item_order" class="form-control" placeholder="Order" value="{{ $category->item_order }}">
                             </div>
-                            <div class="form-group col-md-4">
-                                <label>Type?</label>
-                                <input name="type" type="checkbox" data-toggle="toggle" @if($category->type == 'services') checked @endif  data-on="Service" data-off="Product" data-onstyle="success" data-offstyle="danger" data-size="large">
+                            <div class="form-group col-md-4" style="display:grid;">
+                                <label>Type</label>
+                                <input name="type" type="checkbox" data-toggle="toggle" @if($category->type == 'services') checked @endif  data-on="Service" data-off="Product" data-onstyle="action" data-offstyle="action" data-size="medium">
                             </div>
                         </div>
                         <div class="row">
@@ -120,7 +120,7 @@
                             </div>
                         </div>
 
-                        <button type="submit" class="btn btn-sm btn-primary">Save</button>
+                        <button type="submit" class="btn btn-sm btn-success">Save</button>
                         <a href="{{ route('admin.categories.index') }}" class="btn btn-sm btn-dark">Back</a>
                     </div>
                 </div>

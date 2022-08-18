@@ -81,9 +81,9 @@
                                 @endif
                             @endif
 
-                            {{--<a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-xs btn-info"><i class="fa fa-edit"> Edit</i></a>--}}
+                            {{--<a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-xs btn-action"><i class="fa fa-edit"> Edit</i></a>--}}
 
-                            {{--<a href="{{ route('admin.users.reset', $user->id) }}" class="btn btn-xs btn-primary"><i class="fa fa-unlock"> Reset password</i></a>--}}
+                            {{--<a href="{{ route('admin.users.reset', $user->id) }}" class="btn btn-xs btn-action"><i class="fa fa-unlock"> Reset password</i></a>--}}
 
                             {{--<form action="{{ secure_url('admin/users/'. $user->id) }}" method="POST" class="pull-left delete" style="margin-right: 3px">--}}
                                 {{--{{ csrf_field() }}--}}

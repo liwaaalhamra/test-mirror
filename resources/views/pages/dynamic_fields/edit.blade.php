@@ -97,7 +97,7 @@
                             <label>Extra Field Endpoint  (Needed in case of Field of Type "List", Refer to list on Top of page)</label>
                             <input type="text" name="extra_field_endpoint" id="extra_field_endpoint" class="form-control" placeholder="Extra Field Endpoint" value="{{ $item->extra_field_endpoint }}">
                         </div>
-                        <button type="submit" class="btn btn-sm btn-primary">Save</button>
+                        <button type="submit" class="btn btn-sm btn-success">Save</button>
                         <a href="{{ route('admin.dynamic_fields.index') }}" class="btn btn-sm btn-dark">Back</a>
                     </form>
                 </div>

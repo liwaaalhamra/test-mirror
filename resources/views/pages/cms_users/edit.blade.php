@@ -41,7 +41,7 @@
                         </div>
                         <div class="row">
                             <div class="form-group col-sm-6">
-                                <button type="submit" class="btn btn-sm btn-primary">Save</button>
+                                <button type="submit" class="btn btn-sm btn-success">Save</button>
                                 <a href="{{ route('admin.cms_users.index') }}" class="btn btn-sm btn-dark">Back</a>
                             </div>
                         </div>

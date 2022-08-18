@@ -51,6 +51,7 @@ class SheetsController extends Controller
                  * for car models set startRow to 1
                  */
                 $sheets = $sheets;
+                dd($sheets);
 
 //                foreach ($sheets as $item){
 //                    if($item['brand_id'] == null || $item['brand_name'] == null){

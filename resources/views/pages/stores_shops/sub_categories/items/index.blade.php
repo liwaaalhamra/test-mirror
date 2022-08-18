@@ -106,10 +106,10 @@
                                 {{--</a>--}}
                             {{--@else--}}
                                 {{--<a href="{{ route('admin.restaurants_cafes.publish', $item->id) }}" class="btn btn-xs btn-default">--}}
-                                    {{--UnPublish--}}
+                                    {{--Un-publish--}}
                                 {{--</a>--}}
                             {{--@endif--}}
-                            <a href="{{ route('admin.sub_categories.items.edit', [$category->id,$item->id]) }}" class="btn btn-xs btn-info"><i class="fa fa-edit"> Edit</i></a>
+                            <a href="{{ route('admin.sub_categories.items.edit', [$category->id,$item->id]) }}" class="btn btn-xs btn-action"><i class="fa fa-edit"> Edit</i></a>
                             <form action="{{ secure_url('admin/sub_categories/'.$category->id.'/items/'. $item->id) }}" method="POST" class="pull-left delete" style="margin-right: 3px">
                                 {{ csrf_field() }}
                                 {{ method_field('DELETE') }}

@@ -15,7 +15,7 @@
                                 <input type="text" name="name" id="name" class="form-control" required placeholder="Name" value="{{ $item->name }}">
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-sm btn-primary">Save</button>
+                        <button type="submit" class="btn btn-sm btn-success">Save</button>
                         <a href="{{ route('admin.polls.options.index',$category->id) }}" class="btn btn-sm btn-dark">Back</a>
                     </div>
                 </div>

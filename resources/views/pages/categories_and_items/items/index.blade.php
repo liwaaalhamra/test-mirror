@@ -95,15 +95,15 @@
                         <td>{{ \Carbon\Carbon::createFromTimestamp($item->created_at)->format('Y-m-d H:i:s') }}</td>
                         <td>
                             @if(!$item->is_available)
-                                <a href="{{ route('admin.categories_items.publish', $item->id) }}" class="btn btn-xs btn-success">
+                                <a href="{{ route('admin.categories_items.publish', $item->id) }}" class="btn btn-xs btn-action">
                                     Publish
                                 </a>
                             @else
-                                <a href="{{ route('admin.categories_items.publish', $item->id) }}" class="btn btn-xs btn-default">
-                                    UnPublish
+                                <a href="{{ route('admin.categories_items.publish', $item->id) }}" class="btn btn-xs btn-action">
+                                    Un-publish
                                 </a>
                             @endif
-                            <a href="{{ route('admin.categories.items.edit', [$category->id,$item->id]) }}" class="btn btn-xs btn-info"><i class="fa fa-edit"> Edit</i></a>
+                            <a href="{{ route('admin.categories.items.edit', [$category->id,$item->id]) }}" class="btn btn-xs btn-action"><i class="fa fa-edit"> Edit</i></a>
                             <form action="{{ secure_url('admin/categories/'.$category->id.'/items/'. $item->id) }}" method="POST" class="pull-left delete" style="margin-right: 3px">
                                 {{ csrf_field() }}
                                 {{ method_field('DELETE') }}

@@ -13,7 +13,7 @@
                             <input type="text" name="name" id="name" class="form-control" placeholder="Name" value="{{ old('name') }}">
                         </div>
 
-                        <button type="submit" class="btn btn-sm btn-primary">Save</button>
+                        <button type="submit" class="btn btn-sm btn-success">Save</button>
                         <a href="{{ route('admin.talk_to_us_categories.index') }}" class="btn btn-sm btn-dark">Back</a>
                     </form>
                 </div>

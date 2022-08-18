@@ -156,8 +156,8 @@ class PaymentController extends Controller
     public function show_test(Request $request) /*: View*/
     {
         //below for testing
-        $request->headers->set('token', [ 0 => 'oyoqOPfmG0iTCrHbUXkVLppGyQ4QwzG5WpI2FpglPbYv92j2zu6VfFcm6Uz5dS9n']);
-        $request->headers->set('post-id', [ 1 => '22']);
+//        $request->headers->set('token', [ 0 => '8xCpMW3OOuP5R4mxsCgFuyekYCLR9ptmGogTKgFaSIJClG9IvsPdG208IqPB0pPH']);
+//        $request->headers->set('post-id', [ 1 => '77']);
         $user = $this->validate_user($request);
         $post_id = $request->header("post-id");
         $post = Item::whereId($post_id)->first();

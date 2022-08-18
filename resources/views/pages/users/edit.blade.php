@@ -122,7 +122,7 @@
                             {{--<textarea name="address_details" rows="5" id="address_details" class="form-control">{{$user->address_details}}</textarea>--}}
                         {{--</div>--}}
                         <div class="form-group col-sm-4">
-                            <button type="submit" class="btn btn-sm btn-primary">Save</button>
+                            <button type="submit" class="btn btn-sm btn-success">Save</button>
                             <a href="{{ route('admin.users.index') }}" class="btn btn-sm btn-dark">Back</a>
                         </div>
                     </div>

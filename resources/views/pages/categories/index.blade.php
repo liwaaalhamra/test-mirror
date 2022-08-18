@@ -59,7 +59,7 @@
 {{--                        </td>--}}
                         <td>
                             @if($item->image != null)
-                                <img src="{{ secure_url('admin/medias/categories/'. $item->id.'/view_media') }}" width="100px" data-toggle="modal" data-target="#myModal_{{$item->id}}"  style="cursor: pointer;"/>
+                                <img src="{{ $item->image }}" width="100px" data-toggle="modal" data-target="#myModal_{{$item->id}}"  style="cursor: pointer;"/>
                                 <div id="myModal_{{$item->id}}" class="modal fade" role="dialog">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
@@ -67,7 +67,7 @@
                                                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                                             </div>
                                             <div class="modal-body">
-                                                <img src="{{ secure_url('admin/medias/categories/'. $item->id.'/view_media') }}" width="100%;">
+                                                <img src="{{ $item->image }}" width="100%;">
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -80,7 +80,7 @@
                         </td>
                         <td>
                             @if($item->selected_image != null)
-                                <img src="{{ secure_url('admin/medias/categories/'. $item->id.'/view_media/selected_image') }}" width="100px" data-toggle="modal" data-target="#myModal1_{{$item->id}}"  style="cursor: pointer;"/>
+                                <img src="{{ $item->selected_image }}" width="100px" data-toggle="modal" data-target="#myModal1_{{$item->id}}"  style="cursor: pointer;"/>
                                 <div id="myModal1_{{$item->id}}" class="modal fade" role="dialog">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
@@ -88,7 +88,7 @@
                                                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                                             </div>
                                             <div class="modal-body">
-                                                <img src="{{ secure_url('admin/medias/categories/'. $item->id.'/view_media/selected_image') }}" width="100%;">
+                                                <img src="{{ $item->selected_image }}" width="100%;">
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -101,27 +101,27 @@
                         </td>
                         <td>
                             @if($item->is_published)
-                                <h4><span class="label label-success">Online</span></h4>
+                                <h4><span class="label label-success">Published</span></h4>
                             @else
-                                <h4><span class="label label-warning">Offline</span></h4>
+                                <h4><span class="label label-danger">Un-published</span></h4>
                             @endif
                         </td>
                         <td>{{ \Carbon\Carbon::createFromTimestamp($item->created_at)->format('Y-m-d H:i:s') }}</td>
                         <td>
                             @if(in_array('publish',auth()->user()->role->hasAccess($section_name)))
                                 @if($item->is_published)
-                                    <a href="{{ route('admin.categories.publish', $item->id) }}" class="btn btn-md btn-warning">
-                                        UnPublish
+                                    <a href="{{ route('admin.categories.publish', $item->id) }}" class="btn btn-md btn-action">
+                                        Un-publish
                                     </a>
                                 @else
-                                    <a href="{{ route('admin.categories.publish', $item->id) }}" class="btn btn-md btn-success">
+                                    <a href="{{ route('admin.categories.publish', $item->id) }}" class="btn btn-md btn-action">
                                         Publish
                                     </a>
                                 @endif
                             @endif
                             @if(in_array('edit',auth()->user()->role->hasAccess($section_name)))
-                                <a href="{{ route('admin.categories.edit', $item->id) }}" class="btn btn-xs btn-info"><i class="fa fa-edit"> Edit</i></a>
-                                <a href="{{ route('admin.categories.sub_categories.index',$item->id) }}" class="btn btn-xs btn-primary"><i class="fa fa-arrows-alt">  View Sub Categories</i></a>
+                                <a href="{{ route('admin.categories.edit', $item->id) }}" class="btn btn-xs btn-action"><i class="fa fa-edit"> Edit</i></a>
+                                <a href="{{ route('admin.categories.sub_categories.index',$item->id) }}" class="btn btn-xs btn-action"><i class="fa fa-arrows-alt">View 1st level Categories</i></a>
                             @endif
                             @if(in_array('delete',auth()->user()->role->hasAccess($section_name)))
 {{--                                <form action="{{ secure_url('admin/categories/'. $item->id) }}" method="POST" class="pull-left delete" style="margin-right: 3px">--}}

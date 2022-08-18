@@ -56,7 +56,7 @@
                 <tbody>
                 <tr>
                     <td style="padding-bottom: 23px; padding-top: 23px;">
-                        <p>Thank you for confirming your email {{ $account->email }}. Now you can enjoy our app!</p>
+                        <p>Thank you for confirming your email, Now you can enjoy our app!</p>
                     </td>
                 </tr>
                 </tbody>

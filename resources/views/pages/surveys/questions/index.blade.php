@@ -60,13 +60,13 @@
                                 </a>
                             @else
                                 <a href="{{ route('admin.survey_questions.publish', $item->id) }}" class="btn btn-md btn-default">
-                                    UnPublish
+                                    Un-publish
                                 </a>
                             @endif
                             @if($item->type != 'free_text')
                                 <a href="{{ route('admin.survey_questions.answers.index', $item->id) }}" class="btn btn-md btn-primary"><i class="fa fa-arrows-alt"> Answers</i></a>
                             @endif
-                                <a href="{{ route('admin.surveys.questions.edit', [$category->id,$item->id]) }}" class="btn btn-md btn-info"><i class="fa fa-edit"> Edit</i></a>
+                                <a href="{{ route('admin.surveys.questions.edit', [$category->id,$item->id]) }}" class="btn btn-md btn-action"><i class="fa fa-edit"> Edit</i></a>
                             {{--<form action="{{ secure_url('admin/surveys/'.$category->id.'/questions/'. $item->id) }}" method="POST" class="pull-left delete" style="margin-right: 3px">--}}
                                 {{--{{ csrf_field() }}--}}
                                 {{--{{ method_field('DELETE') }}--}}

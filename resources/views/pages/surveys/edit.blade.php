@@ -35,7 +35,7 @@
                                 </span>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-sm btn-primary">Save</button>
+                        <button type="submit" class="btn btn-sm btn-success">Save</button>
                         <a href="{{ route('admin.surveys.index') }}" class="btn btn-sm btn-dark">Back</a>
                     </div>
                 </div>

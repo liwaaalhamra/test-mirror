@@ -106,7 +106,7 @@
                                                 <td style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 18px; font-weight: 400; line-height: 24px;">
                                                     <a href="#" target="_blank"
                                                        style="color: #ffffff; text-decoration: none;"><img
-                                                                src="{{secure_url('public/uploads/images/logo.png')}}"
+                                                                src="{{secure_url('resources/assets/images/logo_new.png')}}"
                                                                 width="80" height="80"
                                                                 style="display: block; border: 0px;"/></a></td>
                                             </tr>
