@@ -47,10 +47,10 @@ class ItemsController extends Controller
         $limits = [];
         if($price < 3000){
             $limits['minimum'] = 0;
-            $limits['maximum'] = 6000;
+            $limits['maximum'] = 5000;
         }else{
             $limits['minimum'] = $price * 0.5;
-            $limits['maximum'] = floatval($price);
+            $limits['maximum'] = floatval($price) * 2;
         }
         return response()->json($limits);
     }

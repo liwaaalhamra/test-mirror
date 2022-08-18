@@ -42,6 +42,9 @@ class HasAccess
                             case "view":
                                 if($section_name == 'orders'){
                                     $accessible_routes[] = 'admin.'.$section_name.'.items.index';
+                                } 
+                                if($section_name == 'profile'){
+                                    $accessible_routes[] = 'admin.'.$section_name.'.index';
                                 }
                                 if($section_name == 'items'){
                                     $accessible_routes[] = 'admin.'.$section_name.'.show';

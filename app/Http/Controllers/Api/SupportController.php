@@ -92,6 +92,21 @@ class SupportController extends Controller
             $message->subject($info['title']);
             $message->to($info['to']);
         });
+
+        $client_info = [];
+        $client_info['to'] = $to = explode(',', env('SUGGESTION_EMAILS'));
+        $client_info['user'] = $user;
+//        $client_info['body_title'] = $request->title;
+        $client_info['body_message'] = $request->message;
+        $client_info['email'] = $request->email;
+        $client_info['category_name'] = $category->name;
+        $client_info['message'] = "A New Feedback has been sent to you with the following info:";
+        $client_info['title'] = 'Talk To Us';
+
+        Mail::send('emails.suggestion', ['data' => $client_info], function ($message) use ($client_info) {
+            $message->subject($client_info['title']);
+            $message->to($client_info['to']);
+        });
         $message = utf8_decode(utf8_encode(Lang::get('messages.request_submitted_successfully')));
         return response()->json(['status' => $message]);
     }

@@ -124,7 +124,7 @@ class ProfileController extends Controller
             ]);
 
             if ($validator->fails()) {
-                return parent::return_error('DOB Invalid Format',403,'messages.invalid_dob');
+                return parent::return_error('DOB Invalid Format', 403, 'messages.invalid_dob');
             }
             $dob = $request->dob;
         }

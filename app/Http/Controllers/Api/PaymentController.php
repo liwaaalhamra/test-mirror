@@ -71,12 +71,12 @@ class PaymentController extends Controller
 
     public function success_response(Request $request) {
         if(!isset($request->merchantTxnId)){
-            $result['message'] = "Something went wrong,Payment Failure";
+            $result['message'] = "Something went wrong, Payment Failure";
             $result['result'] = 'failure';
             parent::redirect(secure_url('/api/order/check_purchased'),$result);
         }
         if(!isset($request->txnId)){
-            $result['message'] = "Something went wrong,Payment Failure";
+            $result['message'] = "Something went wrong, Payment Failure";
             $result['result'] = 'failure';
             parent::redirect(secure_url('/api/order/check_purchased'),$result);
         }
