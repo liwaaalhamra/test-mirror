@@ -55,7 +55,7 @@ class ItemsController extends Controller
         return response()->json($limits);
     }
 
-    public function lists($type,$parent_id = null){
+    public function lists($type, $parent_id = null){
         $data = CustomFieldList::when($parent_id, function ($query) use ($parent_id) {
                 return $query->whereParentId($parent_id);
         })->whereFieldName($type)->get();
@@ -122,6 +122,7 @@ class ItemsController extends Controller
     public function category_subs(Request $request) {
         $query = SubCategory::whereIsPublished(1)->orderByRaw("LOWER(name_en) asc");
         if(Input::has('category_id')){
+            
             $category_id = Input::get('category_id');
             $query->where(function($query) use ($category_id){
                 $query->whereCategoryId($category_id);
@@ -130,6 +131,16 @@ class ItemsController extends Controller
             $query->whereIsFeatured(1);
         }
         $categories = $query->get();
+
+        foreach($categories as $category){
+            // CustomFieldList::whereRaw("LOWER(name_en)", "=", strtolower($sub_category->name_en))->where('field_name', "car_brands")->first()
+            foreach($category->sub_sub_categories as $sub_category){
+                $car_brand = CustomFieldList::whereRaw("LOWER(name_en) = ?",[ strtolower($sub_category->name_en)])->where('field_name', "car_brands")->first();
+                $sub_category->parent_id = $car_brand ? $car_brand->id : null;
+            }
+        }
+
+        // dd($categories);
         return response()->json($categories);
     }
 

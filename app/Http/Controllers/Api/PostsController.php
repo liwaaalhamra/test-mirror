@@ -282,30 +282,33 @@ class PostsController extends Controller
             if(!$return_sub_category = SubCategory::whereIsPublished(1)->whereId($request->return_sub_category_id)->first()){
                 return parent::return_error("Invalid Return Sub Category", 402, 'messages.invalid_parameters');
             }
-            if(!Input::has('return_sub_sub_category_id')){
-                return parent::return_error('Missing Return Sub Sub Category ID',401,'messages.missing_parameter');
+            // if(!Input::has('return_sub_sub_category_id')){
+            //     return parent::return_error('Missing Return Sub Sub Category ID',401,'messages.missing_parameter');
+            // }
+            if(Input::has('return_sub_sub_category_id')){
+                if(!$return_sub_sub_category = SubSubCategory::whereIsPublished(1)->whereId($request->return_sub_sub_category_id)->first()){
+                    return parent::return_error("Invalid Return Sub Sub Category", 402, 'messages.invalid_parameters');
+                }
             }
-            if(!$return_sub_sub_category = SubSubCategory::whereIsPublished(1)->whereId($request->return_sub_sub_category_id)->first()){
-                return parent::return_error("Invalid Return Sub Sub Category", 402, 'messages.invalid_parameters');
-            }
+
             if(!Input::has('return_location_id')){
-                return parent::return_error('Missing Return Location ID',401,'messages.missing_parameter');
+                return parent::return_error('Missing Return Location ID', 401, 'messages.missing_parameter');
             }
             if(!$return_location = Location::whereId($request->return_location_id)->first()){
                 return parent::return_error("Invalid Return Location", 402, 'messages.invalid_parameters');
             }
             if(!Input::has('return_title')){
-                return parent::return_error('Missing Return Title',401,'messages.missing_parameter');
+                return parent::return_error('Missing Return Title', 401, 'messages.missing_parameter');
             }
 //            if(!Input::has('return_description')){
 //                return parent::return_error('Missing Return Description',401,'messages.missing_parameter');
 //            }
             $return_description = isset($request->return_description) && !empty($request->return_description) ? $request->return_description : null;
             if(!Input::has('return_price_from')){
-                return parent::return_error('Missing Return Price From',401,'messages.missing_parameter');
+                return parent::return_error('Missing Return Price From', 401,'messages.missing_parameter');
             }
             if(!Input::has('return_price_to')){
-                return parent::return_error('Missing Return Price To',401,'messages.missing_parameter');
+                return parent::return_error('Missing Return Price To', 401,'messages.missing_parameter');
             }
             $return_regular_fields = [];
             if(Input::has('return_regular_fields')){
@@ -373,7 +376,7 @@ class PostsController extends Controller
                 'user_id' => $user->id,
                 'category_id' => $return_category->id,
                 'sub_category_id' => $return_sub_category->id,
-                'sub_sub_category_id' => $return_sub_sub_category->id,
+                'sub_sub_category_id' => isset($return_sub_sub_category) && $return_sub_sub_category ? $return_sub_sub_category->id : null,
                 'price_from' => $request->return_price_from,
                 'price_to' => $request->return_price_to,
                 'name_en' => $request->return_title,

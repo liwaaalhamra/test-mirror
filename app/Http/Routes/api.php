@@ -294,9 +294,6 @@ Route::get('/nationalities', 'LoginController@nationalities');
  * Settings Routes
  */
 Route::get('/settings', 'SettingsController@index');
-Route::get('/profile', 'ProfileController@index');
-Route::get('/general-settings', 'GeneralSettingsController@index');
-Route::get('/app-settings', 'AppSettingsController@index');
 
 /**
  * FAQs Routes
