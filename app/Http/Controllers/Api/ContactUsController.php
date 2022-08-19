@@ -88,10 +88,10 @@ class ContactUsController extends Controller
         $info['category_name'] = $category->name;
         $info['message'] = "A New Feedback has been sent to you with the following info:";
         $info['title'] = 'Contact Us';
-//        Mail::send('emails.suggestion', ['data' => $info], function ($message) use ($info) {
-//            $message->subject($info['title']);
-//            $message->to($info['to']);
-//        });
+       Mail::send('emails.suggestion', ['data' => $info], function ($message) use ($info) {
+           $message->subject($info['title']);
+           $message->to($info['to']);
+       });
         $message = utf8_decode(utf8_encode(Lang::get('messages.request_submitted_successfully')));
         return response()->json(['status' => $message]);
     }
