@@ -111,7 +111,7 @@ class LoginController extends Controller
 
     public function login_email(Request $request) {
         $validator = Validator::make($request->all(), [
-            'email' => 'required|email|unique:users,email',
+            'email' => 'required|email|unique:users',
         ]);
 
         if($validator->fails()){
