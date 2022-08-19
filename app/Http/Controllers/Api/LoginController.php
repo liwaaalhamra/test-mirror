@@ -111,7 +111,7 @@ class LoginController extends Controller
 
     public function login_email(Request $request) {
         $validator = Validator::make($request->all(), [
-            'email' => 'required|email|unique:users',
+            'email' => 'required|email|unique:users,email',
         ]);
 
         if($validator->fails()){
@@ -486,7 +486,7 @@ class LoginController extends Controller
             return parent::return_error('Missing Email',401,'messages.missing_parameter');
         }else{      
             $validator = Validator::make($request->all(), [
-                'email' => 'required|email|max:255|unique:users',
+                'email' => 'required|email|max:255|unique:users,email',
             ]); 
         }
 
