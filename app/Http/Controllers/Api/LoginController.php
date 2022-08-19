@@ -117,7 +117,13 @@ class LoginController extends Controller
         if($validator->fails()){
             return parent::return_error('Missing parameter(s)', 400, $validator->messages()->all()[0]);
         }
+                
         $email = strtolower(trim(Input::get('email')));
+        $user = Users::whereAccountType('email')->whereEmail($email)->first();
+        if($user){
+            return parent::return_error("User Already Exists", 403, "User already exists");
+        }
+
         $pin = parent::number_generator(6);
         $registration = parent::generate_tokens(4);
         $info = [];
