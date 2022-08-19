@@ -133,14 +133,12 @@ class ItemsController extends Controller
         $categories = $query->get();
 
         foreach($categories as $category){
-            // CustomFieldList::whereRaw("LOWER(name_en)", "=", strtolower($sub_category->name_en))->where('field_name', "car_brands")->first()
             foreach($category->sub_sub_categories as $sub_category){
-                $car_brand = CustomFieldList::whereRaw("LOWER(name_en) = ?",[ strtolower($sub_category->name_en)])->where('field_name', "car_brands")->first();
+                $car_brand = CustomFieldList::whereRaw("LOWER(name_en) = ?",[ strtolower($sub_category->name_en)])->first();
                 $sub_category->parent_id = $car_brand ? $car_brand->id : null;
             }
         }
 
-        // dd($categories);
         return response()->json($categories);
     }
 
