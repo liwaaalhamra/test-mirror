@@ -1331,7 +1331,7 @@ class ItemsController extends Controller
         /**
          * do not validate post here since could be clicked from my posts which could be expired or not available yet
          */
-        if(!$item = Item::whereId($request->item_id)->first()){
+        if(!$item = Item::whereId($request->item_id)->with(['sub_category','sub_sub_category'])->first()){
             return parent::return_error("Invalid Item", 402, 'messages.invalid_parameters');
         }
         $currency = env('APP_CURRENCY');
