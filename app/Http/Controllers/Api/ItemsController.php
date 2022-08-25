@@ -1275,10 +1275,9 @@ class ItemsController extends Controller
                 $value->field_value = $custom_field_value ? $this->cast_field_value($custom_field_value->field_value, $value->field_type) : null;
                 $field_display_name = null;
                 if($custom_field_value && $value->field_type == 'list'){
-                    $list_item = CustomFieldList::whereId($value->field_value)->first();
-                    // whereFieldName($value->field_name)->
+                    $list_item = CustomFieldList::whereFieldName($value->field_name)->whereId($value->field_value)->first();
                     if($list_item){
-                        $field_display_name = $list_item->field_name;
+                        $field_display_name = $list_item->name_en;
                     }
                 }
                 $value->field_display_name = $field_display_name;
@@ -1369,13 +1368,12 @@ class ItemsController extends Controller
             }
             $custom_field_value = ItemCustomField::whereFieldName($value->field_name)->whereItemId($item->id)->whereCustomFieldId($value->id)->first();
             $value->field_value = $custom_field_value ? $this->cast_field_value($custom_field_value->field_value, $value->field_type) : null;
-            $field_display_name = null;                            
-                
+            $field_display_name = null;
             if($custom_field_value && $value->field_type == 'list'){
-                $list_item = CustomFieldList::whereId($value->field_value)->first(); 
-                // whereFieldName($value->field_name)->
+
+                $list_item = CustomFieldList::whereFieldName($value->field_name)->whereId($value->field_value)->first();
                 if($list_item){
-                    $field_display_name = $list_item->field_name;
+                    $field_display_name = $list_item->name_en;
                 }
             }
             $value->field_display_name = $field_display_name;
