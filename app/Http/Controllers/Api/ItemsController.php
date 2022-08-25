@@ -1442,8 +1442,6 @@ class ItemsController extends Controller
             $item->sub_sub_category;
         }
 
-        dd($item);
-
         return response()->json($item);
     }
 
