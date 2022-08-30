@@ -92,6 +92,21 @@ class ContactUsController extends Controller
            $message->subject($info['title']);
            $message->to($info['to']);
        });
+
+        $client_info = [];
+        $client_info['to'] = $to = $user->email;
+        $client_info['user'] = $user;
+//        $client_info['body_title'] = $request->title;
+        $client_info['body_message'] = $request->message;
+        $client_info['email'] = $request->email;
+        $client_info['category_name'] = $category->name;
+        $client_info['message'] = "Thank you for the feedback";
+        $client_info['title'] = 'Contact Us';
+       Mail::send('emails.user_suggestion', ['data' => $client_info], function ($client_message) use ($client_info) {
+           $client_message->subject($client_info['title']);
+           $client_message->to($client_info['to']);
+       });
+
         $message = utf8_decode(utf8_encode(Lang::get('messages.request_submitted_successfully')));
         return response()->json(['status' => $message]);
     }

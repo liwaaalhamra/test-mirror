@@ -58,7 +58,7 @@
                     <td style="padding-bottom: 23px; padding-top: 23px;">
                         <p>{{$data['message']}}</p><br><br>
                         @if($data['user'] != null)
-                            <p>User Full Name: <strong>{{$data['user']->first_name}} {{$data['user']->last_name}}</strong></p>
+                            <p>User Full Name: <strong>{{$data['user']->full_name}}</strong></p>
                         @endif
                         @if($data['email'] != null)
                             <p>User Email: <strong>{{$data['email']}}</strong></p>
