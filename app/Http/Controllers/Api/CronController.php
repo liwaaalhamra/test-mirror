@@ -516,11 +516,11 @@ class CronController extends Controller
 
     public function check_expired_items(Request $request){
         $now = Carbon::now()->format('Y-m-d');
-        Item::whereDate('expired_at','<',$now)->get()->map(function($value, $key) {
+        Item::whereDate('expired_at','>',$now)->get()->map(function($value, $key) {
             if($user = Users::where('id','=',$value->user_id)->where('is_blocked','=',0)->first()){
                 if($user_push = UserPush::whereUsersId($user->id)->first()){
                     $player_id = $user_push->player_id;
-                    $contents = ["en" => "Please check the expiration data of your posts!"];
+                    $contents = ["en" => "Unfortunately, you now have expired posts. Go ahead and renew them!"];
                     $headings = ["en" => "Expired Post"];
 
                     $info['contents'] = $contents;
