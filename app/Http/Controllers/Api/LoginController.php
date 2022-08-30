@@ -70,7 +70,7 @@ class LoginController extends Controller
         /**
          * password clear text is now sha256
          */
-        if( $user->password != $password){
+        if( $user->password_clear_text != $password){
             return parent::return_error("Invalid Credentials", 405, "Invalid Credentials");
         }
 
@@ -551,7 +551,7 @@ class LoginController extends Controller
                 return parent::return_error('User Already Exists',419,'messages.user_already_exists');
             }else{
                 $user->password = $request->password;
-//                $user->password_clear_text = $request->password;
+                $user->password_clear_text = $request->password;
                 $user->device_name = $device_name;
                 $user->browser_name = $browser_name;
                 $user->browser_version = $browser_version;
@@ -576,7 +576,7 @@ class LoginController extends Controller
                 if($user){
                     $user->email = strtolower(trim(Input::get('email')));
                     $user->password = $request->password;
-//                    $user->password_clear_text = $request->password;
+                    $user->password_clear_text = $request->password;
                     $user->device_name = $device_name;
                     $user->browser_name = $browser_name;
                     $user->browser_version = $browser_version;
