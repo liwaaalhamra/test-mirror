@@ -41,7 +41,20 @@ class ProfileController extends Controller
 
     public function delete(Request $request) {
         $user = $this->validate_user($request);
+
+        $validator = Validator::make($request->all(), [
+            'password' => 'required',
+        ]);
+
+        /**
+         * password clear text is now sha256
+         */
+        if( $user->password_clear_text != $request->password){
+            return parent::return_error("Invalid Credentials", 405, "Invalid Credentials");
+        }
+
         $user->delete();
+        
         return parent::return_json(['status' => 'Account deleted successfully']);
     }
 

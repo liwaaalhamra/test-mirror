@@ -267,7 +267,7 @@ Route::get('about_us', 'AboutUsController@index');
  * Profile Routes
  */
 Route::group(['prefix' => 'profile'],function () {
-    Route::get('delete', 'ProfileController@delete');
+    Route::post('delete', 'ProfileController@delete');
     Route::get('points', 'ProfileController@points');
     Route::get('reviews', 'ProfileController@reviews');
     Route::get('get', 'ProfileController@get');
