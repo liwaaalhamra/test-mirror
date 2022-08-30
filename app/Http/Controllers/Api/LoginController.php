@@ -70,7 +70,7 @@ class LoginController extends Controller
         /**
          * password clear text is now sha256
          */
-        if( $user->password_clear_text != $password){
+        if( $user->password != $password){
             return parent::return_error("Invalid Credentials", 405, "Invalid Credentials");
         }
 
