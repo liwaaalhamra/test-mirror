@@ -520,7 +520,7 @@ class CronController extends Controller
             if($user = Users::where('id','=',$value->user_id)->where('is_blocked','=',0)->first()){
                 if($user_push = UserPush::whereUsersId($user->id)->first()){
                     $player_id = $user_push->player_id;
-                    $contents = ["en" => "Unfortunately, your $value->name_en is expired. Go ahead and renew it!"];
+                    $contents = ["en" => "Unfortunately, your $value->name_en post is expired. Go ahead and renew it!"];
                     $headings = ["en" => "Expired Post!"];
 
                     $info['contents'] = $contents;
