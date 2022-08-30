@@ -15,10 +15,12 @@ use App\Models\Api\Order;
 use App\Models\Api\PackageItem;
 use App\Models\Api\Setting;
 use App\Models\Api\Users;
+use App\Models\Api\UserPush;
 use App\Models\Api\WallMedia;
 use App\Models\Api\WallPost;
 use App\Models\Api\Barter;
 use Carbon\Carbon;
+
 use DB;
 use Facebook\Exceptions\FacebookResponseException;
 use Facebook\Exceptions\FacebookSDKException;
@@ -515,13 +517,29 @@ class CronController extends Controller
     public function check_expired_items(Request $request){
         $now = Carbon::now()->format('Y-m-d');
         Item::whereDate('expired_at','<',$now)->get()->map(function($value, $key) {
+            if($user = Users::where('employee_id','=',$value->user_id)->where('is_blocked','=',0)->first()){
+                if($user_push = UserPush::whereUsersId($user->id)->first()){
+                    $player_id = $user_push->player_id;
+                    $contents = ["en" => "Please check the exipartion data of your posts!"];
+                    $headings = ["en" => "Expired Post"];
+
+                    $info['contents'] = $contents;
+                    $info['headings'] = $headings;
+                    $info['player_ids'] = [$player_id];
+                    if(isset($request->date)){
+                        $info['send_after'] = Carbon::createFromTimestamp($request->date)->format('Y-m-d H:i:s');
+                    }
+                    $result = parent::oneSignal($info);
+                }
+            }
+
 //            $info = [];
 //            $info['to'] = $to = explode(',', env('EXPIRY_DATE_EMAILS'));
 //            $info['icon'] = 'expired.png';
-//            $info['message'] = 'Expired Restaurant';
+//            $info['message'] = 'Expired Posts';
 //            $info['item'] = $value;
 //            $info['item_link'] = secure_url('admin/items?item_id='.$value->id);
-//            $info['title'] = env('APP_NAME') . ' | Expired Restaurant';
+//            $info['title'] = env('APP_NAME') . ' | Expired Posts';
 //            Mail::send('emails.expired_item', ['data' => $info], function ($message) use ($info) {
 //                $message->subject($info['title']);
 //                $message->to($info['to']);
@@ -533,163 +551,4 @@ class CronController extends Controller
         })->values();
         return response()->json(['status' => 'Alerts sent of expired Items']);
     }
-
-    public function sync_content(Request $request){
-
-        $info = [];
-        $info['method'] = 'POST';
-        $info['action'] = 'GetProduct';
-        $info['headers'] = [
-            'sduser' => env('KASSATLY_SDUSER'),
-        ];
-        $items = parent::third_party_connect($info);
-        if(!$items || !isset($items['products']) || !isset($items['products'][0]) || !isset($items['products'][0]['prodnum'])){
-            return parent::return_error('Cannot Retrieve Items',151,'Cannot Retrieve Items');
-        }
-
-        DB::table('items')->update([
-            'is_synced' => 0
-        ]);
-        foreach ($items['products'] as $item_order => $item){
-            if(!isset($item['prodnum']) || !isset($item['catid']) || !isset($item['price']) || !isset($item['descript'])){
-                continue;
-            }
-            $width = null;
-            $height = null;
-            if(isset($item['picpath']) && !empty($item['picpath'])){
-                list($width, $height, $type, $attr) = getimagesize(env('BIMPOS_IMAGE_BASE_URL').'/'.$item['picpath']);
-            }
-            Item::updateOrCreate(['remote_id' => $item['prodnum']],
-                [
-                    'name_en' => isset($item['descript']) ? trim($item['descript']) : null,
-                    'description_en' => isset($item['prodinfo']) ? trim($item['prodinfo']) : null,
-                    'item_order' => isset($item['seq']) ? $item['seq'] : $item_order + 1,
-                    'is_synced' => 1,
-                    'image' => isset($item['picpath']) ? $item['picpath'] : null,
-                    'width' => $width,
-                    'height' => $height,
-                    'price' => isset($item['price']) ? $item['price'] : null,
-                    'refcode1' => isset($item['refcode1']) ? $item['refcode1'] : null,
-                    'refcode2' => isset($item['refcode2']) ? $item['refcode2'] : null,
-                    'quantity' => isset($item['stock']) ? $item['stock'] : null,
-                    'stocks' => isset($item['stocks']) ? json_encode($item['stocks']) : null,
-                    'brand_name' => isset($item['brand']) ? $item['brand'] : null,
-                    'tags' => isset($item['tag1']) ? $item['tag1'] : null,
-                ]
-            );
-        }
-        Item::whereIsSynced(0)->update([
-            'is_available' => 0
-        ]);
-
-        $info = [];
-        $info['method'] = 'POST';
-        $info['action'] = 'GetCountry';
-        $info['headers'] = [
-            'sduser' => env('KASSATLY_SDUSER'),
-        ];
-        $countries = parent::third_party_connect($info);
-        if(!$countries || !isset($countries[0]) || !isset($countries[0]['id'])){
-            return parent::return_error('Cannot Retrieve Countries',151,'Cannot Retrieve Countries');
-        }
-        DB::table('countries')->update([
-            'is_synced' => 0
-        ]);
-        foreach ($countries as $item_order => $country){
-            if(!isset($country['id']) || !isset($country['name'])){
-                continue;
-            }
-            $db_country = Country::updateOrCreate(['remote_id' => $country['id']],
-                [
-                    'name_en' => isset($country['name']) ? trim($country['name']) : null,
-                    'phone_code' => isset($country['phonecode']) ? trim($country['phonecode']) : null,
-                    'is_published' => isset($country['isactive']) ? trim($country['isactive']) : 0,
-                    'item_order' => $item_order + 1,
-                    'is_synced' => 1
-                ]
-            );
-
-            $info = [];
-            $info['method'] = 'POST';
-            $info['action'] = 'GetCity';
-            $info['headers'] = [
-                'sduser' => env('KASSATLY_SDUSER'),
-            ];
-            $info['params'] = [
-                'Parent' => $country['co_code']
-            ];
-            $regions = parent::third_party_connect($info);
-            if(!$regions || !isset($regions[0]) || !isset($regions[0]['id'])){
-                return parent::return_error('Cannot Retrieve Regions',151,'Cannot Retrieve Regions');
-            }
-            DB::table('regions')->whereRemoteCountryId($country['id'])->update([
-                'is_synced' => 0
-            ]);
-            foreach ($regions as $item_order => $region){
-                if(!isset($region['id']) || !isset($region['name'])){
-                    continue;
-                }
-                $db_region = Region::updateOrCreate(['remote_id' => $region['id']],
-                    [
-                        'name_en' => isset($region['name']) ? trim($region['name']) : null,
-                        'country_id' => $db_country->id,
-                        'remote_country_id' => $country['id'],
-                        'phone_code' => isset($region['phonecode']) ? trim($region['phonecode']) : null,
-                        'is_published' => isset($region['isactive']) ? trim($region['isactive']) : 0,
-                        'item_order' => $item_order + 1,
-                        'is_synced' => 1
-                    ]
-                );
-                $info = [];
-                $info['method'] = 'POST';
-                $info['action'] = 'GetRegion';
-                $info['headers'] = [
-                    'sduser' => env('KASSATLY_SDUSER'),
-                ];
-                $info['params'] = [
-                    'Parent' => $region['id']
-                ];
-                $cities = parent::third_party_connect($info);
-
-                if(!$cities || !isset($cities[0]) || !isset($cities[0]['citycode'])){
-                    return parent::return_error('Cannot Retrieve Cities',151,'Cannot Retrieve Cities');
-                }
-                DB::table('areas')->whereRemoteRegionId($region['id'])->update([
-                    'is_synced' => 0
-                ]);
-                foreach ($cities as $item_order => $city){
-                    if(!isset($city['citycode']) || !isset($city['regioncode']) || !isset($city['name'])){
-                        continue;
-                    }
-
-                    Area::updateOrCreate(['remote_id' => $city['citycode']],
-                        [
-                            'region_id' => $db_region->id,
-                            'remote_region_id' => $region['id'],
-                            'name_en' => isset($city['name']) ? trim($city['name']) : null,
-                            'zip_code' => isset($city['zipcode']) ? trim($city['zipcode']) : null,
-                            'country_code' => isset($city['countrycode']) ? trim($city['countrycode']) : null,
-                            'is_published' => isset($region['isactive']) ? trim($region['isactive']) : 0,
-                            'item_order' => $item_order + 1,
-                            'is_synced' => 1,
-                        ]
-                    );
-                }
-                Area::whereRemoteRegionId($region['id'])->whereIsSynced(0)->update([
-                    'is_published' => 0
-                ]);
-            }
-            Region::whereRemoteCountryId($country['id'])->whereIsSynced(0)->update([
-                'is_published' => 0
-            ]);
-        }
-        Country::whereIsSynced(0)->update([
-            'is_published' => 0
-        ]);
-
-
-
-        return response()->json(['status' => 'Content synced successfully']);
-    }
-
 }
