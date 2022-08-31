@@ -153,7 +153,7 @@ class PostsController extends Controller
             $result = parent::oneSignal($info);
         }
 
-        return parent::return_json(['status' => "Your request status has been updated successfully! Now you can chat with $receiver_full_name!"]);
+        return parent::return_json(['status' => "Your request status has been updated successfully! Now you can chat with $sender_full_name!"]);
     }
 
     public function barter_done(Request $request)
