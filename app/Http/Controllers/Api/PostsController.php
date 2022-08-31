@@ -106,7 +106,7 @@ class PostsController extends Controller
             $result = parent::oneSignal($info);
         }
 
-        return parent::return_json(['status' => ' thank you for bartering with us. Your barter request has been sent to '.$receiver_full_name.'. You will be able to chat with '.$receiver_full_name.' once they accept your barter.']);
+        return parent::return_json(['status' => 'Thank you for bartering with us. Your barter request has been sent to '.$receiver_full_name.'. You will be able to chat with '.$receiver_full_name.' once they accept your barter.']);
     }
 
     public function barter_action(Request $request)
