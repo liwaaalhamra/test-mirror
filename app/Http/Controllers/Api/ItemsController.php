@@ -287,8 +287,8 @@ class ItemsController extends Controller
         ];
 
 
-        array_push($categories,$category6);
         array_push($categories,$category5);
+        array_push($categories,$category6);
         array_push($categories,$category2);
         array_push($categories,$category1);
         array_push($categories,$category3);
