@@ -47,8 +47,8 @@ class ChatController extends Controller
                 }
             })
             ->map(function ($value, $key) use ($user) {
-                $value['friend_name'] = $user->id == $value['friend_id'] ? $value['user']->full_name : $value['friend']->full_name;
-                $value['friend_image'] = $user->id == $value['friend_id'] ? $value['user']->photo : $value['friend']->photo;
+                $value['friend_name'] = isset($user) && $user->id == $value['friend_id'] ? $value['user']->full_name : $value['friend']->full_name;
+                $value['friend_image'] = isset($user) && $user->id == $value['friend_id'] ? $value['user']->photo : $value['friend']->photo;
                 unset($value['friend']);
                 unset($value['user']);
                 return $value;
