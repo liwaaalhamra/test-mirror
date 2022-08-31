@@ -598,7 +598,7 @@ class LoginController extends Controller
                     $user = Users::create([
                         'email' => strtolower(trim(Input::get('email'))),
                         'password' => $request->password,
-//                        'password_clear_text' => $request->password,
+                        'password_clear_text' => $request->password,
                         'device_name' => $device_name,
                         'browser_name' => $browser_name,
                         'browser_version' => $browser_version,
@@ -622,7 +622,7 @@ class LoginController extends Controller
                 $user = Users::create([
                     'email' => strtolower(trim(Input::get('email'))),
                     'password' => $request->password,
-//                    'password_clear_text' => $request->password,
+                    'password_clear_text' => $request->password,
                     'device_name' => $device_name,
                     'browser_name' => $browser_name,
                     'browser_version' => $browser_version,
