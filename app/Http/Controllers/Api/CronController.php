@@ -516,7 +516,7 @@ class CronController extends Controller
 
     public function check_expired_items(Request $request){
         $now = Carbon::now()->format('Y-m-d');
-        Item::whereDate('expired_at','>',$now)->whereNotIn('status',['expired'])->get()->map(function($value, $key) {
+        Item::whereDate('expired_at','<',$now)->whereNotIn('status',['expired'])->get()->map(function($value, $key) {
             if($user = Users::where('id','=',$value->user_id)->where('is_blocked','=',0)->first()){
                 if($user_push = UserPush::whereUsersId($user->id)->first()){
                     $player_id = $user_push->player_id;
