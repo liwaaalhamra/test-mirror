@@ -119,7 +119,7 @@ class LoginController extends Controller
         }
                 
         $email = strtolower(trim(Input::get('email')));
-        $user = Users::whereAccountType('email')->whereEmail($email)->first();
+        $user = Users::whereAccountType('email')->whereEmail($email)->whereNull('deleted_at')->first();
         if($user){
             return parent::return_error("User Already Exists", 403, "User already exists");
         }
