@@ -319,7 +319,7 @@ class PostsController extends Controller
         }
         $latitude = isset($request->latitude) ? $request->latitude : null;
         $longitude = isset($request->longitude) ? $request->longitude : null;
-        $max_order = DB::table('items')->whereCategoryId($category->id)->whereSubCategoryId($sub_category->id)->whereSubSubCategoryId($sub_sub_category->id)->max('item_order') + 1;
+        $max_order = isset($sub_sub_category) ? DB::table('items')->whereCategoryId($category->id)->whereSubCategoryId($sub_category->id)->whereSubSubCategoryId($sub_sub_category->id)->max('item_order') + 1 : DB::table('items')->whereCategoryId($category->id)->whereSubCategoryId($sub_category->id)->max('item_order') + 1;
         $post_validity_days = 30;
         if($setting = Setting::whereMetaName('post_validity')->first()){
             $post_validity_days = intval($setting->meta_value);
