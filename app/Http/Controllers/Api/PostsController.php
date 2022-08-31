@@ -404,7 +404,7 @@ class PostsController extends Controller
                 ]);
             }
         }
-        return parent::return_json(['status' => 'Thank you for bartering with us. Your post will be reviewed within 24 hours. You will be updated once it is live','payment_url' => secure_url('payment-test'),'post_id' => $item->id]);
+        return parent::return_json(['status' => 'Thank you for bartering with us. Your post will be reviewed within 24 hours. You will be updated once it is live.','payment_url' => secure_url('payment-test'),'post_id' => $item->id]);
     }
 
     public function update(Request $request){
