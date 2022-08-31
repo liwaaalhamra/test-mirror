@@ -25,6 +25,6 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('expired:posts')->hourly();
+        $schedule->command('expired:posts')->daily();
     }
 }
