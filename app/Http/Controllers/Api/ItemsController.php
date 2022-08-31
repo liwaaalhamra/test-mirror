@@ -243,6 +243,16 @@ class ItemsController extends Controller
             return $value;
         })->values();
 
+        $latest_posts = $query->take(30)->get()->map(function ($value, $key) use ($currency,$user) {
+            // $value->is_favorite = false;
+            // if($user){
+            //     if(UserFavorite::whereMetaName('items')->whereMetaId($value->id)->whereUserId($user->id)->first()){
+            //         $value->is_favorite = true;
+            //     }
+            // }
+            $value->currency = $currency;
+            return $value;
+        })->values();
 
         $category1 = [
             'slug' => 'trending-services',
@@ -270,6 +280,14 @@ class ItemsController extends Controller
             'items' => $matches
         ];
 
+        $category6 = [
+            'slug' => 'latest-posts',
+            'title' => 'Latest Posts',
+            'items' => $latest_posts
+        ];
+
+
+        array_push($categories,$category6);
         array_push($categories,$category5);
         array_push($categories,$category2);
         array_push($categories,$category1);
