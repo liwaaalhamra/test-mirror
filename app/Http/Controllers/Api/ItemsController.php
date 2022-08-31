@@ -389,6 +389,16 @@ class ItemsController extends Controller
                 unset($value->category);
                 return $value;
             })->values();
+        }elseif ($slug == 'latest-posts'){
+            $query = Item::whereType('offer')->whereIsAvailable(1)->orderby('created_at','desc');
+            $currency = env('APP_CURRENCY');
+            $items = $query->take(50)->get()->map(function ($value, $key) use ($currency,$user) {
+                unset($value->quantity);
+                $value->currency = $currency;
+                $value->post_type = $value->category->type;
+                unset($value->category);
+                return $value;
+            })->values();
         }
 
         $limit = 20;
