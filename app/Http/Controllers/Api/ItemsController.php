@@ -1409,7 +1409,7 @@ class ItemsController extends Controller
             $return_post->post_type = $return_post_type;
             $return_post->category_name = $return_post->category->name;
             $return_post->sub_category_name = $return_post->sub_category->name;
-            $return_post->sub_sub_category_name = $return_post->sub_sub_category->name;
+            $return_post->sub_sub_category_name = isset($return_post->sub_sub_category) ? $return_post->sub_sub_category->name : null;
             $return_post->custom_fields = CustomField::whereInFilters(0)->whereInReturn(1)->whereCategoryId($return_post->category_id)->whereSubCategoryId($return_post->sub_category_id)->orderby('item_order','asc')->get()->map(function ($value, $key) use ($return_post) {
                 $value->section = $value->in_filters ? 'filters' : 'regular';
                 $custom_field_value = ItemCustomField::whereFieldName($value->field_name)->whereItemId($return_post->id)->whereCustomFieldId($value->id)->first();
