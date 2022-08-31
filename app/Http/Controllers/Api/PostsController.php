@@ -505,7 +505,7 @@ class PostsController extends Controller
         }
         $latitude = isset($request->latitude) ? $request->latitude : null;
         $longitude = isset($request->longitude) ? $request->longitude : null;
-        $max_order = DB::table('items')->whereCategoryId($category->id)->whereSubCategoryId($sub_category->id)->whereSubSubCategoryId($sub_sub_category->id)->max('item_order') + 1;
+        $max_order = isset($sub_sub_category->id) ? DB::table('items')->whereCategoryId($category->id)->whereSubCategoryId($sub_category->id)->whereSubSubCategoryId($sub_sub_category->id)->max('item_order') + 1 : DB::table('items')->whereCategoryId($category->id)->whereSubCategoryId($sub_category->id)->max('item_order') + 1;
         $item->update([
             'category_id' => $category->id,
             'sub_category_id' => $sub_category->id,
