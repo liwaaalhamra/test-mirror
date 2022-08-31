@@ -4,8 +4,11 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 
-use Illuminate\Support\Carbon;
+
 use App\Models\Item;
+use App\Models\Users;
+use App\Models\UserPush;
+use Carbon\Carbon;
 
 class ForExpiredPosts extends Command
 {
