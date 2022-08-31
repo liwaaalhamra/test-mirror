@@ -239,10 +239,12 @@ class PostsController extends Controller
         if(!$sub_category = SubCategory::whereIsPublished(1)->whereId($request->sub_category_id)->first()){
             return parent::return_error("Invalid Sub Category", 402, 'messages.invalid_parameters');
         }
-        if(!Input::has('sub_sub_category_id')){
-            return parent::return_error('Missing Sub Sub Category ID',401,'messages.missing_parameter');
-        }
-        if(!$sub_sub_category = SubSubCategory::whereIsPublished(1)->whereId($request->sub_sub_category_id)->first()){
+
+        // if(!Input::has('sub_sub_category_id')){
+        //     return parent::return_error('Missing Sub Sub Category ID',401,'messages.missing_parameter');
+        // }
+
+        if(Input::has('sub_sub_category_id') && !$sub_sub_category = SubSubCategory::whereIsPublished(1)->whereId($request->sub_sub_category_id)->first()){
             return parent::return_error("Invalid Sub Sub Category", 402, 'messages.invalid_parameters');
         }
         if(!Input::has('location_id')){
@@ -328,7 +330,7 @@ class PostsController extends Controller
             'user_id' => $user->id,
             'category_id' => $category->id,
             'sub_category_id' => $sub_category->id,
-            'sub_sub_category_id' => $sub_sub_category->id,
+            'sub_sub_category_id' => isset($sub_sub_category) && isset($sub_sub_category->id) ? $sub_sub_category->id : null,
             'price' => $request->price,
             'name_en' => $request->title,
             'description_en' => $description,
@@ -426,10 +428,12 @@ class PostsController extends Controller
         if(!$sub_category = SubCategory::whereIsPublished(1)->whereId($request->sub_category_id)->first()){
             return parent::return_error("Invalid Sub Category", 402, 'messages.invalid_parameters');
         }
-        if(!Input::has('sub_sub_category_id')){
-            return parent::return_error('Missing Sub Sub Category ID',401,'messages.missing_parameter');
-        }
-        if(!$sub_sub_category = SubSubCategory::whereIsPublished(1)->whereId($request->sub_sub_category_id)->first()){
+
+        // if(!Input::has('sub_sub_category_id')){
+        //     return parent::return_error('Missing Sub Sub Category ID',401,'messages.missing_parameter');
+        // }
+
+        if(Input::has('sub_sub_category_id') && !$sub_sub_category = SubSubCategory::whereIsPublished(1)->whereId($request->sub_sub_category_id)->first()){
             return parent::return_error("Invalid Sub Sub Category", 402, 'messages.invalid_parameters');
         }
         if(!Input::has('location_id')){
@@ -469,10 +473,10 @@ class PostsController extends Controller
             if(!$return_sub_category = SubCategory::whereIsPublished(1)->whereId($request->return_sub_category_id)->first()){
                 return parent::return_error("Invalid Return Sub Category", 402, 'messages.invalid_parameters');
             }
-            if(!Input::has('return_sub_sub_category_id')){
-                return parent::return_error('Missing Return Sub Sub Category ID',401,'messages.missing_parameter');
-            }
-            if(!$return_sub_sub_category = SubSubCategory::whereIsPublished(1)->whereId($request->return_sub_sub_category_id)->first()){
+            // if(!Input::has('return_sub_sub_category_id')){
+            //     return parent::return_error('Missing Return Sub Sub Category ID',401,'messages.missing_parameter');
+            // }
+            if(Input::has('return_sub_sub_category_id') && !$return_sub_sub_category = SubSubCategory::whereIsPublished(1)->whereId($request->return_sub_sub_category_id)->first()){
                 return parent::return_error("Invalid Return Sub Sub Category", 402, 'messages.invalid_parameters');
             }
             if(!Input::has('return_location_id')){
@@ -505,7 +509,7 @@ class PostsController extends Controller
         $item->update([
             'category_id' => $category->id,
             'sub_category_id' => $sub_category->id,
-            'sub_sub_category_id' => $sub_sub_category->id,
+            'sub_sub_category_id' => isset($sub_sub_category) ? $sub_sub_category->id : null,
             'price' => $request->price,
             'name_en' => $request->title,
             'description_en' => $description,
@@ -550,7 +554,7 @@ class PostsController extends Controller
                 $return_item->update([
                     'category_id' => $return_category->id,
                     'sub_category_id' => $return_sub_category->id,
-                    'sub_sub_category_id' => $return_sub_sub_category->id,
+                    'sub_sub_category_id' => isset($return_sub_sub_category) ? $return_sub_sub_category->id : null,
                     'price_from' => $request->return_price_from,
                     'price_to' => $request->return_price_to,
                     'name_en' => $request->return_title,
@@ -567,7 +571,7 @@ class PostsController extends Controller
                     'user_id' => $user->id,
                     'category_id' => $return_category->id,
                     'sub_category_id' => $return_sub_category->id,
-                    'sub_sub_category_id' => $return_sub_sub_category->id,
+                    'sub_sub_category_id' => isset($return_sub_sub_category) ? $return_sub_sub_category->id : null,
                     'price_from' => $request->return_price_from,
                     'price_to' => $request->return_price_to,
                     'name_en' => $request->return_title,
