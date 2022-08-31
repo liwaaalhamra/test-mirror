@@ -39,11 +39,11 @@ class Item extends Model
     }
 
     protected function getUserFullnameAttribute(){
-        return $this->user->full_name;
+        return isset($this->user) ? $this->user->full_name : null;
     }
 
     protected function getUserImageAttribute(){
-        return $this->user->photo;
+        return isset($this->user) ? $this->user->photo : null;
     }
 
     protected function getPriceFormattedAttribute(){
