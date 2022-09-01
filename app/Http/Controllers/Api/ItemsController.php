@@ -1229,7 +1229,7 @@ class ItemsController extends Controller
             return parent::return_error("Invalid Item", 402, 'messages.invalid_parameters');
         }
 
-        $custom_field_needed = CustomFieldList::whereRaw("LOWER(name_en) = ?",[ strtolower($item->sub_category->name)])->where('field_name', "car_brands")->first();
+        $custom_field_needed = CustomFieldList::whereRaw("LOWER(name_en) = ?",[ strtolower($item->sub_sub_category->name)])->where('field_name', "car_brands")->first();
         $item->sub_cat_parent_id = $custom_field_needed ? $custom_field_needed->id : null;
 
         $currency = env('APP_CURRENCY');
@@ -1305,7 +1305,7 @@ class ItemsController extends Controller
             $return_post->sub_category_name = $return_post->sub_category->name;
             $return_post->sub_sub_category_name = $return_post->sub_sub_category->name;
 
-            $return_post_custom_field_needed = CustomFieldList::whereRaw("LOWER(name_en) = ?",[ strtolower($return_post->sub_category->name)])->where('field_name', "car_brands")->first();
+            $return_post_custom_field_needed = CustomFieldList::whereRaw("LOWER(name_en) = ?",[ strtolower($return_post->sub_sub_category->name)])->where('field_name', "car_brands")->first();
             $return_post->sub_cat_parent_id = $return_post_custom_field_needed ? $return_post_custom_field_needed->id : null;
             
             $return_post->custom_fields = CustomField::whereInFilters(0)->whereInReturn(1)->whereCategoryId($return_post->category_id)->whereSubCategoryId($return_post->sub_category_id)->orderby('item_order','asc')->get()->map(function ($value, $key) use ($return_post) {
@@ -1373,7 +1373,7 @@ class ItemsController extends Controller
             return parent::return_error("Invalid Item", 402, 'messages.invalid_parameters');
         }
         
-        $custom_field_needed = CustomFieldList::whereRaw("LOWER(name_en) = ?",[ strtolower($item->sub_category->name)])->where('field_name', "car_brands")->first();
+        $custom_field_needed = CustomFieldList::whereRaw("LOWER(name_en) = ?",[ strtolower($item->sub_sub_category->name)])->where('field_name', "car_brands")->first();
         $item->sub_cat_parent_id = $custom_field_needed ? $custom_field_needed->id : null;
 
         $currency = env('APP_CURRENCY');
@@ -1450,7 +1450,7 @@ class ItemsController extends Controller
             $return_post->sub_category_name = $return_post->sub_category->name;
             $return_post->sub_sub_category_name = isset($return_post->sub_sub_category) ? $return_post->sub_sub_category->name : null;
 
-            $return_post_custom_field_needed = CustomFieldList::whereRaw("LOWER(name_en) = ?",[ strtolower($return_post->sub_category->name)])->where('field_name', "car_brands")->first();
+            $return_post_custom_field_needed = CustomFieldList::whereRaw("LOWER(name_en) = ?",[ strtolower($return_post->sub_sub_category->name)])->where('field_name', "car_brands")->first();
             $return_post->sub_cat_parent_id = $return_post_custom_field_needed ? $return_post_custom_field_needed->id : null;
 
             $return_post->custom_fields = CustomField::whereInFilters(0)->whereInReturn(1)->whereCategoryId($return_post->category_id)->whereSubCategoryId($return_post->sub_category_id)->orderby('item_order','asc')->get()->map(function ($value, $key) use ($return_post) {
