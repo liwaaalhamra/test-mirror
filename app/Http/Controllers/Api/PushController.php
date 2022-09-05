@@ -59,7 +59,8 @@ class PushController extends Controller
 
     public function inbox(Request $request) {
         $user = $this->validate_user($request);
-        $query = Inbox::whereUserType('user')->where(function ($query) use($user) {
+        // whereUserType('user')->
+        $query = Inbox::where(function ($query) use($user) {
             $query->where(function ($query) use($user) {
                 $query->whereUserId($user->id)->whereType('targeted');
             })->orwhere('type','=','bulk');
