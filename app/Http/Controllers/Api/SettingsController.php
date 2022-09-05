@@ -68,7 +68,7 @@ class SettingsController extends Controller
             }elseif ($key == 'force_update_title_en' && $locale == 'en'){
                 $version_update_title = $value;
             }elseif ($key == 'post_cost'){
-                $value = floatval($value).' '.env('APP_CURRENCY');
+                $value = env('APP_CURRENCY').' '.number_format(floatval($value));
             }elseif ($key == 'post_validity'){
                 $value = $value.' Days';
             }
