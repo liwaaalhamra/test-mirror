@@ -188,32 +188,32 @@ class ProfileController extends Controller
             $new_phone_number = $user->primary_phone;
             $new_country_code = $user->country_code;
             $country_id = $user->country_id;
-            if($request->email){
-                if(!filter_var(Input::get('email'), FILTER_VALIDATE_EMAIL)){
-                    return parent::return_error("Invalid Email", 402, 'messages.invalid_parameters');
-                }
-                $email = $request->email;
+            // if($request->email){
+            //     if(!filter_var(Input::get('email'), FILTER_VALIDATE_EMAIL)){
+            //         return parent::return_error("Invalid Email", 402, 'messages.invalid_parameters');
+            //     }
+            //     $email = $request->email;
 
-                $pin = parent::number_generator(6);
-                $registration = parent::generate_tokens(4);
+            //     $pin = parent::number_generator(6);
+            //     $registration = parent::generate_tokens(4);
 
-                $user->profile_registration = $registration;
-                $user->profile_pin = $pin;
-                $info = [];
-                $info['to'] = Input::get('email');
-                $info['pin'] = $pin;
-                $info['title'] = 'Account Activation';
-                $info['message1'] = 'Thank you for using '.env('APP_NAME').' App';
-                $info['message2'] = 'Please use the following code to verify your account';
-                $info['message3'] = utf8_decode(utf8_encode(Lang::get('messages.sincerely')));
-                $info['message4'] = utf8_decode(utf8_encode(Lang::get('messages.team')));
-                $info['full_name'] = '';
-                $info['code'] = $pin;
-                Mail::send('emails.activate_email', ['data' => $info], function ($message) use ($info) {
-                    $message->subject(env('APP_NAME')." | ".$info['title']);
-                    $message->to($info['to']);
-                });
-            }
+            //     $user->profile_registration = $registration;
+            //     $user->profile_pin = $pin;
+            //     $info = [];
+            //     $info['to'] = Input::get('email');
+            //     $info['pin'] = $pin;
+            //     $info['title'] = 'Account Activation';
+            //     $info['message1'] = 'Thank you for using '.env('APP_NAME').' App';
+            //     $info['message2'] = 'Please use the following code to verify your account';
+            //     $info['message3'] = utf8_decode(utf8_encode(Lang::get('messages.sincerely')));
+            //     $info['message4'] = utf8_decode(utf8_encode(Lang::get('messages.team')));
+            //     $info['full_name'] = '';
+            //     $info['code'] = $pin;
+            //     Mail::send('emails.activate_email', ['data' => $info], function ($message) use ($info) {
+            //         $message->subject(env('APP_NAME')." | ".$info['title']);
+            //         $message->to($info['to']);
+            //     });
+            // }
         }
 
         $user->password = $password;
