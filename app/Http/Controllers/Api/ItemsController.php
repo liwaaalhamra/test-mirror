@@ -134,7 +134,7 @@ class ItemsController extends Controller
 
         foreach($categories as $category){
             foreach($category->sub_sub_categories as $sub_category){
-                $car_brand = CustomFieldList::whereRaw("LOWER(name_en) = ?",[ strtolower($sub_category->name_en)])->first();
+                $car_brand = isset($sub_category->name_en) ? CustomFieldList::whereRaw("LOWER(name_en) = ?",[ strtolower($sub_category->name_en)])->first() : null;
                 $sub_category->parent_id = $car_brand ? $car_brand->id : null;
             }
         }
@@ -1229,7 +1229,7 @@ class ItemsController extends Controller
             return parent::return_error("Invalid Item", 402, 'messages.invalid_parameters');
         }
 
-        $custom_field_needed = CustomFieldList::whereRaw("LOWER(name_en) = ?",[ strtolower($item->sub_sub_category->name)])->where('field_name', "car_brands")->first();
+        $custom_field_needed = isset($item->sub_sub_category) ? CustomFieldList::whereRaw("LOWER(name_en) = ?",[ strtolower($item->sub_sub_category->name)])->where('field_name', "car_brands")->first() : null;
         $item->sub_cat_parent_id = $custom_field_needed ? $custom_field_needed->id : null;
 
         $currency = env('APP_CURRENCY');
