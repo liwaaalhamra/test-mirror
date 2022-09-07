@@ -97,6 +97,7 @@ class ProfileController extends Controller
                 }
             }
         }
+
         $password = isset($request->password) ? $request->password : null;
         $first_name = null;
         $last_name = null;
@@ -215,9 +216,12 @@ class ProfileController extends Controller
             //     });
             // }
         }
+        
+        if($request->password){
+            $user->password = $password;
+            $user->password_clear_text = $password;
+        }
 
-        $user->password = $password;
-        $user->password_clear_text = $password;
         $user->first_name = $first_name;
         $user->last_name = $last_name;
         $user->full_name = $full_name;
