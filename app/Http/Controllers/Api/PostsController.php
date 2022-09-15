@@ -104,6 +104,18 @@ class PostsController extends Controller
             $info['player_ids'] = $players_ids;
             $info['data'] = ['meta_id' => $barter->id,'type' => 'barter'];
             $result = parent::oneSignal($info);
+                        
+            $code = Controller::number_generator(6);
+
+            Inbox::create([
+                'user_id' => $receiver->id,
+                'title' => $title,
+                'message' => $message,
+                'image' => null,
+                'type' => 'targeted',
+                'code' => $code
+            ]);
+
         }
 
         return parent::return_json(['status' => 'Thank you for bartering with us. Your barter request has been sent to '.$receiver_full_name.'. You will be able to chat with '.$receiver_full_name.' once they accept your barter.']);
@@ -151,6 +163,17 @@ class PostsController extends Controller
             $info['player_ids'] = $players_ids;
             $info['data'] = ['meta_id' => $barter->id,'type' => 'barter'];
             $result = parent::oneSignal($info);
+
+            $code = Controller::number_generator(6);
+
+            Inbox::create([
+                'user_id' => $sender->id,
+                'title' => $title,
+                'message' => $message,
+                'image' => null,
+                'type' => 'targeted',
+                'code' => $code
+            ]);
         }
 
         return parent::return_json(['status' => "Your request status has been updated successfully! Now you can chat with $sender_full_name!"]);
