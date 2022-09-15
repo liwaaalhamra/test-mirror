@@ -12,6 +12,7 @@ use App\Models\Api\SubCategory;
 use App\Models\Api\SubSubCategory;
 use App\Models\Api\UserPush;
 use App\Models\Api\Inbox;
+use App\Models\Api\User;
 
 use Carbon\Carbon;
 use Illuminate\Http\Request;
