@@ -12,7 +12,7 @@ use App\Models\Api\SubCategory;
 use App\Models\Api\SubSubCategory;
 use App\Models\Api\UserPush;
 use App\Models\Api\Inbox;
-use App\Models\Api\User;
+use App\Models\Api\Users;
 
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -399,7 +399,7 @@ class ItemsController extends Controller
                 ]);
 
                 //send email to user with response
-                $user = User::findOrFail($item->user_id);
+                $user = Users::findOrFail($item->user_id);
                 if($user && $user->email){
                     $info = [];
                     $info['to'] = $user->email;
