@@ -7,6 +7,7 @@ use Illuminate\Console\Command;
 
 use App\Models\Item;
 use App\Models\Users;
+use App\Models\Inbox;
 use App\Models\UserPush;
 use Carbon\Carbon;
 
@@ -59,6 +60,17 @@ class ForExpiredPosts extends Command
                         $info['send_after'] = Carbon::createFromTimestamp($request->date)->format('Y-m-d H:i:s');
                     }
                     $result = parent::oneSignal($info);
+                    
+                    $code = Controller::number_generator(6);
+
+                    Inbox::create([
+                        'user_id' => $user->id,
+                        'title' => 'Expired Post!',
+                        'message' => "Unfortunately, your $value->name_en post is expired. Go ahead and renew it!",
+                        'image' => null,
+                        'type' => 'targeted',
+                        'code' => $code
+                    ]);
                 }
             }
 

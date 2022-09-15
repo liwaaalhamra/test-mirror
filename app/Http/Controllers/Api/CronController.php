@@ -14,6 +14,7 @@ use App\Models\Api\Restaurant;
 use App\Models\Api\Order;
 use App\Models\Api\PackageItem;
 use App\Models\Api\Setting;
+use App\Models\Api\Inbox;
 use App\Models\Api\Users;
 use App\Models\Api\UserPush;
 use App\Models\Api\WallMedia;
@@ -530,6 +531,16 @@ class CronController extends Controller
                         $info['send_after'] = Carbon::createFromTimestamp($request->date)->format('Y-m-d H:i:s');
                     }
                     $result = parent::oneSignal($info);
+                    $code = Controller::number_generator(6);
+
+                    Inbox::create([
+                        'user_id' => $item->user_id,
+                        'title' => "Expired Post!",
+                        'message' => "Unfortunately, your $value->name_en post is expired. Go ahead and renew it!",
+                        'image' => null,
+                        'type' => 'targeted',
+                        'code' => $code
+                    ]);
                 }
             }
 
