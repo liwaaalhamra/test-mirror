@@ -396,6 +396,22 @@ class ItemsController extends Controller
                     'type' => 'targeted',
                     'code' => $code
                 ]);
+
+                //send email to user with response
+                $user = User::findorFail($item->user_id);
+                if($user && $user->email){
+                    $info = [];
+                    $info['to'] = $user->email;
+                    $info['icon'] = 'alert.png';
+                    $info['message'] = $message;
+                    $info['cms_user'] = auth()->user();
+                    $info['title'] = $title;
+                    Mail::send('emails.barter_response', ['data' => $info], function ($message) use ($info) {
+                        $message->subject($info['title']);
+                        $message->to($info['to']);
+                    });
+                }
+              
             }
 
             $item->status = $item->status == 'in_review' ? 'approved' : 'in_review';
