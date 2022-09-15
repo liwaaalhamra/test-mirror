@@ -11,6 +11,8 @@ use App\Models\Api\PackageItem;
 use App\Models\Api\SubCategory;
 use App\Models\Api\SubSubCategory;
 use App\Models\Api\UserPush;
+use App\Models\Api\Inbox;
+
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -383,6 +385,17 @@ class ItemsController extends Controller
                 $info['player_ids'] = $players_ids;
                 $info['data'] = ['meta_id' => $item->id,'type' => 'post'];
                 $result = parent::oneSignal($info);
+
+                $code = Controller::number_generator(6);
+
+                Inbox::create([
+                    'user_id' => $item->user_id,
+                    'title' => $title,
+                    'message' => $message,
+                    'image' => null,
+                    'type' => 'targeted',
+                    'code' => $code
+                ]);
             }
 
             $item->status = $item->status == 'in_review' ? 'approved' : 'in_review';
