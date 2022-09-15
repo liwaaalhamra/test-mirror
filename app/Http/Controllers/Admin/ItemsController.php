@@ -399,7 +399,7 @@ class ItemsController extends Controller
                 ]);
 
                 //send email to user with response
-                $user = User::findorFail($item->user_id);
+                $user = User::findOrFail($item->user_id);
                 if($user && $user->email){
                     $info = [];
                     $info['to'] = $user->email;
