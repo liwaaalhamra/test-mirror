@@ -835,7 +835,7 @@ class PostsController extends Controller
         }
         $user_id = $request->user_id;
         $search = Input::has('search') ? Input::get('search') : null;
-        $query = Item::whereIsAvailable(1)->whereType('offer')->whereUserId($user_id)->when($search, function ($query) use ($search) {
+        $query = Item::whereIsAvailable(1)->whereType('offer')->whereStatusNot('pending')->whereUserId($user_id)->when($search, function ($query) use ($search) {
             $query->where(function($query) use ($search){
                 $query->whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])
                     ->orwhereRaw("LOWER(name_ar) like ? ", [ "%".strtolower($search)."%"])
