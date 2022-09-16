@@ -152,7 +152,11 @@ class PostsController extends Controller
         $sender_full_name = $sender->full_name;
         $receiver_full_name = $receiver->full_name;
         $title = "Barter Request ".ucwords($request->status).' !';
-        $message = "Hello $sender_full_name, $receiver_full_name has ".$request->status." your request!";
+        if($request->status == 'accepted'){
+            $message = "Hello $sender_full_name, $receiver_full_name has ".$request->status." your request! Now you can chat with $receiver_full_name!";
+        }else{
+            $message = "Hello $sender_full_name, $receiver_full_name has ".$request->status." your request!";
+        }
 
         if($user_push = UserPush::whereUsersId($sender->id)->first()){
             $players_ids[] = $user_push->player_id;
