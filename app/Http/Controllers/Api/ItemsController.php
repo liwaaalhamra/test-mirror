@@ -27,6 +27,8 @@ use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Log;
+
 use App\Http\Controllers\Controller;
 use Validator;
 use Propaganistas\LaravelPhone\PhoneNumber;
@@ -691,7 +693,7 @@ class ItemsController extends Controller
         $query->when($filters_fields, function ($query) use ($filters_fields) {
             $query->whereHas('custom_fields', function ($query) use ($filters_fields) {
                 foreach ($filters_fields as $filter_field){
-                    $query->where(function($query) use ($filters_fields,$filter_field){
+                    $query->orWhere(function($query) use ($filters_fields,$filter_field){
                         $extra_field_name = isset($filter_field->extra_field_name) ? $filter_field->extra_field_name : null;
                         $extra_field_value = isset($filter_field->extra_field_value) ? $filter_field->extra_field_value : null;
                         /**
@@ -699,16 +701,18 @@ class ItemsController extends Controller
                          */
                         if (strpos($filter_field->field_name, 'min') !== false || strpos($filter_field->field_name, 'max') !== false){
                             if (strpos($filter_field->field_name, 'max') !== false){
-                                $min_field_name = str_replace('max', 'min', $filter_field->field_name);
-                                $query->where(function($query) use ($filter_field,$min_field_name){
+                                //max
+                                // $min_field_name = str_replace('max', 'min', $filter_field->field_name);
+                                $query->where(function($query) use ($filter_field){
                                     // $query->where($filter_field->field_name,'>=',$filter_field->field_value)->where($min_field_name,'<=',$filter_field->field_value);
-                                    $query->where('field_name', $min_field_name)->where('field_value','<=',$filter_field->field_value);
+                                    $query->where('field_name', $filter_field->field_name)->where('field_value','>=',$filter_field->field_value);
                                 });
                             }else{
-                                $max_field_name = str_replace('min', 'max', $filter_field->field_name);
-                                $query->where(function($query) use ($filter_field,$max_field_name){
+                                //min
+                                // $max_field_name = str_replace('min', 'max', $filter_field->field_name);
+                                $query->where(function($query) use ($filter_field){
                                     // $query->where($filter_field->field_name,'<=',$filter_field->field_value)->where($max_field_name,'>=',$filter_field->field_value);
-                                    $query->where('field_name', $max_field_name)->where('field_value','>=',$filter_field->field_value);
+                                    $query->where('field_name', $filter_field->field_name)->where('field_value','<=',$filter_field->field_value);
                                 });
                             }
                         }else{
@@ -720,13 +724,13 @@ class ItemsController extends Controller
                                 $min_field_name = str_replace('max', 'min', $extra_field_name);
                                 $query->where(function($query) use ($extra_field_name,$extra_field_value,$min_field_name){
                                     // $query->where($extra_field_name,'>=',$extra_field_value)->where($min_field_name,'<=',$extra_field_value);
-                                    $query->where('extra_field_name', $min_field_name)->where('field_value','<=',$filter_field->field_value);
+                                    $query->where('extra_field_name', $filter_field->extra_field_name)->where('field_value','>=',$filter_field->extra_field_value);
                                 });
                             }else{
                                 $max_field_name = str_replace('min', 'max', $filter_field->field_name);
                                 $query->where(function($query) use ($extra_field_name,$extra_field_value,$max_field_name){
                                     // $query->where($extra_field_name,'<=',$extra_field_value)->where($max_field_name,'>=',$extra_field_value);
-                                    $query->where('extra_field_name', $max_field_name)->where('field_value','>=',$filter_field->field_value);
+                                    $query->where('extra_field_name', $filter_field->extra_field_name)->where('field_value','<=',$filter_field->extra_field_value);
                                 });
                             }
                         }else{
@@ -736,8 +740,13 @@ class ItemsController extends Controller
                         }
                     });
                 }
-            });
+            });                                    
+            
+            // Log::info($query->toSql());
+
         });
+
+
         if($request->sort){
             $sort = Input::get('sort');
             if($sort == 'price_lowest'){
@@ -757,6 +766,7 @@ class ItemsController extends Controller
         }else{
             $items = $query->selectRaw("*,NULL as distance");
         }
+
         $currency = env('APP_CURRENCY');
         $items = $items->get()->map(function ($value, $key) use ($currency,$user) {
             $value->is_favorite = false;
