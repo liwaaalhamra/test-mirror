@@ -1162,6 +1162,9 @@ class ItemsController extends Controller
                 $value->true_title = 'Sell';
                 $value->false_title = 'Rent';
             }
+                        
+            $value->sub_category_name = ucfirst(strtolower($value->sub_category->name_en));
+
             return $value;
         })->values();
 
