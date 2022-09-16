@@ -68,5 +68,6 @@ return [
     'order_message' => 'Kindly note that your order has been accepted, our Team will contact you soon',
     'cannot_complete_order' => 'Cannot Complete Order',
     'item_already_exist' => 'Restaurant successfully added to cart',
+    'select_a_post' => 'Please select a post',
 
 ];
