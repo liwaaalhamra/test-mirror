@@ -72,6 +72,7 @@ return [
     'cannot_complete_order' => 'need translation',
     'item_added_to_cart' => 'need translation',
     'item_already_exist' => 'need translation',
+    'select_a_post' => 'الرجاء تحديد',
 
 
 

@@ -60,7 +60,7 @@ class PostsController extends Controller
         $sender = $this->validate_user($request);
 
         if (!Input::has('sender_item_id')) {
-            return parent::return_error('Missing Sender Item ID', 401, 'messages.missing_parameter');
+            return parent::return_error('Missing Sender Item ID', 401, 'messages.select_a_post');
         }
         if (!$sender_item = Item::whereUserId($sender->id)->whereId($request->sender_item_id)->first()) {
             return parent::return_error("Invalid Sender Item", 402, 'messages.invalid_parameters');
