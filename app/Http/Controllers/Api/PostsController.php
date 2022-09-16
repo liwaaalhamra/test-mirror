@@ -237,8 +237,8 @@ class PostsController extends Controller
         $barters = Barter::wherenotin('status',['completed'])->where(function ($query) use ($user) {
             $query->whereReceiverId($user->id)->orWhere('sender_id',$user->id);
         })->get()->map(function ($query, $key) {
-            $query->sender_post_type = $query->sender_post->category->type;
-            $query->receiver_post_type = $query->receiver_post->category->type;
+            $query->sender_post_type = $query->sender_post ? $query->sender_post->category->type : "";
+            $query->receiver_post_type = $query->receiver_post ? $query->receiver_post->category->type : "";
             return $query;
         });
 
