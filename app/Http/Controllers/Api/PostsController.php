@@ -152,10 +152,14 @@ class PostsController extends Controller
         $sender_full_name = $sender->full_name;
         $receiver_full_name = $receiver->full_name;
         $title = "Barter Request ".ucwords($request->status).' !';
+        $status = "Your request status has been updated.";
+
         if($request->status == 'accepted'){
             $message = "Hello $sender_full_name, $receiver_full_name has ".$request->status." your request! Now you can chat with $receiver_full_name!";
+            $status = "Your request status has been updated successfully! Now you can chat with $sender_full_name!";
         }else{
             $message = "Hello $sender_full_name, $receiver_full_name has ".$request->status." your request!";
+            $status = "Your request status has been updated.";
         }
 
         if($user_push = UserPush::whereUsersId($sender->id)->first()){
@@ -180,7 +184,7 @@ class PostsController extends Controller
             ]);
         }
 
-        return parent::return_json(['status' => "Your request status has been updated successfully! Now you can chat with $sender_full_name!"]);
+        return parent::return_json(['status' => $status]);
     }
 
     public function barter_done(Request $request)
