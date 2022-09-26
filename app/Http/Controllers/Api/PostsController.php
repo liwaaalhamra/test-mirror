@@ -636,6 +636,18 @@ class PostsController extends Controller
             }
 
         }
+
+        $info = [];
+        $info['to'] = env("MAIL_TO");
+        $info['icon'] = 'alert.png';
+        $info['post_name'] = $request->title;
+        $info['post_title'] = $user->full_name;
+        $info['title'] =  "Post Edited!";
+        Mail::send('emails.on_post_edit', ['data' => $info], function ($message) use ($info) {
+            $message->subject($info['title']);
+            $message->to($info['to']);
+        });
+
         return parent::return_json(['status' => 'Your post has been updated successfully']);
     }
 
