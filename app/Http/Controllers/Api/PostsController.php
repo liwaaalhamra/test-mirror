@@ -30,8 +30,10 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 use App\Http\Controllers\Controller;
-use Validator;
 use Propaganistas\LaravelPhone\PhoneNumber;
+
+use Validator;
+use Mail;
 
 /**
  * Class PostsController
@@ -640,8 +642,8 @@ class PostsController extends Controller
         $info = [];
         $info['to'] = env("MAIL_TO");
         $info['icon'] = 'alert.png';
-        $info['post_name'] = $request->title;
-        $info['post_title'] = $user->full_name;
+        $info['post_title'] = $request->title;
+        $info['post_name'] = $user->full_name;
         $info['title'] =  "Post Edited!";
         Mail::send('emails.on_post_edit', ['data' => $info], function ($message) use ($info) {
             $message->subject($info['title']);

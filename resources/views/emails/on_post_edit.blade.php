@@ -5,8 +5,8 @@
     <title>{{$data['title']}}</title>
 </head>
 <body>	
-	<p>Hello,</p>
+	<h3>Hello,</h3>
 	
-		<h3>{{$data['post_name']}} edited the post {{$data['post_title']}}</h3>
+	<p>{{$data['post_name']}} edited the post {{$data['post_title']}}.</p>
 </body>
 </html>
