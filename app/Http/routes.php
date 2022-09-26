@@ -75,8 +75,6 @@ Route::group(['middleware' => ['web']], function () {
 });
 
 
-
-
 Route::get('docs', function(){
 	return View::make('docs...index');
 });
