@@ -93,7 +93,7 @@ class PostsController extends Controller
         $sender_full_name = $sender->full_name;
         $receiver_full_name = $receiver->full_name;
         $title = "Barter Request!";
-        $message = "$sender_full_name is interested in your post, would you like to accept the request?";
+        $message = "Hello $receiver_full_name. $sender_full_name is interested in your post. Please click on continue to check what $sender_full_name is offering you. You will be able to chat with $sender_full_name once you accept the request to barter!";
 
         if($user_push = UserPush::whereUsersId($receiver->id)->first()){
             $players_ids[] = $user_push->player_id;
@@ -155,10 +155,10 @@ class PostsController extends Controller
         $status = "Your request status has been updated.";
 
         if($request->status == 'accepted'){
-            $message = "Hello $sender_full_name, $receiver_full_name has ".$request->status." your request! Now you can chat with $receiver_full_name!";
-            $status = "Your request status has been updated successfully! Now you can chat with $sender_full_name!";
+            $message = "Hello $sender_full_name. $receiver_full_name has accepted your request to barter! You can chat with $receiver_full_name by clicking on the chat or later by accessing the chat from the inbox or my barters.";
+            $status = "Thank you for accepting the offer. Now you can chat with $sender_full_name!";
         }else{
-            $message = "Hello $sender_full_name, $receiver_full_name has ".$request->status." your request!";
+            $message = "Hello $sender_full_name. $receiver_full_name is not interested in your request to barter. Please explore more of the posts found in Barterdom App!";
             $status = "Your request status has been updated.";
         }
 
