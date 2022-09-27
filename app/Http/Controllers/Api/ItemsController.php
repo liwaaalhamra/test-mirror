@@ -433,19 +433,19 @@ class ItemsController extends Controller
             $sub_sub_categories_available = SubSubCategory::whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])->pluck('id')->toArray();
             if(count($categories_available)){
                 $query->where(function($query) use ($categories_available){
-                    $query->whereIn("category_id", [$categories_available]);
+                    $query->whereIn("category_id", $categories_available);
                 });
             }
                         
             if(count($sub_categories_available)){
                 $query->where(function($query) use ($sub_categories_available){
-                    $query->whereIn("sub_category_id", [$sub_categories_available]);
+                    $query->whereIn("sub_category_id", $sub_categories_available);
                 });
             }
                         
             if(count($sub_sub_categories_available)){
                 $query->where(function($query) use ($sub_sub_categories_available){
-                    $query->whereIn("sub_sub_category_id", [$sub_sub_categories_available]);
+                    $query->whereIn("sub_sub_category_id", $sub_sub_categories_available);
                 });
             }
         }
