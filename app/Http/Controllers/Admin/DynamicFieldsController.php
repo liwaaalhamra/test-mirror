@@ -108,6 +108,8 @@ class DynamicFieldsController extends Controller
         ];
         $field_names = [
             'Sell & Rent' => 'is-sell',
+            'Serviced' => 'serviced',
+            'Warranty' => 'warranty',
         ];
         return view('pages.dynamic_fields.create',compact('sub_sub_categories','field_types','sub_categories','categories','endpoints', 'field_names'))
             ->with('content_header', 'Add New Dynamic Field');
@@ -232,6 +234,8 @@ class DynamicFieldsController extends Controller
         ];
         $field_names = [
             'Sell & Rent' => 'is-sell',
+            'Serviced' => 'serviced',
+            'Warranty' => 'warranty',
         ];
         return view('pages.dynamic_fields.edit', compact('item','endpoints','categories','sub_categories','sub_sub_categories','field_types','item_parent_id', 'field_names'))
             ->with('content_header', 'Update Dynamic Field');
