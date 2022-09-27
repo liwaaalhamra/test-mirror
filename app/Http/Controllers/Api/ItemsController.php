@@ -425,7 +425,7 @@ class ItemsController extends Controller
             $sub_categories_available = SubCategory::whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])->pluck('id')->toArray();
             $sub_sub_categories_available = SubSubCategory::whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])->pluck('id')->toArray();
 
-            $query->where(function($query) use ($search){
+            $query->where(function($query) use ($search, $categories_available, $sub_categories_available, $sub_sub_categories_available){
                 $query->whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])
                     ->orwhereRaw("LOWER(name_ar) like ? ", [ "%".strtolower($search)."%"])
                     ->orwhereRaw("LOWER(description_en) like ? ", [ "%".strtolower($search)."%"])
