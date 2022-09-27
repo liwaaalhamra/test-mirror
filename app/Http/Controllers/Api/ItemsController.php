@@ -15,6 +15,7 @@ use App\Models\Api\Restaurant;
 use App\Models\Api\RestaurantEventType;
 use App\Models\Api\ReviewTag;
 use App\Models\Api\SubCategory;
+use App\Models\Api\SubSubCategory;
 use App\Models\Api\UserFavorite;
 use App\Models\Api\UserPostViewed;
 use App\Models\Api\UserPush;
@@ -427,9 +428,9 @@ class ItemsController extends Controller
                     ->orwhereRaw("LOWER(description_ar) like ? ", [ "%".strtolower($search)."%"]);
             });
 
-            $categories_available = Category::whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])->pluck("id")->get();
-            $sub_categories_available = SubCategory::whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])->pluck("id")->get();
-            $sub_sub_categories_available = SubSubCategory::whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])->pluck("id")->get();
+            $categories_available = Category::whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])->pluck('id')->toArray();
+            $sub_categories_available = SubCategory::whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])->pluck('id')->toArray();
+            $sub_sub_categories_available = SubSubCategory::whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])->pluck('id')->toArray();
             if(count($categories_available)){
                 $query->where(function($query) use ($categories_available){
                     $query->whereIn("category_id", [$categories_available]);
