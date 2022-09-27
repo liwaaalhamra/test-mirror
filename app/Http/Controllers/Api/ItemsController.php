@@ -421,27 +421,27 @@ class ItemsController extends Controller
         $query = Item::whereType('offer')->whereDate('expired_at','>=',$now)->whereIsAvailable(1);
         if(Input::has('search')){
             $search = Input::get('search');
+            $categories_available = Category::whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])->pluck('id')->toArray();
+            $sub_categories_available = SubCategory::whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])->pluck('id')->toArray();
+            $sub_sub_categories_available = SubSubCategory::whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])->pluck('id')->toArray();
+
             $query->where(function($query) use ($search){
                 $query->whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])
                     ->orwhereRaw("LOWER(name_ar) like ? ", [ "%".strtolower($search)."%"])
                     ->orwhereRaw("LOWER(description_en) like ? ", [ "%".strtolower($search)."%"])
-                    ->orwhereRaw("LOWER(description_ar) like ? ", [ "%".strtolower($search)."%"]);
+                    ->orwhereRaw("LOWER(description_ar) like ? ", [ "%".strtolower($search)."%"]);        
+                if(count($categories_available)){
+                    $query->orwhereIn("category_id", $categories_available);
+                }
+                            
+                if(count($sub_categories_available)){
+                    $query->orwhereIn("sub_category_id", $sub_categories_available);
+                }
+                            
+                if(count($sub_sub_categories_available)){
+                    $query->orwhereIn("sub_sub_category_id", $sub_sub_categories_available);
+                }
             });
-
-            $categories_available = Category::whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])->pluck('id')->toArray();
-            $sub_categories_available = SubCategory::whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])->pluck('id')->toArray();
-            $sub_sub_categories_available = SubSubCategory::whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])->pluck('id')->toArray();
-            if(count($categories_available)){
-                $query->orwhereIn("category_id", $categories_available);
-            }
-                        
-            if(count($sub_categories_available)){
-                $query->orwhereIn("sub_category_id", $sub_categories_available);
-            }
-                        
-            if(count($sub_sub_categories_available)){
-                $query->orwhereIn("sub_sub_category_id", $sub_sub_categories_available);
-            }
         }
         $category_id = isset($request->category_id) ? $request->category_id : null;
         $sub_category_ids = isset($request->sub_category_ids) ? $request->sub_category_ids : null;
