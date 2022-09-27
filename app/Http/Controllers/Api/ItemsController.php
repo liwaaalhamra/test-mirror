@@ -426,6 +426,27 @@ class ItemsController extends Controller
                     ->orwhereRaw("LOWER(description_en) like ? ", [ "%".strtolower($search)."%"])
                     ->orwhereRaw("LOWER(description_ar) like ? ", [ "%".strtolower($search)."%"]);
             });
+
+            $categories_available = Category::whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])->pluck("id")->get();
+            $sub_categories_available = SubCategory::whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])->pluck("id")->get();
+            $sub_sub_categories_available = SubSubCategory::whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])->pluck("id")->get();
+            if(count($categories_available)){
+                $query->where(function($query) use ($categories_available){
+                    $query->whereIn("category_id", [$categories_available]);
+                });
+            }
+                        
+            if(count($sub_categories_available)){
+                $query->where(function($query) use ($sub_categories_available){
+                    $query->whereIn("sub_category_id", [$sub_categories_available]);
+                });
+            }
+                        
+            if(count($sub_sub_categories_available)){
+                $query->where(function($query) use ($sub_sub_categories_available){
+                    $query->whereIn("sub_sub_category_id", [$sub_sub_categories_available]);
+                });
+            }
         }
         $category_id = isset($request->category_id) ? $request->category_id : null;
         $sub_category_ids = isset($request->sub_category_ids) ? $request->sub_category_ids : null;
