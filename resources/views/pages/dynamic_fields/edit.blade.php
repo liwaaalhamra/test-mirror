@@ -21,6 +21,25 @@
                 </div>
             </div>
         </div>
+        <div class="col-sm-12">
+            <div class="panel panel-default">
+                <div class="panel-heading font-bold">Field Names</div>
+                <div class="panel-body">
+                    <ul>
+                        @php $i=0 @endphp
+                        @foreach($field_names as $key => $field_name)
+                            @php $i=$i+1; @endphp
+                            <div class="col-sm-4">
+                                <li>
+                                    <strong>{{$key}}</strong> => <label id="p{{$i}}">{{$field_name}}</label> <button onclick="copyToClipboard('#p{{$i}}')">Copy</button>
+                                </li>
+                            </div>
+                            <br>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="row">
         <div class="col-sm-12">
