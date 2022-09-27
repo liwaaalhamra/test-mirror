@@ -106,7 +106,10 @@ class DynamicFieldsController extends Controller
             'Car Brands' => 'lists/car_brands',
             'Car Models' => 'lists/car_models',
         ];
-        return view('pages.dynamic_fields.create',compact('sub_sub_categories','field_types','sub_categories','categories','endpoints'))
+        $field_names = [
+            'Sell & Rent' => 'is-sell',
+        ];
+        return view('pages.dynamic_fields.create',compact('sub_sub_categories','field_types','sub_categories','categories','endpoints', 'field_names'))
             ->with('content_header', 'Add New Dynamic Field');
     }
 
@@ -227,7 +230,10 @@ class DynamicFieldsController extends Controller
             'Car Brands' => 'lists/car_brands',
             'Car Models' => 'lists/car_models',
         ];
-        return view('pages.dynamic_fields.edit', compact('item','endpoints','categories','sub_categories','sub_sub_categories','field_types','item_parent_id'))
+        $field_names = [
+            'Sell & Rent' => 'is-sell',
+        ];
+        return view('pages.dynamic_fields.edit', compact('item','endpoints','categories','sub_categories','sub_sub_categories','field_types','item_parent_id', 'field_names'))
             ->with('content_header', 'Update Dynamic Field');
     }
 
