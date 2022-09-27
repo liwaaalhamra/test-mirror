@@ -31,7 +31,7 @@
                             @php $i=$i+1; @endphp
                         <div class="col-sm-4">
                             <li>
-                                <strong>{{$key}}</strong> => <label id="p{{$i}}">{{$field_name}}</label> <button onclick="copyToClipboard('#p{{$i}}')">Copy</button>
+                                <strong>{{$key}}</strong> => <label id="field_name_{{$i}}">{{$field_name}}</label> <button onclick="copyToClipboard('#field_name_{{$i}}')">Copy</button>
                             </li>
                         </div>
                         <br>
