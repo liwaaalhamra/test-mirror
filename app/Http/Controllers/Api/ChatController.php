@@ -79,6 +79,8 @@ class ChatController extends Controller
      */
     public function messages(Request $request) {
         $user = $this->validate_user($request);
+        $messages['data'] = [];
+
         if(Input::has('conversation_id')){
             if(!$conversation = Conversation::where('id','=',$request->conversation_id)
                 ->where(function ($query) use($user) {
@@ -99,24 +101,27 @@ class ChatController extends Controller
                 return response()->json($messages);
             }
         }
+        
+        if($conversation){
+            $conversation->unread_messages = 0;
+            $conversation->save();
 
-        $conversation->unread_messages = 0;
-        $conversation->save();
-
-        $messages = ConversationMessage::whereConversationId($conversation->id)->orderby('id','desc')
-            ->get()
-            ->map(function ($value, $key) use ($user) {
-                if($user->id == $value['receiver_id']){
-                    $value->is_read = true;
-                    $value->save();
-                }
-                $value['is_my_message'] = $user->id == $value['sender_id'] ? true : false;
-                return $value;
-            });
-        $limit = 15;
-        $messages = new LengthAwarePaginator(
-            $messages->forPage(LengthAwarePaginator::resolveCurrentPage(), $limit)->values(), $messages->count(), $limit, LengthAwarePaginator::resolveCurrentPage(), ['path' => secure_url('/api/chat/messages')]
-        );
+            $messages = ConversationMessage::whereConversationId($conversation->id)->orderby('id','desc')
+                ->get()
+                ->map(function ($value, $key) use ($user) {
+                    if($user->id == $value['receiver_id']){
+                        $value->is_read = true;
+                        $value->save();
+                    }
+                    $value['is_my_message'] = $user->id == $value['sender_id'] ? true : false;
+                    return $value;
+                });
+            $limit = 15;
+            $messages = new LengthAwarePaginator(
+                $messages->forPage(LengthAwarePaginator::resolveCurrentPage(), $limit)->values(), $messages->count(), $limit, LengthAwarePaginator::resolveCurrentPage(), ['path' => secure_url('/api/chat/messages')]
+            );
+        }
+        
         return response()->json($messages);
     }
 
