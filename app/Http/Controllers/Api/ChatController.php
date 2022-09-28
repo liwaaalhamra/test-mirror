@@ -169,8 +169,9 @@ class ChatController extends Controller
             $info['headings'] = $headings;
             $info['player_ids'] = $players_ids;
             $conversation->friend_name = $user->id == $conversation->friend_id ? $conversation->friend->full_name : $conversation->user->full_name;
+            $conversation->friend_id = $user->id == $conversation->friend_id;
             $conversation->friend_image = $user->id == $conversation->friend_id ? $conversation->friend->photo : $conversation->user->photo;
-            $info['data'] = ['conversation' => $conversation,'type' => 'chat'];
+            $info['data'] = ['conversation' => $conversation, 'type' => 'chat'];
             $result = parent::oneSignal($info);
 
         }
