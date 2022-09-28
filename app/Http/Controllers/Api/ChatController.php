@@ -102,7 +102,7 @@ class ChatController extends Controller
             }
         }
         
-        if($conversation){
+        if(Input::has('conversation_id')){
             $conversation->unread_messages = 0;
             $conversation->save();
 
@@ -121,7 +121,7 @@ class ChatController extends Controller
                 $messages->forPage(LengthAwarePaginator::resolveCurrentPage(), $limit)->values(), $messages->count(), $limit, LengthAwarePaginator::resolveCurrentPage(), ['path' => secure_url('/api/chat/messages')]
             );
         }
-        
+
         return response()->json($messages);
     }
 
