@@ -155,6 +155,7 @@ class PostsController extends Controller
         $receiver_full_name = $receiver->full_name;
         $title = "Barter Request ".ucwords($request->status).' !';
         $status = "Your request status has been updated.";
+        $type = "barter";
 
         if($request->status == 'accepted'){
             $message = "Hello $sender_full_name. $receiver_full_name has accepted your request to barter! You can chat with $receiver_full_name by clicking on the chat or later by accessing the chat from the inbox or my barters.";
@@ -163,7 +164,6 @@ class PostsController extends Controller
         }else{
             $message = "Hello $sender_full_name. $receiver_full_name is not interested in your request to barter. Please explore more of the posts found in Barterdom App!";
             $status = "Your request status has been updated.";
-            $type= "barter";
         }
 
         if($user_push = UserPush::whereUsersId($sender->id)->first()){
@@ -246,7 +246,7 @@ class PostsController extends Controller
         ->where('created_at', '>=', Carbon::now()->subMonths(2)->toDateTimeString()) //removing barters older than 2 months
         ->where(function ($query) use ($user) {
             $query->whereReceiverId($user->id)->orWhere('sender_id',$user->id);
-        })->orderByRaw("status desc")->get()->map(function ($query, $key) {
+        })->orderByRaw("FIELD(status , 'pending', 'accepted') ASC")->get()->map(function ($query, $key) {
             $query->sender_post_type = $query->sender_post ? $query->sender_post->category->type : "";
             $query->receiver_post_type = $query->receiver_post ? $query->receiver_post->category->type : "";
             return $query;
