@@ -72,7 +72,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label>Field Name (Column Name in Database, without spaces/capital letter)</label>
+                            <label>Field Name (Column Name in Database, without spaces)</label>
                             <input type="text" name="field_name" id="field_name" required class="form-control" placeholder="Field Name" value="{{ $item->field_name }}">
                         </div>
                         <div class="form-group">
@@ -97,7 +97,7 @@
                             <input name="has_extra_field" id="has_extra_field" type="checkbox" @if($item->has_extra_field) checked @endif data-toggle="toggle" data-on="YES" data-off="NO" data-onstyle="success" data-offstyle="danger" data-size="large">
                         </div>
                         <div class="form-group">
-                            <label>Extra Field Name (Column Name in Database, without spaces/capital letter)</label>
+                            <label>Extra Field Name (Column Name in Database, without spaces)</label>
                             <input type="text" name="extra_field_name" id="extra_field_name" class="form-control" placeholder="Extra Field Name" value="{{ $item->extra_field_name }}">
                         </div>
                         <div class="form-group">
