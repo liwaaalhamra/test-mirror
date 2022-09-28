@@ -1203,7 +1203,7 @@ class ItemsController extends Controller
 //            $query->whereSubSubCategoryId($sub_sub_category_id);
 //        });
 
-        $filters = $query->orderby('item_order','asc')->get()->map(function ($value, $key){
+        $filters = $query->orderby('sub_category_id','asc')->get()->map(function ($value, $key){
             if($value->field_type == 'boolean'){
                 $value->true_title = 'YES';
                 $value->false_title = 'NO';
