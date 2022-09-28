@@ -23,6 +23,7 @@ use App\Models\Api\UserPush;
 use App\Models\Api\UserRating;
 use App\Models\Api\UserRatingLiker;
 use App\Models\Api\UserReservation;
+use App\Models\Api\Conversation;
 use App\Traits\HITrait;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -31,6 +32,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 use App\Http\Controllers\Controller;
 use Propaganistas\LaravelPhone\PhoneNumber;
+use Illuminate\Support\Facades\Log;
 
 use Validator;
 use Mail;
@@ -166,6 +168,24 @@ class PostsController extends Controller
             $status = "Your request status has been updated.";
         }
 
+        $conversation = Conversation::where(function ($query) use($user,$receiver) {
+            $query->where(function ($query) use($user,$receiver) {
+                $query->whereUserId($user->id)->whereFriendId($receiver->id);
+            })->orwhere(function ($query) use($user,$receiver) {
+                $query->whereUserId($receiver->id)->whereFriendId($user->id);
+            });
+        })->first();
+        if(!$conversation){
+            $conversation = Conversation::create([
+                'user_id' => $user->id,
+                'friend_id' => $receiver->id,
+                'unread_messages' => 1
+            ]);
+        }else{
+            $conversation->unread_messages = $conversation->unread_messages + 1;
+            $conversation->save();
+        }
+
         if($user_push = UserPush::whereUsersId($sender->id)->first()){
             $players_ids[] = $user_push->player_id;
             $contents = ["en" => $message];
@@ -173,7 +193,11 @@ class PostsController extends Controller
             $info['contents'] = $contents;
             $info['headings'] = $headings;
             $info['player_ids'] = $players_ids;
-            $info['data'] = ['meta_id' => $barter->id, 'type' => $type];
+            $conversation->friend_name = $user->id == $conversation->friend_id ? $conversation->friend->full_name : $conversation->user->full_name;
+            $conversation->friend_id = $user->id == $conversation->friend_id;
+            $conversation->friend_image = $user->id == $conversation->friend_id ? $conversation->friend->photo : $conversation->user->photo;
+
+            $info['data'] = ['meta_id' => $barter->id, 'type' => $type, 'conversation' => $conversation];
             $result = parent::oneSignal($info);
 
             $code = Controller::number_generator(6);
@@ -246,7 +270,7 @@ class PostsController extends Controller
         ->where('created_at', '>=', Carbon::now()->subMonths(2)->toDateTimeString()) //removing barters older than 2 months
         ->where(function ($query) use ($user) {
             $query->whereReceiverId($user->id)->orWhere('sender_id',$user->id);
-        })->orderByRaw("FIELD(status , 'pending', 'accepted') DESC")->get()->map(function ($query, $key) {
+        })->orderByRaw("FIELD(status , 'pending', 'accepted', 'rejected') ASC")->get()->map(function ($query, $key) {
             $query->sender_post_type = $query->sender_post ? $query->sender_post->category->type : "";
             $query->receiver_post_type = $query->receiver_post ? $query->receiver_post->category->type : "";
             return $query;
