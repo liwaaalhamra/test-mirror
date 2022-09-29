@@ -117,7 +117,8 @@ class PostsController extends Controller
                 'message' => $message,
                 'image' => null,
                 'type' => 'targeted',
-                'code' => $code
+                'code' => $code,
+                'meta_type' => 'barter_request',
             ]);
 
         }
@@ -208,7 +209,8 @@ class PostsController extends Controller
                 'message' => $message,
                 'image' => null,
                 'type' => 'targeted',
-                'code' => $code
+                'code' => $code,
+                'meta_type' => $type,
             ]);
         }
 
