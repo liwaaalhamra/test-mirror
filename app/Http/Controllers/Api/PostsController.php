@@ -211,6 +211,7 @@ class PostsController extends Controller
                 'type' => 'targeted',
                 'code' => $code,
                 'meta_type' => $type,
+                'meta_value' => $conversation,
             ]);
         }
 
