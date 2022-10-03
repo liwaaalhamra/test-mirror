@@ -97,7 +97,7 @@ class PostsController extends Controller
         $sender_full_name = $sender->full_name;
         $receiver_full_name = $receiver->full_name;
         $title = "Barter Request!";
-        $message = "Hello $receiver_full_name. $sender_full_name is interested in your post. Please click on continue to check what $sender_full_name is offering you. You will be able to chat with $sender_full_name once you accept the request to barter!";
+        $message = "Hello $receiver_full_name. $sender_full_name is interested in your post. Please click on the button below to check what $sender_full_name is offering you. You will be able to chat with $sender_full_name once you accept the request to barter!";
 
         if($user_push = UserPush::whereUsersId($receiver->id)->first()){
             $players_ids[] = $user_push->player_id;
