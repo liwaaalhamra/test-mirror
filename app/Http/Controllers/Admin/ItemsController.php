@@ -62,7 +62,7 @@ class ItemsController extends Controller
                 $query->whereDate('created_at','>=',$from)
                     ->whereDate('created_at','<=',$to);
             }
-        })->orderBy('item_order','asc')->get();
+        })->orderBy('created_at','desc')->get();
 
         $selected_category = 'all';
         if ($request->has('category_id')){
