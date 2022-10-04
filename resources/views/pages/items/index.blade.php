@@ -345,7 +345,7 @@
                 "ordering": true,
                 "bAutoWidth": true,
                 "pagingType": "full_numbers",
-                order: [12,'desc'],
+                order: [15,'desc'],
                 dom: 'Bfrtip',
                 buttons: [
                     'copy', 'csv', 'excel', 'print'
