@@ -232,15 +232,14 @@
                                     </a>
                                 @endif
                                 @if($item->status != 'pending')
-                                    <!-- @if($item->status != 'in_review') -->
-                                        <a href="{{ route('admin.items.reject', $item->id) }}" class="btn btn-md btn-action">
-                                            Reject
-                                        </a>
-                                    <!-- @else -->
-                                        <a href="{{ route('admin.items.approve', $item->id) }}" class="btn btn-md btn-action">
-                                            Approve
-                                        </a>
-                                    <!-- @endif -->
+                                    <a href="{{ route('admin.items.reject', $item->id) }}" class="btn btn-md btn-action">
+                                        Reject
+                                    </a>
+                                @endif
+                                @if($item->status != 'pending')
+                                    <a href="{{ route('admin.items.approve', $item->id) }}" class="btn btn-md btn-action">
+                                        Approve
+                                    </a>
                                 @endif
                             @endif
                             @if(in_array('edit',auth()->user()->role->hasAccess($section_name)))
