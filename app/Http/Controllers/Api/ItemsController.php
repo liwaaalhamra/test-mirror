@@ -1196,39 +1196,42 @@ class ItemsController extends Controller
     public function filters(Request $request) {
         $query = CustomField::whereInBrowsingFilters(1);
 
-        $category_id = isset($request->category_id) ? $request->category_id : null;
-        $sub_category_id = isset($request->sub_category_id) ? $request->sub_category_id : null;
-        $sub_sub_category_id = isset($request->sub_sub_category_id) ? $request->sub_sub_category_id : null;
+        $filters = [];
+        if($request->category_id){
+            $category_id = isset($request->category_id) ? $request->category_id : null;
+            $sub_category_id = isset($request->sub_category_id) ? $request->sub_category_id : null;
+            $sub_sub_category_id = isset($request->sub_sub_category_id) ? $request->sub_sub_category_id : null;
 
-        $query->when($category_id, function ($query) use ($category_id) {
-            $query->whereCategoryId($category_id);
-        });
-        $query->when($sub_category_id, function ($query) use ($sub_category_id) {
-            $query->whereSubCategoryId($sub_category_id);
-        });
-//        $query->when($sub_sub_category_id, function ($query) use ($sub_sub_category_id) {
-//            $query->whereSubSubCategoryId($sub_sub_category_id);
-//        });
+            $query->when($category_id, function ($query) use ($category_id) {
+                $query->whereCategoryId($category_id);
+            });
+            $query->when($sub_category_id, function ($query) use ($sub_category_id) {
+                $query->whereSubCategoryId($sub_category_id);
+            });
+    //        $query->when($sub_sub_category_id, function ($query) use ($sub_sub_category_id) {
+    //            $query->whereSubSubCategoryId($sub_sub_category_id);
+    //        });
 
-        $filters = $query->orderby('sub_category_id','asc')->get()->map(function ($value, $key){
-            if($value->field_type == 'boolean'){
-                $value->true_title = 'YES';
-                $value->false_title = 'NO';
-            }
-            if($value->extra_field_type == 'boolean'){
-                $value->extra_true_title = 'YES';
-                $value->extra_false_title = 'NO';
-            }
-            if($value->field_name == 'is-sell'){
-                $value->true_title = 'Sell';
-                $value->false_title = 'Rent';
-            }
-                        
-            $value->sub_category_name = ucfirst(strtolower($value->sub_category->name_en));
+            $filters = $query->orderby('sub_category_id','asc')->get()->map(function ($value, $key){
+                if($value->field_type == 'boolean'){
+                    $value->true_title = 'YES';
+                    $value->false_title = 'NO';
+                }
+                if($value->extra_field_type == 'boolean'){
+                    $value->extra_true_title = 'YES';
+                    $value->extra_false_title = 'NO';
+                }
+                if($value->field_name == 'is-sell'){
+                    $value->true_title = 'Sell';
+                    $value->false_title = 'Rent';
+                }
+                            
+                $value->sub_category_name = ucfirst(strtolower($value->sub_category->name_en));
 
-            return $value;
-        })->values();
-
+                return $value;
+            })->values();
+        }
+        
         return response()->json($filters);
     }
 
