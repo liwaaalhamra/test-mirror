@@ -375,7 +375,7 @@ class ItemsController extends Controller
                 $message = "Your post has been approved, you can start bartering!";
             }else{
                 $title = "Post Rejection!";
-                $message = "Your post has been rejected, please make sure your post information ethical and legit! Contact barterdom support for further clarifications.";
+                $message = "Your post has been rejected, please make sure your post information are ethical and legit! Please contact Barterdom support for further clarifications. Thank you.";
             }
             if($user_push = UserPush::whereUsersId($item->user_id)->first()){
                 $players_ids[] = $user_push->player_id;
@@ -429,7 +429,7 @@ class ItemsController extends Controller
             //     $message = "Your post has been approved, you can start bartering!";
             // }else{
                 $title = "Post Rejection!";
-                $message = "Your post has been rejected, please make sure your post information ethical and legit! Contact barterdom support for further clarifications.";
+                $message = "Your post has been rejected, please make sure your post information are ethical and legit! Please contact Barterdom support for further clarifications. Thank you.";
             // }
             if($user_push = UserPush::whereUsersId($item->user_id)->first()){
                 $players_ids[] = $user_push->player_id;
