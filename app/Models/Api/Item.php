@@ -22,7 +22,7 @@ class Item extends Model
 
     protected $table = "items";
     protected $guarded = [];
-    protected $hidden = ['updated_at','deleted_at','pivot','item_order','meta_name','is_available','location_id',
+    protected $hidden = ['updated_at','deleted_at','pivot','item_order','meta_name','is_available','location_id','sub_region_id',
         'name_en','name_ar','description_en','description_ar','pdf',
         'share_link','country_id','latitude','longitude','address','country_code','phone_number','user','image','width','height'
     ];
@@ -30,7 +30,7 @@ class Item extends Model
         'is_available' => 'boolean',
         'is_sale' => 'boolean',
     ];
-    protected $with = ['location','images'];
+    protected $with = ['location','images', 'sub_region'];
     protected $appends = ['name','user_fullname','description','discount_amount','currency',
         'price_formatted','discounted_price_formatted','discount_amount_formatted','barcode','user_image','price_from_formatted','price_to_formatted'];
 
@@ -119,6 +119,10 @@ class Item extends Model
 
     public function location(){
         return $this->belongsTo(Location::class,'location_id');
+    }
+
+    public function sub_region(){
+        return $this->belongsTo(SubRegion::class,'sub_region_id');
     }
 
     public function custom_fields(){
