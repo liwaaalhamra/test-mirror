@@ -121,6 +121,7 @@ Route::post('/home_top_categories/{slug}/items', 'ItemsController@home_top_categ
 
 Route::get('/lists/{list_type}/{parent_id?}', 'ItemsController@lists');
 Route::post('/locations', 'ItemsController@locations');
+Route::post('/sub_regions', 'ItemsController@sub_regions');
 
 /**
  * Location Routes
