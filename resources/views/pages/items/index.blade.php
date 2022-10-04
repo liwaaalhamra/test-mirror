@@ -233,7 +233,7 @@
                                 @endif
                                 @if($item->status != 'pending')
                                     <!-- @if($item->status != 'in_review') -->
-                                        <a href="{{ route('admin.items.approve', $item->id) }}" class="btn btn-md btn-action">
+                                        <a href="{{ route('admin.items.reject', $item->id) }}" class="btn btn-md btn-action">
                                             Reject
                                         </a>
                                     <!-- @else -->
