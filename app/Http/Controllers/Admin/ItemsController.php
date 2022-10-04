@@ -375,7 +375,7 @@ class ItemsController extends Controller
                 $message = "Your post has been approved, you can start bartering!";
             }else{
                 $title = "Post Rejection!";
-                $message = "Your post has been rejected, please make sure your post information ethical and legit!";
+                $message = "Your post has been rejected, please make sure your post information ethical and legit! Contact barterdom support for further clarifications.";
             }
             if($user_push = UserPush::whereUsersId($item->user_id)->first()){
                 $players_ids[] = $user_push->player_id;
@@ -416,6 +416,60 @@ class ItemsController extends Controller
             }
 
             $item->status = $item->status == 'in_review' ? 'approved' : 'in_review';
+            $item->save();
+        }
+        return redirect()->route('admin.'.$this->section_name.'.index')
+            ->with('success', $this->display_name.' Successfully updated');
+    }
+
+    public function reject(Item $item){
+        if($item){
+            // if($item->status == 'in_review'){
+            //     $title = "Post Approval!";
+            //     $message = "Your post has been approved, you can start bartering!";
+            // }else{
+                $title = "Post Rejection!";
+                $message = "Your post has been rejected, please make sure your post information ethical and legit! Contact barterdom support for further clarifications.";
+            // }
+            if($user_push = UserPush::whereUsersId($item->user_id)->first()){
+                $players_ids[] = $user_push->player_id;
+                $contents = ["en" => $message];
+                $headings = ["en" => $title];
+                $info['contents'] = $contents;
+                $info['headings'] = $headings;
+                $info['player_ids'] = $players_ids;
+                $info['data'] = ['meta_id' => $item->id,'type' => 'post'];
+                $result = parent::oneSignal($info);
+
+                $code = Controller::number_generator(6);
+
+                Inbox::create([
+                    'user_id' => $item->user_id,
+                    'title' => $title,
+                    'message' => $message,
+                    'image' => null,
+                    'type' => 'targeted',
+                    'code' => $code
+                ]);
+
+                //send email to user with response
+                $user = Users::findOrFail($item->user_id);
+                if($user && $user->email){
+                    $info = [];
+                    $info['to'] = $user->email;
+                    $info['icon'] = 'alert.png';
+                    $info['message'] = $message;
+                    $info['cms_user'] = auth()->user();
+                    $info['title'] = $title;
+                    Mail::send('emails.barter_response', ['data' => $info], function ($message) use ($info) {
+                        $message->subject($info['title']);
+                        $message->to($info['to']);
+                    });
+                }
+              
+            }
+
+            $item->status = 'in_review';
             $item->save();
         }
         return redirect()->route('admin.'.$this->section_name.'.index')
