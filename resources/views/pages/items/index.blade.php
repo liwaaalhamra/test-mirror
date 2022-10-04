@@ -121,6 +121,7 @@
                     <th>User Email</th>
                     <th>SKU</th>
                     <th>Name</th>
+                    <th>Type</th>
                     <th>Category</th>
                     <th>Sub Category</th>
                     <th>Sub Sub Category</th>
@@ -142,6 +143,7 @@
                         <td>{{ $item->User ? $item->User->email : "" }}</td>
                         <td>{{ $item->code }}</td>
                         <td>{{ ucwords($item->name_en) }}</td>
+                        <td>{{ ucwords($item->type) }}</td>
                         <td>
                             @if($item->category)
                                 {{ ucwords($item->category->name) }}
