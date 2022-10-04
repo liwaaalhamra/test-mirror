@@ -71,6 +71,12 @@ class ItemsController extends Controller
         return response()->json($data);
     }
 
+    public function sub_regions(Request $request){
+        $country_id = isset($request->city_id) && !empty($request->city_id) ? $request->city_id : 784;
+        $data = SubRegion::without('city')->whereCityId($city_id)->orderByRaw("LOWER(name_en) asc")->get();
+        return response()->json($data);
+    }
+
     public function all_categories(Request $request) {
         $query = Category::whereIsPublished(1)->orderBy('item_order','asc');
         $categories = $query->get()->groupBy('type');
