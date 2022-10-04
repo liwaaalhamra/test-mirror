@@ -73,7 +73,7 @@ class ItemsController extends Controller
     }
 
     public function sub_regions(Request $request){
-        $country_id = isset($request->city_id) && !empty($request->city_id) ? $request->city_id : 784;
+        $city_id = isset($request->city_id) && !empty($request->city_id) ? $request->city_id : 784;
         $data = SubRegion::without('city')->whereCityId($city_id)->orderByRaw("LOWER(name_en) asc")->get();
         return response()->json($data);
     }
