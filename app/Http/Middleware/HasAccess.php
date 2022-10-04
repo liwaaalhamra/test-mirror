@@ -198,6 +198,7 @@ class HasAccess
                                 }
                                 if($section_name == 'items'){
                                     $accessible_routes[] = 'admin.'.$section_name.'.approve';
+                                    $accessible_routes[] = 'admin.'.$section_name.'.reject';
                                 }
                                 if(in_array($section_name, ['banners','offers','news'])){
                                     $accessible_routes[] = 'admin.'.$section_name.'.public';
