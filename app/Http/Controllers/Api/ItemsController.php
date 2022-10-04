@@ -19,6 +19,7 @@ use App\Models\Api\SubSubCategory;
 use App\Models\Api\UserFavorite;
 use App\Models\Api\UserPostViewed;
 use App\Models\Api\UserPush;
+use App\Models\Api\SubRegion;
 use App\Models\Api\UserRating;
 use App\Models\Api\UserRatingLiker;
 use App\Models\Api\UserReservation;
