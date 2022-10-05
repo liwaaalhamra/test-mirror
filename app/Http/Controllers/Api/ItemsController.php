@@ -1200,14 +1200,23 @@ class ItemsController extends Controller
         if($request->category_id){
             $category_id = isset($request->category_id) ? $request->category_id : null;
             $sub_category_id = isset($request->sub_category_id) ? $request->sub_category_id : null;
+            $sub_category_ids = isset($request->sub_category_ids) ? $request->sub_category_ids : null;
             $sub_sub_category_id = isset($request->sub_sub_category_id) ? $request->sub_sub_category_id : null;
 
             $query->when($category_id, function ($query) use ($category_id) {
                 $query->whereCategoryId($category_id);
             });
-            $query->when($sub_category_id, function ($query) use ($sub_category_id) {
-                $query->whereSubCategoryId($sub_category_id);
-            });
+
+            if($sub_category_ids){
+                $query->when($sub_category_ids, function ($query) use ($sub_category_ids) {
+                    $query->whereIn('sub_category_id', $sub_category_ids);
+                });
+            }else if($sub_category_id){
+                $query->when($sub_category_id, function ($query) use ($sub_category_id) {
+                    $query->whereSubCategoryId($sub_category_id);
+                });
+            }
+            
     //        $query->when($sub_sub_category_id, function ($query) use ($sub_sub_category_id) {
     //            $query->whereSubSubCategoryId($sub_sub_category_id);
     //        });
