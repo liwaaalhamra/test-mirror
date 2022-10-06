@@ -38,6 +38,7 @@
 {{--                    <th>Is Supplier</th>--}}
                     <th>Image</th>
                     <th>Selected Image</th>
+                    <th>Price</th>
                     <th>Status</th>
                     <th>Date Added</th>
                     <th></th>
@@ -106,6 +107,7 @@
                                 <h4><span class="label label-danger">Un-published</span></h4>
                             @endif
                         </td>
+                        <td>{{ $item->price }}</td>
                         <td>{{ \Carbon\Carbon::createFromTimestamp($item->created_at)->format('Y-m-d H:i:s') }}</td>
                         <td>
                             @if(in_array('publish',auth()->user()->role->hasAccess($section_name)))
