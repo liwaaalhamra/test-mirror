@@ -20,7 +20,7 @@
                                 <input type="text" name="name_en" required id="name_en" class="form-control" placeholder="Name English" value="{{ old('name_en') }}">
                             </div>
                             <div class="form-group col-sm-6">
-                                <label>Price in dh</label>
+                                <label>Price in AED</label>
                                 <input type="text" name="price" required id="price" class="form-control" placeholder="Price" value="{{ old('price') }}">
                             </div>
 {{--                            <div class="form-group col-sm-6">--}}

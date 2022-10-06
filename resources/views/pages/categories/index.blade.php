@@ -100,7 +100,7 @@
                                 </div>
                             @endif
                         </td>                        
-                        <td>{{ $item->price }} dh</td>
+                        <td>AED {{ $item->price }} </td>
                         <td>
                             @if($item->is_published)
                                 <h4><span class="label label-success">Published</span></h4>
