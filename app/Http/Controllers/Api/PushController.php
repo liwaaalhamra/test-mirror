@@ -78,10 +78,13 @@ class PushController extends Controller
         })->values();
         return response()->json($messages);
     }
-    
+
     public function getMessage(Request $request) {
         $user = $this->validate_user($request);
-        $message = UserInbox::updateOrCreate(['inbox_id' => $request->id,'user_id' => $user->id]);
+        
+        UserInbox::updateOrCreate(['inbox_id' => $request->id,'user_id' => $user->id]);
+
+        $message = Inbox::findOrFail($request->id);
 
         return response()->json($message);
     }
