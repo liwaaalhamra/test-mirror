@@ -1156,7 +1156,7 @@ class PaymentController extends Controller
 
                 ]);
             }
-            $amount = $post->category->price* 100;
+            $amount = ($post->category->price* 100)+($post->category->price*5);
             // if($setting = Setting::whereMetaName('post_cost')->first()){
             //     $amount = $setting->meta_value * 100;
             // }

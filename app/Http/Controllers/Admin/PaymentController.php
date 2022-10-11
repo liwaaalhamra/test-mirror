@@ -130,7 +130,7 @@ class PaymentController extends Controller
             abort(401);
         }
         $post_id = $request->header("post-id");
-        $amount = $post->category->price* 100;
+        $amount = ($post->category->price* 100)+($post->category->price*5);
         // if($setting = Setting::whereMetaName('post_cost')->first()){
         //     $amount = $setting->meta_value * 100;
         // }
@@ -164,7 +164,7 @@ class PaymentController extends Controller
         if(!$post){
             abort(401);
         }
-        $amount = $post->category->price* 100;
+        $amount = ($post->category->price* 100)+($post->category->price*5);
         // if($setting = Setting::whereMetaName('post_cost')->first()){
         //     $amount = $setting->meta_value * 100;
         // }
