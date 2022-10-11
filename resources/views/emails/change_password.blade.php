@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{{env('APP_NAME')}} | {{$data['title']}}</title>
+    <title>{{env('APP_NAME')}}</title>
 </head>
 <body>
 
