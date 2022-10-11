@@ -73,7 +73,7 @@ class PushController extends Controller
             });
         }
         $messages = $query->orderBy('id', 'desc')->get()->map(function ($value, $key) use ($user) {
-            UserInbox::updateOrCreate(['inbox_id' => $value->id,'user_id' => $user->id]);
+            // UserInbox::updateOrCreate(['inbox_id' => $value->id,'user_id' => $user->id]);
             return $value;
         })->values();
         return response()->json($messages);
