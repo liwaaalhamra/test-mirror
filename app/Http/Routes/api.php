@@ -7,6 +7,7 @@
 Route::group(['prefix' => 'push'],function () {
     Route::post('/set_user_push', ['uses' => 'PushController@set_user_push', 'as' => 'api.push.setToken']);
     Route::post('/inbox', ['uses' => 'PushController@inbox', 'as' => 'api.push.inbox']);
+    Route::post('/message', ['uses' => 'PushController@getMessage', 'as' => 'api.push.message']);
     Route::get('/unread_count', ['uses' => 'PushController@unread_count', 'as' => 'api.push.unread_count']);
 });
 
