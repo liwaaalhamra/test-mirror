@@ -165,7 +165,7 @@ class PostsController extends Controller
             $status = "Thank you for accepting the offer. Now you can chat with $sender_full_name!";
             $type= "barter_accepted";
         }else{
-            $message = "Hello $sender_full_name. $receiver_full_name is not interested in your request to barter. Please explore more of the posts found in Barterdom App!";
+            $message = "Hello $sender_full_name. $receiver_full_name is not interested in your request to barter. Please explore more of the posts found in barterdom' App!";
             $status = "Your request status has been updated.";
         }
 
