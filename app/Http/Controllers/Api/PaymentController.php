@@ -1157,9 +1157,9 @@ class PaymentController extends Controller
                 ]);
             }
             $amount = $post->price;
-            if($setting = Setting::whereMetaName('post_cost')->first()){
-                $amount = $setting->meta_value * 100;
-            }
+            // if($setting = Setting::whereMetaName('post_cost')->first()){
+            //     $amount = $setting->meta_value * 100;
+            // }
             $response = Charge::create([
                 "amount" => $amount,
                 "currency" => strtolower(env('APP_CURRENCY')),
