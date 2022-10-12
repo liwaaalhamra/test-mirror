@@ -83,9 +83,10 @@ class PushController extends Controller
         $user = $this->validate_user($request);
         
         UserInbox::updateOrCreate(['inbox_id' => $request->id,'user_id' => $user->id]);
-        $message = Inbox::updateOrCreate(['id' => $request->id, 'user_id' => $user->id],[
-            'is_read' => 1
-        ]);
+        
+        $message = Inbox::findOrFail($request->id);
+        $message->is_read =1;
+        $message->save();
 
         return response()->json($message);
     }
