@@ -93,11 +93,19 @@ class PushController extends Controller
     public function unread_count(Request $request) {
         $user = $this->validate_user($request);
         // $count = Inbox::whereUserType('user')->doesnthave('push_read')->where(function ($query) use($user) {
-        $count = Inbox::doesnthave('push_read')->where(function ($query) use($user) {
+
+        // $count = Inbox::doesnthave('push_read')->where(function ($query) use($user) {
+        //     $query->where(function ($query) use($user) {
+        //         $query->whereUserId($user->id)->whereType('targeted');
+        //     })->orwhere('type','=','bulk');
+        // })->count();
+
+        $count = Inbox::where(function ($query) use($user) {
             $query->where(function ($query) use($user) {
-                $query->whereUserId($user->id)->whereType('targeted');
-            })->orwhere('type','=','bulk');
+                $query->whereUserId($user->id)->whereIsRead(0);
+            });
         })->count();
+
         return response()->json(['unread_count' => $count]);
     }
 
