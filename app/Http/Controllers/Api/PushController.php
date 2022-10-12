@@ -72,7 +72,7 @@ class PushController extends Controller
                     ->orwhereRaw("LOWER(message) like ? ", [ "%".strtolower($search)."%"]);
             });
         }
-        $messages = $query->orderBy('id', 'desc')->get()->map(function ($value, $key) use ($user) {
+        $messages = $query->orderBy('is_read', 'desc')->get()->map(function ($value, $key) use ($user) {
             // UserInbox::updateOrCreate(['inbox_id' => $value->id,'user_id' => $user->id]);
             return $value;
         })->values();
