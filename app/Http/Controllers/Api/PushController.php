@@ -107,6 +107,8 @@ class PushController extends Controller
             })->orwhere('type','=','bulk');
         })->whereIsRead(0)->get();
 
+        $count = $query->count();
+
         return response()->json(['unread_count' => $count]);
     }
 
