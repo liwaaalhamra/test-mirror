@@ -1181,16 +1181,16 @@ class PaymentController extends Controller
                 $result['message'] = 'Thank you for bartering with us. Your post will be reviewed within 24 hours. You will be updated once it is live.';
                 $result['result'] = 'success';
                 if($user->email != null){
-                    $info = [];
-                    $info['to'] = $user->email;
-                    $info['user'] = $user;
-                    $info['post'] = $post;
-                    $info['amount'] = $response['amount'];
-                    $info['title'] = 'Payment Successfull';
+                    $email = [];
+                    $email['to'] = $user->email;
+                    $email['user'] = $user;
+                    $email['post'] = $post;
+                    $email['amount'] = $response['amount'];
+                    $email['title'] = 'Payment Successfull';
                     try {
-                        Mail::send('emails.payment_successful', ['data' => $info], function ($message) use ($info) {
-                            $message->subject($info['title']);
-                            $message->to($info['to']);
+                        Mail::send('emails.payment_successful', ['data' => $email], function ($message) use ($email) {
+                            $message->subject($email['title']);
+                            $message->to($email['to']);
                         });
                     }catch (\Exception $ex){
 
