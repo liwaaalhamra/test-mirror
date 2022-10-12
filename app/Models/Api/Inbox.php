@@ -30,7 +30,7 @@ class Inbox extends Model
 {
     protected $table = 'push_inbox';
     protected $guarded = [];
-    protected $hidden = ['updated_at','code','type','user_id','is_read','user_type'];
+    protected $hidden = ['updated_at','code','type','user_id','user_type'];
     public function getCreatedAtAttribute($value)
     {
         return \Carbon\Carbon::parse($value)->getTimestamp();
