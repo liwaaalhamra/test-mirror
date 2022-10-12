@@ -1179,7 +1179,18 @@ class PaymentController extends Controller
                 $result['message'] = 'Thank you for bartering with us. Your post will be reviewed within 24 hours. You will be updated once it is live.';
                 $result['result'] = 'success';
                 parent::redirect(secure_url('/api/check_result'),$result);
-
+                // if($user->email != null){
+                //     $info = [];
+                //     $info['to'] = $user->email;
+                //     $info['user'] = $user;
+                //     $info['post'] = $post;
+                //     $info['subtotal'] = $response['amount'];
+                //     $info['title'] = 'Payment Successfull';
+                //     Mail::send('emails.user_booking', ['data' => $info], function ($message) use ($info) {
+                //         $message->subject($info['title']);
+                //         $message->to($info['to']);
+                //     });
+                // }
             }else{
                 $result['message'] = 'Payment Failure';
                 $result['result'] = 'failure';
