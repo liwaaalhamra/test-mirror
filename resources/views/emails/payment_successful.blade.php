@@ -61,7 +61,7 @@
                         <p>Post SubCategory: <strong>{{$data['post']->subcategory->name_en}}</strong></p><br>
                         <p>Post Title: <strong>{{$data['post']->name_en}}</strong></p><br>
                         <p>Post Description: <strong>{{$data['post']->description_en}}</strong></p><br>
-                        <p>Post Location: <strong>{{$data['post']->sub_region_id ? $data['post']->sub_region->name_en .','.: ""}} {{$data['post']->city->name_en}}, {{$data['post']->location->name_en}}</strong></p><br>
+                        <p>Post Location: <strong>{{$data['post']->sub_region_id ? $data['post']->sub_region->name_en : ""}} {{$data['post']->city->name_en}}, {{$data['post']->location->name_en}}</strong></p><br>
                         <p>Post Price in AED: <strong>{{$data['post']->price}}</strong></p><br>
                         <p>Payment Amount (incl. VAT): <strong>{{$data['post']->category->price}}</strong></p><br>
                     </td>
