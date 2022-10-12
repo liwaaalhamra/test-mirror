@@ -11,9 +11,7 @@ use App\Models\Api\PackageItem;
 use App\Models\Api\Setting;
 use App\Models\Api\UserCard;
 use App\Models\Api\Users;
-use Carbon\Carbon;
-use DB;
-use Exception;
+
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
@@ -29,6 +27,10 @@ use Stripe\Error\InvalidRequest;
 use Stripe\Error\RateLimit;
 use Stripe\Stripe;
 use Stripe\Token;
+
+use Carbon\Carbon;
+use DB;
+use Exception;
 
 class PaymentController extends Controller
 {
@@ -1178,23 +1180,29 @@ class PaymentController extends Controller
                 $post->save();
                 $result['message'] = 'Thank you for bartering with us. Your post will be reviewed within 24 hours. You will be updated once it is live.';
                 $result['result'] = 'success';
-                parent::redirect(secure_url('/api/check_result'),$result);
-                // if($user->email != null){
-                //     $info = [];
-                //     $info['to'] = $user->email;
-                //     $info['user'] = $user;
-                //     $info['post'] = $post;
-                //     $info['subtotal'] = $response['amount'];
-                //     $info['title'] = 'Payment Successfull';
-                //     Mail::send('emails.user_booking', ['data' => $info], function ($message) use ($info) {
-                //         $message->subject($info['title']);
-                //         $message->to($info['to']);
-                //     });
-                // }
+                if($user->email != null){
+                    $info = [];
+                    $info['to'] = $user->email;
+                    $info['user'] = $user;
+                    $info['post'] = $post;
+                    $info['amount'] = $response['amount'];
+                    $info['title'] = 'Payment Successfull';
+                    try {
+                        Mail::send('emails.payment_successful', ['data' => $info], function ($message) use ($info) {
+                            $message->subject($info['title']);
+                            $message->to($info['to']);
+                        });
+                    }catch (\Exception $ex){
+
+                    }
+                }
+                                
+                parent::redirect(secure_url('/api/check_result'), $result);
+
             }else{
                 $result['message'] = 'Payment Failure';
                 $result['result'] = 'failure';
-                parent::redirect(secure_url('/api/check_result'),$result);
+                parent::redirect(secure_url('/api/check_result'), $result);
             }
         }catch(Card $e) {
             // Since it's a decline, \Stripe\Error\Card will be caught
