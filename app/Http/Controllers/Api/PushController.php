@@ -100,11 +100,7 @@ class PushController extends Controller
         //     })->orwhere('type','=','bulk');
         // })->count();
 
-        $count = Inbox::where(function ($query) use($user) {
-            $query->where(function ($query) use($user) {
-                $query->whereUserId($user->id)->whereIsRead(0);
-            });
-        })->count();
+        $count = Inbox::whereUserId($user->id)->whereIsRead(0)->count();
 
         return response()->json(['unread_count' => $count]);
     }
