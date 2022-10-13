@@ -35,8 +35,8 @@
             <table style="width: 100%">
                 <tbody>
                 <tr>
-                    <td style="background-color: {{env('BACKGROUND_COLOR')}}; padding-bottom: 10px; padding-top: 10px;">
-                        <p style="font-size:28px;"><img style="width: 50px;" src="{{ secure_url("public/uploads/images/logo_new.png") }}" /></p>
+                    <td style="background-color: {{env('BACKGROUND_COLOR')}};padding-bottom: 10px; padding-top: 10px;">
+                        <p style="font-size:28px;"><img style="width: 50px;" src="{{ secure_url("resources/assets/images/logo_new.png") }}" /></p>
                     </td>
                 </tr>
                 </tbody>
@@ -58,10 +58,10 @@
                     <td style="padding-bottom: 23px; padding-top: 23px;">
                         <p>Thank you for bartering with us. Your payment is processed succeffuly and your post will be reviewed within 24 hours. You will be updated once it is live.</p><br>
                         <p>Post Category: <strong>{{$data['post']->category->name_en}}</strong></p><br>
-                        <p>Post SubCategory: <strong>{{$data['post']->subcategory->name_en}}</strong></p><br>
+                        <p>Post SubCategory: <strong>{{$data['post']->sub_category->name_en}}</strong></p><br>
                         <p>Post Title: <strong>{{$data['post']->name_en}}</strong></p><br>
                         <p>Post Description: <strong>{{$data['post']->description_en}}</strong></p><br>
-                        <p>Post Location: <strong>{{$data['post']->sub_region_id ? $data['post']->sub_region->name_en : ""}} {{$data['post']->city->name_en}}, {{$data['post']->location->name_en}}</strong></p><br>
+                        <p>Post Location: <strong>{{$data['post']->sub_region_id ? $data['post']->sub_region->name_en : ""}}, {{$data['post']->location->country->name}}, {{$data['post']->location->name_en}}</strong></p><br>
                         <p>Post Price in AED: <strong>{{$data['post']->price}}</strong></p><br>
                         <p>Payment Amount (incl. VAT): <strong>{{$data['amount']}}</strong></p><br>
                     </td>
