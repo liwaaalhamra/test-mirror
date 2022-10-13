@@ -156,7 +156,7 @@ class PostsController extends Controller
 
         $sender_full_name = $sender->full_name;
         $receiver_full_name = $receiver->full_name;
-        $title = "Barter Request ".ucwords($request->status).' !';
+        $title = "Barter Request ".ucwords($request->status).'!';
         $status = "Your request status has been updated.";
         $type = "barter";
 
