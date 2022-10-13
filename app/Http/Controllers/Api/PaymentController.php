@@ -1170,7 +1170,8 @@ class PaymentController extends Controller
                 "description" => $post->status == 'expired' ? "Renew for ".$user->email." #".$post_id." Order#".$order_id : "Charge for ".$user->email." #".$post_id." Order#".$order_id
             ]);
             $order->status = $response['status'];
-            $order->total_price = $response['amount'];
+            $total_price = $response['amount'];
+            $order->total_price = $total_price;
             $order->payment_return_request = json_encode($request->all());
             $order->payment_return_response = json_encode($response);
             $order->save();
@@ -1181,16 +1182,16 @@ class PaymentController extends Controller
                 $result['message'] = 'Thank you for bartering with us. Your post will be reviewed within 24 hours. You will be updated once it is live.';
                 $result['result'] = 'success';
                 if($user->email != null){
-                    $email = [];
-                    $email['to'] = $user->email;
-                    $email['user'] = $user;
-                    $email['post'] = $post;
-                    $email['amount'] = $response['amount'];
-                    $email['title'] = 'Payment Successfull';
+                    $details = [];
+                    $details['to'] = $user->email;
+                    $details['user'] = $user;
+                    $details['post'] = $post;
+                    $details['amount'] = $total_price;
+                    $details['title'] = 'Payment Successfull';
                     try {
-                        Mail::send('emails.payment_successful', ['data' => $email], function ($message) use ($email) {
-                            $message->subject($email['title']);
-                            $message->to($email['to']);
+                        Mail::send('emails.payment_successful', ['data' => $email], function ($message) use ($details) {
+                            $message->subject($details['title']);
+                            $message->to($details['to']);
                         });
                     }catch (\Exception $ex){
 
