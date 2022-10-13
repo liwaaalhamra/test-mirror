@@ -32,6 +32,8 @@ use Carbon\Carbon;
 use DB;
 use Exception;
 
+use Illuminate\Support\Facades\Log;
+
 class PaymentController extends Controller
 {
     use HITrait;
@@ -1194,7 +1196,7 @@ class PaymentController extends Controller
                             $message->to($details['to']);
                         });
                     }catch (\Exception $ex){
-
+                        // Log::info($ex->getMessage());
                     }
                 }
                                 
