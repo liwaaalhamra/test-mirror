@@ -1189,7 +1189,7 @@ class PaymentController extends Controller
                     $details['amount'] = $total_price;
                     $details['title'] = 'Payment Successfull';
                     try {
-                        Mail::send('emails.payment_successful', ['data' => $email], function ($message) use ($details) {
+                        Mail::send('emails.payment_successful', ['data' => $details], function ($message) use ($details) {
                             $message->subject($details['title']);
                             $message->to($details['to']);
                         });
