@@ -283,9 +283,9 @@ class PostsController extends Controller
                 $receiver = $query->receiver_post;
                 $conversation = Conversation::where(function ($query) use($user, $receiver) {
                     $query->where(function ($query) use($user, $receiver) {
-                        $query->whereUserId($user->id)->whereFriendId($receiver->id);
+                        $query->whereUserId($user->id)->whereFriendId($receiver->user_id);
                     })->orwhere(function ($query) use($user, $receiver) {
-                        $query->whereUserId($receiver->id)->whereFriendId($user->id);
+                        $query->whereUserId($receiver->user_id)->whereFriendId($user->id);
                     });
                 })->first();
                 if(!$conversation){
