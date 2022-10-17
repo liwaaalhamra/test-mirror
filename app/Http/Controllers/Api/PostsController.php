@@ -298,8 +298,8 @@ class PostsController extends Controller
                     $conversation->unread_messages = $conversation->unread_messages + 1;
                     $conversation->save();
                 }
-                $query->conversation_id = isset($conversation) && $conversation ? $conversation->id : null;
-            }
+            }                
+            $query->conversation_id = isset($conversation) && $conversation ? $conversation->id : null;
             return $query;
         });
 
