@@ -125,10 +125,10 @@ class Users extends Model
                 ->where(function($query) use ($search){
                     $query->whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])
                         ->orwhereRaw("LOWER(name_ar) like ? ", [ "%".strtolower($search)."%"]);
-                })
+                })->with('return_post')
                 ->get();
         }
-        return $this->belongsToMany(Item::class,'user_favorites','user_id','meta_id')->where('user_favorites.meta_name','=','items')->get();
+        return $this->belongsToMany(Item::class,'user_favorites','user_id','meta_id')->where('user_favorites.meta_name','=','items')->with('return_post')->get();
     }
 
     /**
