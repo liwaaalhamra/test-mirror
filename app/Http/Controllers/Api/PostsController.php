@@ -279,7 +279,6 @@ class PostsController extends Controller
         })->orderByRaw("FIELD(status , 'pending', 'accepted', 'rejected') ASC")->orderByRaw("FIELD(sender_id, $user->id) ASC")->get()->map(function ($query, $key) use ($user){
             $query->sender_post_type = $query->sender_post ? $query->sender_post->category->type : "";
             $query->receiver_post_type = $query->receiver_post ? $query->receiver_post->category->type : "";
-            $query->conversation_id = null;
             if($query->status == 'accepted' && $query->receiver_post){
                 $receiver = $query->receiver_post;
                 $conversation = Conversation::where(function ($query) use($user, $receiver) {
@@ -299,7 +298,7 @@ class PostsController extends Controller
                     $conversation->unread_messages = $conversation->unread_messages + 1;
                     $conversation->save();
                 }
-                $query->conversation_id = $conversation ? $conversation->id : null;
+                $query->conversation_id = isset($conversation) && $conversation ? $conversation->id : null;
             }
             return $query;
         });
