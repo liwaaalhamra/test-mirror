@@ -276,7 +276,7 @@ class PostsController extends Controller
         ->where('created_at', '>=', Carbon::now()->subMonths(2)->toDateTimeString()) //removing barters older than 2 months
         ->where(function ($query) use ($user) {
             $query->whereReceiverId($user->id)->orWhere('sender_id',$user->id);
-        })->orderByRaw("FIELD(status , 'pending', 'accepted', 'rejected') ASC")->orderByRaw("FIELD(sender_id, $user->id) ASC")->get()->map(function ($query, $key) {
+        })->orderByRaw("FIELD(status , 'pending', 'accepted', 'rejected') ASC")->orderByRaw("FIELD(sender_id, $user->id) ASC")->get()->map(function ($query, $key) use ($user){
             $query->sender_post_type = $query->sender_post ? $query->sender_post->category->type : "";
             $query->receiver_post_type = $query->receiver_post ? $query->receiver_post->category->type : "";
             $query->conversation_id = null;
@@ -291,15 +291,15 @@ class PostsController extends Controller
                 })->first();
                 if(!$conversation){
                     $conversation = Conversation::create([
-                        'user_id' => $user->id,
-                        'friend_id' => $receiver->id,
+                        'user_id' => $user ? $user->id :  null,
+                        'friend_id' => $receiver ? $receiver->user_id :  null,
                         'unread_messages' => 1
                     ]);
                 }else{
                     $conversation->unread_messages = $conversation->unread_messages + 1;
                     $conversation->save();
                 }
-                $query->conversation_id = $conversation->id;
+                $query->conversation_id = $conversation ? $conversation->id : null;
             }
             return $query;
         });
