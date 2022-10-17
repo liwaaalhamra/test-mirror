@@ -194,6 +194,7 @@ class PostsController extends Controller
             $info['contents'] = $contents;
             $info['headings'] = $headings;
             $info['player_ids'] = $players_ids;
+            $conversation->id = $conversation ? $conversation->id : null;
             $conversation->friend_name = $user->id == $conversation->friend_id ? $conversation->friend->full_name : $conversation->user->full_name;
             $conversation->friend_id = $receiver->id;
             $conversation->friend_image = $user->id == $conversation->friend_id ? $conversation->friend->photo : $conversation->user->photo;
@@ -269,6 +270,8 @@ class PostsController extends Controller
     {
         $user = $this->validate_user($request);
 
+
+
         $barters = Barter::wherenotin('status',['completed', 'rejected'])
         ->where('created_at', '>=', Carbon::now()->subMonths(2)->toDateTimeString()) //removing barters older than 2 months
         ->where(function ($query) use ($user) {
@@ -276,6 +279,28 @@ class PostsController extends Controller
         })->orderByRaw("FIELD(status , 'pending', 'accepted', 'rejected') ASC")->orderByRaw("FIELD(sender_id, $user->id) ASC")->get()->map(function ($query, $key) {
             $query->sender_post_type = $query->sender_post ? $query->sender_post->category->type : "";
             $query->receiver_post_type = $query->receiver_post ? $query->receiver_post->category->type : "";
+            $query->conversation_id = null;
+            if($query->status == 'accepted' && $query->receiver_post){
+                $receiver = $query->receiver_post;
+                $conversation = Conversation::where(function ($query) use($user, $receiver) {
+                    $query->where(function ($query) use($user, $receiver) {
+                        $query->whereUserId($user->id)->whereFriendId($receiver->id);
+                    })->orwhere(function ($query) use($user, $receiver) {
+                        $query->whereUserId($receiver->id)->whereFriendId($user->id);
+                    });
+                })->first();
+                if(!$conversation){
+                    $conversation = Conversation::create([
+                        'user_id' => $user->id,
+                        'friend_id' => $receiver->id,
+                        'unread_messages' => 1
+                    ]);
+                }else{
+                    $conversation->unread_messages = $conversation->unread_messages + 1;
+                    $conversation->save();
+                }
+                $query->conversation_id = $conversation->id;
+            }
             return $query;
         });
 
