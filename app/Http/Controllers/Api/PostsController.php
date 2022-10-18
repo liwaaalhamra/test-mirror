@@ -282,8 +282,6 @@ class PostsController extends Controller
                 $receiver = $query->receiver_post;
 
                 if(isset($sender) && isset($receiver)){
-                    Log::info(isset($sender) ? $sender->id : null);
-                    Log::info($receiver);
                     $conversation = Conversation::where(function ($query) use($sender, $receiver) {
                         $query->where(function ($query) use($sender, $receiver) {
                             $query->whereUserId($sender->user_id)->whereFriendId($receiver->user_id);
