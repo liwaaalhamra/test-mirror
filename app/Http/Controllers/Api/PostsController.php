@@ -169,11 +169,11 @@ class PostsController extends Controller
             $status = "Your request status has been updated.";
         }
 
-        $conversation = Conversation::where(function ($query) use($user,$receiver) {
-            $query->where(function ($query) use($user,$receiver) {
-                $query->whereUserId($user->id)->whereFriendId($receiver->id);
-            })->orwhere(function ($query) use($user,$receiver) {
-                $query->whereUserId($receiver->id)->whereFriendId($user->id);
+        $conversation = Conversation::where(function ($query) use($sender,$receiver) {
+            $query->where(function ($query) use($sender,$receiver) {
+                $query->whereUserId($sender->id)->whereFriendId($receiver->id);
+            })->orwhere(function ($query) use($sender,$receiver) {
+                $query->whereUserId($receiver->id)->whereFriendId($sender->id);
             });
         })->first();
         if(!$conversation){
