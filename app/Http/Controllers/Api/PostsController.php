@@ -179,7 +179,7 @@ class PostsController extends Controller
         if(!$conversation){
             $conversation = Conversation::create([
                 'user_id' => $user->id,
-                'friend_id' => $receiver->id,
+                'friend_id' => $user && $user->id == $sender->id  ? $receiver->id : $sender->id,
                 'unread_messages' => 1
             ]);
         }else{
