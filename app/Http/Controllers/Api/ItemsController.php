@@ -425,7 +425,7 @@ class ItemsController extends Controller
             $user = $this->validate_user($request);
         }
         $now = Carbon::now()->format('Y-m-d');
-        $query = Item::whereType('offer')->whereDate('expired_at','>=',$now)->whereIsAvailable(1);
+        $query = Item::wherenotin('status',['pending', 'in_review'])->whereType('offer')->whereDate('expired_at','>=',$now)->whereIsAvailable(1);
         if(Input::has('search')){
             $search = Input::get('search');
             $categories_available = Category::whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])->pluck('id')->toArray();
@@ -865,7 +865,7 @@ class ItemsController extends Controller
                     ->orwhereRaw("LOWER(name_ar) like ? ", [ "%".strtolower($search)."%"])
                     ->orwhereRaw("LOWER(description_en) like ? ", [ "%".strtolower($search)."%"])
                     ->orwhereRaw("LOWER(description_ar) like ? ", [ "%".strtolower($search)."%"]);
-                    
+
                 if(count($locations)){
                     $query->orwhereIn("location_id", $locations);
                 }
