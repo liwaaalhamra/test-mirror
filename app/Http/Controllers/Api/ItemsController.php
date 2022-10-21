@@ -859,11 +859,26 @@ class ItemsController extends Controller
         $query = Item::whereType('offer')->whereDate('expired_at','>=',$now)->whereIsAvailable(1);
         if(Input::has('search')){
             $search = Input::get('search');
-            $query->where(function($query) use ($search){
+                        
+            $locations = Location::whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])->pluck('id')->toArray();
+            $sub_regions = SubRegion::whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])->pluck('id')->toArray();
+
+            $query->where(function($query) use ($search, $locations, $sub_regions){
                 $query->whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])
                     ->orwhereRaw("LOWER(name_ar) like ? ", [ "%".strtolower($search)."%"])
                     ->orwhereRaw("LOWER(description_en) like ? ", [ "%".strtolower($search)."%"])
-                    ->orwhereRaw("LOWER(description_ar) like ? ", [ "%".strtolower($search)."%"]);
+                    ->orwhereRaw("LOWER(description_ar) like ? ", [ "%".strtolower($search)."%"])            
+                    ->orwhereRaw("price >= ? ", [$search])
+                    ->orwhereRaw("price_from >= ? ", [$search])
+                    ->orwhereRaw("price_to <= ? ", [$search]);
+
+                if(count($locations)){
+                    $query->orwhereIn("location_id", $locations);
+                }
+
+                if(count($sub_regions)){
+                    $query->orwhereIn("sub_region_id", $sub_regions);
+                }
             });
         }
         $category_id = isset($request->category_id) ? $request->category_id : null;
