@@ -724,10 +724,7 @@ class ItemsController extends Controller
                 $query->whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])
                     ->orwhereRaw("LOWER(name_ar) like ? ", [ "%".strtolower($search)."%"])
                     ->orwhereRaw("LOWER(description_en) like ? ", [ "%".strtolower($search)."%"])
-                    ->orwhereRaw("LOWER(description_ar) like ? ", [ "%".strtolower($search)."%"])
-                    ->orwhereRaw("price >= ? ", [$search])
-                    ->orwhereRaw("price_from >= ? ", [$search])
-                    ->orwhereRaw("price_to <= ? ", [$search]);
+                    ->orwhereRaw("LOWER(description_ar) like ? ", [ "%".strtolower($search)."%"]);
 
                 if(count($locations)){
                     $query->orwhereIn("location_id", $locations);
@@ -867,11 +864,8 @@ class ItemsController extends Controller
                 $query->whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])
                     ->orwhereRaw("LOWER(name_ar) like ? ", [ "%".strtolower($search)."%"])
                     ->orwhereRaw("LOWER(description_en) like ? ", [ "%".strtolower($search)."%"])
-                    ->orwhereRaw("LOWER(description_ar) like ? ", [ "%".strtolower($search)."%"])            
-                    ->orwhereRaw("price >= ? ", [$search])
-                    ->orwhereRaw("price_from >= ? ", [$search])
-                    ->orwhereRaw("price_to <= ? ", [$search]);
-
+                    ->orwhereRaw("LOWER(description_ar) like ? ", [ "%".strtolower($search)."%"]);
+                    
                 if(count($locations)){
                     $query->orwhereIn("location_id", $locations);
                 }
