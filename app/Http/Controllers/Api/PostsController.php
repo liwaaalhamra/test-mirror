@@ -730,7 +730,7 @@ class PostsController extends Controller
     public function my_posts(Request $request) {
         $user = $this->validate_user($request);
         $search = Input::has('search') ? Input::get('search') : null;
-        $query = Item::whereType('offer')->whereUserId($user->id)->when($search, function ($query) use ($search) {
+        $query = Item::whereType('offer')->whereUserId($user->id)->orderBy('status')->when($search, function ($query) use ($search) {
             $query->where(function($query) use ($search){
                 $query->whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])
                     ->orwhereRaw("LOWER(name_ar) like ? ", [ "%".strtolower($search)."%"])
