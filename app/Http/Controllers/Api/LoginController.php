@@ -198,7 +198,7 @@ class LoginController extends Controller
             return parent::return_error('Missing parameter(s)', 400, $validator->messages()->all()[0]);
         }
 
-        $user = Users::whereAccountType('mobile')->whereCountryCode($request->country_code)->wherePrimaryPhone($request->phone_number)->first();
+        $user = Users::whereAccountType('mobile')->whereIsVerified(1)->whereCountryCode($request->country_code)->wherePrimaryPhone($request->phone_number)->first();
         if($user){
             return parent::return_error("User Already Exists", 403, "User already exists");
         }
