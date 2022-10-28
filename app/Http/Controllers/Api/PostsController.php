@@ -730,7 +730,7 @@ class PostsController extends Controller
     public function my_posts(Request $request) {
         $user = $this->validate_user($request);
         $search = Input::has('search') ? Input::get('search') : null;
-        $query = Item::whereType('offer')->whereUserId($user->id)->orderBy('status')->when($search, function ($query) use ($search) {
+        $query = Item::whereType('offer')->whereUserId($user->id)->orderBy('status')->orderBy('updated_at', 'desc')->when($search, function ($query) use ($search) {
             $query->where(function($query) use ($search){
                 $query->whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])
                     ->orwhereRaw("LOWER(name_ar) like ? ", [ "%".strtolower($search)."%"])
@@ -859,7 +859,7 @@ class PostsController extends Controller
         }
         $user_id = $request->user_id;
         $search = Input::has('search') ? Input::get('search') : null;
-        $query = Item::where('id', '!=', $request->post_id)->whereStatus('approved')->whereIsAvailable(1)->whereType('offer')->whereUserId($user_id)->when($search, function ($query) use ($search) {
+        $query = Item::where('id', '!=', $request->post_id)->whereIsAvailable(1)->whereType('offer')->whereUserId($user_id)->when($search, function ($query) use ($search) {
             $query->where(function($query) use ($search){
                 $query->whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])
                     ->orwhereRaw("LOWER(name_ar) like ? ", [ "%".strtolower($search)."%"])
@@ -939,7 +939,7 @@ class PostsController extends Controller
         });
         $query->orderBy('item_order','desc');
         $currency = env('APP_CURRENCY');
-        $items = $query->take(10)->get()->map(function ($value, $key) use ($currency,$user) {
+        $items = $query->take(5)->get()->map(function ($value, $key) use ($currency,$user) {
             $value->is_favorite = false;
             if($user){
                 if(UserFavorite::whereMetaName('items')->whereMetaId($value->id)->whereUserId($user->id)->first()){
