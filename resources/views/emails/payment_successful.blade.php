@@ -56,7 +56,7 @@
                 <tbody>
                 <tr>
                     <td style="padding-bottom: 23px; padding-top: 23px;">
-                        <p>Thank you for bartering with us. Your payment is processed succeffuly and your post will be reviewed within 24 hours. You will be updated once it is live.</p><br>
+                        <p>Thank you for bartering with us. Your payment is processed successfully and your post will be reviewed within 24 hours. You will be updated once it is live.</p><br>
                         <p>Post Category: <strong>{{$data['post']->category->name_en}}</strong></p><br>
                         <p>Post SubCategory: <strong>{{$data['post']->sub_category->name_en}}</strong></p><br>
                         <p>Post Title: <strong>{{$data['post']->name_en}}</strong></p><br>
