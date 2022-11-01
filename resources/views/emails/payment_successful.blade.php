@@ -62,8 +62,8 @@
                         <p>Post Title: <strong>{{$data['post']->name_en}}</strong></p><br>
                         <p>Post Description: <strong>{{$data['post']->description_en}}</strong></p><br>
                         <p>Post Location: <strong>{{$data['post']->sub_region_id ? $data['post']->sub_region->name_en : ""}}, {{$data['post']->location->country->name}}, {{$data['post']->location->name_en}}</strong></p><br>
-                        <p>Post Price in AED: <strong>{{$data['post']->price}}</strong></p><br>
-                        <p>Payment Amount (incl. VAT): <strong>{{$data['amount']}}</strong></p><br>
+                        <p>Post Price in AED (incl. VAT): <strong>{{$data['amount']}}</strong></p><br>
+                        <!-- <p>Payment Amount (incl. VAT): <strong>{{$data['amount']}}</strong></p><br> -->
                     </td>
                 </tr>
                 </tbody>
