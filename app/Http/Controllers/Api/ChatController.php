@@ -47,7 +47,7 @@ class ChatController extends Controller
                 }
             })
             ->map(function ($value, $key) use ($user) {
-                $value->latest_message = ConversationMessage::whereConversationId($value->id)->orderBy('created_at', 'desc')->take(1)->get();
+                $value->latest_message = ConversationMessage::whereConversationId($value->id)->orderBy('created_at', 'desc')->take(1)->first();
                 $value['friend_name'] = isset($user->id) && $user->id == $value['friend_id'] && isset($value['user']) ? $value['user']->full_name : (isset($value['friend']) ? $value['friend']->full_name: null);
                 $value['friend_image'] = isset($user->id) && $user->id == $value['friend_id'] && isset($value['user']) ? $value['user']->photo : (isset($value['friend']) ? $value['friend']->photo : null);
                 unset($value['friend']);
