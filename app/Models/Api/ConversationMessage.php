@@ -22,7 +22,7 @@ class ConversationMessage extends Model
 {
     protected $table = "conversation_messages";
     protected $guarded = [];
-    protected $hidden = ['conversation_id','updated_at','sender_id','receiver_id'];
+    protected $hidden = ['conversation_id','updated_at'];
     protected $casts = [
         'is_my_message' => 'boolean',
         'is_read' => 'boolean',
