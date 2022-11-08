@@ -274,7 +274,7 @@ class PostsController extends Controller
         ->where('created_at', '>=', Carbon::now()->subMonths(2)->toDateTimeString()) //removing barters older than 2 months
         ->where(function ($query) use ($user) {
             $query->whereReceiverId($user->id)->orWhere('sender_id',$user->id);
-        })->orderByRaw("FIELD(status , 'pending', 'accepted', 'rejected') ASC")->orderByRaw("FIELD(sender_id, $user->id) DESC")->orderBy('created_at', 'desc')->get()->map(function ($query, $key) use ($user){
+        })->orderByRaw("FIELD(status , 'pending', 'accepted', 'rejected') ASC")->orderByRaw("FIELD(sender_id, $user->id) ASC")->orderBy('created_at', 'desc')->get()->map(function ($query, $key) use ($user){
             $query->sender_post_type = $query->sender_post ? $query->sender_post->category->type : "";
             $query->receiver_post_type = $query->receiver_post ? $query->receiver_post->category->type : "";
             if($query->status == 'accepted' && $query->receiver_post){
