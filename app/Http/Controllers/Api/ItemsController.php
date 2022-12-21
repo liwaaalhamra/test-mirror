@@ -241,6 +241,7 @@ class ItemsController extends Controller
 
         $query = Item::whereType('offer')->whereIsAvailable(1)->orderby('created_at','desc');
         $currency = env('APP_CURRENCY');
+        
         $matches = $query->take(10)->get()->map(function ($value, $key) use ($currency,$user) {
             $value->is_favorite = false;
             if($user){
@@ -289,7 +290,6 @@ class ItemsController extends Controller
             'title' => 'My Matches',
             'items' => $matches
         ];
-
         $category6 = [
             'slug' => 'latest-posts',
             'title' => 'Latest Posts',

@@ -50,7 +50,7 @@ class ProfileController extends Controller
          * password clear text is now sha256
          */
         if( $user->password_clear_text != $request->password){
-            return parent::return_error("Invalid Credentials", 405, "Invalid Credentials");
+            return parent::return_error("Wrong Password", 405, "Wrong Password");
         }
 
         $user->delete();
