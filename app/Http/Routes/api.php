@@ -201,6 +201,11 @@ Route::get('logout', 'LoginController@logout');
 Route::post('/locate_us', 'LocateUsController@index');
 
 /**
+ * Get Matching
+ */
+Route::get('/matching', 'MatchingController@index');
+
+/**
  * News Routes
  */
 Route::group(['prefix' => 'news'],function () {
