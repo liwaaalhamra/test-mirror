@@ -19,7 +19,7 @@ return [
     'invalid_code'     => 'Code invalide',
     'password_changed_success'     => 'Mot de passe modifié avec succès',
     'wrong_password'     => 'Mauvais mot de passe',
-    'email_sent_success'     => 'Email envoyé avec succès',
+    'email_sent_success'     => 'Code envoyé avec succès',
     'training_request_submitted_success'     => 'Demande de formation soumise avec succès',
     'account_locked'     => 'Account Pending Verification',
     'warranty_submit_success'     => 'Warranty submitted successfully',
