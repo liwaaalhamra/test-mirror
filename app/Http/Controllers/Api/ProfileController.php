@@ -557,6 +557,8 @@ class ProfileController extends Controller
         }else{
             if(!$user = Users::whereAccountType('mobile')->where(DB::raw("CONCAT(`country_code`, `primary_phone`)"), '=', $username)->first()){
                 return parent::return_error("Mobile Number does not exist", 403, "User does not exist");
+            }elseif(!$user = Users::whereAccountType('email')->where(DB::raw("CONCAT(`country_code`, `primary_phone`)"), '=', $username)->first()){
+                return parent::return_error("Mobile Number does not exist", 403, "User does not exist");
             }
         }
 //        if($user->is_verified == 0){
