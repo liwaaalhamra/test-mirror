@@ -553,6 +553,8 @@ class ProfileController extends Controller
         if(filter_var($username, FILTER_VALIDATE_EMAIL)){
             if(!$user = Users::whereAccountType('email')->whereRaw("LOWER(email) = ?",[ strtolower(trim($username))])->first()){
                 return parent::return_error("Email does not exist", 403, "User does not exist");
+            }elseif(!$user = Users::whereAccountType('mobile')->whereRaw("LOWER(email) = ?",[ strtolower(trim($username))])->first()){
+                return parent::return_error("Email does not exist", 403, "User does not exist");
             }
         }else{
             if(!$user = Users::whereAccountType('mobile')->where(DB::raw("CONCAT(`country_code`, `primary_phone`)"), '=', $username)->first()){
