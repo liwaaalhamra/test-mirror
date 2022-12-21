@@ -19,7 +19,7 @@ return [
     'invalid_registration' => 'Registration not found or not valid',
     'invalid_dob' => 'DOB Invalid Format',
     'email_already_verified' => 'Email already Verified',
-    'email_sent_success'     => 'Email sent successfully',
+    'email_sent_success'     => 'Code sent successfully',
     'invalid_code'     => 'Invalid Code',
     'password_changed_success'     => 'Password successfully changed',
     'wrong_password'     => 'Wrong Password',
