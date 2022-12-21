@@ -18,7 +18,7 @@ return [
     'invalid_registration' => 'need translation',
     'invalid_dob' => 'need translation',
     'email_already_verified' => 'need translation',
-    'email_sent_success'     => 'تمّ إرسال البريد الإلكتروني بنجاح',
+    'email_sent_success'     => 'تمّ إرسال الرمز بنجاح',
     'invalid_code'     => 'رمز غير صحيح',
     'password_changed_success'     => 'تمّ تغيير كلمة المرور بنجاح',
     'wrong_password'     => 'كلمة مرور خاطئة',
