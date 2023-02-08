@@ -58,17 +58,17 @@ class MatchingController extends Controller
         $secondMatch = $secondCatMatch && $secondSubCatMatch && $secondSubSubSubCatMatch && $secondLocationMatch && $secondPriceMatch;
         $firstRentMatch = $catMatch && $subCatMatch && $subSubSubCatMatch && $locationMatch && $priceRentMatch;
 
-        if($firstMatch && $secondMatch){
-            $priority = 1;
-        }
+        // if($firstMatch && $secondMatch){
+        //     $priority = 1;
+        // }
         
-        if($firstRentMatch && $secondMatch){
-            $label = 2;
-        }
+        // if($firstRentMatch && $secondMatch){
+        //     $label = 2;
+        // }
 
-        if($catMatch && $subCatMatch && !$subSubSubCatMatch && $locationMatch && $priceMatch){
-            $label = "1.a";
-        }
+        // if($catMatch && $subCatMatch && !$subSubSubCatMatch && $locationMatch && $priceMatch){
+        //     $label = "1.a";
+        // }
     }
 
     function compareCategory($post_1, $post_2){
