@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-
+use App\Models\Api\UserMatchingRecord;
 use App\Models\Api\Ad;
 
 use App\Models\Api\CheckoutLog;
@@ -27,8 +27,9 @@ use Facebook\Exceptions\FacebookResponseException;
 use Facebook\Exceptions\FacebookSDKException;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Api\User;
 use Mail;
-
+use stdClass;
 
 class CronController extends Controller
 {
@@ -561,5 +562,17 @@ class CronController extends Controller
             return $value;
         })->values();
         return response()->json(['status' => 'Alerts sent of expired Items']);
+    }
+
+    public function matchingRecords()
+    {
+        $users = Item::get()->pluck('user_id','user_id');
+        foreach($users as $user){
+            $result = (new MatchingController)->index($user);
+            $set_data = new UserMatchingRecord();
+            $set_data->user_id = $user;
+            $set_data->matching_records = json_encode($result);
+            $set_data->save();
+        }
     }
 }
