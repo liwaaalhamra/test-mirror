@@ -14,7 +14,8 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         // Commands\Inspire::class,
-        Commands\ForExpiredPosts::class,
+        // Commands\ForExpiredPosts::class,
+        Commands\MatchingScheduler::class,
     ];
 
     /**
@@ -25,6 +26,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('expired:posts')->daily();
+        // $schedule->command('expired:posts')->daily();
+        // $schedule->command('match:cron')->dailyAt('00:00');
+        $schedule->command('match:cron')->everyMinute();
     }
 }

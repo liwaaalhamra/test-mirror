@@ -13,21 +13,17 @@ class MatchingController extends Controller
      * @param Request $request
      * @return \stdClass
      */
-    public function index(Request $request)
+    public function index($user_id)
     {
-        $user = null;
-        if ($request->header('token')) {
-            $user = $this->validate_user($request);
-        }
-        $my_posts = Item::whereUserId($user->id)->whereType('offer')->get();
-        $others_posts = Item::where('user_id', '!=', $user->id)->whereType('offer')->get();
+        $my_posts = Item::whereUserId($user_id)->whereType('offer')->get();
+        $others_posts = Item::where('user_id', '!=', $user_id)->whereType('offer')->get();
         foreach ($my_posts as $my_post) {
             $result = $this->returnResult($my_post, $others_posts);
         }
         if (!$result) {
-            return response()->json("No matching items");
+            return "No matching items";
         }
-        return response()->json($result);
+        return $result;
     }
 
     function returnResult($post_1, $post_2)

@@ -142,6 +142,8 @@ Route::post('/sub_regions', 'ItemsController@sub_regions');
 Route::get('cron/retrieve_orders', 'CronController@retrieve_orders');
 Route::get('cron/update_dashboard', 'CronController@update_dashboard');
 Route::get('cron/check_expired_items', 'CronController@check_expired_items');
+Route::get('/matching-records', 'CronController@matchingRecords');
+
 
 /**
  * Tips & More Routes
@@ -203,8 +205,7 @@ Route::post('/locate_us', 'LocateUsController@index');
 /**
  * Get Matching
  */
-Route::get('/matching', 'MatchingController@index');
-
+// Route::get('/matching', 'MatchingController@index');
 /**
  * News Routes
  */
