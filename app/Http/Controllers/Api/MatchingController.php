@@ -25,7 +25,7 @@ class MatchingController extends Controller
         }
         return $result;
     }
-
+    
     function returnResult($post_1, $post_2)
     {
         $matches = [];

@@ -206,7 +206,7 @@ Route::post('/locate_us', 'LocateUsController@index');
 /**
  * Get Matching
  */
-// Route::get('/matching', 'MatchingController@index');
+Route::get('/matching', 'MatchingController@index')->name('matching');
 /**
  * News Routes
  */
