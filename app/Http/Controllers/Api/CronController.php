@@ -578,11 +578,26 @@ class CronController extends Controller
     }
     public function get_matches()
     {
-        $query = UserMatchingRecord::where('user_id',16)->orderBy('created_at','desc')->first();
-        $data = json_decode($query->matching_records,true);
-        $collection = $data[0];
+        $query = UserMatchingRecord::where('user_id',28)->orderBy('created_at','desc')->first();
+        $data = json_decode($query['matching_records'],true);
+        $collection = $data;
         $matches1 = collect($collection)->values();
 
-        return $matches1;
+        $query = Item::whereType('offer')->whereIsAvailable(1)->orderby('created_at','desc');
+        $currency = env('APP_CURRENCY');
+        $user = Users::where('id','28')->first();
+        $matches = $query->take(10)->get()->map(function ($value, $key) use ($currency,$user) {
+            $value->is_favorite = false;
+            if($user){
+                if(UserFavorite::whereMetaName('items')->whereMetaId($value->id)->whereUserId($user->id)->first()){
+                    $value->is_favorite = true;
+                }
+            }
+            $value->currency = $currency;
+            $value->post_type = "services";
+            return $value;
+        })->values();
+
+        return $matches;
     }
 }

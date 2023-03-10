@@ -243,7 +243,7 @@ class ItemsController extends Controller
         $query = Item::whereType('offer')->whereIsAvailable(1)->orderby('created_at','desc');
         $currency = env('APP_CURRENCY');
         
-        $matches = $query->take(10)->get()->map(function ($value, $key) use ($currency,$user) {
+        $matches1 = $query->take(10)->get()->map(function ($value, $key) use ($currency,$user) {
             $value->is_favorite = false;
             if($user){
                 if(UserFavorite::whereMetaName('items')->whereMetaId($value->id)->whereUserId($user->id)->first()){
@@ -255,11 +255,12 @@ class ItemsController extends Controller
             return $value;
         })->values();
 
-        $query = UserMatchingRecord::where('user_id',16)->orderBy('created_at','desc')->first();
-        $data = json_decode($query->matching_records,true);
-        $collection = $data[0];
-
-        $matches1 = collect($collection)->values();
+        if($user){
+            $query = UserMatchingRecord::where('user_id',$user->id)->orderBy('created_at','desc')->first();
+            $data = json_decode($query->matching_records,true);
+            $collection = $data[0];
+            $matches = collect($collection)->values();
+        }
 
         $latest_posts = $query->take(30)->get()->map(function ($value, $key) use ($currency,$user) {
             // $value->is_favorite = false;

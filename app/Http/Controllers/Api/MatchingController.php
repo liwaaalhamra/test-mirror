@@ -21,7 +21,7 @@ class MatchingController extends Controller
             $result = $this->returnResult($my_post, $others_posts);
         }
         if (!$result) {
-            return "No matching records";
+            return null;
         }
         return $result;
     }
@@ -34,12 +34,6 @@ class MatchingController extends Controller
             $matches[0] = $priority_1;
         }
         $priority_2 = $this->priority_2($post_1, $post_2);
-        // dd($priority_2);
-        // if(empty($priority_2[0])){
-        //     dd(1);
-        // }else{
-        //     dd(2);
-        // }
         if (!empty($priority_2[0])) {
             for($i=0;$i<count($priority_2);$i++) {
                 if( !array_key_exists($priority_2[$i]['id'], $priority_1[0]['id'])) {
