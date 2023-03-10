@@ -32,6 +32,7 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Log;
 
 use App\Http\Controllers\Controller;
+use App\Models\Api\UserMatchingRecord;
 use Validator;
 use Propaganistas\LaravelPhone\PhoneNumber;
 
@@ -253,6 +254,12 @@ class ItemsController extends Controller
             $value->post_type = "services";
             return $value;
         })->values();
+
+        $query = UserMatchingRecord::where('user_id',16)->orderBy('created_at','desc')->first();
+        $data = json_decode($query->matching_records,true);
+        $collection = $data[0];
+
+        $matches1 = collect($collection)->values();
 
         $latest_posts = $query->take(30)->get()->map(function ($value, $key) use ($currency,$user) {
             // $value->is_favorite = false;

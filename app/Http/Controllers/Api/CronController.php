@@ -27,7 +27,7 @@ use Facebook\Exceptions\FacebookResponseException;
 use Facebook\Exceptions\FacebookSDKException;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Api\User;
+use App\Models\Api\UserFavorite;
 use Mail;
 use stdClass;
 
@@ -578,11 +578,11 @@ class CronController extends Controller
     }
     public function get_matches()
     {
-        $matches = UserMatchingRecord::where('user_id',28)->orderBy('created_at','desc')->first();
+        $query = UserMatchingRecord::where('user_id',16)->orderBy('created_at','desc')->first();
+        $data = json_decode($query->matching_records,true);
+        $collection = $data[0];
+        $matches1 = collect($collection)->values();
 
-        $result = json_decode($matches->matching_records,true);
-
-        // dd();
-        return $result;
+        return $matches1;
     }
 }

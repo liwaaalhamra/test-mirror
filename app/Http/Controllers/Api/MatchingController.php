@@ -31,7 +31,7 @@ class MatchingController extends Controller
         $matches = [];
         $priority_1 = $this->priority_1($post_1, $post_2);
         if (!empty($priority_1[0])) {
-            $matches[$priority_1[0]["id"]] = $priority_1;
+            $matches[0] = $priority_1;
         }
         $priority_2 = $this->priority_2($post_1, $post_2);
         // dd($priority_2);
@@ -43,7 +43,7 @@ class MatchingController extends Controller
         if (!empty($priority_2[0])) {
             for($i=0;$i<count($priority_2);$i++) {
                 if( !array_key_exists($priority_2[$i]['id'], $priority_1[0]['id'])) {
-                    $matches[$priority_2[0]["id"]] = $priority_2;
+                    $matches[0] = $priority_2;
                 }
             }
         }
@@ -51,7 +51,7 @@ class MatchingController extends Controller
         if (!empty($priority_3[0])) {
             for($i=0;$i<count($priority_3);$i++) {
                 if( !array_key_exists($priority_3[$i]['id'], $priority_2[0]['id'])) {
-                    $matches[$priority_3[0]["id"]] = $priority_3;
+                    $matches[0] = $priority_3;
                 }
             }
         }
@@ -59,7 +59,7 @@ class MatchingController extends Controller
         if (!empty($priority_4[0])) {
             for($i=0;$i<count($priority_4);$i++) {
                 if( !array_key_exists($priority_4[$i]['id'], $priority_3[0]['id'])) {
-                    $matches[$priority_4[0]["id"]] = $priority_4;
+                    $matches[0] = $priority_4;
                 }
             }
         }
@@ -67,7 +67,7 @@ class MatchingController extends Controller
         if (!empty($priority_5[0])) {
             for($i=0;$i<count($priority_5);$i++) {
                 if( !array_key_exists($priority_5[$i]['id'], $priority_4[0]['id'])) {
-                    $matches[$priority_5[0]["id"]] = $priority_5;
+                    $matches[0] = $priority_5;
                 }
             }
         }
@@ -75,7 +75,7 @@ class MatchingController extends Controller
         if (!empty($priority_6[0])) {
             for($i=0;$i<count($priority_6);$i++) {
                 if( !array_key_exists($priority_6[$i]['id'], $priority_5[0]['id'])) {
-                    $matches[$priority_6[0]["id"]] = $priority_6;
+                    $matches[0] = $priority_6;
                 }
             }
         }
@@ -83,7 +83,7 @@ class MatchingController extends Controller
         if (!empty($priority_7[0])) {
             for($i=0;$i<count($priority_7);$i++) {
                 if( !array_key_exists($priority_7[$i]['id'], $priority_6[0]['id'])) {
-                    $matches[$priority_7[0]["id"]] = $priority_7;
+                    $matches[0] = $priority_7;
                 }
             }
         }
@@ -91,7 +91,7 @@ class MatchingController extends Controller
         if (!empty($priority_8[0])) {
             for($i=0;$i<count($priority_8);$i++) {
                 if( !array_key_exists($priority_8[$i]['id'], $priority_7[0]['id'])) {
-                    $matches[$priority_8[0]["id"]] = $priority_8;
+                    $matches[0] = $priority_8;
                 }
             }
         }
@@ -99,7 +99,7 @@ class MatchingController extends Controller
         if (!empty($priority_9[0])) {
             for($i=0;$i<count($priority_9);$i++) {
                 if( !array_key_exists($priority_9[$i]['id'], $priority_8[0]['id'])) {
-                    $matches[$priority_9[0]["id"]] = $priority_9;
+                    $matches[0] = $priority_9;
                 }
             }
         }
@@ -107,7 +107,7 @@ class MatchingController extends Controller
         if (!empty($priority_10[0])) {
             for($i=0;$i<count($priority_10);$i++) {
                 if( !array_key_exists($priority_10[$i]['id'], $priority_9[0]['id'])) {
-                    $matches[$priority_10[0]["id"]] = $priority_10;
+                    $matches[0] = $priority_10;
                 }
             }
         }
@@ -115,7 +115,7 @@ class MatchingController extends Controller
         if (!empty($priority_11[0])) {
             for($i=0;$i<count($priority_11);$i++) {
                 if( !array_key_exists($priority_11[$i]['id'], $priority_10[0]['id'])) {
-                    $matches[$priority_11[0]["id"]] = $priority_11;
+                    $matches[0] = $priority_11;
                 }
             }
         }
@@ -123,7 +123,7 @@ class MatchingController extends Controller
         if (!empty($priority_12[0])) {
             for($i=0;$i<count($priority_12);$i++) {
                 if( !array_key_exists($priority_12[$i]['id'], $priority_11[0]['id'])) {
-                    $matches[$priority_12[0]["id"]] = $priority_12;
+                    $matches[0] = $priority_12;
                 }
             }
         }
@@ -131,7 +131,7 @@ class MatchingController extends Controller
         if (!empty($priority_13[0])) {
             for($i=0;$i<count($priority_13);$i++) {
                 if( !array_key_exists($priority_13[$i]['id'], $priority_12[0]['id'])) {
-                    $matches[$priority_13[0]["id"]] = $priority_13;
+                    $matches[0] = $priority_13;
                 }
             }
         }
@@ -139,7 +139,7 @@ class MatchingController extends Controller
         if (!empty($priority_14[0])) {
             for($i=0;$i<count($priority_14);$i++) {
                 if( !array_key_exists($priority_14[$i]['id'], $priority_13[0]['id'])) {
-                    $matches[$priority_14[0]["id"]] = $priority_14;
+                    $matches[0] = $priority_14;
                 }
             }
         }
@@ -147,7 +147,7 @@ class MatchingController extends Controller
         if (!empty($priority_15[0])) {
             for($i=0;$i<count($priority_15);$i++) {
                 if( !array_key_exists($priority_15[$i]['id'], $priority_14[0]['id'])) {
-                    $matches[$priority_15[0]["id"]] = $priority_15;
+                    $matches[0] = $priority_15;
                 }
             }
         }
@@ -155,7 +155,7 @@ class MatchingController extends Controller
         if (!empty($priority_16[0])) {
             for($i=0;$i<count($priority_16);$i++) {
                 if( !array_key_exists($priority_16[$i]['id'], $priority_15[0]['id'])) {
-                    $matches[$priority_16[0]["id"]] = $priority_16;
+                    $matches[0] = $priority_16;
                 }
             }
         }
@@ -163,7 +163,7 @@ class MatchingController extends Controller
         if (!empty($priority_17[0])) {
             for($i=0;$i<count($priority_17);$i++) {
                 if( !array_key_exists($priority_17[$i]['id'], $priority_16[0]['id'])) {
-                    $matches[$priority_17[0]["id"]] = $priority_17;
+                    $matches[0] = $priority_17;
                 }
             }
         }
@@ -171,7 +171,7 @@ class MatchingController extends Controller
         if (!empty($priority_18[0])) {
             for($i=0;$i<count($priority_18);$i++) {
                 if( !array_key_exists($priority_18[$i]['id'], $priority_17[0]['id'])) {
-                    $matches[$priority_18[0]["id"]] = $priority_18;
+                    $matches[0] = $priority_18;
                 }
             }
         }
@@ -179,7 +179,7 @@ class MatchingController extends Controller
         if (!empty($priority_19[0])) {
             for($i=0;$i<count($priority_19);$i++) {
                 if( !array_key_exists($priority_19[$i]['id'], $priority_18[0]['id'])) {
-                    $matches[$priority_19[0]["id"]] = $priority_19;
+                    $matches[0] = $priority_19;
                 }
             }
         }
@@ -187,7 +187,7 @@ class MatchingController extends Controller
         if (!empty($priority_20[0])) {
             for($i=0;$i<count($priority_20);$i++) {
                 if( !array_key_exists($priority_20[$i]['id'], $priority_19[0]['id'])) {
-                    $matches[$priority_20[0]["id"]] = $priority_20;
+                    $matches[0] = $priority_20;
                 }
             }
         }
@@ -195,7 +195,7 @@ class MatchingController extends Controller
         if (!empty($priority_21[0])) {
             for($i=0;$i<count($priority_21);$i++) {
                 if( !array_key_exists($priority_21[$i]['id'], $priority_20[0]['id'])) {
-                    $matches[$priority_21[0]["id"]] = $priority_21;
+                    $matches[0] = $priority_21;
                 }
             }
         }
@@ -203,7 +203,7 @@ class MatchingController extends Controller
         if (!empty($priority_22[0])) {
             for($i=0;$i<count($priority_22);$i++) {
                 if( !array_key_exists($priority_22[$i]['id'], $priority_21[0]['id'])) {
-                    $matches[$priority_22[0]["id"]] = $priority_22;
+                    $matches[0] = $priority_22;
                 }
             }
         }
@@ -211,7 +211,7 @@ class MatchingController extends Controller
         if (!empty($priority_23[0])) {
             for($i=0;$i<count($priority_23);$i++) {
                 if( !array_key_exists($priority_23[$i]['id'], $priority_22[0]['id'])) {
-                    $matches[$priority_23[0]["id"]] = $priority_23;
+                    $matches[0] = $priority_23;
                 }
             }
         }
@@ -219,7 +219,7 @@ class MatchingController extends Controller
         if (!empty($priority_24[0])) {
             for($i=0;$i<count($priority_24);$i++) {
                 if( !array_key_exists($priority_24[$i]['id'], $priority_23[0]['id'])) {
-                    $matches[$priority_24[0]["id"]] = $priority_24;
+                    $matches[0] = $priority_24;
                 }
             }
         }
@@ -227,7 +227,7 @@ class MatchingController extends Controller
         if (!empty($priority_25[0])) {
             for($i=0;$i<count($priority_25);$i++) {
                 if( !array_key_exists($priority_25[$i]['id'], $priority_24[0]['id'])) {
-                    $matches[$priority_25[0]["id"]] = $priority_25;
+                    $matches[0] = $priority_25;
                 }
             }
         }
@@ -235,7 +235,7 @@ class MatchingController extends Controller
         if (!empty($priority_26[0])) {
             for($i=0;$i<count($priority_26);$i++) {
                 if( !array_key_exists($priority_26[$i]['id'], $priority_25[0]['id'])) {
-                    $matches[$priority_26[0]["id"]] = $priority_26;
+                    $matches[0] = $priority_26;
                 }
             }
         }
@@ -243,7 +243,7 @@ class MatchingController extends Controller
         if (!empty($priority_27[0])) {
             for($i=0;$i<count($priority_27);$i++) {
                 if( !array_key_exists($priority_27[$i]['id'], $priority_26[0]['id'])) {
-                    $matches[$priority_27[0]["id"]] = $priority_27;
+                    $matches[0] = $priority_27;
                 }
             }
         }
@@ -251,7 +251,7 @@ class MatchingController extends Controller
         if (!empty($priority_28[0])) {
             for($i=0;$i<count($priority_28);$i++) {
                 if( !array_key_exists($priority_28[$i]['id'], $priority_27[0]['id'])) {
-                    $matches[$priority_28[0]["id"]] = $priority_28;
+                    $matches[0] = $priority_28;
                 }
             }
         }
@@ -259,7 +259,7 @@ class MatchingController extends Controller
         if (!empty($priority_29[0])) {
             for($i=0;$i<count($priority_29);$i++) {
                 if( !array_key_exists($priority_29[$i]['id'], $priority_28[0]['id'])) {
-                    $matches[$priority_29[0]["id"]] = $priority_29;
+                    $matches[0] = $priority_29;
                 }
             }
         }
@@ -267,7 +267,7 @@ class MatchingController extends Controller
         if (!empty($priority_30[0])) {
             for($i=0;$i<count($priority_30);$i++) {
                 if( !array_key_exists($priority_30[$i]['id'], $priority_29[0]['id'])) {
-                    $matches[$priority_30[0]["id"]] = $priority_30;
+                    $matches[0] = $priority_30;
                 }
             }
         }
@@ -275,7 +275,7 @@ class MatchingController extends Controller
         if (!empty($priority_31[0])) {
             for($i=0;$i<count($priority_31);$i++) {
                 if( !array_key_exists($priority_31[$i]['id'], $priority_30[0]['id'])) {
-                    $matches[$priority_31[0]["id"]] = $priority_31;
+                    $matches[0] = $priority_31;
                 }
             }
         }
@@ -283,7 +283,7 @@ class MatchingController extends Controller
         if (!empty($priority_32[0])) {
             for($i=0;$i<count($priority_32);$i++) {
                 if( !array_key_exists($priority_32[$i]['id'], $priority_31[0]['id'])) {
-                    $matches[$priority_32[0]["id"]] = $priority_32;
+                    $matches[0] = $priority_32;
                 }
             }
         }
@@ -291,7 +291,7 @@ class MatchingController extends Controller
         if (!empty($priority_33[0])) {
             for($i=0;$i<count($priority_33);$i++) {
                 if( !array_key_exists($priority_33[$i]['id'], $priority_32[0]['id'])) {
-                    $matches[$priority_33[0]["id"]] = $priority_33;
+                    $matches[0] = $priority_33;
                 }
             }
         }
@@ -299,7 +299,7 @@ class MatchingController extends Controller
         if (!empty($priority_34[0])) {
             for($i=0;$i<count($priority_34);$i++) {
                 if( !array_key_exists($priority_34[$i]['id'], $priority_33[0]['id'])) {
-                    $matches[$priority_34[0]["id"]] = $priority_34;
+                    $matches[0] = $priority_34;
                 }
             }
         }
@@ -307,7 +307,7 @@ class MatchingController extends Controller
         if (!empty($priority_35[0])) {
             for($i=0;$i<count($priority_35);$i++) {
                 if( !array_key_exists($priority_35[$i]['id'], $priority_34[0]['id'])) {
-                    $matches[$priority_35[0]["id"]] = $priority_35;
+                    $matches[0] = $priority_35;
                 }
             }
         }
@@ -315,7 +315,7 @@ class MatchingController extends Controller
         if (!empty($priority_36[0])) {
             for($i=0;$i<count($priority_36);$i++) {
                 if( !array_key_exists($priority_36[$i]['id'], $priority_35[0]['id'])) {
-                    $matches[$priority_36[0]["id"]] = $priority_36;
+                    $matches[0] = $priority_36;
                 }
             }
         }
@@ -323,7 +323,7 @@ class MatchingController extends Controller
         if (!empty($priority_37[0])) {
             for($i=0;$i<count($priority_37);$i++) {
                 if( !array_key_exists($priority_37[$i]['id'], $priority_36[0]['id'])) {
-                    $matches[$priority_37[0]["id"]] = $priority_37;
+                    $matches[0] = $priority_37;
                 }
             }
         }
@@ -331,7 +331,7 @@ class MatchingController extends Controller
         if (!empty($priority_38[0])) {
             for($i=0;$i<count($priority_38);$i++) {
                 if( !array_key_exists($priority_38[$i]['id'], $priority_37[0]['id'])) {
-                    $matches[$priority_38[0]["id"]] = $priority_38;
+                    $matches[0] = $priority_38;
                 }
             }
         }
@@ -339,7 +339,7 @@ class MatchingController extends Controller
         if (!empty($priority_39[0])) {
             for($i=0;$i<count($priority_39);$i++) {
                 if( !array_key_exists($priority_39[$i]['id'], $priority_38[0]['id'])) {
-                    $matches[$priority_39[0]["id"]] = $priority_39;
+                    $matches[0] = $priority_39;
                 }
             }
         }
@@ -347,7 +347,7 @@ class MatchingController extends Controller
         if (!empty($priority_40[0])) {
             for($i=0;$i<count($priority_40);$i++) {
                 if( !array_key_exists($priority_40[$i]['id'], $priority_39[0]['id'])) {
-                    $matches[$priority_40[0]["id"]] = $priority_40;
+                    $matches[0] = $priority_40;
                 }
             }
         }
