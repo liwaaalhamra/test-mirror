@@ -573,6 +573,16 @@ class CronController extends Controller
             $set_data->user_id = $user;
             $set_data->matching_records = json_encode($result);
             $set_data->save();
+
         }
+    }
+    public function get_matches()
+    {
+        $matches = UserMatchingRecord::where('user_id',28)->orderBy('created_at','desc')->first();
+
+        $result = json_decode($matches->matching_records,true);
+
+        // dd();
+        return $result;
     }
 }
