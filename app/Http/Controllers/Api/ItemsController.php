@@ -255,12 +255,22 @@ class ItemsController extends Controller
             return $value;
         })->values();
 
-        // if($user){
-        //     $query = UserMatchingRecord::where('user_id',$user->id)->orderBy('created_at','desc')->first();
-        //     $data = json_decode($query->matching_records,true);
-        //     $collection = $data[0];
-        //     $matches = collect($collection)->values();
-        // }
+        $data = UserMatchingRecord::where('user_id',11)->orderBy('created_at','desc')->first();
+        $ids = json_decode($data->matching_records);
+        $query = Item::whereIn('id',$ids);
+        $currency = env('APP_CURRENCY');
+        
+        $matches1 = $query->take(10)->get()->map(function ($value, $key) use ($currency,$user) {
+            $value->is_favorite = false;
+            if($user){
+                if(UserFavorite::whereMetaName('items')->whereMetaId($value->id)->whereUserId($user->id)->first()){
+                    $value->is_favorite = true;
+                }
+            }
+            $value->currency = $currency;
+            $value->post_type = "services";
+            return $value;
+        })->values();
 
         $latest_posts = $query->take(30)->get()->map(function ($value, $key) use ($currency,$user) {
             // $value->is_favorite = false;

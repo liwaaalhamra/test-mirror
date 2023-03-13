@@ -13,10 +13,10 @@ class MatchingController extends Controller
      * @param Request $request
      * @return \stdClass
      */
-    public function index($user_id)
+    public function index($user)
     {
-        $my_posts = Item::whereUserId($user_id)->whereType('offer')->get();
-        $others_posts = Item::where('user_id', '!=', $user_id)->whereType('offer')->get();
+        $my_posts = Item::whereUserId($user)->whereType('offer')->get();
+        $others_posts = Item::where('user_id', '!=', $user)->whereType('offer')->get();
         foreach ($my_posts as $my_post) {
             $result = $this->returnResult($my_post, $others_posts);
         }
@@ -358,7 +358,7 @@ class MatchingController extends Controller
                 && $item->return_post['sub_sub_category_id'] == $post_1->return_post['sub_sub_category_id'] && $item->return_post['location'] == $post_1->return_post['location']
                 && $item->return_post['price_from'] <= $post_1->return_post['price'] && $item->return_post['price_to'] >= $post_1->return_post['price']
             ) {
-                return $item;
+                return $item->id;
             }
         });
         $filteredResponce = $responce->filter(function ($value) {
@@ -376,7 +376,7 @@ class MatchingController extends Controller
                 && $item->return_post['sub_sub_category_id'] == $post_1->return_post['sub_sub_category_id'] && $item->return_post['location'] == $post_1->return_post['location']
                 && $item->return_post['price_from'] <= $post_1->return_post['price'] && $item->return_post['price_to'] >= $post_1->return_post['price']
             ) {
-                return $item;
+                return $item->id;
             }
         });
         $filteredResponce = $responce->filter(function ($value) {
@@ -394,7 +394,7 @@ class MatchingController extends Controller
                 && $item->return_post['sub_sub_category_id'] == $post_1->return_post['sub_sub_category_id'] && $item->return_post['location'] == $post_1->return_post['location']
                 && $item->return_post['price_from'] <= $post_1->return_post['price'] && $item->return_post['price_to'] >= $post_1->return_post['price']
             ) {
-                return $item;
+                return $item->id;
             }
         });
         $filteredResponce = $responce->filter(function ($value) {
@@ -412,7 +412,7 @@ class MatchingController extends Controller
                 && $item->return_post['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item->return_post['location'] == $post_1->return_post['location']
                 && $item->return_post['price_from'] <= $post_1->return_post['price'] && $item->return_post['price_to'] >= $post_1->return_post['price']
             ) {
-                return $item;
+                return $item->id;
             }
         });
         $filteredResponce = $responce->filter(function ($value) {
@@ -430,7 +430,7 @@ class MatchingController extends Controller
                 && $item->return_post['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item->return_post['location'] == $post_1->return_post['location']
                 && $item->return_post['price_from'] <= $post_1->return_post['price'] && $item->return_post['price_to'] >= $post_1->return_post['price']
             ) {
-                return $item;
+                return $item->id;
             }
         });
         $filteredResponce = $responce->filter(function ($value) {
@@ -448,7 +448,7 @@ class MatchingController extends Controller
                 && $item->return_post['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item->return_post['location'] == $post_1->return_post['location']
                 && $item->return_post['price_from'] <= $post_1->return_post['price'] && $item->return_post['price_to'] >= $post_1->return_post['price']
             ) {
-                return $item;
+                return $item->id;
             }
         });
         $filteredResponce = $responce->filter(function ($value) {
@@ -466,7 +466,7 @@ class MatchingController extends Controller
                 && $item->return_post['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item->return_post['location'] == $post_1->return_post['location']
                 && $item->return_post['price_from'] <= $post_1->return_post['price'] && $item->return_post['price_to'] >= $post_1->return_post['price']
             ) {
-                return $item;
+                return $item->id;
             }
         });
         $filteredResponce = $responce->filter(function ($value) {
@@ -484,7 +484,7 @@ class MatchingController extends Controller
                 && $item->return_post['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item->return_post['location'] == $post_1->return_post['location']
                 && $item->return_post['price_from'] <= $post_1->return_post['price'] && $item->return_post['price_to'] >= $post_1->return_post['price']
             ) {
-                return $item;
+                return $item->id;
             }
         });
         $filteredResponce = $responce->filter(function ($value) {
@@ -502,7 +502,7 @@ class MatchingController extends Controller
                 && $item->return_post['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item->return_post['location'] == $post_1->return_post['location']
                 && $item->return_post['price_from'] <= $post_1->return_post['price'] && $item->return_post['price_to'] >= $post_1->return_post['price']
             ) {
-                return $item;
+                return $item->id;
             }
         });
         $filteredResponce = $responce->filter(function ($value) {
@@ -516,7 +516,7 @@ class MatchingController extends Controller
             if ($item->return_post['category_id'] == $post_1->return_post['category_id'] && $item->return_post['sub_category_id'] == $post_1->return_post['sub_category_id']
             && $item->return_post['sub_sub_category_id'] == $post_1->return_post['sub_sub_category_id'] && $item->return_post['location'] == $post_1->return_post['location']
             && $item->return_post['price_from'] <= $post_1->return_post['price'] && $item->return_post['price_to'] >= $post_1->return_post['price']) {
-                return $item;
+                return $item->id;
             }
         });
         $filteredResponce = $responce->filter(function ($value) {
@@ -532,7 +532,7 @@ class MatchingController extends Controller
                 $item['category_id'] == $post_1['category_id'] && $item['sub_category_id'] == $post_1['sub_category_id'] && $item['sub_sub_category_id'] == $post_1['sub_sub_category_id']
                 && $item['location'] == $post_1['location'] && $item['price_from'] <= $post_1['price'] && $item['price_to'] >= $post_1['price']
             ) {
-                return $item;
+                return $item->id;
             }
         });
         $filteredResponce = $responce->filter(function ($value) {
@@ -548,7 +548,7 @@ class MatchingController extends Controller
                 && $item->return_post['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item->return_post['location'] == $post_1->return_post['location']
                 && $item->return_post['price_from'] <= $post_1->return_post['price'] && $item->return_post['price_to'] >= $post_1->return_post['price']
             ) {
-                return $item;
+                return $item->id;
             }
         });
         $filteredResponce = $responce->filter(function ($value) {
@@ -563,7 +563,7 @@ class MatchingController extends Controller
                 $item['category_id'] == $post_1['category_id'] && $item['sub_category_id'] == $post_1['sub_category_id'] && $item['sub_sub_category_id'] != $post_1['sub_sub_category_id']
                 && $item['location'] == $post_1['location'] && $item['price_from'] <= $post_1['price'] && $item['price_to'] >= $post_1['price']
             ) {
-                return $item;
+                return $item->id;
             }
         });
         $filteredResponce = $responce->filter(function ($value) {
@@ -579,7 +579,7 @@ class MatchingController extends Controller
                 && $item->return_post['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item->return_post['location'] == $post_1->return_post['location']
                 && $item->return_post['price_from'] <= $post_1->return_post['price'] && $item->return_post['price_to'] >= $post_1->return_post['price']
             ) {
-                return $item;
+                return $item->id;
             }
         });
         $filteredResponce = $responce->filter(function ($value) {
@@ -594,7 +594,7 @@ class MatchingController extends Controller
                 $item['category_id'] == $post_1['category_id'] && $item['sub_category_id'] != $post_1['sub_category_id'] && $item['sub_sub_category_id'] != $post_1['sub_sub_category_id']
                 && $item['location'] == $post_1['location'] && $item['price_from'] <= $post_1['price'] && $item['price_to'] >= $post_1['price']
             ) {
-                return $item;
+                return $item->id;
             }
         });
         $filteredResponce = $responce->filter(function ($value) {
@@ -612,7 +612,7 @@ class MatchingController extends Controller
                 && $item->return_post['sub_sub_category_id'] == $post_1->return_post['sub_sub_category_id'] && $item->return_post['location'] == $post_1->return_post['location']
                 && $item->return_post['price_from'] <= $post_1->return_post['price'] && $item->return_post['price_to'] >= $post_1->return_post['price']
             ) {
-                return $item;
+                return $item->id;
             }
         });
         $filteredResponce = $responce->filter(function ($value) {
@@ -630,7 +630,7 @@ class MatchingController extends Controller
                 && $item->return_post['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item->return_post['location'] == $post_1->return_post['location']
                 && $item->return_post['price_from'] <= $post_1->return_post['price'] && $item->return_post['price_to'] >= $post_1->return_post['price']
             ) {
-                return $item;
+                return $item->id;
             }
         });
         $filteredResponce = $responce->filter(function ($value) {
@@ -648,7 +648,7 @@ class MatchingController extends Controller
                 && $item->return_post['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item->return_post['location'] == $post_1->return_post['location']
                 && $item->return_post['price_from'] <= $post_1->return_post['price'] && $item->return_post['price_to'] >= $post_1->return_post['price']
             ) {
-                return $item;
+                return $item->id;
             }
         });
         $filteredResponce = $responce->filter(function ($value) {
@@ -666,7 +666,7 @@ class MatchingController extends Controller
                 && $item->return_post['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item->return_post['location'] == $post_1->return_post['location']
                 && $item->return_post['price_from'] <= $post_1->return_post['price'] && $item->return_post['price_to'] >= $post_1->return_post['price']
             ) {
-                return $item;
+                return $item->id;
             }
         });
         $filteredResponce = $responce->filter(function ($value) {
@@ -684,7 +684,7 @@ class MatchingController extends Controller
                 && $item->return_post['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item->return_post['location'] == $post_1->return_post['location']
                 && $item->return_post['price_from'] <= $post_1->return_post['price'] && $item->return_post['price_to'] >= $post_1->return_post['price']
             ) {
-                return $item;
+                return $item->id;
             }
         });
         $filteredResponce = $responce->filter(function ($value) {
@@ -702,7 +702,7 @@ class MatchingController extends Controller
                 && $item->return_post['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item->return_post['location'] == $post_1->return_post['location']
                 && $item->return_post['price_from'] <= $post_1->return_post['price'] && $item->return_post['price_to'] >= $post_1->return_post['price']
             ) {
-                return $item;
+                return $item->id;
             }
         });
         $filteredResponce = $responce->filter(function ($value) {
@@ -720,7 +720,7 @@ class MatchingController extends Controller
                 && $item->return_post['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item->return_post['location'] != $post_1->return_post['location']
                 && $item->return_post['price_from'] <= $post_1->return_post['price'] && $item->return_post['price_to'] >= $post_1->return_post['price']
             ) {
-                return $item;
+                return $item->id;
             }
         });
         $filteredResponce = $responce->filter(function ($value) {
@@ -738,7 +738,7 @@ class MatchingController extends Controller
                 && $item->return_post['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item->return_post['location'] == $post_1->return_post['location']
                 && $item->return_post['price_from'] <= $post_1->return_post['price'] && $item->return_post['price_to'] >= $post_1->return_post['price']
             ) {
-                return $item;
+                return $item->id;
             }
         });
         $filteredResponce = $responce->filter(function ($value) {
@@ -754,7 +754,7 @@ class MatchingController extends Controller
                 && $item->return_post['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item->return_post['location'] != $post_1->return_post['location']
                 && $item->return_post['price_from'] <= $post_1->return_post['price'] && $item->return_post['price_to'] >= $post_1->return_post['price']
             ) {
-                return $item;
+                return $item->id;
             }
         });
         $filteredResponce = $responce->filter(function ($value) {
@@ -770,7 +770,7 @@ class MatchingController extends Controller
                 && $item->return_post['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item->return_post['location'] == $post_1->return_post['location']
                 && $item->return_post['price_from'] <= $post_1->return_post['price'] && $item->return_post['price_to'] >= $post_1->return_post['price']
             ) {
-                return $item;
+                return $item->id;
             }
         });
         $filteredResponce = $responce->filter(function ($value) {
@@ -785,7 +785,7 @@ class MatchingController extends Controller
                 $item['category_id'] == $post_1['category_id'] && $item['sub_category_id'] != $post_1['sub_category_id'] && $item['sub_sub_category_id'] != $post_1['sub_sub_category_id']
                 && $item['location'] != $post_1['location'] && $item['price_from'] <= $post_1['price'] && $item['price_to'] >= $post_1['price']
             ) {
-                return $item;
+                return $item->id;
             }
         });
         $filteredResponce = $responce->filter(function ($value) {
@@ -800,7 +800,7 @@ class MatchingController extends Controller
                 $item['category_id'] != $post_1['category_id'] && $item['sub_category_id'] != $post_1['sub_category_id'] && $item['sub_sub_category_id'] != $post_1['sub_sub_category_id']
                 && $item['location'] == $post_1['location'] && $item['price_from'] <= $post_1['price'] && $item['price_to'] >= $post_1['price']
             ) {
-                return $item;
+                return $item->id;
             }
         });
         $filteredResponce = $responce->filter(function ($value) {
@@ -818,7 +818,7 @@ class MatchingController extends Controller
                 && $item->return_post['sub_sub_category_id'] == $post_1->return_post['sub_sub_category_id'] && $item->return_post['location'] == $post_1->return_post['location']
                 && $item->return_post['price_from'] <= $post_1->return_post['price'] && $item->return_post['price_to'] >= $post_1->return_post['price']
             ) {
-                return $item;
+                return $item->id;
             }
         });
         $filteredResponce = $responce->filter(function ($value) {
@@ -836,7 +836,7 @@ class MatchingController extends Controller
                 && $item->return_post['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item->return_post['location'] == $post_1->return_post['location']
                 && $item->return_post['price_from'] <= $post_1->return_post['price'] && $item->return_post['price_to'] >= $post_1->return_post['price']
             ) {
-                return $item;
+                return $item->id;
             }
         });
         $filteredResponce = $responce->filter(function ($value) {
@@ -854,7 +854,7 @@ class MatchingController extends Controller
                 && $item->return_post['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item->return_post['location'] == $post_1->return_post['location']
                 && $item->return_post['price_from'] <= $post_1->return_post['price'] && $item->return_post['price_to'] >= $post_1->return_post['price']
             ) {
-                return $item;
+                return $item->id;
             }
         });
         $filteredResponce = $responce->filter(function ($value) {
@@ -872,7 +872,7 @@ class MatchingController extends Controller
                 && $item->return_post['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item->return_post['location'] != $post_1->return_post['location']
                 && $item->return_post['price_from'] <= $post_1->return_post['price'] && $item->return_post['price_to'] >= $post_1->return_post['price']
             ) {
-                return $item;
+                return $item->id;
             }
         });
         $filteredResponce = $responce->filter(function ($value) {
@@ -890,7 +890,7 @@ class MatchingController extends Controller
                 && $item->return_post['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item->return_post['location'] == $post_1->return_post['location']
                 && $item->return_post['price_from'] <= $post_1->return_post['price'] && $item->return_post['price_to'] >= $post_1->return_post['price']
             ) {
-                return $item;
+                return $item->id;
             }
         });
         $filteredResponce = $responce->filter(function ($value) {
@@ -908,7 +908,7 @@ class MatchingController extends Controller
                 && $item->return_post['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item->return_post['location'] != $post_1->return_post['location']
                 && $item->return_post['price_from'] <= $post_1->return_post['price'] && $item->return_post['price_to'] >= $post_1->return_post['price']
             ) {
-                return $item;
+                return $item->id;
             }
         });
         $filteredResponce = $responce->filter(function ($value) {
@@ -926,7 +926,7 @@ class MatchingController extends Controller
                 && $item->return_post['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item->return_post['location'] != $post_1->return_post['location']
                 && $item->return_post['price_from'] <= $post_1->return_post['price'] && $item->return_post['price_to'] >= $post_1->return_post['price']
             ) {
-                return $item;
+                return $item->id;
             }
         });
         $filteredResponce = $responce->filter(function ($value) {
@@ -944,7 +944,7 @@ class MatchingController extends Controller
                 && $item->return_post['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item->return_post['location'] != $post_1->return_post['location']
                 && $item->return_post['price_from'] <= $post_1->return_post['price'] && $item->return_post['price_to'] >= $post_1->return_post['price']
             ) {
-                return $item;
+                return $item->id;
             }
         });
         $filteredResponce = $responce->filter(function ($value) {
@@ -962,7 +962,7 @@ class MatchingController extends Controller
                 && $item->return_post['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item->return_post['location'] != $post_1->return_post['location']
                 && $item->return_post['price_from'] <= $post_1->return_post['price'] && $item->return_post['price_to'] >= $post_1->return_post['price']
             ) {
-                return $item;
+                return $item->id;
             }
         });
         $filteredResponce = $responce->filter(function ($value) {
@@ -980,7 +980,7 @@ class MatchingController extends Controller
                 && $item->return_post['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item->return_post['location'] != $post_1->return_post['location']
                 && $item->return_post['price_from'] <= $post_1->return_post['price'] && $item->return_post['price_to'] >= $post_1->return_post['price']
             ) {
-                return $item;
+                return $item->id;
             }
         });
         $filteredResponce = $responce->filter(function ($value) {
@@ -998,7 +998,7 @@ class MatchingController extends Controller
                 && $item->return_post['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item->return_post['location'] != $post_1->return_post['location']
                 && $item->return_post['price_from'] <= $post_1->return_post['price'] && $item->return_post['price_to'] >= $post_1->return_post['price']
             ) {
-                return $item;
+                return $item->id;
             }
         });
         $filteredResponce = $responce->filter(function ($value) {
@@ -1010,7 +1010,7 @@ class MatchingController extends Controller
     {
         $responce = $post_2->map(function ($item) use ($post_1) {
             if ($item->return_post['price_from'] <= $post_1->return_post['price'] && $item->return_post['price_to'] >= $post_1->return_post['price']) {
-                return $item;
+                return $item->id;
             }
         });
         $filteredResponce = $responce->filter(function ($value) {
@@ -1022,7 +1022,7 @@ class MatchingController extends Controller
     {
         $responce = $post_2->map(function ($item) use ($post_1) {
             if ($item['price_from'] <= $post_1['price'] && $item['price_to'] >= $post_1['price']) {
-                return $item;
+                return $item->id;
             }
         });
         $filteredResponce = $responce->filter(function ($value) {
