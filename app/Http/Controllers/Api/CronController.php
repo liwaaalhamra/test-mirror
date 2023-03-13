@@ -579,7 +579,7 @@ class CronController extends Controller
     public function get_matches()
     {
         $data = UserMatchingRecord::where('user_id',28)->orderBy('created_at','desc')->first();
-        $ids = json_decode($data->matching_records);
+        $ids = json_decode($data->matching_records,true);
         $query = Item::whereIn('id',$ids);
         $currency = env('APP_CURRENCY');
         $user = Users::where('id',28)->first();
