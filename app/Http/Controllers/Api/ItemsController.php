@@ -255,22 +255,28 @@ class ItemsController extends Controller
             return $value;
         })->values();
 
-        $data = UserMatchingRecord::where('user_id',11)->orderBy('created_at','desc')->first();
-        $ids = json_decode($data->matching_records);
-        $query = Item::whereIn('id',$ids);
-        $currency = env('APP_CURRENCY');
+
         
-        $matches1 = $query->take(10)->get()->map(function ($value, $key) use ($currency,$user) {
-            $value->is_favorite = false;
-            if($user){
-                if(UserFavorite::whereMetaName('items')->whereMetaId($value->id)->whereUserId($user->id)->first()){
-                    $value->is_favorite = true;
+        if($user){
+            $data = UserMatchingRecord::where('user_id',$user->id)->orderBy('created_at','desc')->first();
+            $ids = json_decode($data->matching_records);
+            $match_query = Item::whereIn('id',$ids);
+            $currency = env('APP_CURRENCY');
+            
+            $matches = $match_query->get()->map(function ($value, $key) use ($currency,$user) {
+                $value->is_favorite = false;
+                if($user){
+                    if(UserFavorite::whereMetaName('items')->whereMetaId($value->id)->whereUserId($user->id)->first()){
+                        $value->is_favorite = true;
+                    }
                 }
-            }
-            $value->currency = $currency;
-            $value->post_type = "services";
-            return $value;
-        })->values();
+                $value->currency = $currency;
+                $value->post_type = "services";
+                return $value;
+            })->values();
+        }else{
+            $matches = null;
+        }
 
         $latest_posts = $query->take(30)->get()->map(function ($value, $key) use ($currency,$user) {
             // $value->is_favorite = false;

@@ -53,7 +53,7 @@ class MatchingScheduler extends Command
 
         foreach($users as $user){
             Log::info('cron');
-            $result = $this->index($user);
+            $result = $this->matchingResult($user);
 
             $set_data = new UserMatchingRecord();
             $set_data->user_id = $user;
@@ -63,7 +63,7 @@ class MatchingScheduler extends Command
 
     }
 
-    public function index($user)
+    public function matchingResult($user)
     {
         $my_posts = Item::whereUserId($user)->whereType('offer')->get();
         $others_posts = Item::where('user_id', '!=', $user)->whereType('offer')->get();
@@ -395,9 +395,50 @@ class MatchingScheduler extends Command
                 }
             }
         }
+        $priority_0 = $this->priority_0($post_1, $post_2);
+        if (!empty($priority_0[0])) {
+            for($i=0;$i<count($priority_0);$i++) {
+                if( !array_key_exists($priority_0[$i]['id'], $priority_40[0]['id'])) {
+                    $matches[0] = $priority_0;
+                }
+            }
+        }
+        $priority_N = $this->priority_N($post_1, $post_2);
+        if (!empty($priority_N[0])) {
+            for($i=0;$i<count($priority_N);$i++) {
+                if( !array_key_exists($priority_N[$i]['id'], $priority_40[0]['id'])) {
+                    $matches[0] = $priority_N;
+                }
+            }
+        }
         return $matches;
     }
 
+    function priority_N($post_1, $post_2)
+    {
+        $responce = $post_2->map(function ($item) use ($post_1) {
+            if ($item['category_id'] == $post_1['category_id']) {
+                return $item->id;
+            }
+        });
+        $filteredResponce = $responce->filter(function ($value) {
+            return !is_null($value);
+        })->toArray();
+       return array_values($filteredResponce);
+    }
+
+    function priority_0($post_1, $post_2)
+    {
+        $responce = $post_2->map(function ($item) use ($post_1) {
+            if ($item['sub_category_id'] == $post_1['sub_category_id']) {
+                return $item->id;
+            }
+        });
+        $filteredResponce = $responce->filter(function ($value) {
+            return !is_null($value);
+        })->toArray();
+       return array_values($filteredResponce);
+    }
     function priority_1($post_1, $post_2)
     {
         $responce = $post_2->map(function ($item) use ($post_1) {
