@@ -5,6 +5,8 @@ namespace App\Console;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
+use Illuminate\Support\Facades\Log;
+
 class Kernel extends ConsoleKernel
 {
     /**
@@ -14,7 +16,6 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         // Commands\Inspire::class,
-        // Commands\ForExpiredPosts::class,
         Commands\MatchingScheduler::class,
     ];
 
@@ -26,8 +27,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('expired:posts')->daily();
-        // $schedule->command('match:cron')->dailyAt('00:00');
-        $schedule->command('match:cron')->everyMinute();
+        Log::info('innn cronnnnn');
+        $schedule->command('match:cron')
+            ->everyMinute();
     }
 }

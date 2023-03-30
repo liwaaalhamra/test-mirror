@@ -49,6 +49,9 @@ class LoginController extends Controller
         }
         $username = $request->username;
         $password = $request->password;
+        if($user = Users::whereAccountType('email')->whereRaw("LOWER(email) = ?",[ strtolower(trim($username))])->where('password',null)->first()){
+            return parent::return_error("Registration Error", 400, "Your registration process was interrupted please reset your password first.");
+        }
         if(filter_var($username, FILTER_VALIDATE_EMAIL)){
             if(!$user = Users::whereAccountType('email')->whereRaw("LOWER(email) = ?",[ strtolower(trim($username))])->first()){
                 return parent::return_error("Email does not exist", 403, "User does not exist.");

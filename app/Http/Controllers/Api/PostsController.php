@@ -271,7 +271,7 @@ class PostsController extends Controller
         $user = $this->validate_user($request);
 
         $barters = Barter::wherenotin('status',['completed', 'rejected'])
-        ->where('created_at', '>=', Carbon::now()->subMonths(2)->toDateTimeString()) //removing barters older than 2 months
+        ->where('created_at', '>=', Carbon::now()->subMonths(1)->toDateTimeString()) //removing barters older than 2 months
         ->where(function ($query) use ($user) {
             $query->whereReceiverId($user->id)->orWhere('sender_id',$user->id);
         })->orderByRaw("FIELD(status , 'pending', 'accepted', 'rejected') ASC")->orderByRaw("FIELD(sender_id, $user->id) ASC")->orderBy('created_at', 'desc')->get()->map(function ($query, $key) use ($user){

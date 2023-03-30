@@ -782,8 +782,8 @@ class Controller extends BaseController
         if(isset($response['id'])){
             if(!empty($response['id'])){//200 ok
                 $data['status'] = 'OK';
-                $data['message'] = 'Push Sent Successfully to '.$response['recipients'].' devices';
-                $data['debugger'] = 'Push Sent Successfully to '.$response['recipients'].' devices';
+                $data['message'] = 'Push Sent Successfully to all devices';
+                $data['debugger'] = 'Push Sent Successfully to all devices';
             }else{//200 no subscribed players
                 $data['status'] = 'OK_WITH_ERRORS';
                 if(isset($response['errors'])){

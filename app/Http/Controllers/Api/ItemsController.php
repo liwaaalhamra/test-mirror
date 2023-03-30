@@ -255,25 +255,25 @@ class ItemsController extends Controller
             return $value;
         })->values();
 
-
-        
         if($user){
             $data = UserMatchingRecord::where('user_id',$user->id)->orderBy('created_at','desc')->first();
-            $ids = json_decode($data->matching_records,true);
-            $match_query = Item::whereIn('id',$ids);
-            $currency = env('APP_CURRENCY');
-            
-            $matches = $match_query->get()->map(function ($value, $key) use ($currency,$user) {
-                $value->is_favorite = false;
-                if($user){
-                    if(UserFavorite::whereMetaName('items')->whereMetaId($value->id)->whereUserId($user->id)->first()){
-                        $value->is_favorite = true;
+            if($data){
+                $ids = json_decode($data->matching_records,true);
+                $match_query = Item::whereIn('id',$ids);
+                $currency = env('APP_CURRENCY');
+                
+                $matches = $match_query->get()->map(function ($value, $key) use ($currency,$user) {
+                    $value->is_favorite = false;
+                    if($user){
+                        if(UserFavorite::whereMetaName('items')->whereMetaId($value->id)->whereUserId($user->id)->first()){
+                            $value->is_favorite = true;
+                        }
                     }
-                }
-                $value->currency = $currency;
-                $value->post_type = "services";
-                return $value;
-            })->values();
+                    $value->currency = $currency;
+                    $value->post_type = "services";
+                    return $value;
+                })->values();
+            }
         }else{
             $matches = null;
         }
@@ -408,21 +408,45 @@ class ItemsController extends Controller
                 })->values();
             }
         }elseif ($slug == 'matches'){
-            $query = Item::whereType('offer')->whereIsAvailable(1)->orderby('created_at','desc');
-            $currency = env('APP_CURRENCY');
-            $items = $query->take(50)->get()->map(function ($value, $key) use ($currency,$user) {
-                $value->is_favorite = false;
-                if($user){
-                    if(UserFavorite::whereMetaName('items')->whereMetaId($value->id)->whereUserId($user->id)->first()){
-                        $value->is_favorite = true;
-                    }
+            // $query = Item::whereType('offer')->whereIsAvailable(1)->orderby('created_at','desc');
+            // $currency = env('APP_CURRENCY');
+            // $items = $query->take(50)->get()->map(function ($value, $key) use ($currency,$user) {
+            //     $value->is_favorite = false;
+            //     if($user){
+            //         if(UserFavorite::whereMetaName('items')->whereMetaId($value->id)->whereUserId($user->id)->first()){
+            //             $value->is_favorite = true;
+            //         }
+            //     }
+            //     unset($value->quantity);
+            //     $value->currency = $currency;
+            //     $value->post_type = $value->category->type;
+            //     unset($value->category);
+            //     return $value;
+            // })->values();
+            if($user){
+                $data = UserMatchingRecord::where('user_id',$user->id)->orderBy('created_at','desc')->first();
+                if($data){
+                    $ids = json_decode($data->matching_records,true);
+                    $match_query = Item::whereIn('id',$ids);
+                    $currency = env('APP_CURRENCY');
+                    
+                    $items = $match_query->get()->map(function ($value, $key) use ($currency,$user) {
+                        $value->is_favorite = false;
+                        if($user){
+                            if(UserFavorite::whereMetaName('items')->whereMetaId($value->id)->whereUserId($user->id)->first()){
+                                $value->is_favorite = true;
+                            }
+                        }
+                    unset($value->quantity);
+                    $value->currency = $currency;
+                    $value->post_type = $value->category->type;
+                    unset($value->category);
+                    return $value;
+                    })->values();
                 }
-                unset($value->quantity);
-                $value->currency = $currency;
-                $value->post_type = $value->category->type;
-                unset($value->category);
-                return $value;
-            })->values();
+            }else{
+                $items = null;
+            }
         }elseif ($slug == 'latest-posts'){
             $query = Item::whereType('offer')->whereIsAvailable(1)->orderby('created_at','desc');
             $currency = env('APP_CURRENCY');

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-
+use App\Http\Controllers\Api\MatchingController;
 use App\Models\Api\Category;
 use App\Models\Api\Item;
 use App\Models\Api\Media;
@@ -19,7 +19,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
+use App\Models\Api\UserMatchingRecord;
+use Exception;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
 use Mail;
 
 
@@ -364,8 +367,25 @@ class ItemsController extends Controller
             $item->is_available = !$item->is_available;
             $item->save();
         }
+        try {
+        $users = Item::get()->pluck('user_id','user_id');
+        // UserMatchingRecord::where('id', '>', 0)->delete();
+
+        foreach($users as $user){
+            Log::info('cron');
+            $result = (new MatchingController)->matchingResult($user);
+
+            $set_data = new UserMatchingRecord();
+            $set_data->user_id = $user;
+            $set_data->matching_records = json_encode($result[0]);
+            $set_data->save();
+        }
         return redirect()->route('admin.'.$this->section_name.'.index')
             ->with('success', $this->display_name.' Successfully updated');
+
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
     }
 
     public function approve(Item $item){

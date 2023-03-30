@@ -550,27 +550,19 @@ class ProfileController extends Controller
             return parent::return_error('Missing parameter(s)', 400, $validator->messages()->all()[0]);
         }
         $username = $request->username;
-        if(filter_var($username, FILTER_VALIDATE_EMAIL)){
-            if(!$user = Users::whereAccountType('email')->whereRaw("LOWER(email) = ?",[ strtolower(trim($username))])->first()){
-                return parent::return_error("Email does not exist", 403, "User does not exist");
-            }elseif(!$user = Users::whereAccountType('mobile')->whereRaw("LOWER(email) = ?",[ strtolower(trim($username))])->first()){
-                return parent::return_error("Email does not exist", 403, "User does not exist");
-            }
-        }else{
-            if(!$user = Users::whereAccountType('mobile')->where(DB::raw("CONCAT(`country_code`, `primary_phone`)"), '=', $username)->first()){
-                return parent::return_error("Mobile Number does not exist", 403, "User does not exist");
-            }elseif(!$user = Users::whereAccountType('email')->where(DB::raw("CONCAT(`country_code`, `primary_phone`)"), '=', $username)->first()){
-                return parent::return_error("Mobile Number does not exist", 403, "User does not exist");
-            }
+        $user = Users::where('email',$username)->orWhere('primary_phone', $username)->first();
+        
+        if(!$user){
+            return parent::return_error("Email does not exist", 403, "User does not exist");
         }
-//        if($user->is_verified == 0){
-//            return parent::return_error("Registration not complete, please register again", 406, "Registration not complete, please register again");
-//        }
+
+        if($user->is_verified == 0){
+            return parent::return_error("Registration not complete, please register again", 406, "Registration not complete, please register again");
+        }
 
         if($user->is_blocked){
             return parent::return_error("Account Blocked", 407, "Account Blocked");
         }
-
 
         $reset_code = parent::number_generator(6);
         $registration = parent::generate_tokens(4);

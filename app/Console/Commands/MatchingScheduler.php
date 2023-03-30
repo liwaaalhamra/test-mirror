@@ -6,7 +6,6 @@ use App\Models\Api\UserMatchingRecord;
 use App\Models\Api\Item;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
-use App\Http\Controllers\Api\MatchingController;
     
 class MatchingScheduler extends Command
 {
@@ -50,9 +49,9 @@ class MatchingScheduler extends Command
 
         $users = Item::get()->pluck('user_id','user_id');
         // UserMatchingRecord::where('id', '>', 0)->delete();
+        Log::info('cron');
 
         foreach($users as $user){
-            Log::info('cron');
             $result = $this->matchingResult($user);
 
             $set_data = new UserMatchingRecord();
@@ -409,11 +408,11 @@ class MatchingScheduler extends Command
     {
         $responce = $post_2->map(function ($item) use ($post_1) {
             if (
-                $item['category_id'] == $post_1['category_id'] && $item['sub_category_id'] == $post_1['sub_category_id'] && $item['sub_sub_category_id'] == $post_1['sub_sub_category_id']
-                && $item['location'] == $post_1['location'] && $item['price_from'] <= $post_1['price'] && $item['price_to'] >= $post_1['price']
-                && $item->return_post['category_id'] == $post_1->return_post['category_id'] && $item->return_post['sub_category_id'] == $post_1->return_post['sub_category_id']
-                && $item->return_post['sub_sub_category_id'] == $post_1->return_post['sub_sub_category_id'] && $item->return_post['location'] == $post_1->return_post['location']
-                && $item->return_post['price_from'] <= $post_1->return_post['price'] && $item->return_post['price_to'] >= $post_1->return_post['price']
+                $item->return_post['category_id'] == $post_1['category_id'] && $item->return_post['sub_category_id'] == $post_1['sub_category_id'] && $item->return_post['sub_sub_category_id'] == $post_1['sub_sub_category_id']
+                && $item->return_post['location_id'] == $post_1['location_id'] && $item->return_post['price_from'] <= $post_1['price'] && $item->return_post['price_to'] >= $post_1['price']
+                && $item['category_id'] == $post_1->return_post['category_id'] && $item['sub_category_id'] == $post_1->return_post['sub_category_id']
+                && $item['sub_sub_category_id'] == $post_1->return_post['sub_sub_category_id'] && $item['location_id'] == $post_1->return_post['location_id']
+                && $item['price_from'] <= $post_1->return_post['price'] && $item->return_post['price_to'] >= $post_1->return_post['price']
             ) {
                 return $item->id;
             }
@@ -427,11 +426,11 @@ class MatchingScheduler extends Command
     {
         $responce = $post_2->map(function ($item) use ($post_1) {
             if (
-                $item['category_id'] == $post_1['category_id'] && $item['sub_category_id'] == $post_1['sub_category_id'] && $item['sub_sub_category_id'] != $post_1['sub_sub_category_id']
-                && $item['location'] == $post_1['location'] && $item['price_from'] <= $post_1['price'] && $item['price_to'] >= $post_1['price']
-                && $item->return_post['category_id'] == $post_1->return_post['category_id'] && $item->return_post['sub_category_id'] == $post_1->return_post['sub_category_id']
-                && $item->return_post['sub_sub_category_id'] == $post_1->return_post['sub_sub_category_id'] && $item->return_post['location'] == $post_1->return_post['location']
-                && $item->return_post['price_from'] <= $post_1->return_post['price'] && $item->return_post['price_to'] >= $post_1->return_post['price']
+                $item->return_post['category_id'] == $post_1['category_id'] && $item->return_post['sub_category_id'] == $post_1['sub_category_id'] && $item->return_post['sub_sub_category_id'] != $post_1['sub_sub_category_id']
+                && $item->return_post['location_id'] == $post_1['location_id'] && $item->return_post['price_from'] <= $post_1['price'] && $item->return_post['price_to'] >= $post_1['price']
+                && $item['category_id'] == $post_1->return_post['category_id'] && $item['sub_category_id'] == $post_1->return_post['sub_category_id']
+                && $item['sub_sub_category_id'] == $post_1->return_post['sub_sub_category_id'] && $item['location_id'] == $post_1->return_post['location_id']
+                && $item['price_from'] <= $post_1->return_post['price'] && $item['price_to'] >= $post_1->return_post['price']
             ) {
                 return $item->id;
             }
@@ -445,11 +444,11 @@ class MatchingScheduler extends Command
     {
         $responce = $post_2->map(function ($item) use ($post_1) {
             if (
-                $item['category_id'] == $post_1['category_id'] && $item['sub_category_id'] != $post_1['sub_category_id'] && $item['sub_sub_category_id'] != $post_1['sub_sub_category_id']
-                && $item['location'] == $post_1['location'] && $item['price_from'] <= $post_1['price'] && $item['price_to'] >= $post_1['price']
-                && $item->return_post['category_id'] == $post_1->return_post['category_id'] && $item->return_post['sub_category_id'] == $post_1->return_post['sub_category_id']
-                && $item->return_post['sub_sub_category_id'] == $post_1->return_post['sub_sub_category_id'] && $item->return_post['location'] == $post_1->return_post['location']
-                && $item->return_post['price_from'] <= $post_1->return_post['price'] && $item->return_post['price_to'] >= $post_1->return_post['price']
+                $item->return_post['category_id'] == $post_1['category_id'] && $item->return_post['sub_category_id'] != $post_1['sub_category_id'] && $item->return_post['sub_sub_category_id'] != $post_1['sub_sub_category_id']
+                && $item->return_post['location_id'] == $post_1['location_id'] && $item->return_post['price_from'] <= $post_1['price'] && $item->return_post['price_to'] >= $post_1['price']
+                && $item['category_id'] == $post_1->return_post['category_id'] && $item['sub_category_id'] == $post_1->return_post['sub_category_id']
+                && $item['sub_sub_category_id'] == $post_1->return_post['sub_sub_category_id'] && $item['location_id'] == $post_1->return_post['location_id']
+                && $item['price_from'] <= $post_1->return_post['price'] && $item['price_to'] >= $post_1->return_post['price']
             ) {
                 return $item->id;
             }
@@ -463,11 +462,11 @@ class MatchingScheduler extends Command
     {
         $responce = $post_2->map(function ($item) use ($post_1) {
             if (
-                $item['category_id'] == $post_1['category_id'] && $item['sub_category_id'] == $post_1['sub_category_id'] && $item['sub_sub_category_id'] == $post_1['sub_sub_category_id']
-                && $item['location'] == $post_1['location'] && $item['price_from'] <= $post_1['price'] && $item['price_to'] >= $post_1['price']
-                && $item->return_post['category_id'] == $post_1->return_post['category_id'] && $item->return_post['sub_category_id'] == $post_1->return_post['sub_category_id']
-                && $item->return_post['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item->return_post['location'] == $post_1->return_post['location']
-                && $item->return_post['price_from'] <= $post_1->return_post['price'] && $item->return_post['price_to'] >= $post_1->return_post['price']
+                $item->return_post['category_id'] == $post_1['category_id'] && $item->return_post['sub_category_id'] == $post_1['sub_category_id'] && $item->return_post['sub_sub_category_id'] == $post_1['sub_sub_category_id']
+                && $item->return_post['location_id'] == $post_1['location_id'] && $item->return_post['price_from'] <= $post_1['price'] && $item->return_post['price_to'] >= $post_1['price']
+                && $item['category_id'] == $post_1->return_post['category_id'] && $item['sub_category_id'] == $post_1->return_post['sub_category_id']
+                && $item['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item['location_id'] == $post_1->return_post['location_id']
+                && $item['price_from'] <= $post_1->return_post['price'] && $item['price_to'] >= $post_1->return_post['price']
             ) {
                 return $item->id;
             }
@@ -481,11 +480,11 @@ class MatchingScheduler extends Command
     {
         $responce = $post_2->map(function ($item) use ($post_1) {
             if (
-                $item['category_id'] == $post_1['category_id'] && $item['sub_category_id'] == $post_1['sub_category_id'] && $item['sub_sub_category_id'] == $post_1['sub_sub_category_id']
-                && $item['location'] == $post_1['location'] && $item['price_from'] <= $post_1['price'] && $item['price_to'] >= $post_1['price']
-                && $item->return_post['category_id'] == $post_1->return_post['category_id'] && $item->return_post['sub_category_id'] != $post_1->return_post['sub_category_id']
-                && $item->return_post['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item->return_post['location'] == $post_1->return_post['location']
-                && $item->return_post['price_from'] <= $post_1->return_post['price'] && $item->return_post['price_to'] >= $post_1->return_post['price']
+                $item->return_post['category_id'] == $post_1['category_id'] && $item->return_post['sub_category_id'] == $post_1['sub_category_id'] && $item->return_post['sub_sub_category_id'] == $post_1['sub_sub_category_id']
+                && $item->return_post['location_id'] == $post_1['location_id'] && $item->return_post['price_from'] <= $post_1['price'] && $item->return_post['price_to'] >= $post_1['price']
+                && $item['category_id'] == $post_1->return_post['category_id'] && $item['sub_category_id'] != $post_1->return_post['sub_category_id']
+                && $item['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item['location_id'] == $post_1->return_post['location_id']
+                && $item['price_from'] <= $post_1->return_post['price'] && $item['price_to'] >= $post_1->return_post['price']
             ) {
                 return $item->id;
             }
@@ -499,11 +498,11 @@ class MatchingScheduler extends Command
     {
         $responce = $post_2->map(function ($item) use ($post_1) {
             if (
-                $item['category_id'] == $post_1['category_id'] && $item['sub_category_id'] == $post_1['sub_category_id'] && $item['sub_sub_category_id'] != $post_1['sub_sub_category_id']
-                && $item['location'] == $post_1['location'] && $item['price_from'] <= $post_1['price'] && $item['price_to'] >= $post_1['price']
-                && $item->return_post['category_id'] == $post_1->return_post['category_id'] && $item->return_post['sub_category_id'] == $post_1->return_post['sub_category_id']
-                && $item->return_post['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item->return_post['location'] == $post_1->return_post['location']
-                && $item->return_post['price_from'] <= $post_1->return_post['price'] && $item->return_post['price_to'] >= $post_1->return_post['price']
+                $item->return_post['category_id'] == $post_1['category_id'] && $item->return_post['sub_category_id'] == $post_1['sub_category_id'] && $item->return_post['sub_sub_category_id'] != $post_1['sub_sub_category_id']
+                && $item->return_post['location_id'] == $post_1['location_id'] && $item->return_post['price_from'] <= $post_1['price'] && $item->return_post['price_to'] >= $post_1['price']
+                && $item['category_id'] == $post_1->return_post['category_id'] && $item['sub_category_id'] == $post_1->return_post['sub_category_id']
+                && $item['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item['location_id'] == $post_1->return_post['location_id']
+                && $item['price_from'] <= $post_1->return_post['price'] && $item['price_to'] >= $post_1->return_post['price']
             ) {
                 return $item->id;
             }
@@ -517,11 +516,11 @@ class MatchingScheduler extends Command
     {
         $responce = $post_2->map(function ($item) use ($post_1) {
             if (
-                $item['category_id'] == $post_1['category_id'] && $item['sub_category_id'] != $post_1['sub_category_id'] && $item['sub_sub_category_id'] != $post_1['sub_sub_category_id']
-                && $item['location'] == $post_1['location'] && $item['price_from'] <= $post_1['price'] && $item['price_to'] >= $post_1['price']
-                && $item->return_post['category_id'] == $post_1->return_post['category_id'] && $item->return_post['sub_category_id'] == $post_1->return_post['sub_category_id']
-                && $item->return_post['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item->return_post['location'] == $post_1->return_post['location']
-                && $item->return_post['price_from'] <= $post_1->return_post['price'] && $item->return_post['price_to'] >= $post_1->return_post['price']
+                $item->return_post['category_id'] == $post_1['category_id'] && $item->return_post['sub_category_id'] != $post_1['sub_category_id'] && $item->return_post['sub_sub_category_id'] != $post_1['sub_sub_category_id']
+                && $item->return_post['location_id'] == $post_1['location_id'] && $item->return_post['price_from'] <= $post_1['price'] && $item->return_post['price_to'] >= $post_1['price']
+                && $item['category_id'] == $post_1->return_post['category_id'] && $item['sub_category_id'] == $post_1->return_post['sub_category_id']
+                && $item['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item['location_id'] == $post_1->return_post['location_id']
+                && $item['price_from'] <= $post_1->return_post['price'] && $item['price_to'] >= $post_1->return_post['price']
             ) {
                 return $item->id;
             }
@@ -535,11 +534,11 @@ class MatchingScheduler extends Command
     {
         $responce = $post_2->map(function ($item) use ($post_1) {
             if (
-                $item['category_id'] == $post_1['category_id'] && $item['sub_category_id'] == $post_1['sub_category_id'] && $item['sub_sub_category_id'] != $post_1['sub_sub_category_id']
-                && $item['location'] == $post_1['location'] && $item['price_from'] <= $post_1['price'] && $item['price_to'] >= $post_1['price']
-                && $item->return_post['category_id'] == $post_1->return_post['category_id'] && $item->return_post['sub_category_id'] != $post_1->return_post['sub_category_id']
-                && $item->return_post['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item->return_post['location'] == $post_1->return_post['location']
-                && $item->return_post['price_from'] <= $post_1->return_post['price'] && $item->return_post['price_to'] >= $post_1->return_post['price']
+                $item->return_post['category_id'] == $post_1['category_id'] && $item->return_post['sub_category_id'] == $post_1['sub_category_id'] && $item->return_post['sub_sub_category_id'] != $post_1['sub_sub_category_id']
+                && $item->return_post['location_id'] == $post_1['location_id'] && $item->return_post['price_from'] <= $post_1['price'] && $item->return_post['price_to'] >= $post_1['price']
+                && $item['category_id'] == $post_1->return_post['category_id'] && $item['sub_category_id'] != $post_1->return_post['sub_category_id']
+                && $item['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item['location_id'] == $post_1->return_post['location_id']
+                && $item['price_from'] <= $post_1->return_post['price'] && $item['price_to'] >= $post_1->return_post['price']
             ) {
                 return $item->id;
             }
@@ -553,11 +552,11 @@ class MatchingScheduler extends Command
     {
         $responce = $post_2->map(function ($item) use ($post_1) {
             if (
-                $item['category_id'] == $post_1['category_id'] && $item['sub_category_id'] != $post_1['sub_category_id'] && $item['sub_sub_category_id'] != $post_1['sub_sub_category_id']
-                && $item['location'] == $post_1['location'] && $item['price_from'] <= $post_1['price'] && $item['price_to'] >= $post_1['price']
-                && $item->return_post['category_id'] == $post_1->return_post['category_id'] && $item->return_post['sub_category_id'] != $post_1->return_post['sub_category_id']
-                && $item->return_post['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item->return_post['location'] == $post_1->return_post['location']
-                && $item->return_post['price_from'] <= $post_1->return_post['price'] && $item->return_post['price_to'] >= $post_1->return_post['price']
+                $item->return_post['category_id'] == $post_1['category_id'] && $item->return_post['sub_category_id'] != $post_1['sub_category_id'] && $item->return_post['sub_sub_category_id'] != $post_1['sub_sub_category_id']
+                && $item->return_post['location_id'] == $post_1['location_id'] && $item->return_post['price_from'] <= $post_1['price'] && $item->return_post['price_to'] >= $post_1['price']
+                && $item['category_id'] == $post_1->return_post['category_id'] && $item['sub_category_id'] != $post_1->return_post['sub_category_id']
+                && $item['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item['location_id'] == $post_1->return_post['location_id']
+                && $item['price_from'] <= $post_1->return_post['price'] && $item['price_to'] >= $post_1->return_post['price']
             ) {
                 return $item->id;
             }
@@ -570,9 +569,9 @@ class MatchingScheduler extends Command
     function priority_10($post_1, $post_2)
     {
         $responce = $post_2->map(function ($item) use ($post_1) {
-            if ($item->return_post['category_id'] == $post_1->return_post['category_id'] && $item->return_post['sub_category_id'] == $post_1->return_post['sub_category_id']
-            && $item->return_post['sub_sub_category_id'] == $post_1->return_post['sub_sub_category_id'] && $item->return_post['location'] == $post_1->return_post['location']
-            && $item->return_post['price_from'] <= $post_1->return_post['price'] && $item->return_post['price_to'] >= $post_1->return_post['price']) {
+            if ($item['category_id'] == $post_1->return_post['category_id'] && $item['sub_category_id'] == $post_1->return_post['sub_category_id']
+            && $item['sub_sub_category_id'] == $post_1->return_post['sub_sub_category_id'] && $item['location_id'] == $post_1->return_post['location_id']
+            && $item['price_from'] <= $post_1->return_post['price'] && $item['price_to'] >= $post_1->return_post['price']) {
                 return $item->id;
             }
         });
@@ -586,8 +585,8 @@ class MatchingScheduler extends Command
     {
         $responce = $post_2->map(function ($item) use ($post_1) {
             if (
-                $item['category_id'] == $post_1['category_id'] && $item['sub_category_id'] == $post_1['sub_category_id'] && $item['sub_sub_category_id'] == $post_1['sub_sub_category_id']
-                && $item['location'] == $post_1['location'] && $item['price_from'] <= $post_1['price'] && $item['price_to'] >= $post_1['price']
+                $item->return_post['category_id'] == $post_1['category_id'] && $item->return_post['sub_category_id'] == $post_1['sub_category_id'] && $item->return_post['sub_sub_category_id'] == $post_1['sub_sub_category_id']
+                && $item->return_post['location_id'] == $post_1['location_id'] && $item->return_post['price_from'] <= $post_1['price'] && $item->return_post['price_to'] >= $post_1['price']
             ) {
                 return $item->id;
             }
@@ -601,9 +600,9 @@ class MatchingScheduler extends Command
     {
         $responce = $post_2->map(function ($item) use ($post_1) {
             if (
-                $item->return_post['category_id'] == $post_1->return_post['category_id'] && $item->return_post['sub_category_id'] == $post_1->return_post['sub_category_id']
-                && $item->return_post['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item->return_post['location'] == $post_1->return_post['location']
-                && $item->return_post['price_from'] <= $post_1->return_post['price'] && $item->return_post['price_to'] >= $post_1->return_post['price']
+                $item['category_id'] == $post_1->return_post['category_id'] && $item['sub_category_id'] == $post_1->return_post['sub_category_id']
+                && $item['location_id'] == $post_1->return_post['location_id']
+                && $item['price_from'] <= $post_1->return_post['price'] && $item['price_to'] >= $post_1->return_post['price']
             ) {
                 return $item->id;
             }
@@ -617,8 +616,8 @@ class MatchingScheduler extends Command
     {
         $responce = $post_2->map(function ($item) use ($post_1) {
             if (
-                $item['category_id'] == $post_1['category_id'] && $item['sub_category_id'] == $post_1['sub_category_id'] && $item['sub_sub_category_id'] != $post_1['sub_sub_category_id']
-                && $item['location'] == $post_1['location'] && $item['price_from'] <= $post_1['price'] && $item['price_to'] >= $post_1['price']
+                $item->return_post['category_id'] == $post_1['category_id'] && $item->return_post['sub_category_id'] == $post_1['sub_category_id'] && $item->return_post['sub_sub_category_id'] != $post_1['sub_sub_category_id']
+                && $item->return_post['location_id'] == $post_1['location_id'] && $item->return_post['price_from'] <= $post_1['price'] && $item->return_post['price_to'] >= $post_1['price']
             ) {
                 return $item->id;
             }
@@ -632,9 +631,9 @@ class MatchingScheduler extends Command
     {
         $responce = $post_2->map(function ($item) use ($post_1) {
             if (
-                $item->return_post['category_id'] == $post_1->return_post['category_id'] && $item->return_post['sub_category_id'] != $post_1->return_post['sub_category_id']
-                && $item->return_post['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item->return_post['location'] == $post_1->return_post['location']
-                && $item->return_post['price_from'] <= $post_1->return_post['price'] && $item->return_post['price_to'] >= $post_1->return_post['price']
+                $item['category_id'] == $post_1->return_post['category_id'] && $item['sub_category_id'] != $post_1->return_post['sub_category_id']
+                && $item['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item['location_id'] == $post_1->return_post['location_id']
+                && $item['price_from'] <= $post_1->return_post['price'] && $item['price_to'] >= $post_1->return_post['price']
             ) {
                 return $item->id;
             }
@@ -648,8 +647,8 @@ class MatchingScheduler extends Command
     {
         $responce = $post_2->map(function ($item) use ($post_1) {
             if (
-                $item['category_id'] == $post_1['category_id'] && $item['sub_category_id'] != $post_1['sub_category_id'] && $item['sub_sub_category_id'] != $post_1['sub_sub_category_id']
-                && $item['location'] == $post_1['location'] && $item['price_from'] <= $post_1['price'] && $item['price_to'] >= $post_1['price']
+                $item->return_post['category_id'] == $post_1['category_id'] && $item->return_post['sub_category_id'] != $post_1['sub_category_id'] && $item->return_post['sub_sub_category_id'] != $post_1['sub_sub_category_id']
+                && $item->return_post['location_id'] == $post_1['location_id'] && $item->return_post['price_from'] <= $post_1['price'] && $item->return_post['price_to'] >= $post_1['price']
             ) {
                 return $item->id;
             }
@@ -663,11 +662,11 @@ class MatchingScheduler extends Command
     {
         $responce = $post_2->map(function ($item) use ($post_1) {
             if (
-                $item['category_id'] == $post_1['category_id'] && $item['sub_category_id'] != $post_1['sub_category_id'] && $item['sub_sub_category_id'] != $post_1['sub_sub_category_id']
-                && $item['location'] == $post_1['location'] && $item['price_from'] <= $post_1['price'] && $item['price_to'] >= $post_1['price']
-                && $item->return_post['category_id'] == $post_1->return_post['category_id'] && $item->return_post['sub_category_id'] == $post_1->return_post['sub_category_id']
-                && $item->return_post['sub_sub_category_id'] == $post_1->return_post['sub_sub_category_id'] && $item->return_post['location'] == $post_1->return_post['location']
-                && $item->return_post['price_from'] <= $post_1->return_post['price'] && $item->return_post['price_to'] >= $post_1->return_post['price']
+                $item->return_post['category_id'] == $post_1['category_id'] && $item->return_post['sub_category_id'] != $post_1['sub_category_id'] && $item->return_post['sub_sub_category_id'] != $post_1['sub_sub_category_id']
+                && $item->return_post['location_id'] == $post_1['location_id'] && $item->return_post['price_from'] <= $post_1['price'] && $item->return_post['price_to'] >= $post_1['price']
+                && $item['category_id'] == $post_1->return_post['category_id'] && $item['sub_category_id'] == $post_1->return_post['sub_category_id']
+                && $item['sub_sub_category_id'] == $post_1->return_post['sub_sub_category_id'] && $item['location_id'] == $post_1->return_post['location_id']
+                && $item['price_from'] <= $post_1->return_post['price'] && $item['price_to'] >= $post_1->return_post['price']
             ) {
                 return $item->id;
             }
@@ -681,11 +680,11 @@ class MatchingScheduler extends Command
     {
         $responce = $post_2->map(function ($item) use ($post_1) {
             if (
-                $item['category_id'] == $post_1['category_id'] && $item['sub_category_id'] != $post_1['sub_category_id'] && $item['sub_sub_category_id'] != $post_1['sub_sub_category_id']
-                && $item['location'] == $post_1['location'] && $item['price_from'] <= $post_1['price'] && $item['price_to'] >= $post_1['price']
-                && $item->return_post['category_id'] == $post_1->return_post['category_id'] && $item->return_post['sub_category_id'] == $post_1->return_post['sub_category_id']
-                && $item->return_post['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item->return_post['location'] == $post_1->return_post['location']
-                && $item->return_post['price_from'] <= $post_1->return_post['price'] && $item->return_post['price_to'] >= $post_1->return_post['price']
+                $item->return_post['category_id'] == $post_1['category_id'] && $item->return_post['sub_category_id'] != $post_1['sub_category_id'] && $item->return_post['sub_sub_category_id'] != $post_1['sub_sub_category_id']
+                && $item->return_post['location_id'] == $post_1['location_id'] && $item->return_post['price_from'] <= $post_1['price'] && $item->return_post['price_to'] >= $post_1['price']
+                && $item['category_id'] == $post_1->return_post['category_id'] && $item['sub_category_id'] == $post_1->return_post['sub_category_id']
+                && $item['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item['location_id'] == $post_1->return_post['location_id']
+                && $item['price_from'] <= $post_1->return_post['price'] && $item['price_to'] >= $post_1->return_post['price']
             ) {
                 return $item->id;
             }
@@ -699,11 +698,11 @@ class MatchingScheduler extends Command
     {
         $responce = $post_2->map(function ($item) use ($post_1) {
             if (
-                $item['category_id'] == $post_1['category_id'] && $item['sub_category_id'] != $post_1['sub_category_id'] && $item['sub_sub_category_id'] != $post_1['sub_sub_category_id']
-                && $item['location'] == $post_1['location'] && $item['price_from'] <= $post_1['price'] && $item['price_to'] >= $post_1['price']
-                && $item->return_post['category_id'] == $post_1->return_post['category_id'] && $item->return_post['sub_category_id'] != $post_1->return_post['sub_category_id']
-                && $item->return_post['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item->return_post['location'] == $post_1->return_post['location']
-                && $item->return_post['price_from'] <= $post_1->return_post['price'] && $item->return_post['price_to'] >= $post_1->return_post['price']
+                $item->return_post['category_id'] == $post_1['category_id'] && $item->return_post['sub_category_id'] != $post_1['sub_category_id'] && $item->return_post['sub_sub_category_id'] != $post_1['sub_sub_category_id']
+                && $item->return_post['location_id'] == $post_1['location_id'] && $item->return_post['price_from'] <= $post_1['price'] && $item->return_post['price_to'] >= $post_1['price']
+                && $item['category_id'] == $post_1->return_post['category_id'] && $item['sub_category_id'] != $post_1->return_post['sub_category_id']
+                && $item['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item['location_id'] == $post_1->return_post['location_id']
+                && $item['price_from'] <= $post_1->return_post['price'] && $item['price_to'] >= $post_1->return_post['price']
             ) {
                 return $item->id;
             }
@@ -717,11 +716,11 @@ class MatchingScheduler extends Command
     {
         $responce = $post_2->map(function ($item) use ($post_1) {
             if (
-                $item['category_id'] == $post_1['category_id'] && $item['sub_category_id'] == $post_1['sub_category_id'] && $item['sub_sub_category_id'] == $post_1['sub_sub_category_id']
-                && $item['location'] == $post_1['location'] && $item['price_from'] <= $post_1['price'] && $item['price_to'] >= $post_1['price']
-                && $item->return_post['category_id'] == $post_1->return_post['category_id'] && $item->return_post['sub_category_id'] != $post_1->return_post['sub_category_id']
-                && $item->return_post['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item->return_post['location'] == $post_1->return_post['location']
-                && $item->return_post['price_from'] <= $post_1->return_post['price'] && $item->return_post['price_to'] >= $post_1->return_post['price']
+                $item->return_post['category_id'] == $post_1['category_id'] && $item->return_post['sub_category_id'] == $post_1['sub_category_id'] && $item->return_post['sub_sub_category_id'] == $post_1['sub_sub_category_id']
+                && $item->return_post['location_id'] == $post_1['location_id'] && $item->return_post['price_from'] <= $post_1['price'] && $item->return_post['price_to'] >= $post_1['price']
+                && $item['category_id'] == $post_1->return_post['category_id'] && $item['sub_category_id'] != $post_1->return_post['sub_category_id']
+                && $item['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item['location_id'] == $post_1->return_post['location_id']
+                && $item['price_from'] <= $post_1->return_post['price'] && $item['price_to'] >= $post_1->return_post['price']
             ) {
                 return $item->id;
             }
@@ -735,11 +734,11 @@ class MatchingScheduler extends Command
     {
         $responce = $post_2->map(function ($item) use ($post_1) {
             if (
-                $item['category_id'] == $post_1['category_id'] && $item['sub_category_id'] == $post_1['sub_category_id'] && $item['sub_sub_category_id'] != $post_1['sub_sub_category_id']
-                && $item['location'] == $post_1['location'] && $item['price_from'] <= $post_1['price'] && $item['price_to'] >= $post_1['price']
-                && $item->return_post['category_id'] == $post_1->return_post['category_id'] && $item->return_post['sub_category_id'] != $post_1->return_post['sub_category_id']
-                && $item->return_post['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item->return_post['location'] == $post_1->return_post['location']
-                && $item->return_post['price_from'] <= $post_1->return_post['price'] && $item->return_post['price_to'] >= $post_1->return_post['price']
+                $item->return_post['category_id'] == $post_1['category_id'] && $item->return_post['sub_category_id'] == $post_1['sub_category_id'] && $item->return_post['sub_sub_category_id'] != $post_1['sub_sub_category_id']
+                && $item->return_post['location_id'] == $post_1['location_id'] && $item->return_post['price_from'] <= $post_1['price'] && $item->return_post['price_to'] >= $post_1['price']
+                && $item['category_id'] == $post_1->return_post['category_id'] && $item['sub_category_id'] != $post_1->return_post['sub_category_id']
+                && $item['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item['location_id'] == $post_1->return_post['location_id']
+                && $item['price_from'] <= $post_1->return_post['price'] && $item['price_to'] >= $post_1->return_post['price']
             ) {
                 return $item->id;
             }
@@ -753,11 +752,11 @@ class MatchingScheduler extends Command
     {
         $responce = $post_2->map(function ($item) use ($post_1) {
             if (
-                $item['category_id'] == $post_1['category_id'] && $item['sub_category_id'] != $post_1['sub_category_id'] && $item['sub_sub_category_id'] != $post_1['sub_sub_category_id']
-                && $item['location'] == $post_1['location'] && $item['price_from'] <= $post_1['price'] && $item['price_to'] >= $post_1['price']
-                && $item->return_post['category_id'] == $post_1->return_post['category_id'] && $item->return_post['sub_category_id'] != $post_1->return_post['sub_category_id']
-                && $item->return_post['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item->return_post['location'] == $post_1->return_post['location']
-                && $item->return_post['price_from'] <= $post_1->return_post['price'] && $item->return_post['price_to'] >= $post_1->return_post['price']
+                $item->return_post['category_id'] == $post_1['category_id'] && $item->return_post['sub_category_id'] != $post_1['sub_category_id'] && $item->return_post['sub_sub_category_id'] != $post_1['sub_sub_category_id']
+                && $item->return_post['location_id'] == $post_1['location_id'] && $item->return_post['price_from'] <= $post_1['price'] && $item->return_post['price_to'] >= $post_1['price']
+                && $item['category_id'] == $post_1->return_post['category_id'] && $item['sub_category_id'] != $post_1->return_post['sub_category_id']
+                && $item['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item['location_id'] == $post_1->return_post['location_id']
+                && $item['price_from'] <= $post_1->return_post['price'] && $item['price_to'] >= $post_1->return_post['price']
             ) {
                 return $item->id;
             }
@@ -771,11 +770,11 @@ class MatchingScheduler extends Command
     {
         $responce = $post_2->map(function ($item) use ($post_1) {
             if (
-                $item['category_id'] == $post_1['category_id'] && $item['sub_category_id'] != $post_1['sub_category_id'] && $item['sub_sub_category_id'] != $post_1['sub_sub_category_id']
-                && $item['location'] == $post_1['location'] && $item['price_from'] <= $post_1['price'] && $item['price_to'] >= $post_1['price']
-                && $item->return_post['category_id'] == $post_1->return_post['category_id'] && $item->return_post['sub_category_id'] != $post_1->return_post['sub_category_id']
-                && $item->return_post['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item->return_post['location'] != $post_1->return_post['location']
-                && $item->return_post['price_from'] <= $post_1->return_post['price'] && $item->return_post['price_to'] >= $post_1->return_post['price']
+                $item->return_post['category_id'] == $post_1['category_id'] && $item->return_post['sub_category_id'] != $post_1['sub_category_id'] && $item->return_post['sub_sub_category_id'] != $post_1['sub_sub_category_id']
+                && $item->return_post['location_id'] == $post_1['location_id'] && $item->return_post['price_from'] <= $post_1['price'] && $item->return_post['price_to'] >= $post_1['price']
+                && $item['category_id'] == $post_1->return_post['category_id'] && $item['sub_category_id'] != $post_1->return_post['sub_category_id']
+                && $item['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item['location_id'] != $post_1->return_post['location_id']
+                && $item['price_from'] <= $post_1->return_post['price'] && $item['price_to'] >= $post_1->return_post['price']
             ) {
                 return $item->id;
             }
@@ -789,11 +788,11 @@ class MatchingScheduler extends Command
     {
         $responce = $post_2->map(function ($item) use ($post_1) {
             if (
-                $item['category_id'] == $post_1['category_id'] && $item['sub_category_id'] != $post_1['sub_category_id'] && $item['sub_sub_category_id'] != $post_1['sub_sub_category_id']
-                && $item['location'] == $post_1['location'] && $item['price_from'] <= $post_1['price'] && $item['price_to'] >= $post_1['price']
-                && $item->return_post['category_id'] != $post_1->return_post['category_id'] && $item->return_post['sub_category_id'] != $post_1->return_post['sub_category_id']
-                && $item->return_post['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item->return_post['location'] == $post_1->return_post['location']
-                && $item->return_post['price_from'] <= $post_1->return_post['price'] && $item->return_post['price_to'] >= $post_1->return_post['price']
+                $item->return_post['category_id'] == $post_1['category_id'] && $item->return_post['sub_category_id'] != $post_1['sub_category_id'] && $item->return_post['sub_sub_category_id'] != $post_1['sub_sub_category_id']
+                && $item->return_post['location_id'] == $post_1['location_id'] && $item->return_post['price_from'] <= $post_1['price'] && $item->return_post['price_to'] >= $post_1['price']
+                && $item['category_id'] != $post_1->return_post['category_id'] && $item['sub_category_id'] != $post_1->return_post['sub_category_id']
+                && $item['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item['location_id'] == $post_1->return_post['location_id']
+                && $item['price_from'] <= $post_1->return_post['price'] && $item['price_to'] >= $post_1->return_post['price']
             ) {
                 return $item->id;
             }
@@ -807,9 +806,9 @@ class MatchingScheduler extends Command
     {
         $responce = $post_2->map(function ($item) use ($post_1) {
             if (
-                $item->return_post['category_id'] == $post_1->return_post['category_id'] && $item->return_post['sub_category_id'] != $post_1->return_post['sub_category_id']
-                && $item->return_post['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item->return_post['location'] != $post_1->return_post['location']
-                && $item->return_post['price_from'] <= $post_1->return_post['price'] && $item->return_post['price_to'] >= $post_1->return_post['price']
+                $item['category_id'] == $post_1->return_post['category_id'] && $item['sub_category_id'] != $post_1->return_post['sub_category_id']
+                && $item['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item['location_id'] != $post_1->return_post['location_id']
+                && $item['price_from'] <= $post_1->return_post['price'] && $item['price_to'] >= $post_1->return_post['price']
             ) {
                 return $item->id;
             }
@@ -823,9 +822,9 @@ class MatchingScheduler extends Command
     {
         $responce = $post_2->map(function ($item) use ($post_1) {
             if (
-                $item->return_post['category_id'] != $post_1->return_post['category_id'] && $item->return_post['sub_category_id'] != $post_1->return_post['sub_category_id']
-                && $item->return_post['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item->return_post['location'] == $post_1->return_post['location']
-                && $item->return_post['price_from'] <= $post_1->return_post['price'] && $item->return_post['price_to'] >= $post_1->return_post['price']
+                $item['category_id'] != $post_1->return_post['category_id'] && $item['sub_category_id'] != $post_1->return_post['sub_category_id']
+                && $item['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item['location_id'] == $post_1->return_post['location_id']
+                && $item['price_from'] <= $post_1->return_post['price'] && $item['price_to'] >= $post_1->return_post['price']
             ) {
                 return $item->id;
             }
@@ -839,8 +838,8 @@ class MatchingScheduler extends Command
     {
         $responce = $post_2->map(function ($item) use ($post_1) {
             if (
-                $item['category_id'] == $post_1['category_id'] && $item['sub_category_id'] != $post_1['sub_category_id'] && $item['sub_sub_category_id'] != $post_1['sub_sub_category_id']
-                && $item['location'] != $post_1['location'] && $item['price_from'] <= $post_1['price'] && $item['price_to'] >= $post_1['price']
+                $item->return_post['category_id'] == $post_1['category_id'] && $item->return_post['sub_category_id'] != $post_1['sub_category_id'] && $item->return_post['sub_sub_category_id'] != $post_1['sub_sub_category_id']
+                && $item->return_post['location_id'] != $post_1['location_id'] && $item->return_post['price_from'] <= $post_1['price'] && $item->return_post['price_to'] >= $post_1['price']
             ) {
                 return $item->id;
             }
@@ -854,8 +853,8 @@ class MatchingScheduler extends Command
     {
         $responce = $post_2->map(function ($item) use ($post_1) {
             if (
-                $item['category_id'] != $post_1['category_id'] && $item['sub_category_id'] != $post_1['sub_category_id'] && $item['sub_sub_category_id'] != $post_1['sub_sub_category_id']
-                && $item['location'] == $post_1['location'] && $item['price_from'] <= $post_1['price'] && $item['price_to'] >= $post_1['price']
+                $item->return_post['category_id'] != $post_1['category_id'] && $item->return_post['sub_category_id'] != $post_1['sub_category_id'] && $item->return_post['sub_sub_category_id'] != $post_1['sub_sub_category_id']
+                && $item->return_post['location_id'] == $post_1['location_id'] && $item->return_post['price_from'] <= $post_1['price'] && $item->return_post['price_to'] >= $post_1['price']
             ) {
                 return $item->id;
             }
@@ -869,11 +868,11 @@ class MatchingScheduler extends Command
     {
         $responce = $post_2->map(function ($item) use ($post_1) {
             if (
-                $item['category_id'] != $post_1['category_id'] && $item['sub_category_id'] != $post_1['sub_category_id'] && $item['sub_sub_category_id'] != $post_1['sub_sub_category_id']
-                && $item['location'] != $post_1['location'] && $item['price_from'] <= $post_1['price'] && $item['price_to'] >= $post_1['price']
-                && $item->return_post['category_id'] == $post_1->return_post['category_id'] && $item->return_post['sub_category_id'] == $post_1->return_post['sub_category_id']
-                && $item->return_post['sub_sub_category_id'] == $post_1->return_post['sub_sub_category_id'] && $item->return_post['location'] == $post_1->return_post['location']
-                && $item->return_post['price_from'] <= $post_1->return_post['price'] && $item->return_post['price_to'] >= $post_1->return_post['price']
+                $item->return_post['category_id'] != $post_1['category_id'] && $item->return_post['sub_category_id'] != $post_1['sub_category_id'] && $item->return_post['sub_sub_category_id'] != $post_1['sub_sub_category_id']
+                && $item->return_post['location_id'] != $post_1['location_id'] && $item->return_post['price_from'] <= $post_1['price'] && $item->return_post['price_to'] >= $post_1['price']
+                && $item['category_id'] == $post_1->return_post['category_id'] && $item['sub_category_id'] == $post_1->return_post['sub_category_id']
+                && $item['sub_sub_category_id'] == $post_1->return_post['sub_sub_category_id'] && $item['location_id'] == $post_1->return_post['location_id']
+                && $item['price_from'] <= $post_1->return_post['price'] && $item['price_to'] >= $post_1->return_post['price']
             ) {
                 return $item->id;
             }
@@ -887,11 +886,11 @@ class MatchingScheduler extends Command
     {
         $responce = $post_2->map(function ($item) use ($post_1) {
             if (
-                $item['category_id'] != $post_1['category_id'] && $item['sub_category_id'] != $post_1['sub_category_id'] && $item['sub_sub_category_id'] != $post_1['sub_sub_category_id']
-                && $item['location'] != $post_1['location'] && $item['price_from'] <= $post_1['price'] && $item['price_to'] >= $post_1['price']
-                && $item->return_post['category_id'] == $post_1->return_post['category_id'] && $item->return_post['sub_category_id'] == $post_1->return_post['sub_category_id']
-                && $item->return_post['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item->return_post['location'] == $post_1->return_post['location']
-                && $item->return_post['price_from'] <= $post_1->return_post['price'] && $item->return_post['price_to'] >= $post_1->return_post['price']
+                $item->return_post['category_id'] != $post_1['category_id'] && $item->return_post['sub_category_id'] != $post_1['sub_category_id'] && $item->return_post['sub_sub_category_id'] != $post_1['sub_sub_category_id']
+                && $item->return_post['location_id'] != $post_1['location_id'] && $item->return_post['price_from'] <= $post_1['price'] && $item->return_post['price_to'] >= $post_1['price']
+                && $item['category_id'] == $post_1->return_post['category_id'] && $item['sub_category_id'] == $post_1->return_post['sub_category_id']
+                && $item['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item['location_id'] == $post_1->return_post['location_id']
+                && $item['price_from'] <= $post_1->return_post['price'] && $item['price_to'] >= $post_1->return_post['price']
             ) {
                 return $item->id;
             }
@@ -905,11 +904,11 @@ class MatchingScheduler extends Command
     {
         $responce = $post_2->map(function ($item) use ($post_1) {
             if (
-                $item['category_id'] != $post_1['category_id'] && $item['sub_category_id'] != $post_1['sub_category_id'] && $item['sub_sub_category_id'] != $post_1['sub_sub_category_id']
-                && $item['location'] != $post_1['location'] && $item['price_from'] <= $post_1['price'] && $item['price_to'] >= $post_1['price']
-                && $item->return_post['category_id'] == $post_1->return_post['category_id'] && $item->return_post['sub_category_id'] != $post_1->return_post['sub_category_id']
-                && $item->return_post['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item->return_post['location'] == $post_1->return_post['location']
-                && $item->return_post['price_from'] <= $post_1->return_post['price'] && $item->return_post['price_to'] >= $post_1->return_post['price']
+                $item->return_post['category_id'] != $post_1['category_id'] && $item->return_post['sub_category_id'] != $post_1['sub_category_id'] && $item->return_post['sub_sub_category_id'] != $post_1['sub_sub_category_id']
+                && $item->return_post['location_id'] != $post_1['location_id'] && $item->return_post['price_from'] <= $post_1['price'] && $item->return_post['price_to'] >= $post_1['price']
+                && $item['category_id'] == $post_1->return_post['category_id'] && $item['sub_category_id'] != $post_1->return_post['sub_category_id']
+                && $item['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item['location_id'] == $post_1->return_post['location_id']
+                && $item['price_from'] <= $post_1->return_post['price'] && $item['price_to'] >= $post_1->return_post['price']
             ) {
                 return $item->id;
             }
@@ -923,11 +922,11 @@ class MatchingScheduler extends Command
     {
         $responce = $post_2->map(function ($item) use ($post_1) {
             if (
-                $item['category_id'] != $post_1['category_id'] && $item['sub_category_id'] != $post_1['sub_category_id'] && $item['sub_sub_category_id'] != $post_1['sub_sub_category_id']
-                && $item['location'] != $post_1['location'] && $item['price_from'] <= $post_1['price'] && $item['price_to'] >= $post_1['price']
-                && $item->return_post['category_id'] == $post_1->return_post['category_id'] && $item->return_post['sub_category_id'] != $post_1->return_post['sub_category_id']
-                && $item->return_post['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item->return_post['location'] != $post_1->return_post['location']
-                && $item->return_post['price_from'] <= $post_1->return_post['price'] && $item->return_post['price_to'] >= $post_1->return_post['price']
+                $item->return_post['category_id'] != $post_1['category_id'] && $item->return_post['sub_category_id'] != $post_1['sub_category_id'] && $item->return_post['sub_sub_category_id'] != $post_1['sub_sub_category_id']
+                && $item->return_post['location_id'] != $post_1['location_id'] && $item->return_post['price_from'] <= $post_1['price'] && $item->return_post['price_to'] >= $post_1['price']
+                && $item['category_id'] == $post_1->return_post['category_id'] && $item['sub_category_id'] != $post_1->return_post['sub_category_id']
+                && $item['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item['location_id'] != $post_1->return_post['location_id']
+                && $item['price_from'] <= $post_1->return_post['price'] && $item['price_to'] >= $post_1->return_post['price']
             ) {
                 return $item->id;
             }
@@ -941,11 +940,11 @@ class MatchingScheduler extends Command
     {
         $responce = $post_2->map(function ($item) use ($post_1) {
             if (
-                $item['category_id'] != $post_1['category_id'] && $item['sub_category_id'] != $post_1['sub_category_id'] && $item['sub_sub_category_id'] != $post_1['sub_sub_category_id']
-                && $item['location'] != $post_1['location'] && $item['price_from'] <= $post_1['price'] && $item['price_to'] >= $post_1['price']
-                && $item->return_post['category_id'] != $post_1->return_post['category_id'] && $item->return_post['sub_category_id'] != $post_1->return_post['sub_category_id']
-                && $item->return_post['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item->return_post['location'] == $post_1->return_post['location']
-                && $item->return_post['price_from'] <= $post_1->return_post['price'] && $item->return_post['price_to'] >= $post_1->return_post['price']
+                $item->return_post['category_id'] != $post_1['category_id'] && $item->return_post['sub_category_id'] != $post_1['sub_category_id'] && $item->return_post['sub_sub_category_id'] != $post_1['sub_sub_category_id']
+                && $item->return_post['location_id'] != $post_1['location_id'] && $item->return_post['price_from'] <= $post_1['price'] && $item->return_post['price_to'] >= $post_1['price']
+                && $item['category_id'] != $post_1->return_post['category_id'] && $item['sub_category_id'] != $post_1->return_post['sub_category_id']
+                && $item['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item['location_id'] == $post_1->return_post['location_id']
+                && $item['price_from'] <= $post_1->return_post['price'] && $item['price_to'] >= $post_1->return_post['price']
             ) {
                 return $item->id;
             }
@@ -959,11 +958,11 @@ class MatchingScheduler extends Command
     {
         $responce = $post_2->map(function ($item) use ($post_1) {
             if (
-                $item['category_id'] != $post_1['category_id'] && $item['sub_category_id'] != $post_1['sub_category_id'] && $item['sub_sub_category_id'] != $post_1['sub_sub_category_id']
-                && $item['location'] != $post_1['location'] && $item['price_from'] <= $post_1['price'] && $item['price_to'] >= $post_1['price']
-                && $item->return_post['category_id'] != $post_1->return_post['category_id'] && $item->return_post['sub_category_id'] != $post_1->return_post['sub_category_id']
-                && $item->return_post['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item->return_post['location'] != $post_1->return_post['location']
-                && $item->return_post['price_from'] <= $post_1->return_post['price'] && $item->return_post['price_to'] >= $post_1->return_post['price']
+                $item->return_post['category_id'] != $post_1['category_id'] && $item->return_post['sub_category_id'] != $post_1['sub_category_id'] && $item->return_post['sub_sub_category_id'] != $post_1['sub_sub_category_id']
+                && $item->return_post['location_id'] != $post_1['location_id'] && $item->return_post['price_from'] <= $post_1['price'] && $item->return_post['price_to'] >= $post_1['price']
+                && $item['category_id'] != $post_1->return_post['category_id'] && $item['sub_category_id'] != $post_1->return_post['sub_category_id']
+                && $item['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item['location_id'] != $post_1->return_post['location_id']
+                && $item['price_from'] <= $post_1->return_post['price'] && $item['price_to'] >= $post_1->return_post['price']
             ) {
                 return $item->id;
             }
@@ -977,11 +976,11 @@ class MatchingScheduler extends Command
     {
         $responce = $post_2->map(function ($item) use ($post_1) {
             if (
-                $item['category_id'] == $post_1['category_id'] && $item['sub_category_id'] == $post_1['sub_category_id'] && $item['sub_sub_category_id'] == $post_1['sub_sub_category_id']
-                && $item['location'] == $post_1['location'] && $item['price_from'] <= $post_1['price'] && $item['price_to'] >= $post_1['price']
-                && $item->return_post['category_id'] != $post_1->return_post['category_id'] && $item->return_post['sub_category_id'] != $post_1->return_post['sub_category_id']
-                && $item->return_post['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item->return_post['location'] != $post_1->return_post['location']
-                && $item->return_post['price_from'] <= $post_1->return_post['price'] && $item->return_post['price_to'] >= $post_1->return_post['price']
+                $item->return_post['category_id'] == $post_1['category_id'] && $item->return_post['sub_category_id'] == $post_1['sub_category_id'] && $item->return_post['sub_sub_category_id'] == $post_1['sub_sub_category_id']
+                && $item->return_post['location_id'] == $post_1['location_id'] && $item->return_post['price_from'] <= $post_1['price'] && $item->return_post['price_to'] >= $post_1['price']
+                && $item['category_id'] != $post_1->return_post['category_id'] && $item['sub_category_id'] != $post_1->return_post['sub_category_id']
+                && $item['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item['location_id'] != $post_1->return_post['location_id']
+                && $item['price_from'] <= $post_1->return_post['price'] && $item['price_to'] >= $post_1->return_post['price']
             ) {
                 return $item->id;
             }
@@ -995,11 +994,11 @@ class MatchingScheduler extends Command
     {
         $responce = $post_2->map(function ($item) use ($post_1) {
             if (
-                $item['category_id'] == $post_1['category_id'] && $item['sub_category_id'] == $post_1['sub_category_id'] && $item['sub_sub_category_id'] != $post_1['sub_sub_category_id']
-                && $item['location'] == $post_1['location'] && $item['price_from'] <= $post_1['price'] && $item['price_to'] >= $post_1['price']
-                && $item->return_post['category_id'] != $post_1->return_post['category_id'] && $item->return_post['sub_category_id'] != $post_1->return_post['sub_category_id']
-                && $item->return_post['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item->return_post['location'] != $post_1->return_post['location']
-                && $item->return_post['price_from'] <= $post_1->return_post['price'] && $item->return_post['price_to'] >= $post_1->return_post['price']
+                $item->return_post['category_id'] == $post_1['category_id'] && $item->return_post['sub_category_id'] == $post_1['sub_category_id'] && $item->return_post['sub_sub_category_id'] != $post_1['sub_sub_category_id']
+                && $item->return_post['location_id'] == $post_1['location_id'] && $item->return_post['price_from'] <= $post_1['price'] && $item->return_post['price_to'] >= $post_1['price']
+                && $item['category_id'] != $post_1->return_post['category_id'] && $item['sub_category_id'] != $post_1->return_post['sub_category_id']
+                && $item['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item['location_id'] != $post_1->return_post['location_id']
+                && $item['price_from'] <= $post_1->return_post['price'] && $item['price_to'] >= $post_1->return_post['price']
             ) {
                 return $item->id;
             }
@@ -1013,11 +1012,11 @@ class MatchingScheduler extends Command
     {
         $responce = $post_2->map(function ($item) use ($post_1) {
             if (
-                $item['category_id'] == $post_1['category_id'] && $item['sub_category_id'] != $post_1['sub_category_id'] && $item['sub_sub_category_id'] != $post_1['sub_sub_category_id']
-                && $item['location'] == $post_1['location'] && $item['price_from'] <= $post_1['price'] && $item['price_to'] >= $post_1['price']
-                && $item->return_post['category_id'] != $post_1->return_post['category_id'] && $item->return_post['sub_category_id'] != $post_1->return_post['sub_category_id']
-                && $item->return_post['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item->return_post['location'] != $post_1->return_post['location']
-                && $item->return_post['price_from'] <= $post_1->return_post['price'] && $item->return_post['price_to'] >= $post_1->return_post['price']
+                $item->return_post['category_id'] == $post_1['category_id'] && $item->return_post['sub_category_id'] != $post_1['sub_category_id'] && $item->return_post['sub_sub_category_id'] != $post_1['sub_sub_category_id']
+                && $item->return_post['location_id'] == $post_1['location_id'] && $item->return_post['price_from'] <= $post_1['price'] && $item->return_post['price_to'] >= $post_1['price']
+                && $item['category_id'] != $post_1->return_post['category_id'] && $item['sub_category_id'] != $post_1->return_post['sub_category_id']
+                && $item['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item['location_id'] != $post_1->return_post['location_id']
+                && $item['price_from'] <= $post_1->return_post['price'] && $item['price_to'] >= $post_1->return_post['price']
             ) {
                 return $item->id;
             }
@@ -1031,11 +1030,11 @@ class MatchingScheduler extends Command
     {
         $responce = $post_2->map(function ($item) use ($post_1) {
             if (
-                $item['category_id'] == $post_1['category_id'] && $item['sub_category_id'] != $post_1['sub_category_id'] && $item['sub_sub_category_id'] != $post_1['sub_sub_category_id']
-                && $item['location'] != $post_1['location'] && $item['price_from'] <= $post_1['price'] && $item['price_to'] >= $post_1['price']
-                && $item->return_post['category_id'] != $post_1->return_post['category_id'] && $item->return_post['sub_category_id'] != $post_1->return_post['sub_category_id']
-                && $item->return_post['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item->return_post['location'] != $post_1->return_post['location']
-                && $item->return_post['price_from'] <= $post_1->return_post['price'] && $item->return_post['price_to'] >= $post_1->return_post['price']
+                $item->return_post['category_id'] == $post_1['category_id'] && $item->return_post['sub_category_id'] != $post_1['sub_category_id'] && $item->return_post['sub_sub_category_id'] != $post_1['sub_sub_category_id']
+                && $item->return_post['location_id'] != $post_1['location_id'] && $item->return_post['price_from'] <= $post_1['price'] && $item->return_post['price_to'] >= $post_1['price']
+                && $item['category_id'] != $post_1->return_post['category_id'] && $item['sub_category_id'] != $post_1->return_post['sub_category_id']
+                && $item['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item['location_id'] != $post_1->return_post['location_id']
+                && $item['price_from'] <= $post_1->return_post['price'] && $item['price_to'] >= $post_1->return_post['price']
             ) {
                 return $item->id;
             }
@@ -1049,11 +1048,11 @@ class MatchingScheduler extends Command
     {
         $responce = $post_2->map(function ($item) use ($post_1) {
             if (
-                $item['category_id'] != $post_1['category_id'] && $item['sub_category_id'] != $post_1['sub_category_id'] && $item['sub_sub_category_id'] != $post_1['sub_sub_category_id']
-                && $item['location'] == $post_1['location'] && $item['price_from'] <= $post_1['price'] && $item['price_to'] >= $post_1['price']
-                && $item->return_post['category_id'] != $post_1->return_post['category_id'] && $item->return_post['sub_category_id'] != $post_1->return_post['sub_category_id']
-                && $item->return_post['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item->return_post['location'] != $post_1->return_post['location']
-                && $item->return_post['price_from'] <= $post_1->return_post['price'] && $item->return_post['price_to'] >= $post_1->return_post['price']
+                $item->return_post['category_id'] != $post_1['category_id'] && $item->return_post['sub_category_id'] != $post_1['sub_category_id'] && $item->return_post['sub_sub_category_id'] != $post_1['sub_sub_category_id']
+                && $item->return_post['location_id'] == $post_1['location_id'] && $item->return_post['price_from'] <= $post_1['price'] && $item->return_post['price_to'] >= $post_1['price']
+                && $item['category_id'] != $post_1->return_post['category_id'] && $item['sub_category_id'] != $post_1->return_post['sub_category_id']
+                && $item['sub_sub_category_id'] != $post_1->return_post['sub_sub_category_id'] && $item['location_id'] != $post_1->return_post['location_id']
+                && $item['price_from'] <= $post_1->return_post['price'] && $item['price_to'] >= $post_1->return_post['price']
             ) {
                 return $item->id;
             }
@@ -1066,7 +1065,7 @@ class MatchingScheduler extends Command
     function priority_39($post_1, $post_2)
     {
         $responce = $post_2->map(function ($item) use ($post_1) {
-            if ($item->return_post['price_from'] <= $post_1->return_post['price'] && $item->return_post['price_to'] >= $post_1->return_post['price']) {
+            if ($item->return_post['price_from'] <= $post_1['price'] && $item->return_post['price_to'] >= $post_1['price']) {
                 return $item->id;
             }
         });
@@ -1078,7 +1077,7 @@ class MatchingScheduler extends Command
     function priority_40($post_1, $post_2)
     {
         $responce = $post_2->map(function ($item) use ($post_1) {
-            if ($item['price_from'] <= $post_1['price'] && $item['price_to'] >= $post_1['price']) {
+            if ($item->return_post['price_from'] <= $post_1['price'] && $item->return_post['price_to'] >= $post_1['price']) {
                 return $item->id;
             }
         });
