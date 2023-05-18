@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="shortcut icon"  type="image/png" href="{{secure_asset('public/images/logo.png')}}"/>
+    <link rel="shortcut icon"  type="image/png" href="{{env('APP_ENV') == 'local' ? asset('public/images/logo.png') : secure_asset('public/images/logo.png')}}"/>
     <title>{{env('APP_NAME')}}</title>
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -20,7 +20,7 @@
 <body>
 <div class="app app-header-fixed ">
     <div style="text-align: center">
-        <h4><img style="width: 100%" src="{{secure_asset('resources/assets/images/logo_new.png')}}" /></h4>
+        <h4><img style="width: 100%" src="{{env('APP_ENV') == 'local' ? asset('resources/assets/images/logo_new.png') : secure_asset('resources/assets/images/logo_new.png')}}" /></h4>
     </div>
     <div class="panel panel-default" style="text-align: center">
         <div class="panel-heading" style="background-color: #4EBC97;color: white;">
