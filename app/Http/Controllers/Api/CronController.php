@@ -28,6 +28,7 @@ use Facebook\Exceptions\FacebookSDKException;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Api\UserFavorite;
+use Illuminate\Support\Facades\Log;
 use Mail;
 use stdClass;
 
@@ -566,36 +567,41 @@ class CronController extends Controller
 
     public function matchingRecords()
     {
-        $users = Item::get()->pluck('user_id','user_id');
-        foreach($users as $user){
-            $result = (new MatchingController)->index($user);
-            $set_data = new UserMatchingRecord();
-            $set_data->user_id = $user;
-            $set_data->matching_records = json_encode($result[0]);
-            $set_data->save();
-
-        }
+        Log::info("cron start");
+            $users = Item::get()->pluck('user_id','user_id');
+            
+            foreach($users as $user){
+                $result = (new MatchingController)->matchingResult($user);
+                $set_data = new UserMatchingRecord();
+                $set_data->user_id = $user;
+                $set_data->matching_records = json_encode($result);
+                $set_data->save();
+            }
+        Log::info("cron end");
     }
     public function get_matches()
     {
-        $data = UserMatchingRecord::where('user_id',28)->orderBy('created_at','desc')->first();
-        $ids = json_decode($data->matching_records,true);
-        $query = Item::whereIn('id',$ids);
-        $currency = env('APP_CURRENCY');
-        $user = Users::where('id',28)->first();
-        
-        $matches = $query->get()->map(function ($value, $key) use ($currency,$user) {
-            $value->is_favorite = false;
-            if($user){
-                if(UserFavorite::whereMetaName('items')->whereMetaId($value->id)->whereUserId($user->id)->first()){
-                    $value->is_favorite = true;
-                }
-            }
-            $value->currency = $currency;
-            $value->post_type = "services";
-            return $value;
-        })->values();
 
+        $data = UserMatchingRecord::where('user_id',5)->orderBy('created_at','desc')->first();
+            if($data){
+                $ids = json_decode($data->matching_records,true);
+                $ids_ordered = implode(',', $ids);
+                $match_query = Item::whereIn('id',$ids)->where('is_available', 1)->orderByRaw("FIELD(id, $ids_ordered)");
+                $currency = env('APP_CURRENCY');
+                
+                $matches = $match_query->get()->map(function ($value, $key) use ($currency) {
+                    $value->is_favorite = false;
+                    // if($user){
+                    //     if(UserFavorite::whereMetaName('items')->whereMetaId($value->id)->whereUserId($user->id)->first()){
+                    //         $value->is_favorite = true;
+                    //     }
+                    // }
+                    $value->currency = $currency;
+                    $value->post_type = "services";
+                    return $value;
+                })->values();
+            }
+            // dd($data);
         return $matches;
     }
 }

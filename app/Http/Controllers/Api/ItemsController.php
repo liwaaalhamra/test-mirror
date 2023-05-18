@@ -259,7 +259,8 @@ class ItemsController extends Controller
             $data = UserMatchingRecord::where('user_id',$user->id)->orderBy('created_at','desc')->first();
             if($data){
                 $ids = json_decode($data->matching_records,true);
-                $match_query = Item::whereIn('id',$ids);
+                $ids_ordered = implode(',', $ids);
+                $match_query = Item::whereIn('id',$ids)->where('is_available', 1)->orderByRaw("FIELD(id, $ids_ordered)");
                 $currency = env('APP_CURRENCY');
                 
                 $matches = $match_query->get()->map(function ($value, $key) use ($currency,$user) {
@@ -273,6 +274,8 @@ class ItemsController extends Controller
                     $value->post_type = "services";
                     return $value;
                 })->values();
+            }else{
+                $matches = null;
             }
         }else{
             $matches = null;
@@ -427,7 +430,9 @@ class ItemsController extends Controller
                 $data = UserMatchingRecord::where('user_id',$user->id)->orderBy('created_at','desc')->first();
                 if($data){
                     $ids = json_decode($data->matching_records,true);
-                    $match_query = Item::whereIn('id',$ids);
+                    $ids_ordered = implode(',', $ids);
+                    $match_query = Item::whereIn('id',$ids)->where('is_available', 1)->orderByRaw("FIELD(id, $ids_ordered)");
+                    
                     $currency = env('APP_CURRENCY');
                     
                     $items = $match_query->get()->map(function ($value, $key) use ($currency,$user) {
@@ -443,6 +448,8 @@ class ItemsController extends Controller
                     unset($value->category);
                     return $value;
                     })->values();
+                }else{
+                    $items = null;
                 }
             }else{
                 $items = null;
@@ -464,6 +471,7 @@ class ItemsController extends Controller
             $items->forPage(LengthAwarePaginator::resolveCurrentPage(), $limit)->values(), $items->count(), $limit, LengthAwarePaginator::resolveCurrentPage(), ['path' => secure_url('/api/products/items/pagination')]
         );
 
+        Log::info(response()->json($items));
         return response()->json($items);
     }
 

@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Http\Request;
 
 use App\Http\Controllers\Controller;
-
+use App\Models\Api\Inbox;
 use Illuminate\Support\Facades\Lang;
 use Jenssegers\Agent\Agent;
 use Laravel\Socialite\Facades\Socialite;
@@ -186,7 +186,8 @@ class LoginController extends Controller
 
 
 
-        $return_body["pin"] = config('app.debug') ? $pin : null;
+        // $return_body["pin"] = config('app.debug') ? $pin : null;
+        $return_body["pin"] = $pin;
         $return_body["registration"] = $registration;
         return parent::return_json($return_body);
     }
@@ -495,7 +496,7 @@ class LoginController extends Controller
             return parent::return_error('Missing Email',401,'messages.missing_parameter');
         }else{      
             $validator = Validator::make($request->all(), [
-                'email' => 'required|email|max:255|unique:users,email',
+                'email' => 'required|email|max:255',
             ]); 
         }
 
@@ -769,6 +770,44 @@ class LoginController extends Controller
 
     public function logout(Request $request){
         $user = $this->validate_user($request);
+
+        if($user_push = UserPush::whereUsersId($user->id)->first()){
+            $players_ids[] = $user_push->player_id;
+            $contents = ["en" => 'You logged out successfully'];
+            $headings = ["en" => 'User Logged out'];
+            $info['contents'] = $contents;
+            $info['headings'] = $headings;
+            $info['player_ids'] = $players_ids;
+            $result = parent::oneSignal($info);
+
+            $code = Controller::number_generator(6);
+
+            Inbox::create([
+                'user_id' => $user->id,
+                'title' => 'User Logged out',
+                'message' => 'You logged out successfully',
+                'image' => null,
+                'type' => 'targeted',
+                'code' => $code
+            ]);
+
+            //send email to user with response
+            $user = Users::findOrFail($user->id);
+            if($user && $user->email){
+                $info = [];
+                $info['to'] = $user->email;
+                $info['icon'] = 'alert.png';
+                $info['message'] = 'You logged out successfully';
+                $info['cms_user'] = auth()->user();
+                $info['title'] = 'User Logged out';
+                Mail::send('emails.barter_response', ['data' => $info], function ($message) use ($info) {
+                    $message->subject($info['title']);
+                    $message->to($info['to']);
+                });
+            }
+          
+        }
+
         UsersAccess::where("user_id", "=", $user->id)->delete();
         UserPush::where("users_id", "=", $user->id)->delete();
         $message = utf8_decode(utf8_encode(Lang::get('messages.logout_success')));

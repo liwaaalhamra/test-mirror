@@ -446,6 +446,7 @@ class PostsController extends Controller
                 'field_value' => $regular_field->field_value,
                 'extra_field_name' => isset($regular_field->extra_field_name) ? $regular_field->extra_field_name : null,
                 'extra_field_value' => isset($regular_field->extra_field_value) ? $regular_field->extra_field_value : null,
+                'user_extra_value' => isset($regular_field->user_extra_value) ? $regular_field->user_extra_value : null,
             ]);
         }
         foreach ($filters_fields as $filter_field){
@@ -456,6 +457,7 @@ class PostsController extends Controller
                 'field_value' => $filter_field->field_value,
                 'extra_field_name' => isset($filter_field->extra_field_name) ? $filter_field->extra_field_name : null,
                 'extra_field_value' => isset($filter_field->extra_field_value) ? $filter_field->extra_field_value : null,
+                'user_extra_value' => isset($filter_field->user_extra_value) ? $filter_field->user_extra_value : null,
             ]);
         }
         if(Input::has('media_ids')){

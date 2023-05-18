@@ -368,18 +368,18 @@ class ItemsController extends Controller
             $item->save();
         }
         try {
-        $users = Item::get()->pluck('user_id','user_id');
-        // UserMatchingRecord::where('id', '>', 0)->delete();
+        // $users = Item::get()->pluck('user_id','user_id');
+        // // UserMatchingRecord::where('id', '>', 0)->delete();
 
-        foreach($users as $user){
-            Log::info('cron');
-            $result = (new MatchingController)->matchingResult($user);
+        // foreach($users as $user){
+        //     Log::info('cron');
+        //     $result = (new MatchingController)->matchingResult($user);
 
-            $set_data = new UserMatchingRecord();
-            $set_data->user_id = $user;
-            $set_data->matching_records = json_encode($result[0]);
-            $set_data->save();
-        }
+        //     $set_data = new UserMatchingRecord();
+        //     $set_data->user_id = $user;
+        //     $set_data->matching_records = json_encode($result[0]);
+        //     $set_data->save();
+        // }
         return redirect()->route('admin.'.$this->section_name.'.index')
             ->with('success', $this->display_name.' Successfully updated');
 
