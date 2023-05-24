@@ -159,10 +159,10 @@ class MatchingController extends Controller
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->where($label_9)
             ->orderBy('items.created_at','desc')
-            ->get(['items.id']);
+            ->get(['items.id','items.created_at','items.created_at']);
             if(!$matching_posts_p1->isEmpty()){
                 foreach ($matching_posts_p1 as $matching_post_p1) {
-                    $value1 = [$matching_post_p1->id => 'priority_1'];
+                    $value1 = [$matching_post_p1->id => 'priority_1' , 'created_at' => $matching_post_p1->created_at];
                     array_push($p1, $value1);
                 }
                 $matches->push(...$matching_posts_p1);
@@ -174,10 +174,10 @@ class MatchingController extends Controller
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->where($label_9_b)
             ->orderBy('items.created_at','desc')
-            ->get(['items.id']);
+            ->get(['items.id','items.created_at']);
             if(!$matching_posts_p2->isEmpty()){
                 foreach ($matching_posts_p2 as $matching_post_p2) {
-                $value2 = [$matching_post_p2->id => 'priority_2'];
+                $value2 = [$matching_post_p2->id => 'priority_2' , 'created_at' => $matching_post_p2->created_at];
                     array_push($p2, $value2);
                 }
                 $matches->push(...$matching_posts_p2);
@@ -189,10 +189,10 @@ class MatchingController extends Controller
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->where($label_9_c)
             ->orderBy('items.created_at','desc')
-            ->get(['items.id']);
+            ->get(['items.id','items.created_at']);
             if(!$matching_posts_p3->isEmpty()){
                 foreach ($matching_posts_p3 as $matching_post_p3) {
-                $value3 = [$matching_post_p3->id => 'priority_3'];
+                $value3 = [$matching_post_p3->id => 'priority_3' , 'created_at' => $matching_post_p3->created_at];
                     array_push($p3, $value3);
                 }
                 $matches->push(...$matching_posts_p3);
@@ -204,10 +204,10 @@ class MatchingController extends Controller
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->where($label_9)
             ->orderBy('items.created_at','desc')
-            ->get(['items.id']);
+            ->get(['items.id','items.created_at']);
             if(!$matching_posts_p4->isEmpty()){
                 foreach ($matching_posts_p4 as $matching_post_p4) {
-                $value4 = [$matching_post_p4->id => 'priority_4'];
+                $value4 = [$matching_post_p4->id => 'priority_4' , 'created_at' => $matching_post_p4->created_at];
                     array_push($p4, $value4);
                 }
                 $matches->push(...$matching_posts_p4);
@@ -219,10 +219,10 @@ class MatchingController extends Controller
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->where($label_9)
             ->orderBy('items.created_at','desc')
-            ->get(['items.id']);
+            ->get(['items.id','items.created_at']);
             if(!$matching_posts_p5->isEmpty()){
                 foreach ($matching_posts_p5 as $matching_post_p5) {
-                $value5 = [$matching_post_p5->id => 'priority_5'];
+                $value5 = [$matching_post_p5->id => 'priority_5' , 'created_at' => $matching_post_p5->created_at];
                     array_push($p5, $value5);
                 }
                 $matches->push(...$matching_posts_p5);
@@ -234,10 +234,10 @@ class MatchingController extends Controller
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->where($label_9_b)
             ->orderBy('items.created_at','desc')
-            ->get(['items.id']);
+            ->get(['items.id','items.created_at']);
             if(!$matching_posts_p6->isEmpty()){
                 foreach ($matching_posts_p6 as $matching_post_p6) {
-                $value6 = [$matching_post_p6->id => 'priority_6'];
+                $value6 = [$matching_post_p6->id => 'priority_6' , 'created_at' => $matching_post_p6->created_at];
                 array_push($p6, $value6);
                 }
                 $matches->push(...$matching_posts_p6);
@@ -249,10 +249,10 @@ class MatchingController extends Controller
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->where($label_9_c)
             ->orderBy('items.created_at','desc')
-            ->get(['items.id']);
+            ->get(['items.id','items.created_at']);
             if(!$matching_posts_p7->isEmpty()){
                 foreach ($matching_posts_p7 as $matching_post_p7) {
-                $value7 = [$matching_post_p7->id => 'priority_7'];
+                $value7 = [$matching_post_p7->id => 'priority_7' , 'created_at' => $matching_post_p7->created_at];
                     array_push($p7, $value7);
                 }
                 $matches->push(...$matching_posts_p7);
@@ -264,10 +264,10 @@ class MatchingController extends Controller
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->where($label_9_b)
             ->orderBy('items.created_at','desc')
-            ->get(['items.id']);
+            ->get(['items.id','items.created_at']);
             if(!$matching_posts_p8->isEmpty()){
                 foreach ($matching_posts_p8 as $matching_post_p8) {
-                $value8 = [$matching_post_p8->id => 'priority_8'];
+                $value8 = [$matching_post_p8->id => 'priority_8' , 'created_at' => $matching_post_p8->created_at];
                 array_push($p8, $value8);
                 }
                 $matches->push(...$matching_posts_p8);
@@ -279,10 +279,10 @@ class MatchingController extends Controller
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->where($label_9_c)
             ->orderBy('items.created_at','desc')
-            ->get(['items.id']);
+            ->get(['items.id','items.created_at']);
             if(!$matching_posts_p9->isEmpty()){
                 foreach ($matching_posts_p9 as $matching_post_p9) {
-                $value9 = [$matching_post_p9->id => 'priority_9'];
+                $value9 = [$matching_post_p9->id => 'priority_9' , 'created_at' => $matching_post_p9->created_at];
                 array_push($p9, $value9);
                 }
                 $matches->push(...$matching_posts_p9);
@@ -299,7 +299,7 @@ class MatchingController extends Controller
             ])->orderBy('created_at','desc')->get();
             if(!$matching_posts_p10->isEmpty()){
                 foreach ($matching_posts_p10 as $matching_post_p10) {
-                $value10 = [$matching_post_p10->id => 'priority_10'];
+                $value10 = [$matching_post_p10->id => 'priority_10' , 'created_at' => $matching_post_p10->created_at];
                 array_push($p10, $value10);
                 }
                 $matches->push(...$matching_posts_p10);
@@ -313,7 +313,7 @@ class MatchingController extends Controller
                 ['location_id', '=', $my_post->location_id],
                 ['price_from', '<=', $my_post->price],
                 ['price_to', '>=', $my_post->price],
-            ])->orderBy('created_at','desc')->get(['id']);
+            ])->orderBy('created_at','desc')->get();
             $ids_p11 = [];
             foreach($data_p11 as $d_p11){
                 $array_p11 = [$d_p11->id - 1];
@@ -322,7 +322,7 @@ class MatchingController extends Controller
             $matching_posts_p11 = Item::whereIn('id',$ids_p11)->get();
             if(!$matching_posts_p11->isEmpty()){
                 foreach ($matching_posts_p11 as $matching_post_p11) {
-                $value11 = [$matching_post_p11->id => 'priority_11'];
+                $value11 = [$matching_post_p11->id => 'priority_11' , 'created_at' => $matching_post_p11->created_at];
                 array_push($p11, $value11);
                 }
                 $matches->push(...$matching_posts_p11);
@@ -338,7 +338,7 @@ class MatchingController extends Controller
             ])->orderBy('created_at','desc')->get();
             if(!$matching_posts_p12->isEmpty()){
                 foreach ($matching_posts_p12 as $matching_post_p12) {
-                $value12 = [$matching_post_p12->id => 'priority_12'];
+                $value12 = [$matching_post_p12->id => 'priority_12' , 'created_at' => $matching_post_p12->created_at];
                 array_push($p12, $value12);
                 }
                 $matches->push(...$matching_posts_p12);
@@ -360,7 +360,7 @@ class MatchingController extends Controller
             $matching_posts_p13 = Item::whereIn('id',$ids_p13)->get();
             if(!$matching_posts_p13->isEmpty()){
                 foreach ($matching_posts_p13 as $matching_post_p13) {
-                $value13 = [$matching_post_p13->id => 'priority_13'];
+                $value13 = [$matching_post_p13->id => 'priority_13' , 'created_at' => $matching_post_p13->created_at];
                 array_push($p13, $value13);
                 }
                 $matches->push(...$matching_posts_p13);
@@ -375,7 +375,7 @@ class MatchingController extends Controller
             ])->orderBy('created_at','desc')->get();
             if(!$matching_posts_p14->isEmpty()){
                 foreach ($matching_posts_p14 as $matching_post_p14) {
-                $value14 = [$matching_post_p14->id => 'priority_14'];
+                $value14 = [$matching_post_p14->id => 'priority_14' , 'created_at' => $matching_post_p14->created_at];
                 array_push($p14, $value14);
                 }
                 $matches->push(...$matching_posts_p14);
@@ -396,7 +396,7 @@ class MatchingController extends Controller
             $matching_posts_p15 = Item::whereIn('id',$ids_p15)->get();
             if(!$matching_posts_p15->isEmpty()){
                 foreach ($matching_posts_p15 as $matching_post_p15) {
-                $value15 = [$matching_post_p15->id => 'priority_15'];
+                $value15 = [$matching_post_p15->id => 'priority_15' , 'created_at' => $matching_post_p15->created_at];
                 array_push($p15, $value15);
                 }
                 $matches->push(...$matching_posts_p15);
@@ -408,10 +408,10 @@ class MatchingController extends Controller
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->where($label_9_e)
             ->orderBy('items.created_at','desc')
-            ->get(['items.id']);
+            ->get(['items.id','items.created_at']);
             if(!$matching_posts_p16->isEmpty()){
                 foreach ($matching_posts_p16 as $matching_post_p16) {
-                $value16 = [$matching_post_p16->id => 'priority_16'];
+                $value16 = [$matching_post_p16->id => 'priority_16' , 'created_at' => $matching_post_p16->created_at];
                     array_push($p16, $value16);
                 }
                 $matches->push(...$matching_posts_p16);
@@ -423,10 +423,10 @@ class MatchingController extends Controller
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->where($label_9_d)
             ->orderBy('items.created_at','desc')
-            ->get(['items.id']);
+            ->get(['items.id','items.created_at']);
             if(!$matching_posts_p17->isEmpty()){
                 foreach ($matching_posts_p17 as $matching_post_p17) {
-                $value17 = [$matching_post_p17->id => 'priority_17'];
+                $value17 = [$matching_post_p17->id => 'priority_17' , 'created_at' => $matching_post_p17->created_at];
                 array_push($p17, $value17);
                 }
                 $matches->push(...$matching_posts_p17);
@@ -438,10 +438,10 @@ class MatchingController extends Controller
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->where($label_9_e)
             ->orderBy('items.created_at','desc')
-            ->get(['items.id']);
+            ->get(['items.id','items.created_at']);
             if(!$matching_posts_p18->isEmpty()){
                 foreach ($matching_posts_p18 as $matching_post_p18) {
-                $value18 = [$matching_post_p18->id => 'priority_18'];
+                $value18 = [$matching_post_p18->id => 'priority_18' , 'created_at' => $matching_post_p18->created_at];
                 array_push($p18, $value18);
                 }
                 $matches->push(...$matching_posts_p18);
@@ -453,10 +453,10 @@ class MatchingController extends Controller
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->where($label_9_d)
             ->orderBy('items.created_at','desc')
-            ->get(['items.id']);
+            ->get(['items.id','items.created_at']);
             if(!$matching_posts_p19->isEmpty()){
                 foreach ($matching_posts_p19 as $matching_post_p19) {
-                $value19 = [$matching_post_p19->id => 'priority_19'];
+                $value19 = [$matching_post_p19->id => 'priority_19' , 'created_at' => $matching_post_p19->created_at];
                     array_push($p19, $value19);
                 }
                 $matches->push(...$matching_posts_p19);
@@ -468,10 +468,10 @@ class MatchingController extends Controller
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->where($label_9_e)
             ->orderBy('items.created_at','desc')
-            ->get(['items.id']);
+            ->get(['items.id','items.created_at']);
             if(!$matching_posts_p20->isEmpty()){
                 foreach ($matching_posts_p20 as $matching_post_p20) {
-                $value20 = [$matching_post_p20->id => 'priority_20'];
+                $value20 = [$matching_post_p20->id => 'priority_20' , 'created_at' => $matching_post_p20->created_at];
                     array_push($p20, $value20);
                 }
                 $matches->push(...$matching_posts_p20);
@@ -483,10 +483,10 @@ class MatchingController extends Controller
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->where($label_9_d)
             ->orderBy('items.created_at','desc')
-            ->get(['items.id']);
+            ->get(['items.id','items.created_at']);
             if(!$matching_posts_p21->isEmpty()){
                 foreach ($matching_posts_p21 as $matching_post_p21) {
-                $value21 = [$matching_post_p21->id => 'priority_21'];
+                $value21 = [$matching_post_p21->id => 'priority_21' , 'created_at' => $matching_post_p21->created_at];
                     array_push($p21, $value21);
                 }
                 $matches->push(...$matching_posts_p21);
@@ -498,10 +498,10 @@ class MatchingController extends Controller
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->where($label_9)
             ->orderBy('items.created_at','desc')
-            ->get(['items.id']);
+            ->get(['items.id','items.created_at']);
             if(!$matching_posts_p22->isEmpty()){
                 foreach ($matching_posts_p22 as $matching_post_p22) {
-                $value22 = [$matching_post_p22->id => 'priority_22'];
+                $value22 = [$matching_post_p22->id => 'priority_22' , 'created_at' => $matching_post_p22->created_at];
                 array_push($p22, $value22);
                 }
                 $matches->push(...$matching_posts_p22);
@@ -513,10 +513,10 @@ class MatchingController extends Controller
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->where($label_9)
             ->orderBy('items.created_at','desc')
-            ->get(['items.id']);
+            ->get(['items.id','items.created_at']);
             if(!$matching_posts_p23->isEmpty()){
                 foreach ($matching_posts_p23 as $matching_post_p23) {
-                $value23 = [$matching_post_p23->id => 'priority_23'];
+                $value23 = [$matching_post_p23->id => 'priority_23' , 'created_at' => $matching_post_p23->created_at];
                     array_push($p23, $value23);
                 }
                 $matches->push(...$matching_posts_p23);
@@ -528,10 +528,10 @@ class MatchingController extends Controller
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->where($label_9_b)
             ->orderBy('items.created_at','desc')
-            ->get(['items.id']);
+            ->get(['items.id','items.created_at']);
             if(!$matching_posts_p24->isEmpty()){
                 foreach ($matching_posts_p24 as $matching_post_p24) {
-                $value24 = [$matching_post_p24->id => 'priority_24'];
+                $value24 = [$matching_post_p24->id => 'priority_24' , 'created_at' => $matching_post_p24->created_at];
                     array_push($p24, $value24);
                 }
                 $matches->push(...$matching_posts_p24);
@@ -543,10 +543,10 @@ class MatchingController extends Controller
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->where($label_9_b)
             ->orderBy('items.created_at','desc')
-            ->get(['items.id']);
+            ->get(['items.id','items.created_at']);
             if(!$matching_posts_p25->isEmpty()){
                 foreach ($matching_posts_p25 as $matching_post_p25) {
-                $value25 = [$matching_post_p25->id => 'priority_25'];
+                $value25 = [$matching_post_p25->id => 'priority_25' , 'created_at' => $matching_post_p25->created_at];
                     array_push($p25, $value25);
                 }
                 $matches->push(...$matching_posts_p25);
@@ -558,10 +558,10 @@ class MatchingController extends Controller
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->where($label_9_c)
             ->orderBy('items.created_at','desc')
-            ->get(['items.id']);
+            ->get(['items.id','items.created_at']);
             if(!$matching_posts_p26->isEmpty()){
                 foreach ($matching_posts_p26 as $matching_post_p26) {
-                $value26 = [$matching_post_p26->id => 'priority_26'];
+                $value26 = [$matching_post_p26->id => 'priority_26' , 'created_at' => $matching_post_p26->created_at];
                     array_push($p26, $value26);
                 }
                 $matches->push(...$matching_posts_p26);
@@ -573,10 +573,10 @@ class MatchingController extends Controller
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->where($label_9_c)
             ->orderBy('items.created_at','desc')
-            ->get(['items.id']);
+            ->get(['items.id','items.created_at']);
             if(!$matching_posts_p27->isEmpty()){
                 foreach ($matching_posts_p27 as $matching_post_p27) {
-                $value27 = [$matching_post_p27->id => 'priority_27'];
+                $value27 = [$matching_post_p27->id => 'priority_27' , 'created_at' => $matching_post_p27->created_at];
                     array_push($p27, $value27);
                 }
                 $matches->push(...$matching_posts_p27);
@@ -588,10 +588,10 @@ class MatchingController extends Controller
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->where($label_9_e)
             ->orderBy('items.created_at','desc')
-            ->get(['items.id']);
+            ->get(['items.id','items.created_at']);
             if(!$matching_posts_p28->isEmpty()){
                 foreach ($matching_posts_p28 as $matching_post_p28) {
-                $value28 = [$matching_post_p28->id => 'priority_28'];
+                $value28 = [$matching_post_p28->id => 'priority_28' , 'created_at' => $matching_post_p28->created_at];
                     array_push($p28, $value28);
                 }
                 $matches->push(...$matching_posts_p28);
@@ -603,10 +603,10 @@ class MatchingController extends Controller
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->where($label_9_d)
             ->orderBy('items.created_at','desc')
-            ->get(['items.id']);
+            ->get(['items.id','items.created_at']);
             if(!$matching_posts_p29->isEmpty()){
                 foreach ($matching_posts_p29 as $matching_post_p29) {
-                $value29 = [$matching_post_p29->id => 'priority_29'];
+                $value29 = [$matching_post_p29->id => 'priority_29' , 'created_at' => $matching_post_p29->created_at];
                     array_push($p29, $value29);
                 }
                 $matches->push(...$matching_posts_p29);
@@ -618,10 +618,10 @@ class MatchingController extends Controller
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->where($label_9_e)
             ->orderBy('items.created_at','desc')
-            ->get(['items.id']);
+            ->get(['items.id','items.created_at']);
             if(!$matching_posts_p30->isEmpty()){
                 foreach ($matching_posts_p30 as $matching_post_p30) {
-                $value30 = [$matching_post_p30->id => 'priority_30'];
+                $value30 = [$matching_post_p30->id => 'priority_30' , 'created_at' => $matching_post_p30->created_at];
                     array_push($p30, $value30);
                 }
                 $matches->push(...$matching_posts_p30);
@@ -633,10 +633,10 @@ class MatchingController extends Controller
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->where($label_9_d)
             ->orderBy('items.created_at','desc')
-            ->get(['items.id']);
+            ->get(['items.id','items.created_at']);
             if(!$matching_posts_p31->isEmpty()){
                 foreach ($matching_posts_p31 as $matching_post_p31) {
-                $value31 = [$matching_post_p31->id => 'priority_31'];
+                $value31 = [$matching_post_p31->id => 'priority_31' , 'created_at' => $matching_post_p31->created_at];
                     array_push($p31, $value31);
                 }
                 $matches->push(...$matching_posts_p31);
@@ -650,7 +650,7 @@ class MatchingController extends Controller
             ])->orderBy('created_at','desc')->get();
             if(!$matching_posts_p32->isEmpty()){
                 foreach ($matching_posts_p32 as $matching_post_p32) {
-                $value32 = [$matching_post_p32->id => 'priority_32'];
+                $value32 = [$matching_post_p32->id => 'priority_32' , 'created_at' => $matching_post_p32->created_at];
                     array_push($p32, $value32);
                 }
                 $matches->push(...$matching_posts_p32);
@@ -664,7 +664,7 @@ class MatchingController extends Controller
             ])->orderBy('created_at','desc')->get();
             if(!$matching_posts_p33->isEmpty()){
                 foreach ($matching_posts_p33 as $matching_post_p33) {
-                $value33 = [$matching_post_p33->id => 'priority_33'];
+                $value33 = [$matching_post_p33->id => 'priority_33' , 'created_at' => $matching_post_p33->created_at];
                     array_push($p33, $value33);
                 }
                 $matches->push(...$matching_posts_p33);
@@ -684,7 +684,7 @@ class MatchingController extends Controller
             $matching_posts_p34 = Item::whereIn('id',$ids_p34)->get();
             if(!$matching_posts_p34->isEmpty()){
                 foreach ($matching_posts_p34 as $matching_post_p34) {
-                $value34 = [$matching_post_p34->id => 'priority_34'];
+                $value34 = [$matching_post_p34->id => 'priority_34' , 'created_at' => $matching_post_p34->created_at];
                     array_push($p34, $value34);
                 }
                 $matches->push(...$matching_posts_p34);
@@ -704,7 +704,7 @@ class MatchingController extends Controller
             $matching_posts_p35 = Item::whereIn('id',$ids_p35)->get();
             if(!$matching_posts_p35->isEmpty()){
                 foreach ($matching_posts_p35 as $matching_post_p35) {
-                $value35 = [$matching_post_p35->id => 'priority_35'];
+                $value35 = [$matching_post_p35->id => 'priority_35' , 'created_at' => $matching_post_p35->created_at];
                     array_push($p35, $value35);
                 }
                 $matches->push(...$matching_posts_p35);
@@ -716,10 +716,10 @@ class MatchingController extends Controller
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->where($label_9_f)
             ->orderBy('items.created_at','desc')
-            ->get(['items.id']);
+            ->get(['items.id','items.created_at']);
             if(!$matching_posts_p36->isEmpty()){
                 foreach ($matching_posts_p36 as $matching_post_p36) {
-                $value36 = [$matching_post_p36->id => 'priority_36'];
+                $value36 = [$matching_post_p36->id => 'priority_36' , 'created_at' => $matching_post_p36->created_at];
                     array_push($p36, $value36);
                 }
                 $matches->push(...$matching_posts_p36);
@@ -731,10 +731,10 @@ class MatchingController extends Controller
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->where($label_9_f)
             ->orderBy('items.created_at','desc')
-            ->get(['items.id']);
+            ->get(['items.id','items.created_at']);
             if(!$matching_posts_p37->isEmpty()){
                 foreach ($matching_posts_p37 as $matching_post_p37) {
-                $value37 = [$matching_post_p37->id => 'priority_37'];
+                $value37 = [$matching_post_p37->id => 'priority_37' , 'created_at' => $matching_post_p37->created_at];
                     array_push($p37, $value37);
                 }
                 $matches->push(...$matching_posts_p37);
@@ -746,10 +746,10 @@ class MatchingController extends Controller
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->where($label_9_f)
             ->orderBy('items.created_at','desc')
-            ->get(['items.id']);
+            ->get(['items.id','items.created_at']);
             if(!$matching_posts_p38->isEmpty()){
                 foreach ($matching_posts_p38 as $matching_post_p38) {
-                $value38 = [$matching_post_p38->id => 'priority_38'];
+                $value38 = [$matching_post_p38->id => 'priority_38' , 'created_at' => $matching_post_p38->created_at];
                     array_push($p38, $value38);
                 }
                 $matches->push(...$matching_posts_p38);
@@ -761,10 +761,10 @@ class MatchingController extends Controller
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->where($label_9_f)
             ->orderBy('items.created_at','desc')
-            ->get(['items.id']);
+            ->get(['items.id','items.created_at']);
             if(!$matching_posts_p39->isEmpty()){
                 foreach ($matching_posts_p39 as $matching_post_p39) {
-                $value39 = [$matching_post_p39->id => 'priority_39'];
+                $value39 = [$matching_post_p39->id => 'priority_39' , 'created_at' => $matching_post_p39->created_at];
                     array_push($p39, $value39);
                 }
                 $matches->push(...$matching_posts_p39);
@@ -776,10 +776,10 @@ class MatchingController extends Controller
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->where($label_9_f)
             ->orderBy('items.created_at','desc')
-            ->get(['items.id']);
+            ->get(['items.id','items.created_at']);
             if(!$matching_posts_p40->isEmpty()){
                 foreach ($matching_posts_p40 as $matching_post_p40) {
-                $value40 = [$matching_post_p40->id => 'priority_40'];
+                $value40 = [$matching_post_p40->id => 'priority_40' , 'created_at' => $matching_post_p40->created_at];
                     array_push($p40, $value40);
                 }
                 $matches->push(...$matching_posts_p40);
@@ -791,10 +791,10 @@ class MatchingController extends Controller
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->where($label_9_f)
             ->orderBy('items.created_at','desc')
-            ->get(['items.id']);
+            ->get(['items.id','items.created_at']);
             if(!$matching_posts_p41->isEmpty()){
                 foreach ($matching_posts_p41 as $matching_post_p41) {
-                $value41 = [$matching_post_p41->id => 'priority_41'];
+                $value41 = [$matching_post_p41->id => 'priority_41' , 'created_at' => $matching_post_p41->created_at];
                     array_push($p41, $value41);
                 }
                 $matches->push(...$matching_posts_p41);
@@ -806,10 +806,10 @@ class MatchingController extends Controller
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->where($label_9)
             ->orderBy('items.created_at','desc')
-            ->get(['items.id']);
+            ->get(['items.id','items.created_at']);
             if(!$matching_posts_p42->isEmpty()){
                 foreach ($matching_posts_p42 as $matching_post_p42) {
-                $value42 = [$matching_post_p42->id => 'priority_42'];
+                $value42 = [$matching_post_p42->id => 'priority_42' , 'created_at' => $matching_post_p42->created_at];
                     array_push($p42, $value42);
                 }
                 $matches->push(...$matching_posts_p42);
@@ -821,10 +821,10 @@ class MatchingController extends Controller
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->where($label_9_b)
             ->orderBy('items.created_at','desc')
-            ->get(['items.id']);
+            ->get(['items.id','items.created_at']);
             if(!$matching_posts_p43->isEmpty()){
                 foreach ($matching_posts_p43 as $matching_post_p43) {
-                $value43 = [$matching_post_p43->id => 'priority_43'];
+                $value43 = [$matching_post_p43->id => 'priority_43' , 'created_at' => $matching_post_p43->created_at];
                     array_push($p43, $value43);
                 }
                 $matches->push(...$matching_posts_p43);
@@ -836,10 +836,10 @@ class MatchingController extends Controller
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->where($label_9_c)
             ->orderBy('items.created_at','desc')
-            ->get(['items.id']);
+            ->get(['items.id','items.created_at']);
             if(!$matching_posts_p44->isEmpty()){
                 foreach ($matching_posts_p44 as $matching_post_p44) {
-                $value44 = [$matching_post_p44->id => 'priority_44'];
+                $value44 = [$matching_post_p44->id => 'priority_44' , 'created_at' => $matching_post_p44->created_at];
                     array_push($p44, $value44);
                 }
                 $matches->push(...$matching_posts_p44);
@@ -851,10 +851,10 @@ class MatchingController extends Controller
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->where($label_9_e)
             ->orderBy('items.created_at','desc')
-            ->get(['items.id']);
+            ->get(['items.id','items.created_at']);
             if(!$matching_posts_p45->isEmpty()){
                 foreach ($matching_posts_p45 as $matching_post_p45) {
-                $value45 = [$matching_post_p45->id => 'priority_45'];
+                $value45 = [$matching_post_p45->id => 'priority_45' , 'created_at' => $matching_post_p45->created_at];
                     array_push($p45, $value45);
                 }
                 $matches->push(...$matching_posts_p45);
@@ -866,10 +866,10 @@ class MatchingController extends Controller
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->where($label_9_d)
             ->orderBy('items.created_at','desc')
-            ->get(['items.id']);
+            ->get(['items.id','items.created_at']);
             if(!$matching_posts_p46->isEmpty()){
                 foreach ($matching_posts_p46 as $matching_post_p46) {
-                $value46 = [$matching_post_p46->id => 'priority_46'];
+                $value46 = [$matching_post_p46->id => 'priority_46' , 'created_at' => $matching_post_p46->created_at];
                     array_push($p46, $value46);
                 }
                 $matches->push(...$matching_posts_p46);
@@ -882,7 +882,7 @@ class MatchingController extends Controller
             ])->orderBy('created_at','desc')->get();
             if(!$matching_posts_p47->isEmpty()){
                 foreach ($matching_posts_p47 as $matching_post_p47) {
-                $value47 = [$matching_post_p47->id => 'priority_47'];
+                $value47 = [$matching_post_p47->id => 'priority_47' , 'created_at' => $matching_post_p47->created_at];
                     array_push($p47, $value47);
                 }
                 $matches->push(...$matching_posts_p47);
@@ -901,7 +901,7 @@ class MatchingController extends Controller
             $matching_posts_p48 = Item::whereIn('id',$ids_p48)->get();
             if(!$matching_posts_p48->isEmpty()){
                 foreach ($matching_posts_p48 as $matching_post_p48) {
-                $value48 = [$matching_post_p48->id => 'priority_48'];
+                $value48 = [$matching_post_p48->id => 'priority_48' , 'created_at' => $matching_post_p48->created_at];
                     array_push($p48, $value48);
                 }
                 $matches->push(...$matching_posts_p48);
@@ -957,53 +957,149 @@ class MatchingController extends Controller
         // $merged_array = array_merge($merged_array, array_reverse($p47));
         // $merged_array = array_merge($merged_array, array_reverse($p48));
 
+        $timestamps = array_column($p1, 'created_at');
+        array_multisort($timestamps, SORT_DESC, $p1);
         $merged_array = array_merge($merged_array, $p1);
+        $timestamps = array_column($p2, 'created_at');
+        array_multisort($timestamps, SORT_DESC, $p2);
         $merged_array = array_merge($merged_array, $p2);
+        $timestamps = array_column($p3, 'created_at');
+        array_multisort($timestamps, SORT_DESC, $p3);
         $merged_array = array_merge($merged_array, $p3);
+        $timestamps = array_column($p4, 'created_at');
+        array_multisort($timestamps, SORT_DESC, $p4);
         $merged_array = array_merge($merged_array, $p4);
+        $timestamps = array_column($p5, 'created_at');
+        array_multisort($timestamps, SORT_DESC, $p5);
         $merged_array = array_merge($merged_array, $p5);
+        $timestamps = array_column($p6, 'created_at');
+        array_multisort($timestamps, SORT_DESC, $p6);
         $merged_array = array_merge($merged_array, $p6);
+        $timestamps = array_column($p7, 'created_at');
+        array_multisort($timestamps, SORT_DESC, $p7);
         $merged_array = array_merge($merged_array, $p7);
+        $timestamps = array_column($p8, 'created_at');
+        array_multisort($timestamps, SORT_DESC, $p8);
         $merged_array = array_merge($merged_array, $p8);
+        $timestamps = array_column($p9, 'created_at');
+        array_multisort($timestamps, SORT_DESC, $p9);
         $merged_array = array_merge($merged_array, $p9);
+        $timestamps = array_column($p10, 'created_at');
+        array_multisort($timestamps, SORT_DESC, $p10);
         $merged_array = array_merge($merged_array, $p10);
+        $timestamps = array_column($p11, 'created_at');
+        array_multisort($timestamps, SORT_DESC, $p11);
         $merged_array = array_merge($merged_array, $p11);
+        $timestamps = array_column($p12, 'created_at');
+        array_multisort($timestamps, SORT_DESC, $p12);
         $merged_array = array_merge($merged_array, $p12);
+        $timestamps = array_column($p13, 'created_at');
+        array_multisort($timestamps, SORT_DESC, $p13);
         $merged_array = array_merge($merged_array, $p13);
+        $timestamps = array_column($p14, 'created_at');
+        array_multisort($timestamps, SORT_DESC, $p14);
         $merged_array = array_merge($merged_array, $p14);
+        $timestamps = array_column($p15, 'created_at');
+        array_multisort($timestamps, SORT_DESC, $p15);
         $merged_array = array_merge($merged_array, $p15);
+        $timestamps = array_column($p16, 'created_at');
+        array_multisort($timestamps, SORT_DESC, $p16);
         $merged_array = array_merge($merged_array, $p16);
+        $timestamps = array_column($p17, 'created_at');
+        array_multisort($timestamps, SORT_DESC, $p17);
         $merged_array = array_merge($merged_array, $p17);
+        $timestamps = array_column($p18, 'created_at');
+        array_multisort($timestamps, SORT_DESC, $p18);
         $merged_array = array_merge($merged_array, $p18);
+        $timestamps = array_column($p19, 'created_at');
+        array_multisort($timestamps, SORT_DESC, $p19);
         $merged_array = array_merge($merged_array, $p19);
+        $timestamps = array_column($p20, 'created_at');
+        array_multisort($timestamps, SORT_DESC, $p20);
         $merged_array = array_merge($merged_array, $p20);
+        $timestamps = array_column($p21, 'created_at');
+        array_multisort($timestamps, SORT_DESC, $p21);
         $merged_array = array_merge($merged_array, $p21);
+        $timestamps = array_column($p22, 'created_at');
+        array_multisort($timestamps, SORT_DESC, $p22);
         $merged_array = array_merge($merged_array, $p22);
+        $timestamps = array_column($p23, 'created_at');
+        array_multisort($timestamps, SORT_DESC, $p23);
         $merged_array = array_merge($merged_array, $p23);
+        $timestamps = array_column($p24, 'created_at');
+        array_multisort($timestamps, SORT_DESC, $p24);
         $merged_array = array_merge($merged_array, $p24);
+        $timestamps = array_column($p25, 'created_at');
+        array_multisort($timestamps, SORT_DESC, $p25);
         $merged_array = array_merge($merged_array, $p25);
+        $timestamps = array_column($p26, 'created_at');
+        array_multisort($timestamps, SORT_DESC, $p26);
         $merged_array = array_merge($merged_array, $p26);
+        $timestamps = array_column($p27, 'created_at');
+        array_multisort($timestamps, SORT_DESC, $p27);
         $merged_array = array_merge($merged_array, $p27);
+        $timestamps = array_column($p28, 'created_at');
+        array_multisort($timestamps, SORT_DESC, $p28);
         $merged_array = array_merge($merged_array, $p28);
+        $timestamps = array_column($p29, 'created_at');
+        array_multisort($timestamps, SORT_DESC, $p29);
         $merged_array = array_merge($merged_array, $p29);
+        $timestamps = array_column($p30, 'created_at');
+        array_multisort($timestamps, SORT_DESC, $p30);
         $merged_array = array_merge($merged_array, $p30);
+        $timestamps = array_column($p31, 'created_at');
+        array_multisort($timestamps, SORT_DESC, $p31);
         $merged_array = array_merge($merged_array, $p31);
+        $timestamps = array_column($p32, 'created_at');
+        array_multisort($timestamps, SORT_DESC, $p32);
         $merged_array = array_merge($merged_array, $p32);
+        $timestamps = array_column($p33, 'created_at');
+        array_multisort($timestamps, SORT_DESC, $p33);
         $merged_array = array_merge($merged_array, $p33);
+        $timestamps = array_column($p34, 'created_at');
+        array_multisort($timestamps, SORT_DESC, $p34);
         $merged_array = array_merge($merged_array, $p34);
+        $timestamps = array_column($p35, 'created_at');
+        array_multisort($timestamps, SORT_DESC, $p35);
         $merged_array = array_merge($merged_array, $p35);
+        $timestamps = array_column($p36, 'created_at');
+        array_multisort($timestamps, SORT_DESC, $p36);
         $merged_array = array_merge($merged_array, $p36);
+        $timestamps = array_column($p37, 'created_at');
+        array_multisort($timestamps, SORT_DESC, $p37);
         $merged_array = array_merge($merged_array, $p37);
+        $timestamps = array_column($p38, 'created_at');
+        array_multisort($timestamps, SORT_DESC, $p38);
         $merged_array = array_merge($merged_array, $p38);
+        $timestamps = array_column($p39, 'created_at');
+        array_multisort($timestamps, SORT_DESC, $p39);
         $merged_array = array_merge($merged_array, $p39);
+        $timestamps = array_column($p40, 'created_at');
+        array_multisort($timestamps, SORT_DESC, $p40);
         $merged_array = array_merge($merged_array, $p40);
+        $timestamps = array_column($p41, 'created_at');
+        array_multisort($timestamps, SORT_DESC, $p41);
         $merged_array = array_merge($merged_array, $p41);
+        $timestamps = array_column($p42, 'created_at');
+        array_multisort($timestamps, SORT_DESC, $p42);
         $merged_array = array_merge($merged_array, $p42);
+        $timestamps = array_column($p43, 'created_at');
+        array_multisort($timestamps, SORT_DESC, $p43);
         $merged_array = array_merge($merged_array, $p43);
+        $timestamps = array_column($p44, 'created_at');
+        array_multisort($timestamps, SORT_DESC, $p44);
         $merged_array = array_merge($merged_array, $p44);
+        $timestamps = array_column($p45, 'created_at');
+        array_multisort($timestamps, SORT_DESC, $p45);
         $merged_array = array_merge($merged_array, $p45);
+        $timestamps = array_column($p46, 'created_at');
+        array_multisort($timestamps, SORT_DESC, $p46);
         $merged_array = array_merge($merged_array, $p46);
+        $timestamps = array_column($p47, 'created_at');
+        array_multisort($timestamps, SORT_DESC, $p47);
         $merged_array = array_merge($merged_array, $p47);
+        $timestamps = array_column($p48, 'created_at');
+        array_multisort($timestamps, SORT_DESC, $p48);
         $merged_array = array_merge($merged_array, $p48);
 
         array_push($matching_ids, $merged_array);
@@ -1015,7 +1111,11 @@ class MatchingController extends Controller
         $uniqueKeys = array_merge(...$uniqueKeys);
 
         $uniqueValues = array_unique(array_values($uniqueKeys));
-        Log::info($matching_ids);
+
+        $uniqueValues = array_filter($uniqueValues, function ($value) {
+            return $value !== "created_at";
+        });
+        // Log::info($matching_ids);
         // dd($matching_ids);
         return array_values($uniqueValues);
     }
