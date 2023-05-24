@@ -1062,5 +1062,5 @@ class MatchingScheduler extends Command
         Log::info($matching_ids);
         // dd($matching_ids);
         return array_values($uniqueValues);
-     }
+    }
 }
