@@ -567,17 +567,19 @@ class CronController extends Controller
 
     public function matchingRecords()
     {
-        Log::info("cron start");
-            $users = Item::get()->pluck('user_id','user_id');
-            
-            foreach($users as $user){
-                $result = (new MatchingController)->matchingResult($user);
-                $set_data = new UserMatchingRecord();
-                $set_data->user_id = $user;
-                $set_data->matching_records = json_encode($result);
-                $set_data->save();
-            }
-        Log::info("cron end");
+        $users = Item::where('id','>',0)->get()->pluck('user_id','user_id');
+        // UserMatchingRecord::where('id', '>', 0)->delete();
+        Log::info("manual cron start");
+        foreach($users as $user){
+            // $result = $this->matchingResult($user);
+            $result = (new MatchingController)->matchingResult($user);
+            $set_data = new UserMatchingRecord();
+            $set_data->user_id = $user;
+            $set_data->matching_records = json_encode($result);
+            $set_data->save();
+        }
+        Log::info("manual cron end");
+        return redirect()->back();
     }
     public function get_matches()
     {

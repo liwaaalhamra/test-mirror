@@ -107,6 +107,7 @@
                         <label></label>
                         <div class='input-group'>
                             <button type="submit" class="btn btn-lg btn-action">GO</button>
+                            <a href="https://barterdom.tedmob.com/api/matching-records"><button type="button" class="btn btn-lg btn-primary">Get Matches</button></a>
                         </div>
                     </div>
                 </form>

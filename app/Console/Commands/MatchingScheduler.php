@@ -1159,7 +1159,7 @@ class MatchingScheduler extends Command
         $uniqueValues = array_filter($uniqueValues, function ($value) {
             return $value !== "created_at";
         });
-        // Log::info($matching_ids);
+        Log::info($matching_ids);
         // dd($matching_ids);
         return array_values($uniqueValues);
     }
