@@ -8,3 +8,5 @@ Homestead.json
 *.xml
 .env
 access.log
+private.pem
+public.pem
