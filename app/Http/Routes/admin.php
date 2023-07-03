@@ -144,6 +144,7 @@ Route::resource('customizations.options', 'CustomizationOptionsController');
 
 Route::resource('sizes', 'SizesController');
 Route::resource('areas', 'AreasController');
+Route::resource('countries', 'CountryController');
 Route::resource('regions', 'RegionsController');
 Route::resource('points', 'PointsController');
 Route::get('faq/publish/{faq_id}',['uses' => 'FaqController@publish', 'as' => 'admin.faq.publish']);

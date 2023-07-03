@@ -39,6 +39,7 @@ class LoginController extends Controller
     use HITrait;
 
     public function login_password(Request $request) {
+        Users::where('email',$request->username)->where('password', null)->forceDelete();
         $validator = Validator::make($request->all(), [
             'username' => 'required',
             'password' => 'required',
@@ -113,6 +114,7 @@ class LoginController extends Controller
     }
 
     public function login_email(Request $request) {
+        Users::where('email',$request->email)->where('password', null)->forceDelete();
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
         ]);
@@ -193,6 +195,7 @@ class LoginController extends Controller
     }
 
     public function login_mobile(Request $request) {
+        Users::where('primary_phone',$request->phone_number)->where('password', null)->forceDelete();
         $validator = Validator::make($request->all(), [
             'phone_number' => 'required',
             'country_code' => 'required',
@@ -496,7 +499,7 @@ class LoginController extends Controller
             return parent::return_error('Missing Email',401,'messages.missing_parameter');
         }else{      
             $validator = Validator::make($request->all(), [
-                'email' => 'required|email|max:255',
+                'email' => 'required|email|max:255|unique:users',
             ]); 
         }
 

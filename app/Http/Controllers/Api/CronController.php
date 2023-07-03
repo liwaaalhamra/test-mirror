@@ -579,7 +579,7 @@ class CronController extends Controller
             $set_data->save();
         }
         Log::info("manual cron end");
-        return redirect()->back();
+        return redirect()->back()->with('success', 'Matching Successfully Done');
     }
     public function get_matches()
     {
