@@ -505,6 +505,13 @@ class LoginController extends Controller
 
         if(!Input::has('password')){
             return parent::return_error('Missing Password',401,'messages.missing_parameter');
+        }else{      
+            $validator = Validator::make($request->all(), [
+                'password' => 'required|string|complex',
+            ]); 
+            if ($validator->fails()) {
+                return parent::return_error($validator->messages()->all(), 400, 'invalid_parameter');
+            }
         }
         if(!Input::has('password_confirm')){
             return parent::return_error('Missing Password Confirmation',401,'messages.missing_parameter');

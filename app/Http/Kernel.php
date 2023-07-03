@@ -51,5 +51,8 @@ class Kernel extends HttpKernel
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'has_access' => HasAccess::class,
+        'vcap' => \App\Http\Middleware\ValidateCommonApiParams::class,
+        'rsa' => \App\Http\Middleware\RsaCryptography::class,
+        'arl' => \App\Http\Middleware\ApiRateLimiter::class,
     ];
 }

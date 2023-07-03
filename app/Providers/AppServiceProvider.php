@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Api\Users;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -14,7 +15,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        Validator::extend('complex', function ($attribute, $value, $parameters) {
+            return preg_match('/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[_#?!@$%^&*]).{8,}$/', $value);
+        }, 'Password must be a combination of at least eight numbers, letters, upper case, and symbols (like @ & $)');
     }
 
     /**
