@@ -7,7 +7,7 @@
     <link rel="shortcut icon"  type="image/png" href="{{asset('resources/assets/images/logo_new.png')}}"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta name="token" value="{{ csrf_token() }}">
+    <meta name="token" value="{{ csrf_token() }}" content="{{ csrf_token() }}">
     <link rel="manifest" href="{{secure_url('/manifest.json')}}" />
     {{--<script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script>--}}
     {{--<script>--}}

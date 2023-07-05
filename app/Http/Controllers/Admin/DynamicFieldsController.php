@@ -76,7 +76,7 @@ class DynamicFieldsController extends Controller
             'double' => 'Number with Decimals',
             'text' => 'Free Text'
         ];
-        $endpoints = [
+        $endpoints_old = [
             'Conditions' => 'lists/conditions',
             'Fuel Types' => 'lists/fuel_types',
             'Body Types' => 'lists/body_types',
@@ -106,6 +106,7 @@ class DynamicFieldsController extends Controller
             'Car Brands' => 'lists/car_brands',
             'Car Models' => 'lists/car_models',
         ];
+        $endpoints = CustomFieldList::orderBy('field_name','asc')->get()->pluck('parent_id','field_name');
         $field_names = [
             'Sell & Rent' => 'is-sell',
             'Serviced' => 'serviced',
@@ -228,7 +229,7 @@ class DynamicFieldsController extends Controller
             'double' => 'Number with Decimals',
             'text' => 'Free Text'
         ];
-        $endpoints = [
+        $endpoints_old = [
             'Conditions' => 'lists/conditions',
             'Fuel Types' => 'lists/fuel_types',
             'Body Types' => 'lists/body_types',
@@ -258,6 +259,7 @@ class DynamicFieldsController extends Controller
             'Car Brands' => 'lists/car_brands',
             'Car Models' => 'lists/car_models',
         ];
+        $endpoints = CustomFieldList::orderBy('field_name','asc')->get()->pluck('parent_id','field_name');
         $field_names = [
             'Sell & Rent' => 'is-sell',
             'Serviced' => 'serviced',

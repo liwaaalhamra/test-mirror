@@ -8,11 +8,30 @@
                 <div class="panel-body">
                     <ul>
                         @php $i=0 @endphp
-                        @foreach($endpoints as $key => $endpoint)
+                        {{-- @foreach($endpoints as $key => $endpoint)
                             @php $i=$i+1; @endphp
                             <div class="col-sm-4">
                                 <li>
                                     <strong>{{$key}}</strong> => <label id="p{{$i}}">{{$endpoint}}</label> <button onclick="copyToClipboard('#p{{$i}}')">Copy</button>
+                                </li>
+                            </div>
+                            <br>
+                        @endforeach --}}
+                        @foreach($endpoints as $key => $endpoint)
+                            @php 
+                                $i=$i+1;
+
+                                $names = explode('_', $key); 
+                            
+                            @endphp
+                            <div class="col-sm-4">
+                                <li>
+                                    <strong class="d-flex">
+                                        @foreach($names as $name)
+                                            {{ ucfirst($name) }}
+                                        @endforeach
+                                    </strong>
+                                    => <label id="p{{$i}}">lists/{{$key}}</label> <button onclick="copyToClipboard('#p{{$i}}')">Copy</button>
                                 </li>
                             </div>
                             <br>

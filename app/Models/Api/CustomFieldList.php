@@ -16,6 +16,7 @@ class CustomFieldList extends Model
     protected $guarded = [];
     protected $hidden = ['updated_at','field_name','name_en','name_ar'];
     protected $appends = ['name'];
+    protected $fillable = ['field_name','name_en','name_ar','parent_id'];
 
     public function getNameAttribute(){
         $locale = App::getLocale();
@@ -25,5 +26,10 @@ class CustomFieldList extends Model
     public function getCreatedAtAttribute($value)
     {
         return $value == null ? null : \Carbon\Carbon::parse($value)->getTimestamp();
+    }
+
+    public function parent()
+    {
+        return $this->belongsTo(CustomFieldList::class,'parent_id');
     }
 }
