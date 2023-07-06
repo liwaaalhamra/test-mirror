@@ -75,7 +75,10 @@ class RegionsController extends Controller
      */
     public function store(Request $request)
     {
-
+        $this->validate($request, [
+            'name_en' => 'required',
+            'country_id' => 'required',
+        ]);
         Region::create([
             'name_en' => isset($request->name_en) && !empty($request->name_en) ? trim($request->name_en) : null,
             'name_ar' => isset($request->name_ar) && !empty($request->name_ar) ? trim($request->name_ar) : null,
@@ -110,6 +113,10 @@ class RegionsController extends Controller
      */
     public function update($id, Request $request) /*: RedirectResponse*/
     {
+        $this->validate($request, [
+            'name_en' => 'required',
+            'country_id' => 'required',
+        ]);
         $item = Region::findOrFail($id);
         $item->update([
             'name_en' => isset($request->name_en) && !empty($request->name_en) ? trim($request->name_en) : null,

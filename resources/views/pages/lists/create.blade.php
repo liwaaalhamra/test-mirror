@@ -32,12 +32,12 @@
                                 </select>
                             </div>
                             <div class="form-group col-sm-6">
-                                <label>Name in English</label>
-                                <input type="text" name="name_en" class="form-control" placeholder="Name in English" value="" required>
+                                <label>Name in English <p style="color: red; display: inline-block">*</p></label>
+                                <input type="text" name="name_en" class="form-control" placeholder="Name in English" value="">
                             </div>
                             <div class="form-group col-sm-6">
                                 <label>Name in Arabic</label>
-                                <input type="text" name="name_ar" class="form-control" placeholder="Name in Arabic" value="" required>
+                                <input type="text" name="name_ar" class="form-control" placeholder="Name in Arabic" value="">
                             </div>
                         </div>
                         <button type="submit" class="btn btn-sm btn-success">Save</button>

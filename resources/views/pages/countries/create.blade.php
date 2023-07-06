@@ -8,23 +8,21 @@
                 <div class="panel-body">
                     <form action="{{ secure_url('admin/countries') }}" method="post" enctype="multipart/form-data">
                         {{ csrf_field() }}
-
-
                         <div class="row">
                             <div class="form-group col-sm-4">
-                                <label>Flag</label>
+                                <label>Flag <p style="color: red; display: inline-block; line-height: 0.1rem">*</p></label>
                                 <input type="file" name="flag" class="form-control" required value="">
                             </div>
                             <div class="form-group col-sm-4">
-                                <label>Name</label>
+                                <label>Name <p style="color: red; display: inline-block; line-height: 0.1rem">*</p></label>
                                 <input type="text" name="name" class="form-control" required placeholder="Name" value="">
                             </div>
                             <div class="form-group col-sm-4">
-                                <label>Fullname</label>
+                                <label>Fullname <p style="color: red; display: inline-block; line-height: 0.1rem">*</p></label>
                                 <input type="text" name="fullname" class="form-control" required placeholder="Name" value="">
                             </div>
                             <div class="form-group col-sm-4">
-                                <label>Published</label>
+                                <label>Published <p style="color: red; display: inline-block; line-height: 0.1rem">*</p></label>
                                 <select name="visibility" class="form-control" required>
                                     <option value="">Select Option</option>
                                     <option value="0">No</option>
@@ -32,11 +30,11 @@
                                 </select>
                             </div>
                             <div class="form-group col-sm-4">
-                                <label>Capital</label>
+                                <label>Capital <p style="color: red; display: inline-block; line-height: 0.1rem">*</p></label>
                                 <input type="text" name="capital" class="form-control" placeholder="Capital" value="">
                             </div>
                             <div class="form-group col-sm-4">
-                                <label>Country Code</label>
+                                <label>Country Code <p style="color: red; display: inline-block; line-height: 0.1rem">*</p></label>
                                 <input type="text" name="country_code" class="form-control" placeholder="country_code" value="">
                             </div>
                             <div class="form-group col-sm-4">

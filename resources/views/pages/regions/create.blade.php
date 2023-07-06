@@ -10,7 +10,7 @@
                         {{ csrf_field() }}
                         <div class="row">
                             <div class="form-group col-sm-4">
-                                <label>Choose Country</label>
+                                <label>Choose Country <p style="color: red; display: inline-block; line-height: 0.1rem">*</p></label>
                                 <select class="form-control selectpicker" title="Choose..."  data-live-search="true" name="country_id" required>
                                     @foreach($countries as $country)
                                         <option data-content='<img src="{{$country->flag}}" width="17px" /> {{$country->name}}' data-tokens="{{$country->name}}" value="{{ $country->id }}"> {{$country->name}}</option>
@@ -21,7 +21,7 @@
 
                         <div class="row">
                             <div class="form-group col-sm-4">
-                                <label>Name English</label>
+                                <label>Name English <p style="color: red; display: inline-block; line-height: 0.1rem">*</p></label>
                                 <input type="text" name="name_en" id="name_en" class="form-control" placeholder="Name English" value="{{ old('name_en') }}">
                             </div>
 

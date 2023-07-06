@@ -40,7 +40,7 @@ class CountryController extends Controller
     {
         $countries = Country::get();
         return view('pages.countries.create',compact('countries'))
-            ->with('content_header', 'Add Region');
+            ->with('content_header', 'Add Country');
     }
 
     /**
@@ -51,6 +51,14 @@ class CountryController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request, [
+            'flag' => 'required',
+            'name' => 'required',
+            'full_name' => 'required',
+            'visibility' => 'required',
+            'capital' => 'required',
+            'country_code' => 'required',
+        ]);
         $destinationDir = public_path() . DIRECTORY_SEPARATOR . 'uploads/images/flags';
         $fileName = null;
         // check if a file exist and is valid.
@@ -99,7 +107,7 @@ class CountryController extends Controller
         $country->save();
 
         return redirect()->route('admin.countries.index')
-            ->with('success', 'Region Successfully added');
+            ->with('success', 'Country Successfully added');
     }
 
     /**
@@ -112,7 +120,7 @@ class CountryController extends Controller
     {
         $item = Country::findOrFail($id);
         return view('pages.countries.edit', compact('item'))
-            ->with('content_header', 'Update Region');
+            ->with('content_header', 'Update Country');
     }
 
     /**
@@ -124,6 +132,13 @@ class CountryController extends Controller
      */
     public function update($id, Request $request) /*: RedirectResponse*/
     {
+        $this->validate($request, [
+            'name' => 'required',
+            'full_name' => 'required',
+            'visibility' => 'required',
+            'capital' => 'required',
+            'country_code' => 'required',
+        ]);
         $destinationDir = public_path() . DIRECTORY_SEPARATOR . 'uploads/images/flags';
         $fileName = null;
         // check if a file exist and is valid.
@@ -170,7 +185,7 @@ class CountryController extends Controller
         $country->save();
 
         return redirect()->route('admin.countries.index')
-            ->with('success', 'Region Successfully updated');
+            ->with('success', 'Country Successfully updated');
     }
 
     /**
@@ -185,7 +200,7 @@ class CountryController extends Controller
         $item->delete();
 
         return redirect()->route('admin.countries.index')
-            ->with('success', 'Region Successfully deleted');
+            ->with('success', 'Country Successfully deleted');
     }
 
 }

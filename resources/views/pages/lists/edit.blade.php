@@ -13,8 +13,8 @@
                         <input type="hidden" name="id[]" value="{{$data->id}}"/>
                             <div class="row">
                                 <div class="form-group col-sm-3">
-                                    <label>Field Name</label>
-                                    <input type="text" name="field_name[]" class="form-control" placeholder="Field Name" value="{{$data->field_name}}" required>
+                                    <label>Field Name <p style="color: red; display: inline-block; line-height: 0.1rem">*</p></label>
+                                    <input type="text" name="field_name[]" class="form-control" placeholder="Field Name" value="{{$data->field_name}}">
                                 </div>
                                 <div class="form-group col-sm-2">
                                     <label>Reference Name</label>
@@ -26,12 +26,12 @@
                                     </select>
                                 </div>
                                 <div class="form-group col-sm-3">
-                                    <label>Name in English</label>
-                                    <input type="text" name="name_en[]" class="form-control" placeholder="Name in English" value="{{$data->name_en}}" required>
+                                <label>Name in English <p style="color: red; display: inline-block; line-height: 0.1rem">*</p></label>
+                                    <input type="text" name="name_en[]" class="form-control" placeholder="Name in English" value="{{$data->name_en}}">
                                 </div>
                                 <div class="form-group col-sm-3">
                                     <label>Name in Arabic</label>
-                                    <input type="text" name="name_ar[]" class="form-control" placeholder="Name in Arabic" value="{{$data->name_ar}}" required>
+                                    <input type="text" name="name_ar[]" class="form-control" placeholder="Name in Arabic" value="{{$data->name_ar}}">
                                 </div>
                                 <div class="form-group col-sm-1">
                                     <label>Delete Item</label>

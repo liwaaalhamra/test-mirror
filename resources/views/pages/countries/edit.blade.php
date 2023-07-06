@@ -25,15 +25,15 @@
                                 <img src="{{$item->flag}}"/>
                             </div>
                             <div class="form-group col-sm-4">
-                                <label>Name</label>
+                                <label>Name <p style="color: red; display: inline-block; line-height: 0.1rem">*</p></label>
                                 <input type="text" name="name" class="form-control" required placeholder="Name" value="{{$item->name}}">
                             </div>
                             <div class="form-group col-sm-4">
-                                <label>Fullname</label>
+                                <label>Fullname <p style="color: red; display: inline-block; line-height: 0.1rem">*</p></label>
                                 <input type="text" name="fullname" class="form-control" required placeholder="Name" value="{{$item->full_name}}">
                             </div>
                             <div class="form-group col-sm-4">
-                                <label>Published</label>
+                                <label>Published <p style="color: red; display: inline-block; line-height: 0.1rem">*</p></label>
                                 <select name="visibility" class="form-control" required>
                                     <option value="">Select Option</option>
                                     <option value="0" @if($item->visibility == 0) selected @endif>No</option>
@@ -41,11 +41,11 @@
                                 </select>
                             </div>
                             <div class="form-group col-sm-4">
-                                <label>Capital</label>
+                                <label>Capital <p style="color: red; display: inline-block; line-height: 0.1rem">*</p></label>
                                 <input type="text" name="capital" class="form-control" placeholder="Capital" value="{{$item->capital}}">
                             </div>
                             <div class="form-group col-sm-4">
-                                <label>Country Code</label>
+                                <label>Country Code <p style="color: red; display: inline-block; line-height: 0.1rem">*</p></label>
                                 <input type="text" name="country_code" class="form-control" placeholder="country_code" value="{{$item->country_code}}">
                             </div>
                             <div class="form-group col-sm-4">

@@ -71,7 +71,10 @@ class AreasController extends Controller
      */
     public function store(Request $request)
     {
-
+        $this->validate($request, [
+            'name_en' => 'required',
+            'region_id' => 'required',
+        ]);
         Area::create([
             'name_en' => isset($request->name_en) && !empty($request->name_en) ? trim($request->name_en) : null,
             'name_ar' => isset($request->name_ar) && !empty($request->name_ar) ? trim($request->name_ar) : null,
@@ -104,6 +107,10 @@ class AreasController extends Controller
      */
     public function update($id, Request $request) /*: RedirectResponse*/
     {
+        $this->validate($request, [
+            'name_en' => 'required',
+            'region_id' => 'required',
+        ]);
         $item = Area::findOrFail($id);
         $item->update([
             'name_en' => isset($request->name_en) && !empty($request->name_en) ? trim($request->name_en) : null,

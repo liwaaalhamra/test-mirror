@@ -50,12 +50,10 @@ class CustomFieldListController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->all());
-        if(!$request->field_name && !$request->field_name_list)
-        {
-            return redirect()->back()
-            ->with('success', 'Field Name is required');
-        }
+        $this->validate($request, [
+            'field_name' => 'required',
+            'name_en' => 'required',
+        ]);
         $fieldName = null;
         if($request->field_name){
             $fieldName = str_replace(' ', '_', $request->field_name);
@@ -100,11 +98,10 @@ class CustomFieldListController extends Controller
      */
     public function update($id, Request $request) /*: RedirectResponse*/
     {
-        if(!$request->field_name)
-        {
-            return redirect()->back()
-            ->with('success', 'Field Name is required');
-        }
+        $this->validate($request, [
+            'field_name' => 'required',
+            'name_en' => 'required',
+        ]);
         foreach($request->id as $key => $data)
         {
             $fieldName = str_replace(' ', '_', $request->field_name[$key]);

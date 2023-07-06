@@ -62,7 +62,6 @@
         $(".delete").on("submit", function(){
             return confirm("Are you sure you want to delete this?");
         });
-        @if(in_array('export',auth()->user()->role->hasAccess($section_name)))
         $(document).ready(function() {
             $('.table').dataTable({
                 "bPaginate": true,
@@ -72,7 +71,7 @@
                 "bInfo": true,
                 "ordering": true,
                 "bAutoWidth": true,
-                order: [3,'desc'],
+                order: [0,'desc'],
                 "pagingType": "full_numbers",
 
                 dom: 'Bfrtip',
@@ -81,23 +80,6 @@
                 ]
             });
         } );
-        @else
-        $(document).ready(function() {
-            $('.table').dataTable({
-                "bPaginate": true,
-                "bLengthChange": true,
-                "pageLength": 50,
-                "bFilter": true,
-                "bInfo": true,
-                "ordering": true,
-                "bAutoWidth": true,
-                order: [3,'desc'],
-                "pagingType": "full_numbers",
-            });
-        } );
-        @endif
-
-
     </script>
 @endsection
 
