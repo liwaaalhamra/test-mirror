@@ -43,32 +43,32 @@ class PaymentController extends Controller
         $payment_methods[] = [
             'code' => 'cash',
             'name' => 'Cash On Delivery',
-            'image' => env('APP_ENV') == 'local' ? asset('public/uploads/images/cod.png') : secure_asset('public/uploads/images/cod.png'),
+            'image' => env('APP_ENV') == 'local' ? asset('uploads/images/cod.png') : secure_asset('uploads/images/cod.png'),
         ];
         $payment_methods[] = [
             'code' => 'online',
             'name' => 'Online',
-            'image' => env('APP_ENV') == 'local' ? asset('public/uploads/images/credit.png') : secure_asset('public/uploads/images/credit.png'),
+            'image' => env('APP_ENV') == 'local' ? asset('uploads/images/credit.png') : secure_asset('uploads/images/credit.png'),
         ];
 //        $payment_methods[] = [
 //            'code' => 'knet',
 //            'name' => 'KNET',
-//            'image' => env('APP_ENV') == 'local' ? asset('public/uploads/images/knet.png') : secure_asset('public/uploads/images/knet.png'),
+//            'image' => env('APP_ENV') == 'local' ? asset('uploads/images/knet.png') : secure_asset('uploads/images/knet.png'),
 //        ];
 //        $payment_methods[] = [
 //            'code' => 'credit',
 //            'name' => 'Credit Card',
-//            'image' => env('APP_ENV') == 'local' ? asset('public/uploads/images/credit.png') : secure_asset('public/uploads/images/credit.png'),
+//            'image' => env('APP_ENV') == 'local' ? asset('uploads/images/credit.png') : secure_asset('uploads/images/credit.png'),
 //        ];
 //        $payment_methods[] = [
 //            'code' => 'amex',
 //            'name' => 'Amex',
-//            'image' => env('APP_ENV') == 'local' ? asset('public/uploads/images/amex.png') : secure_asset('public/uploads/images/amex.png'),
+//            'image' => env('APP_ENV') == 'local' ? asset('uploads/images/amex.png') : secure_asset('uploads/images/amex.png'),
 //        ];
 //        $payment_methods[] = [
 //            'code' => 'Bookeey',
 //            'name' => 'Bookeey',
-//            'image' => env('APP_ENV') == 'local' ? asset('public/uploads/images/bookeey.png') : secure_asset('public/uploads/images/bookeey.png'),
+//            'image' => env('APP_ENV') == 'local' ? asset('uploads/images/bookeey.png') : secure_asset('uploads/images/bookeey.png'),
 //        ];
         return response()->json($payment_methods);
     }
