@@ -338,8 +338,8 @@ class MatchingController extends Controller
                 ['return_items.sub_category_id', '!=', $my_post->sub_category_id],
                 ['return_items.sub_sub_category_id', '!=', $my_post->sub_sub_category_id],
                 ['return_items.location_id', '!=', $my_post->location_id],
-                ['return_items.price_from', '>=', $my_post->price ? $my_post->price : 0],
-                ['return_items.price_to', '<=', $my_post->price ? $my_post->price : $max],
+                ['return_items.price_from', '>', $my_post->price ? $my_post->price : 0],
+                ['return_items.price_to', '<', $my_post->price ? $my_post->price : $max],
             ])
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
@@ -360,8 +360,8 @@ class MatchingController extends Controller
                 ['items.sub_category_id', '!=', $my_post->return_post['sub_category_id']],
                 ['items.sub_sub_category_id', '!=', $my_post->return_post['sub_sub_category_id']],
                 ['items.location_id', '!=', $my_post->return_post['location_id']],
-                ['items.price', '<=', $my_post->return_post['price_from'] ? $my_post->return_post['price_from'] : 0],
-                ['items.price', '>=', $my_post->return_post['price_to'] ? $my_post->return_post['price_to'] : $max],
+                ['items.price', '<', $my_post->return_post['price_from'] ? $my_post->return_post['price_from'] : 0],
+                ['items.price', '>', $my_post->return_post['price_to'] ? $my_post->return_post['price_to'] : $max],
             ])
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
@@ -388,8 +388,8 @@ class MatchingController extends Controller
                 ['return_items.sub_category_id', '!=', $my_post->sub_category_id],
                 ['return_items.sub_sub_category_id', '!=', $my_post->sub_sub_category_id],
                 ['return_items.location_id', '!=', $my_post->location_id],
-                ['return_items.price_from', '>=', $my_post->price ? $my_post->price : 0],
-                ['return_items.price_to', '<=', $my_post->price ? $my_post->price : $max],
+                ['return_items.price_from', '>', $my_post->price ? $my_post->price : 0],
+                ['return_items.price_to', '<', $my_post->price ? $my_post->price : $max],
             ])
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
@@ -410,8 +410,8 @@ class MatchingController extends Controller
                 ['items.sub_category_id', '!=', $my_post->return_post['sub_category_id']],
                 ['items.sub_sub_category_id', '!=', $my_post->return_post['sub_sub_category_id']],
                 ['items.location_id', '!=', $my_post->return_post['location_id']],
-                ['items.price', '<=', $my_post->return_post['price_from'] ? $my_post->return_post['price_from'] : 0],
-                ['items.price', '>=', $my_post->return_post['price_to'] ? $my_post->return_post['price_to'] : $max],
+                ['items.price', '<', $my_post->return_post['price_from'] ? $my_post->return_post['price_from'] : 0],
+                ['items.price', '>', $my_post->return_post['price_to'] ? $my_post->return_post['price_to'] : $max],
             ])
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
@@ -438,8 +438,8 @@ class MatchingController extends Controller
                 ['return_items.sub_category_id', '!=', $my_post->sub_category_id],
                 ['return_items.sub_sub_category_id', '!=', $my_post->sub_sub_category_id],
                 ['return_items.location_id', '!=', $my_post->location_id],
-                ['return_items.price_from', '>=', $my_post->price ? $my_post->price : 0],
-                ['return_items.price_to', '<=', $my_post->price ? $my_post->price : $max],
+                ['return_items.price_from', '>', $my_post->price ? $my_post->price : 0],
+                ['return_items.price_to', '<', $my_post->price ? $my_post->price : $max],
             ])
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
@@ -460,8 +460,8 @@ class MatchingController extends Controller
                 ['items.sub_category_id', '!=', $my_post->return_post['sub_category_id']],
                 ['items.sub_sub_category_id', '!=', $my_post->return_post['sub_sub_category_id']],
                 ['items.location_id', '!=', $my_post->return_post['location_id']],
-                ['items.price', '<=', $my_post->return_post['price_from'] ? $my_post->return_post['price_from'] : 0],
-                ['items.price', '>=', $my_post->return_post['price_to'] ? $my_post->return_post['price_to'] : $max],
+                ['items.price', '<', $my_post->return_post['price_from'] ? $my_post->return_post['price_from'] : 0],
+                ['items.price', '>', $my_post->return_post['price_to'] ? $my_post->return_post['price_to'] : $max],
             ])
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
@@ -728,8 +728,8 @@ class MatchingController extends Controller
                 ['return_items.sub_category_id', '!=', $my_post->sub_category_id],
                 ['return_items.sub_sub_category_id', '!=', $my_post->sub_sub_category_id],
                 ['return_items.location_id', '!=', $my_post->location_id],
-                ['return_items.price_from', '>=', $my_post->price ? $my_post->price : 0],
-                ['return_items.price_to', '<=', $my_post->price ? $my_post->price : $max],
+                ['return_items.price_from', '>', $my_post->price ? $my_post->price : 0],
+                ['return_items.price_to', '<', $my_post->price ? $my_post->price : $max],
             ])
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
@@ -750,8 +750,8 @@ class MatchingController extends Controller
                 ['return_items.sub_category_id', '!=', $my_post->sub_category_id],
                 ['return_items.sub_sub_category_id', '!=', $my_post->sub_sub_category_id],
                 ['return_items.location_id', '!=', $my_post->location_id],
-                ['return_items.price_from', '>=', $my_post->price ? $my_post->price : 0],
-                ['return_items.price_to', '<=', $my_post->price ? $my_post->price : $max],
+                ['return_items.price_from', '>', $my_post->price ? $my_post->price : 0],
+                ['return_items.price_to', '<', $my_post->price ? $my_post->price : $max],
             ])
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
@@ -772,8 +772,8 @@ class MatchingController extends Controller
                 ['items.sub_category_id', '!=', $my_post->return_post['sub_category_id']],
                 ['items.sub_sub_category_id', '!=', $my_post->return_post['sub_sub_category_id']],
                 ['items.location_id', '!=', $my_post->return_post['location_id']],
-                ['items.price', '<=', $my_post->return_post['price_from'] ? $my_post->return_post['price_from'] : 0],
-                ['items.price', '>=', $my_post->return_post['price_to'] ? $my_post->return_post['price_to'] : $max],
+                ['items.price', '<', $my_post->return_post['price_from'] ? $my_post->return_post['price_from'] : 0],
+                ['items.price', '>', $my_post->return_post['price_to'] ? $my_post->return_post['price_to'] : $max],
             ])
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
@@ -800,8 +800,8 @@ class MatchingController extends Controller
                 ['items.sub_category_id', '!=', $my_post->return_post['sub_category_id']],
                 ['items.sub_sub_category_id', '!=', $my_post->return_post['sub_sub_category_id']],
                 ['items.location_id', '!=', $my_post->return_post['location_id']],
-                ['items.price', '<=', $my_post->return_post['price_from'] ? $my_post->return_post['price_from'] : 0],
-                ['items.price', '>=', $my_post->return_post['price_to'] ? $my_post->return_post['price_to'] : $max],
+                ['items.price', '<', $my_post->return_post['price_from'] ? $my_post->return_post['price_from'] : 0],
+                ['items.price', '>', $my_post->return_post['price_to'] ? $my_post->return_post['price_to'] : $max],
             ])
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
@@ -993,8 +993,8 @@ class MatchingController extends Controller
                 ['return_items.sub_category_id', '!=', $my_post->sub_category_id],
                 ['return_items.sub_sub_category_id', '!=', $my_post->sub_sub_category_id],
                 ['return_items.location_id', '!=', $my_post->location_id],
-                ['return_items.price_from', '>=', $my_post->price ? $my_post->price : 0],
-                ['return_items.price_to', '<=', $my_post->price ? $my_post->price : $max],
+                ['return_items.price_from', '>', $my_post->price ? $my_post->price : 0],
+                ['return_items.price_to', '<', $my_post->price ? $my_post->price : $max],
             ])
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
@@ -1015,8 +1015,8 @@ class MatchingController extends Controller
                 ['items.sub_category_id', '!=', $my_post->return_post['sub_category_id']],
                 ['items.sub_sub_category_id', '!=', $my_post->return_post['sub_sub_category_id']],
                 ['items.location_id', '!=', $my_post->return_post['location_id']],
-                ['items.price', '<=', $my_post->return_post['price_from'] ? $my_post->return_post['price_from'] : 0],
-                ['items.price', '>=', $my_post->return_post['price_to'] ? $my_post->return_post['price_to'] : $max],
+                ['items.price', '<', $my_post->return_post['price_from'] ? $my_post->return_post['price_from'] : 0],
+                ['items.price', '>', $my_post->return_post['price_to'] ? $my_post->return_post['price_to'] : $max],
             ])
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
