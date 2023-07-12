@@ -5,20 +5,20 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 <!--===============================================================================================-->	
-	<link rel="icon" type="image/png" href="{{env('APP_ENV') == 'local' ? asset('public/coming_soon/images/icons/favicon.ico') : secure_asset('public/coming_soon/images/icons/favicon.ico')}}"/>
+	<link rel="icon" type="image/png" href="{{env('APP_ENV') == 'local' ? asset('coming_soon/images/icons/favicon.ico') : secure_asset('coming_soon/images/icons/favicon.ico')}}"/>
 <!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="{{env('APP_ENV') == 'local' ? asset('public/coming_soon/vendor/bootstrap/css/bootstrap.min.css') : secure_asset('public/coming_soon/vendor/bootstrap/css/bootstrap.min.css')}}">
+	<link rel="stylesheet" type="text/css" href="{{env('APP_ENV') == 'local' ? asset('coming_soon/vendor/bootstrap/css/bootstrap.min.css') : secure_asset('coming_soon/vendor/bootstrap/css/bootstrap.min.css')}}">
 <!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="{{env('APP_ENV') == 'local' ? asset('public/coming_soon/fonts/font-awesome-4.7.0/css/font-awesome.min.css') : secure_asset('public/coming_soon/fonts/font-awesome-4.7.0/css/font-awesome.min.css')}}">
+	<link rel="stylesheet" type="text/css" href="{{env('APP_ENV') == 'local' ? asset('coming_soon/fonts/font-awesome-4.7.0/css/font-awesome.min.css') : secure_asset('coming_soon/fonts/font-awesome-4.7.0/css/font-awesome.min.css')}}">
 <!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="{{env('APP_ENV') == 'local' ? asset('public/coming_soon/fonts/iconic/css/material-design-iconic-font.min.css') : secure_asset('public/coming_soon/fonts/iconic/css/material-design-iconic-font.min.css')}}">
+	<link rel="stylesheet" type="text/css" href="{{env('APP_ENV') == 'local' ? asset('coming_soon/fonts/iconic/css/material-design-iconic-font.min.css') : secure_asset('coming_soon/fonts/iconic/css/material-design-iconic-font.min.css')}}">
 <!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="{{env('APP_ENV') == 'local' ? asset('public/coming_soon/vendor/animate/animate.css') : secure_asset('public/coming_soon/vendor/animate/animate.css')}}">
+	<link rel="stylesheet" type="text/css" href="{{env('APP_ENV') == 'local' ? asset('coming_soon/vendor/animate/animate.css') : secure_asset('coming_soon/vendor/animate/animate.css')}}">
 <!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="{{env('APP_ENV') == 'local' ? asset('public/coming_soon/vendor/select2/select2.min.css') : secure_asset('public/coming_soon/vendor/select2/select2.min.css')}}">
+	<link rel="stylesheet" type="text/css" href="{{env('APP_ENV') == 'local' ? asset('coming_soon/vendor/select2/select2.min.css') : secure_asset('coming_soon/vendor/select2/select2.min.css')}}">
 <!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="{{env('APP_ENV') == 'local' ? asset('public/coming_soon/css/util.css') : secure_asset('public/coming_soon/css/util.css')}}">
-	<link rel="stylesheet" type="text/css" href="{{env('APP_ENV') == 'local' ? asset('public/coming_soon/css/main.css') : secure_asset('public/coming_soon/css/main.css')}}">
+	<link rel="stylesheet" type="text/css" href="{{env('APP_ENV') == 'local' ? asset('coming_soon/css/util.css') : secure_asset('coming_soon/css/util.css')}}">
+	<link rel="stylesheet" type="text/css" href="{{env('APP_ENV') == 'local' ? asset('coming_soon/css/main.css') : secure_asset('coming_soon/css/main.css')}}">
 <!--===============================================================================================-->
 </head>
 <body>
@@ -46,17 +46,17 @@
 	
 
 <!--===============================================================================================-->	
-	<script src="{{env('APP_ENV') == 'local' ? asset('public/coming_soon/vendor/jquery/jquery-3.2.1.min.js') : secure_asset('public/coming_soon/vendor/jquery/jquery-3.2.1.min.js')}}"></script>
+	<script src="{{env('APP_ENV') == 'local' ? asset('coming_soon/vendor/jquery/jquery-3.2.1.min.js') : secure_asset('coming_soon/vendor/jquery/jquery-3.2.1.min.js')}}"></script>
 <!--===============================================================================================-->
-	<script src="{{env('APP_ENV') == 'local' ? asset('public/coming_soon/vendor/bootstrap/js/popper.js') : secure_asset('public/coming_soon/vendor/bootstrap/js/popper.js')}}"></script>
-	<script src="{{env('APP_ENV') == 'local' ? asset('public/coming_soon/vendor/bootstrap/js/bootstrap.min.js') : secure_asset('public/coming_soon/vendor/bootstrap/js/bootstrap.min.js')}}"></script>
+	<script src="{{env('APP_ENV') == 'local' ? asset('coming_soon/vendor/bootstrap/js/popper.js') : secure_asset('coming_soon/vendor/bootstrap/js/popper.js')}}"></script>
+	<script src="{{env('APP_ENV') == 'local' ? asset('coming_soon/vendor/bootstrap/js/bootstrap.min.js') : secure_asset('coming_soon/vendor/bootstrap/js/bootstrap.min.js')}}"></script>
 <!--===============================================================================================-->
-	<script src="{{env('APP_ENV') == 'local' ? asset('public/coming_soon/vendor/select2/select2.min.js') : secure_asset('public/coming_soon/vendor/select2/select2.min.js')}}"></script>
+	<script src="{{env('APP_ENV') == 'local' ? asset('coming_soon/vendor/select2/select2.min.js') : secure_asset('coming_soon/vendor/select2/select2.min.js')}}"></script>
 <!--===============================================================================================-->
-	<script src="{{env('APP_ENV') == 'local' ? asset('public/coming_soon/vendor/countdowntime/moment.min.js') : secure_asset('public/coming_soon/vendor/countdowntime/moment.min.js')}}"></script>
-	<script src="{{env('APP_ENV') == 'local' ? asset('public/coming_soon/vendor/countdowntime/moment-timezone.min.js') : secure_asset('public/coming_soon/vendor/countdowntime/moment-timezone.min.js')}}"></script>
-	<script src="{{env('APP_ENV') == 'local' ? asset('public/coming_soon/vendor/countdowntime/moment-timezone-with-data.min.js') : secure_asset('public/coming_soon/vendor/countdowntime/moment-timezone-with-data.min.js')}}"></script>
-	<script src="{{env('APP_ENV') == 'local' ? asset('public/coming_soon/vendor/countdowntime/countdowntime.js') : secure_asset('public/coming_soon/vendor/countdowntime/countdowntime.js')}}"></script>
+	<script src="{{env('APP_ENV') == 'local' ? asset('coming_soon/vendor/countdowntime/moment.min.js') : secure_asset('coming_soon/vendor/countdowntime/moment.min.js')}}"></script>
+	<script src="{{env('APP_ENV') == 'local' ? asset('coming_soon/vendor/countdowntime/moment-timezone.min.js') : secure_asset('coming_soon/vendor/countdowntime/moment-timezone.min.js')}}"></script>
+	<script src="{{env('APP_ENV') == 'local' ? asset('coming_soon/vendor/countdowntime/moment-timezone-with-data.min.js') : secure_asset('coming_soon/vendor/countdowntime/moment-timezone-with-data.min.js')}}"></script>
+	<script src="{{env('APP_ENV') == 'local' ? asset('coming_soon/vendor/countdowntime/countdowntime.js') : secure_asset('coming_soon/vendor/countdowntime/countdowntime.js')}}"></script>
 	<script>
 		$('.cd100').countdown100({
 			// Set Endtime here
@@ -73,14 +73,14 @@
 		});
 	</script>
 <!--===============================================================================================-->
-	<script src="{{env('APP_ENV') == 'local' ? asset('public/coming_soon/vendor/tilt/tilt.jquery.min.js') : secure_asset('public/coming_soon/vendor/tilt/tilt.jquery.min.js')}}"></script>
+	<script src="{{env('APP_ENV') == 'local' ? asset('coming_soon/vendor/tilt/tilt.jquery.min.js') : secure_asset('coming_soon/vendor/tilt/tilt.jquery.min.js')}}"></script>
 	<script >
 		$('.js-tilt').tilt({
 			scale: 1.1
 		})
 	</script>
 <!--===============================================================================================-->
-	<script src="{{env('APP_ENV') == 'local' ? asset('public/coming_soon/js/main.js') : secure_asset('public/coming_soon/js/main.js')}}"></script>
+	<script src="{{env('APP_ENV') == 'local' ? asset('coming_soon/js/main.js') : secure_asset('coming_soon/js/main.js')}}"></script>
 
 </body>
 </html>

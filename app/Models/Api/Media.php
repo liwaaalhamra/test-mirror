@@ -37,9 +37,9 @@ class Media extends Model
     public function getMediaNameAttribute($value)
     {
         if($this->user_id != null){
-            return env('APP_ENV') == 'local' ? asset('public/uploads/'.$this->media_type.'/'.$this->user_id.'/'.$this->meta_name.DIRECTORY_SEPARATOR.$value) : secure_url('public/uploads/'.$this->media_type.'/'.$this->user_id.'/'.$this->meta_name.DIRECTORY_SEPARATOR.$value);
+            return env('APP_ENV') == 'local' ? asset('uploads/'.$this->media_type.'/'.$this->user_id.'/'.$this->meta_name.DIRECTORY_SEPARATOR.$value) : secure_url('public/uploads/'.$this->media_type.'/'.$this->user_id.'/'.$this->meta_name.DIRECTORY_SEPARATOR.$value);
         }else{
-            return env('APP_ENV') == 'local' ? asset('public/uploads/'.$this->media_type.'/'.$this->user_id.'/'.$this->meta_name.DIRECTORY_SEPARATOR.$value) : secure_url('public/uploads/'.$this->media_type.'/'.$this->user_id.'/'.$this->meta_name.DIRECTORY_SEPARATOR.$value);
+            return env('APP_ENV') == 'local' ? asset('uploads/'.$this->media_type.'/'.$this->user_id.'/'.$this->meta_name.DIRECTORY_SEPARATOR.$value) : secure_url('public/uploads/'.$this->media_type.'/'.$this->user_id.'/'.$this->meta_name.DIRECTORY_SEPARATOR.$value);
 
         }
     }
