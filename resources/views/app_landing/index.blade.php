@@ -5,7 +5,7 @@
 	<!-- Mobile Specific Meta -->
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<!-- Favicon-->
-	<link rel="shortcut icon" href="{{env('APP_ENV') == 'local' ? asset('resources/assets/images/logo_new.png') : secure_asset('resources/assets/images/logo_new.png')}}">
+	<link rel="shortcut icon" href="{{env('APP_ENV') == 'local' ? asset('resources/assets/images/logo_new.png') : secure_asset('public/resources/assets/images/logo_new.png')}}">
 	<!-- Author Meta -->
 	<meta name="author" content="codepixer">
 	<!-- Meta Description -->
@@ -23,14 +23,14 @@
 	<!--
 			CSS
 			============================================= -->
-	<link rel="stylesheet" href="{{env('APP_ENV') == 'local' ? asset('app_landing/css/linearicons.css') : secure_asset('app_landing/css/linearicons.css')}}">
-	<link rel="stylesheet" href="{{env('APP_ENV') == 'local' ? asset('app_landing/css/font-awesome.min.css') : secure_asset('app_landing/css/font-awesome.min.css')}}">
-	<link rel="stylesheet" href="{{env('APP_ENV') == 'local' ? asset('app_landing/css/bootstrap.css') : secure_asset('app_landing/css/bootstrap.css')}}">
-	<link rel="stylesheet" href="{{env('APP_ENV') == 'local' ? asset('app_landing/css/magnific-popup.css') : secure_asset('app_landing/css/magnific-popup.css')}}">
-	<link rel="stylesheet" href="{{env('APP_ENV') == 'local' ? asset('app_landing/css/nice-select.css') : secure_asset('app_landing/css/nice-select.css')}}">
-	<link rel="stylesheet" href="{{env('APP_ENV') == 'local' ? asset('app_landing/css/hexagons.min.css') : secure_asset('app_landing/css/hexagons.min.css')}}">
-	<link rel="stylesheet" href="{{env('APP_ENV') == 'local' ? asset('app_landing/css/owl.carousel.css') : secure_asset('app_landing/css/owl.carousel.css')}}">
-	<link rel="stylesheet" href="{{env('APP_ENV') == 'local' ? asset('app_landing/css/main.css') : secure_asset('app_landing/css/main.css')}}">
+	<link rel="stylesheet" href="{{env('APP_ENV') == 'local' ? asset('app_landing/css/linearicons.css') : secure_asset('public/app_landing/css/linearicons.css')}}">
+	<link rel="stylesheet" href="{{env('APP_ENV') == 'local' ? asset('app_landing/css/font-awesome.min.css') : secure_asset('public/app_landing/css/font-awesome.min.css')}}">
+	<link rel="stylesheet" href="{{env('APP_ENV') == 'local' ? asset('app_landing/css/bootstrap.css') : secure_asset('public/app_landing/css/bootstrap.css')}}">
+	<link rel="stylesheet" href="{{env('APP_ENV') == 'local' ? asset('app_landing/css/magnific-popup.css') : secure_asset('public/app_landing/css/magnific-popup.css')}}">
+	<link rel="stylesheet" href="{{env('APP_ENV') == 'local' ? asset('app_landing/css/nice-select.css') : secure_asset('public/app_landing/css/nice-select.css')}}">
+	<link rel="stylesheet" href="{{env('APP_ENV') == 'local' ? asset('app_landing/css/hexagons.min.css') : secure_asset('public/app_landing/css/hexagons.min.css')}}">
+	<link rel="stylesheet" href="{{env('APP_ENV') == 'local' ? asset('app_landing/css/owl.carousel.css') : secure_asset('public/app_landing/css/owl.carousel.css')}}">
+	<link rel="stylesheet" href="{{env('APP_ENV') == 'local' ? asset('app_landing/css/main.css') : secure_asset('public/app_landing/css/main.css')}}">
 
 	<style>
 
@@ -89,7 +89,7 @@
 <div class="container main-menu">
 <div class="row align-items-center justify-content-between d-flex">
 <div id="logo">
-<a href="index.html"><img src="{{env('APP_ENV') == 'local' ? asset('app_landing/img/bob.png?') : secure_asset('app_landing/img/bob.png?')}}" alt="" title="" /></a>
+<a href="index.html"><img src="{{env('APP_ENV') == 'local' ? asset('app_landing/img/bob.png?') : secure_asset('public/app_landing/img/bob.png?')}}" alt="" title="" /></a>
 </div>
 {{--<nav id="nav-menu-container">--}}
 {{--<ul class="nav-menu">--}}
@@ -151,7 +151,7 @@
 				</div>
 			</div>
 			<div class="banner-img col-lg-4 col-md-6">
-				<img class="img-fluid" src="{{env('APP_ENV') == 'local' ? asset('app_landing/img/app_banner.png') : secure_asset('app_landing/img/app_banner.png')}}" alt="">
+				<img class="img-fluid" src="{{env('APP_ENV') == 'local' ? asset('app_landing/img/app_banner.png') : secure_asset('public/app_landing/img/app_banner.png')}}" alt="">
 			</div>
 		</div>
 	</div>
@@ -453,10 +453,10 @@
 		<div class="row">
 			<div class="owl-carousel owl-screenshot">
 				<div class="single-screenshot">
-					<img class="img-fluid" src="{{env('APP_ENV') == 'local' ? asset('app_landing/img/screenshots/1.png') : secure_asset('app_landing/img/screenshots/1.png')}}" alt="">
+					<img class="img-fluid" src="{{env('APP_ENV') == 'local' ? asset('app_landing/img/screenshots/1.png') : secure_asset('public/app_landing/img/screenshots/1.png')}}" alt="">
 				</div>
 				<div class="single-screenshot">
-					<img class="img-fluid" src="{{env('APP_ENV') == 'local' ? asset('app_landing/img/screenshots/2.png') : secure_asset('app_landing/img/screenshots/2.png')}}" alt="">
+					<img class="img-fluid" src="{{env('APP_ENV') == 'local' ? asset('app_landing/img/screenshots/2.png') : secure_asset('public/app_landing/img/screenshots/2.png')}}" alt="">
 				</div>
 			</div>
 		</div>
@@ -608,7 +608,7 @@
 				<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
 			<div class="col-lg-6 col-md-6 social-link">
 				{{--<div class="download-button d-flex flex-row justify-content-end">--}}
-					{{--<img src="{{env('APP_ENV') == 'local' ? asset('app_landing/img/visa-mastercard-logo.jpg') : secure_asset('app_landing/img/visa-mastercard-logo.jpg')}}" style="width: 20%;margin: auto" alt="" title="" />--}}
+					{{--<img src="{{env('APP_ENV') == 'local' ? asset('app_landing/img/visa-mastercard-logo.jpg') : secure_asset('public/app_landing/img/visa-mastercard-logo.jpg')}}" style="width: 20%;margin: auto" alt="" title="" />--}}
 				{{--</div>--}}
 			</div>
 		</div>
@@ -616,24 +616,24 @@
 </footer>
 <!-- End Footer Area -->
 
-<script src="{{env('APP_ENV') == 'local' ? asset('app_landing/js/vendor/jquery-2.2.4.min.js') : secure_asset('app_landing/js/vendor/jquery-2.2.4.min.js')}}"></script>
+<script src="{{env('APP_ENV') == 'local' ? asset('app_landing/js/vendor/jquery-2.2.4.min.js') : secure_asset('public/app_landing/js/vendor/jquery-2.2.4.min.js')}}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
 		crossorigin="anonymous"></script>
-<script src="{{env('APP_ENV') == 'local' ? asset('app_landing/js/tilt.jquery.min.js') : secure_asset('app_landing/js/tilt.jquery.min.js')}}"></script>
-<script src="{{env('APP_ENV') == 'local' ? asset('app_landing/js/vendor/bootstrap.min.js') : secure_asset('app_landing/js/vendor/bootstrap.min.js')}}"></script>
+<script src="{{env('APP_ENV') == 'local' ? asset('app_landing/js/tilt.jquery.min.js') : secure_asset('public/app_landing/js/tilt.jquery.min.js')}}"></script>
+<script src="{{env('APP_ENV') == 'local' ? asset('app_landing/js/vendor/bootstrap.min.js') : secure_asset('public/app_landing/js/vendor/bootstrap.min.js')}}"></script>
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBhOdIF3Y9382fqJYt5I_sswSrEw5eihAA"></script>
-<script src="{{env('APP_ENV') == 'local' ? asset('app_landing/js/easing.min.js') : secure_asset('app_landing/js/easing.min.js')}}"></script>
-<script src="{{env('APP_ENV') == 'local' ? asset('app_landing/js/hoverIntent.js') : secure_asset('app_landing/js/hoverIntent.js')}}"></script>
-<script src="{{env('APP_ENV') == 'local' ? asset('app_landing/js/superfish.min.js') : secure_asset('app_landing/js/superfish.min.js')}}"></script>
-<script src="{{env('APP_ENV') == 'local' ? asset('app_landing/js/jquery.ajaxchimp.min.js') : secure_asset('app_landing/js/jquery.ajaxchimp.min.js')}}"></script>
-<script src="{{env('APP_ENV') == 'local' ? asset('app_landing/js/jquery.magnific-popup.min.js') : secure_asset('app_landing/js/jquery.magnific-popup.min.js')}}"></script>
-<script src="{{env('APP_ENV') == 'local' ? asset('app_landing/js/owl.carousel.min.js') : secure_asset('app_landing/js/owl.carousel.min.js')}}"></script>
-<script src="{{env('APP_ENV') == 'local' ? asset('app_landing/js/owl-carousel-thumb.min.js') : secure_asset('app_landing/js/owl-carousel-thumb.min.js')}}"></script>
-<script src="{{env('APP_ENV') == 'local' ? asset('app_landing/js/hexagons.min.js') : secure_asset('app_landing/js/hexagons.min.js')}}"></script>
-<script src="{{env('APP_ENV') == 'local' ? asset('app_landing/js/jquery.nice-select.min.js') : secure_asset('app_landing/js/jquery.nice-select.min.js')}}"></script>
-<script src="{{env('APP_ENV') == 'local' ? asset('app_landing/js/waypoints.min.js') : secure_asset('app_landing/js/waypoints.min.js')}}"></script>
-<script src="{{env('APP_ENV') == 'local' ? asset('app_landing/js/mail-script.js') : secure_asset('app_landing/js/mail-script.js')}}"></script>
-<script src="{{env('APP_ENV') == 'local' ? asset('app_landing/js/main.js') : secure_asset('app_landing/js/main.js')}}"></script>
+<script src="{{env('APP_ENV') == 'local' ? asset('app_landing/js/easing.min.js') : secure_asset('public/app_landing/js/easing.min.js')}}"></script>
+<script src="{{env('APP_ENV') == 'local' ? asset('app_landing/js/hoverIntent.js') : secure_asset('public/app_landing/js/hoverIntent.js')}}"></script>
+<script src="{{env('APP_ENV') == 'local' ? asset('app_landing/js/superfish.min.js') : secure_asset('public/app_landing/js/superfish.min.js')}}"></script>
+<script src="{{env('APP_ENV') == 'local' ? asset('app_landing/js/jquery.ajaxchimp.min.js') : secure_asset('public/app_landing/js/jquery.ajaxchimp.min.js')}}"></script>
+<script src="{{env('APP_ENV') == 'local' ? asset('app_landing/js/jquery.magnific-popup.min.js') : secure_asset('public/app_landing/js/jquery.magnific-popup.min.js')}}"></script>
+<script src="{{env('APP_ENV') == 'local' ? asset('app_landing/js/owl.carousel.min.js') : secure_asset('public/app_landing/js/owl.carousel.min.js')}}"></script>
+<script src="{{env('APP_ENV') == 'local' ? asset('app_landing/js/owl-carousel-thumb.min.js') : secure_asset('public/app_landing/js/owl-carousel-thumb.min.js')}}"></script>
+<script src="{{env('APP_ENV') == 'local' ? asset('app_landing/js/hexagons.min.js') : secure_asset('public/app_landing/js/hexagons.min.js')}}"></script>
+<script src="{{env('APP_ENV') == 'local' ? asset('app_landing/js/jquery.nice-select.min.js') : secure_asset('public/app_landing/js/jquery.nice-select.min.js')}}"></script>
+<script src="{{env('APP_ENV') == 'local' ? asset('app_landing/js/waypoints.min.js') : secure_asset('public/app_landing/js/waypoints.min.js')}}"></script>
+<script src="{{env('APP_ENV') == 'local' ? asset('app_landing/js/mail-script.js') : secure_asset('public/app_landing/js/mail-script.js')}}"></script>
+<script src="{{env('APP_ENV') == 'local' ? asset('app_landing/js/main.js') : secure_asset('public/app_landing/js/main.js')}}"></script>
 </body>
 
 </html>

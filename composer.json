@@ -24,8 +24,7 @@
     "jenssegers/agent": "^2.6",
     "propaganistas/laravel-phone": "^4.2",
     "firebase/php-jwt": "^5.2",
-    "swiftmailer/swiftmailer": "^5.4",
-    "joshuachinemezu/smsglobal-laravel": "^0.1.0"
+    "swiftmailer/swiftmailer": "^5.4"
   },
   "require-dev": {
     "fzaninotto/faker": "~1.4",
