@@ -166,7 +166,7 @@ return [
         \App\Providers\MailServiceProvider::class,
         Jenssegers\Agent\AgentServiceProvider::class,
         Propaganistas\LaravelPhone\PhoneServiceProvider::class,
-        // JoshuaChinemezu\SmsGlobal\SmsGlobalServiceProvider::class,
+        JoshuaChinemezu\SmsGlobal\SmsGlobalServiceProvider::class,
     ],
 
     /*
@@ -217,7 +217,7 @@ return [
         'Facebook' => SammyK\LaravelFacebookSdk\FacebookFacade::class,
         'Agent' => Jenssegers\Agent\Facades\Agent::class,
         'Phone' => \Propaganistas\LaravelPhone\PhoneServiceProvider::class,
-        // 'SmsGlobal' => JoshuaChinemezu\SmsGlobal\Facades\SmsGlobal::class,
+        'SmsGlobal' => JoshuaChinemezu\SmsGlobal\Facades\SmsGlobal::class,
 
     ],
 

@@ -28,6 +28,7 @@ use Jenssegers\Agent\Agent;
 use Laravel\Socialite\Facades\Socialite;
 use libphonenumber\NumberParseException;
 use Propaganistas\LaravelPhone\PhoneNumber;
+use Illuminate\Support\Facades\Log;
 use SoapClient;
 use SoapFault;
 use SoapHeader;
@@ -58,7 +59,7 @@ class LoginController extends Controller
                 return parent::return_error("Email does not exist", 403, "User does not exist.");
             }
         }else{
-            if(!$user = Users::whereAccountType('mobile')->where(DB::raw("CONCAT(`country_code`, `primary_phone`)"), '=', $username)->first()){
+            if(!$user = Users::whereAccountType('mobile')->where(DB::raw("CONCAT(`country_code`, `primary_phone`)"), '=', str_replace('00', '', $username))->first()){
                 return parent::return_error("Mobile Number does not exist", 403, "User does not exist or wrong password.");
             }
         }
@@ -197,7 +198,7 @@ class LoginController extends Controller
     public function login_mobile(Request $request) {
         Users::where('primary_phone',$request->phone_number)->where('password', null)->forceDelete();
         $validator = Validator::make($request->all(), [
-            'phone_number' => 'required',
+            'phone_number' => 'required|unique:users,primary_phone',
             'country_code' => 'required',
         ]);
 
@@ -234,6 +235,8 @@ class LoginController extends Controller
         $pin = 111111;
         $registration = parent::generate_tokens(4);
 
+        $otp = $this->generateNumericOTP();
+
         $agent = new Agent();
         $device_name = $agent->device();
         $browser_name = $agent->browser();
@@ -255,7 +258,7 @@ class LoginController extends Controller
                 'verified_at' => null,
                 'country_id' => $country_id,
                 'registration' => $registration,
-                'pin' => $pin,
+                'pin' => $otp,
                 'device_name' => $device_name,
                 'browser_name' => $browser_name,
                 'browser_version' => $browser_version,
@@ -272,11 +275,12 @@ class LoginController extends Controller
             return parent::return_error("Account Blocked", 407, "Account Blocked");
         }
         try {
-//            $result = parent::infobip_send_sms($data);
-//            $result = parent::SendQpaySMS('Your Activation Code: '.$pin, $new_country_code.$new_phone_number,env('SMS_SOURCE'));
-//            if(!$result){
-//                return parent::return_error('Failed to Send Pin',455,'messages.failed_send_pin');
-//            }
+            $phoneNumber = str_replace('+', '', $request->country_code.$request->phone_number);
+            $result = parent::send_otp($phoneNumber,$otp);
+            // $result = parent::SendQpaySMS('Your Activation Code: '.$pin, $new_country_code.$new_phone_number,env('SMS_SOURCE'));
+            if(!$result){
+                return parent::return_error('Failed to Send Pin',455,'messages.failed_send_pin');
+            }
         } catch (SoapFault $fault) {
             return parent::return_error('Failed to Send Pin:'.$fault->faultstring,455,'messages.failed_send_pin');
         }
@@ -481,7 +485,7 @@ class LoginController extends Controller
     }
 
     public function register(Request $request) {
-//        $lang = parent::setLang('en');
+            //        $lang = parent::setLang('en');
         $first_name = null;
         if(Input::has('first_name')){
            $first_name = trim($request->first_name);
@@ -831,6 +835,13 @@ class LoginController extends Controller
             ->orderByRaw("LOWER(citizenship) ASC")
             ->get();
         return response()->json($countries);
+    }
+
+    function generateNumericOTP($length = 6)
+    {
+        $min = pow(10, $length - 1);
+        $max = pow(10, $length) - 1;
+        return strval(random_int($min, $max));
     }
 
 }

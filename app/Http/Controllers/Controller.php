@@ -19,6 +19,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Str;
+use GuzzleHttp\Client;
 
 class Controller extends BaseController
 {
@@ -640,39 +642,48 @@ class Controller extends BaseController
         return $result;
     }
 
-    protected function infobip_send_sms($info){
-        $full_url = env('SMS_BASE_URL');
-        $ch = curl_init();
-        $fields = $info['params'];
-        $fields = json_encode($fields);
-        curl_setopt_array($ch, array(
-            CURLOPT_URL => $full_url,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => "",
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 30,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => "POST",
-            CURLOPT_POSTFIELDS => $fields,
-            CURLOPT_HTTPHEADER => array(
-                "Connection: keep-alive",
-                'Authorization: Basic '. base64_encode(env('SMS_USERNAME').":".env('SMS_PASSWORD')),
-                "Content-Type: application/json",
-            ),
-        ));
-        $response = curl_exec($ch);
-        $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        $err = curl_errno($ch);
+    protected function send_otp($phoneNumber,$otp)
+    {
+        $message = 'Please verify using the following code: '.$otp;
+        $senderId = 'Barterdom';
 
-        curl_close($ch);
-        if ($err) {
-            return false;
-        } else {
-            $response = json_decode($response,true);
-            if($response == null){
-                return false;
+        $apiUrl = env('SMSGLOBAL_API_URL');
+        $apiKey = env('SMSGLOBAL_API_KEY');
+        $secretKey = env('SMSGLOBAL_SECRET_KEY');
+
+        $ts = time();
+        $nonce = Str::random(8);
+        $urlComponents = parse_url($apiUrl);
+
+        $auth = "{$ts}\n{$nonce}\nPOST\n{$urlComponents['path']}\n{$urlComponents['host']}\n443\n\n";
+        $authHash = base64_encode(hash_hmac('sha256', $auth, $secretKey, true));
+        $authHeader = "MAC id=\"{$apiKey}\", ts=\"{$ts}\", nonce=\"{$nonce}\", mac=\"{$authHash}\"";
+
+        $client = new \GuzzleHttp\Client();
+
+        try {
+            $response = $client->post($apiUrl, [
+                'headers' => [
+                    'Authorization' => $authHeader,
+                    'Content-Type' => 'application/json',
+                ],
+                'json' => [
+                    'destination' => $phoneNumber,
+                    'message' => $message,
+                    'origin' => $senderId,
+                ],
+            ]);
+
+            if ($response->getStatusCode() === 200) {
+                // SMS sent successfully
+                return response()->json(['message' => 'SMS sent successfully']);
+            } else {
+                // Handle error if needed
+                return response()->json(['error' => 'Failed to send SMS']);
             }
-            return $response;
+        } catch (\Exception $e) {
+            // Handle exceptions, log errors, etc.
+            return response()->json(['error' => 'Error sending SMS: ' . $e->getMessage()]);
         }
     }
 

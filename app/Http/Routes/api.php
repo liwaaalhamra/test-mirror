@@ -208,7 +208,8 @@ Route::post('/locate_us', 'LocateUsController@index');
  * Get Matching
  */
 Route::get('/matching', 'MatchingController@index')->name('matching');
-Route::post('/send-sms', 'SmsController@sendSms')->name('sendsms');
+Route::get('/send-otp', 'SmsController@sendOTP')->name('sendOTP');
+
 /**
  * News Routes
  */

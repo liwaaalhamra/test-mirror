@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a81db54a8a9df2a16f1ac8d1e3ed0964",
+    "content-hash": "77eb6717f4d7705b01c579ca55fa1463",
     "packages": [
         {
             "name": "classpreloader/classpreloader",
@@ -1422,6 +1422,83 @@
             },
             "abandoned": "opis/closure",
             "time": "2018-03-21T22:21:57+00:00"
+        },
+        {
+            "name": "joshuachinemezu/smsglobal-laravel",
+            "version": "v0.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/joshuachinemezu/smsglobal-laravel.git",
+                "reference": "626206c9b373624de53c50ce827bbfdb1c79e94b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/joshuachinemezu/smsglobal-laravel/zipball/626206c9b373624de53c50ce827bbfdb1c79e94b",
+                "reference": "626206c9b373624de53c50ce827bbfdb1c79e94b",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "5.*|6.*",
+                "illuminate/support": "^5.0|^6.0|^7.0|^8.0",
+                "php": "^7.3"
+            },
+            "require-dev": {
+                "mockery/mockery": "^1.4@dev",
+                "orchestra/testbench": "^6.0@dev",
+                "phpunit/phpunit": "^9.2@dev"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "JoshuaChinemezu\\SmsGlobal\\SmsGlobalServiceProvider"
+                    ],
+                    "aliases": {
+                        "SmsGlobal": "JoshuaChinemezu\\SmsGlobal\\Facades\\SmsGlobal"
+                    }
+                }
+            },
+            "autoload": {
+                "files": [
+                    "src/Support/helpers.php"
+                ],
+                "psr-4": {
+                    "JoshuaChinemezu\\SmsGlobal\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Joshua Chinemezu",
+                    "email": "joshuachinemezu@gmail.com"
+                }
+            ],
+            "description": "A Laravel packaage for integrating SmsGlobal",
+            "keywords": [
+                "Sms Integration",
+                "bulk sms",
+                "github",
+                "joshuachinemezu",
+                "laravel",
+                "laravel 5",
+                "open source",
+                "php",
+                "sms",
+                "sms api",
+                "sms gateway",
+                "sms marketing",
+                "smsglobal",
+                "smsglobal.com",
+                "text messaging"
+            ],
+            "support": {
+                "issues": "https://github.com/joshuachinemezu/smsglobal-laravel/issues",
+                "source": "https://github.com/joshuachinemezu/smsglobal-laravel/tree/v0.1.0"
+            },
+            "time": "2020-05-30T19:31:18+00:00"
         },
         {
             "name": "kylekatarnls/update-helper",

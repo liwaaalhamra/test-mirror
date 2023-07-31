@@ -314,7 +314,7 @@ class ItemsController extends Controller
         ];
         $category5 = [
             'slug' => 'matches',
-            'title' => 'My Matches',
+            'title' => 'Matching Posts',
             'items' => $matches
         ];
         $category6 = [
