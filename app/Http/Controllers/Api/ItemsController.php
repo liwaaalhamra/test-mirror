@@ -471,7 +471,7 @@ class ItemsController extends Controller
             $items->forPage(LengthAwarePaginator::resolveCurrentPage(), $limit)->values(), $items->count(), $limit, LengthAwarePaginator::resolveCurrentPage(), ['path' => secure_url('/api/products/items/pagination')]
         );
 
-        Log::info(response()->json($items));
+        // Log::info(response()->json($items));
         return response()->json($items);
     }
 

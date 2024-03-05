@@ -140,8 +140,8 @@ class SupplierSubCategoriesController extends Controller
      */
     public function edit($category_id,$item_id)
     {
-        $item = SupplierSubCategory::findOrFail($item_id);
-        $category = CuratedCollection::findOrFail($category_id);
+        $item = SubSubCategory::findOrFail($item_id);
+        $category = SubCategory::findOrFail($category_id);
         return view('pages.'.$this->parent_section_name.'.'.$this->section_name.'.'.$this->sub_section_name.'.edit', compact('item','category'))
             ->with('content_header', 'Update '.$this->display_name);
     }
@@ -154,13 +154,13 @@ class SupplierSubCategoriesController extends Controller
      */
     public function update(Request $request,$category_id,$item_id)
     {
-        $item = SupplierSubCategory::findOrFail($item_id);
+        $item = SubSubCategory::findOrFail($item_id);
         $item->update([
             'item_order' => $request->item_order,
             'name_en' => isset($request->name_en) && !empty($request->name_en) ? trim($request->name_en) : null,
-            'name_ar' => isset($request->name_ar) && !empty($request->name_ar) ? trim($request->name_ar) : null,
-            'description_en' => isset($request->description_en) && !empty($request->description_en) ? trim($request->description_en) : null,
-            'description_ar' => isset($request->description_ar) && !empty($request->description_ar) ? trim($request->description_ar) : null,
+            // 'name_ar' => isset($request->name_ar) && !empty($request->name_ar) ? trim($request->name_ar) : null,
+            // 'description_en' => isset($request->description_en) && !empty($request->description_en) ? trim($request->description_en) : null,
+            // 'description_ar' => isset($request->description_ar) && !empty($request->description_ar) ? trim($request->description_ar) : null,
         ]);
 
         return redirect()->route('admin.'.$this->section_name.'.'.$this->sub_section_name.'.index',$category_id)
@@ -170,14 +170,14 @@ class SupplierSubCategoriesController extends Controller
 
     public function destroy($category_id,$item_id)
     {
-        $item = SupplierSubCategory::findOrFail($item_id);
-        if($item->item_order != null){
-            $all_items = SupplierSubCategory::whereCategoryId($category_id)->where('item_order','>',$item->item_order)->get();
-            foreach ($all_items as $single_item){
-                $single_item->item_order = $single_item->item_order - 1;
-                $single_item->save();
-            }
-        }
+        $item = SubSubCategory::findOrFail($item_id);
+        // if($item->item_order != null){
+        //     $all_items = SupplierSubCategory::whereCategoryId($category_id)->where('item_order','>',$item->item_order)->get();
+        //     foreach ($all_items as $single_item){
+        //         $single_item->item_order = $single_item->item_order - 1;
+        //         $single_item->save();
+        //     }
+        // }
         $item->delete();
 
         return redirect()->route('admin.'.$this->section_name.'.'.$this->sub_section_name.'.index',$category_id)

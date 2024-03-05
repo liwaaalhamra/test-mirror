@@ -21,6 +21,8 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Str;
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Log;
+
 
 class Controller extends BaseController
 {
@@ -644,6 +646,8 @@ class Controller extends BaseController
 
     protected function send_otp($phoneNumber,$otp)
     {
+        // Log::info($phoneNumber);
+        // Log::info($otp);
         $message = 'Please verify using the following code: '.$otp;
         $senderId = 'Barterdom';
 
@@ -676,9 +680,11 @@ class Controller extends BaseController
 
             if ($response->getStatusCode() === 200) {
                 // SMS sent successfully
+                // Log::info('SMS sent successfully');
                 return response()->json(['message' => 'SMS sent successfully']);
             } else {
                 // Handle error if needed
+                // Log::info('Failed to send SMS');
                 return response()->json(['error' => 'Failed to send SMS']);
             }
         } catch (\Exception $e) {

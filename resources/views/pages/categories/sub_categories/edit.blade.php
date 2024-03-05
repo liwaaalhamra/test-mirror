@@ -24,13 +24,13 @@
                                 <label>Name English</label>
                                 <input type="text" name="name_en" required id="name_en" class="form-control" placeholder="Name English" value="{{ $item->name_en }}">
                             </div>
-                            <div class="form-group col-sm-4">
+                            {{-- <div class="form-group col-sm-4">
                                 <label>Name Arabic</label>
                                 <input type="text" name="name_ar" required id="name_ar" class="form-control" placeholder="Name Arabic" value="{{ $item->name_ar }}">
-                            </div>
+                            </div> --}}
 
                         </div>
-                        <div class="row">
+                        {{-- <div class="row">
 
                             <div class="form-group col-sm-6">
                                 <label>Description English</label>
@@ -40,8 +40,8 @@
                                 <label>Description Arabic</label>
                                 <textarea name="description_ar" id="desc_ar" rows="10" class="form-control">{{ $item->description_ar }}</textarea>
                             </div>
-                        </div>
-                        <div class="row">
+                        </div> --}}
+                        {{-- <div class="row">
                             <div class="form-group col-sm-4">
                                 <div class="imageupload panel panel-default">
 
@@ -86,7 +86,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
 
                         <div class="form-group col-sm-12">
                             <button type="submit" id="submit" class="btn btn-sm btn-success">Save</button>

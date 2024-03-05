@@ -14,16 +14,16 @@
                                 <label>Name English</label>
                                 <input type="text" name="name_en" id="name_en" class="form-control" required placeholder="Name English" value="{{ $item->name_en }}">
                             </div>
-                            <div class="form-group col-sm-4">
+                            {{-- <div class="form-group col-sm-4">
                                 <label>Name Arabic</label>
                                 <input type="text" name="name_ar" id="name_ar" class="form-control" required placeholder="Name Arabic" value="{{ $item->name_ar }}">
-                            </div>
+                            </div> --}}
                             <div class="form-group col-sm-4">
                                 <label>Order</label>
                                 <input type="text" name="item_order" id="item_order" required class="form-control" placeholder="Order" value="{{ $item->item_order }}">
                             </div>
                         </div>
-                        <div class="row">
+                        {{-- <div class="row">
                             <div class="form-group col-sm-6">
                                 <label>Description English</label>
                                 <textarea name="description_en" id="description_en" class="form-control">{{$item->description_en}}</textarea>
@@ -32,7 +32,7 @@
                                 <label>Description Arabic</label>
                                 <textarea name="description_ar" id="description_ar" class="form-control">{{$item->description_ar}}</textarea>
                             </div>
-                        </div>
+                        </div> --}}
 
                         <div class="form-group col-sm-12">
                             <button type="submit" id="submit" class="btn btn-sm btn-success">Save</button>

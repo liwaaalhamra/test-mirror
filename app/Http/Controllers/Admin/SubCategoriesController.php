@@ -207,9 +207,9 @@ class SubCategoriesController extends Controller
         $data = [
             'item_order' => empty(trim($request->item_order)) ? null : trim($request->item_order),
             'name_en' => empty(trim($request->name_en)) ? null : trim($request->name_en),
-            'name_ar' => empty(trim($request->name_ar)) ? null : trim($request->name_ar),
-            'description_en' => empty(trim($request->description_en)) ? null : trim($request->description_en),
-            'description_ar' => empty(trim($request->description_ar)) ? null : trim($request->description_ar),
+            // 'name_ar' => empty(trim($request->name_ar)) ? null : trim($request->name_ar),
+            // 'description_en' => empty(trim($request->description_en)) ? null : trim($request->description_en),
+            // 'description_ar' => empty(trim($request->description_ar)) ? null : trim($request->description_ar),
         ];
 
         if($image != null){
@@ -241,10 +241,10 @@ class SubCategoriesController extends Controller
         $item = SubCategory::findOrFail($item_id);
 
         $category = Category::findOrFail($category_id);
-        if($item->getMediaName() != null) {
-            $filePath = public_path() . DIRECTORY_SEPARATOR . 'uploads/images'  . DIRECTORY_SEPARATOR . 'categories' . DIRECTORY_SEPARATOR . $item->getMediaName();
-            File::delete($filePath);
-        }
+        // if($item->getMediaName() != null) {
+        //     $filePath = public_path() . DIRECTORY_SEPARATOR . 'uploads/images'  . DIRECTORY_SEPARATOR . 'categories' . DIRECTORY_SEPARATOR . $item->getMediaName();
+        //     File::delete($filePath);
+        // }
         $item->delete();
 
         return redirect()->route('admin.categories.sub_categories.index',$category_id)

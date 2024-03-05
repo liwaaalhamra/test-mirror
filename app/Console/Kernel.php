@@ -27,7 +27,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        Log::info('Cron working fine');
+        // Log::info('Cron working fine');
         $schedule->command('match:cron')
             ->daily();
     }
