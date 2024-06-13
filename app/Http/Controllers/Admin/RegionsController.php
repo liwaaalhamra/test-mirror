@@ -16,6 +16,8 @@ use App\Models\Api\PlaceTypes;
 use App\Models\Api\Player;
 use App\Models\Api\ProductType;
 use App\Models\Api\Region;
+use App\Models\Api\SubRegion;
+use App\Models\Api\Location;
 use App\Models\Api\Report;
 use App\Models\Api\Store;
 use App\Models\Api\Suggestion;
@@ -47,7 +49,7 @@ class RegionsController extends Controller
      */
     public function index(Request $request) /*: View*/
     {
-        $items = Region::get();
+        $items = SubRegion::get();
         return view('pages.regions.index', compact('items'))
             ->with('section_name', 'regions')
             ->with('content_header', 'Regions');
@@ -60,9 +62,8 @@ class RegionsController extends Controller
      */
     public function create()
     {
-        $countries = Country::where('visibility','=',1)
-            ->orderByRaw("LOWER(name) ASC")
-            ->get();
+        $countries = Location::orderBy('name_en')->get();
+
         return view('pages.regions.create',compact('countries'))
             ->with('content_header', 'Add Region');
     }
@@ -79,10 +80,10 @@ class RegionsController extends Controller
             'name_en' => 'required',
             'country_id' => 'required',
         ]);
-        Region::create([
+        SubRegion::create([
             'name_en' => isset($request->name_en) && !empty($request->name_en) ? trim($request->name_en) : null,
             'name_ar' => isset($request->name_ar) && !empty($request->name_ar) ? trim($request->name_ar) : null,
-            'country_id' => $request->get('country_id'),
+            'city_id' => $request->get('country_id'),
         ]);
         return redirect()->route('admin.regions.index')
             ->with('success', 'Region Successfully added');
@@ -96,10 +97,9 @@ class RegionsController extends Controller
      */
     public function edit($id) /*: View*/
     {
-        $item = Region::findOrFail($id);
-        $countries = Country::where('visibility','=',1)
-            ->orderByRaw("LOWER(name) ASC")
-            ->get();
+        $item = SubRegion::findOrFail($id);
+        $countries = Location::orderBy('name_en')->get();
+
         return view('pages.regions.edit', compact('item','countries'))
             ->with('content_header', 'Update Region');
     }
@@ -117,11 +117,11 @@ class RegionsController extends Controller
             'name_en' => 'required',
             'country_id' => 'required',
         ]);
-        $item = Region::findOrFail($id);
+        $item = SubRegion::findOrFail($id);
         $item->update([
             'name_en' => isset($request->name_en) && !empty($request->name_en) ? trim($request->name_en) : null,
             'name_ar' => isset($request->name_ar) && !empty($request->name_ar) ? trim($request->name_ar) : null,
-            'country_id' => $request->get('country_id'),
+            'city_id' => $request->get('country_id'),
         ]);
         return redirect()->route('admin.regions.index')
             ->with('success', 'Region Successfully updated');
@@ -135,7 +135,7 @@ class RegionsController extends Controller
      */
     public function destroy($id) /*: RedirectResponse*/
     {
-        $item = Region::findOrFail($id);
+        $item = SubRegion::findOrFail($id);
         $item->delete();
 
         return redirect()->route('admin.regions.index')

@@ -14,7 +14,7 @@
                                 <label>Choose Country <p style="color: red; display: inline-block; line-height: 0.1rem">*</p></label>
                                 <select class="form-control selectpicker" title="Choose..."  data-live-search="true" name="country_id" required>
                                     @foreach($countries as $country)
-                                        <option data-tokens="{{$country->name}}" @if($item->country_id == $country->id) selected @endif value="{{ $country->id }}">{{$country->name}}</option>
+                                        <option data-tokens="{{$country->name}}" @if($item->city_id == $country->id) selected @endif value="{{ $country->id }}">{{$country->name}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -26,7 +26,7 @@
                             </div>
                             <div class="form-group col-sm-4">
                                 <label>Name Arabic</label>
-                                <input type="text" name="name_ar" id="name_ar" class="form-control" required placeholder="Name" value="{{ $item->name_ar }}">
+                                <input type="text" name="name_ar" id="name_ar" class="form-control" placeholder="Name" value="{{ $item->name_ar }}">
                             </div>
                         </div>
 

@@ -14,7 +14,8 @@ class SubRegion extends Model
 {
     protected $table = 'sub_regions';
     protected $guarded = [];
-    protected $hidden = ['updated_at','name_en','name_ar','city_id'];
+    // protected $hidden = ['updated_at','name_en','name_ar','city_id'];
+    protected $fillable = ['updated_at','name_en','name_ar','city_id'];
     protected $appends = ['name'];
     protected $with = ['city'];
 

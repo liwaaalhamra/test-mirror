@@ -35,6 +35,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Api\UserMatchingRecord;
 use Validator;
 use Propaganistas\LaravelPhone\PhoneNumber;
+use Intervention\Image\ImageManagerStatic as Image;
 
 /**
  * Class ItemsController
@@ -191,7 +192,7 @@ class ItemsController extends Controller
 
 
 
-        $query = Item::wherein('id',$items_viewed)->whereType('offer')->whereIsAvailable(1)->orderby('created_at','desc');
+        $query = Item::wherein('id',$items_viewed)->whereType('offer')->whereIsAvailable(1)->where('expired_at','>=', Carbon::now())->orderby('created_at','desc');
         $currency = env('APP_CURRENCY');
         $recently_viewed_items = $query->take(10)->get()->map(function ($value, $key) use ($currency,$user) {
             $value->is_favorite = false;
@@ -209,7 +210,7 @@ class ItemsController extends Controller
 
         $query = Item::whereType('offer')->whereHas('category', function ($q) {
             $q->whereType('products');
-        })->whereIsAvailable(1)->orderby('created_at','desc');
+        })->whereIsAvailable(1)->where('expired_at','>=', Carbon::now())->orderby('created_at','desc');
         $currency = env('APP_CURRENCY');
         $new_arrival_items = $query->take(10)->get()->map(function ($value, $key) use ($currency,$user) {
             $value->is_favorite = false;
@@ -226,7 +227,7 @@ class ItemsController extends Controller
 
         $query = Item::whereType('offer')->whereHas('category', function ($q) {
             $q->whereType('services');
-        })->whereIsAvailable(1)->orderby('created_at','desc');
+        })->whereIsAvailable(1)->where('expired_at','>=', Carbon::now())->orderby('created_at','desc');
         $currency = env('APP_CURRENCY');
         $latest_services_items = $query->take(10)->get()->map(function ($value, $key) use ($currency,$user) {
             $value->is_favorite = false;
@@ -240,7 +241,7 @@ class ItemsController extends Controller
             return $value;
         })->values();
 
-        $query = Item::whereType('offer')->whereIsAvailable(1)->orderby('created_at','desc');
+        $query = Item::whereType('offer')->whereIsAvailable(1)->where('expired_at','>=', Carbon::now())->orderby('created_at','desc');
         $currency = env('APP_CURRENCY');
         
         $matches1 = $query->take(10)->get()->map(function ($value, $key) use ($currency,$user) {
@@ -259,21 +260,25 @@ class ItemsController extends Controller
             $data = UserMatchingRecord::where('user_id',$user->id)->orderBy('created_at','desc')->first();
             if($data){
                 $ids = json_decode($data->matching_records,true);
-                $ids_ordered = implode(',', $ids);
-                $match_query = Item::whereIn('id',$ids)->where('is_available', 1)->orderByRaw("FIELD(id, $ids_ordered)");
-                $currency = env('APP_CURRENCY');
-                
-                $matches = $match_query->get()->map(function ($value, $key) use ($currency,$user) {
-                    $value->is_favorite = false;
-                    if($user){
-                        if(UserFavorite::whereMetaName('items')->whereMetaId($value->id)->whereUserId($user->id)->first()){
-                            $value->is_favorite = true;
+                if($ids){
+                    $ids_ordered = implode(',', $ids);
+                    $match_query = Item::whereIn('id',$ids)->where('is_available', 1)->orderByRaw("FIELD(id, $ids_ordered)");
+                    $currency = env('APP_CURRENCY');
+                    
+                    $matches = $match_query->get()->map(function ($value, $key) use ($currency,$user) {
+                        $value->is_favorite = false;
+                        if($user){
+                            if(UserFavorite::whereMetaName('items')->whereMetaId($value->id)->whereUserId($user->id)->first()){
+                                $value->is_favorite = true;
+                            }
                         }
-                    }
-                    $value->currency = $currency;
-                    $value->post_type = "services";
-                    return $value;
-                })->values();
+                        $value->currency = $currency;
+                        $value->post_type = "services";
+                        return $value;
+                    })->values();
+                }else{
+                    $matches = null;
+                }
             }else{
                 $matches = null;
             }
@@ -346,7 +351,7 @@ class ItemsController extends Controller
         if($slug == 'trending-products'){
             $query = Item::whereType('offer')->whereHas('category', function ($q) {
                 $q->whereType('products');
-            })->whereIsAvailable(1)->orderby('created_at','desc');
+            })->whereIsAvailable(1)->where('expired_at','>=', Carbon::now())->orderby('created_at','desc');
             $currency = env('APP_CURRENCY');
             $items = $query->take(50)->get()->map(function ($value, $key) use ($currency,$user) {
                 $value->is_favorite = false;
@@ -358,12 +363,13 @@ class ItemsController extends Controller
                 unset($value->quantity);
                 $value->currency = $currency;
                 $value->post_type = "products";
+                $value->return_post = json_encode($value->return_post);
                 return $value;
             })->values();
         }elseif ($slug == 'trending-services'){
             $query = Item::whereType('offer')->whereHas('category', function ($q) {
                 $q->whereType('services');
-            })->whereIsAvailable(1)->orderby('created_at','desc');
+            })->whereIsAvailable(1)->where('expired_at','>=', Carbon::now())->orderby('created_at','desc');
             $currency = env('APP_CURRENCY');
             $items = $query->take(50)->get()->map(function ($value, $key) use ($currency,$user) {
                 $value->is_favorite = false;
@@ -374,10 +380,11 @@ class ItemsController extends Controller
                 }
                 $value->currency = $currency;
                 $value->post_type = "services";
+                $value->return_post = json_encode($value->return_post);
                 return $value;
             })->values();
         }elseif ($slug == 'recently-viewed'){
-            $query = Item::wherein('id',$items_viewed)->whereType('offer')->whereIsAvailable(1)->orderby('created_at','desc');
+            $query = Item::wherein('id',$items_viewed)->whereType('offer')->whereIsAvailable(1)->where('expired_at','>=', Carbon::now())->orderby('created_at','desc');
             $currency = env('APP_CURRENCY');
             $items = $query->take(50)->get()->map(function ($value, $key) use ($currency,$user) {
                 $value->is_favorite = false;
@@ -390,11 +397,12 @@ class ItemsController extends Controller
                 $value->currency = $currency;
                 $value->post_type = $value->category->type;
                 unset($value->category);
+                $value->return_post = json_encode($value->return_post);
                 return $value;
             })->values();
         }elseif ($slug == 'nearby'){
             if($latitude && $longitude){
-                $query = Item::whereType('offer')->whereIsAvailable(1)->orderbyRaw("(6371 * 2 * ASIN(SQRT( POWER(SIN(( $latitude - latitude) *  pi()/180 / 2), 2) +COS( $latitude * pi()/180) * COS(latitude * pi()/180) * POWER(SIN(( $longitude - longitude) * pi()/180 / 2), 2) ))) asc");
+                $query = Item::whereType('offer')->whereIsAvailable(1)->where('expired_at','>=', Carbon::now())->orderbyRaw("(6371 * 2 * ASIN(SQRT( POWER(SIN(( $latitude - latitude) *  pi()/180 / 2), 2) +COS( $latitude * pi()/180) * COS(latitude * pi()/180) * POWER(SIN(( $longitude - longitude) * pi()/180 / 2), 2) ))) asc");
                 $currency = env('APP_CURRENCY');
                 $items = $query->take(50)->get()->map(function ($value, $key) use ($currency,$user) {
                     $value->is_favorite = false;
@@ -407,6 +415,7 @@ class ItemsController extends Controller
                     $value->currency = $currency;
                     $value->post_type = $value->category->type;
                     unset($value->category);
+                    $value->return_post = json_encode($value->return_post);
                     return $value;
                 })->values();
             }
@@ -431,7 +440,7 @@ class ItemsController extends Controller
                 if($data){
                     $ids = json_decode($data->matching_records,true);
                     $ids_ordered = implode(',', $ids);
-                    $match_query = Item::whereIn('id',$ids)->where('is_available', 1)->orderByRaw("FIELD(id, $ids_ordered)");
+                    $match_query = Item::whereIn('id',$ids)->where('is_available', 1)->where('expired_at','>=', Carbon::now())->orderByRaw("FIELD(id, $ids_ordered)");
                     
                     $currency = env('APP_CURRENCY');
                     
@@ -446,6 +455,7 @@ class ItemsController extends Controller
                     $value->currency = $currency;
                     $value->post_type = $value->category->type;
                     unset($value->category);
+                    $value->return_post = json_encode($value->return_post);
                     return $value;
                     })->values();
                 }else{
@@ -455,13 +465,14 @@ class ItemsController extends Controller
                 $items = null;
             }
         }elseif ($slug == 'latest-posts'){
-            $query = Item::whereType('offer')->whereIsAvailable(1)->orderby('created_at','desc');
+            $query = Item::whereType('offer')->whereIsAvailable(1)->where('expired_at','>=', Carbon::now())->orderby('created_at','desc');
             $currency = env('APP_CURRENCY');
             $items = $query->take(50)->get()->map(function ($value, $key) use ($currency,$user) {
                 unset($value->quantity);
                 $value->currency = $currency;
                 $value->post_type = $value->category->type;
                 unset($value->category);
+                $value->return_post = json_encode($value->return_post);
                 return $value;
             })->values();
         }
@@ -471,7 +482,6 @@ class ItemsController extends Controller
             $items->forPage(LengthAwarePaginator::resolveCurrentPage(), $limit)->values(), $items->count(), $limit, LengthAwarePaginator::resolveCurrentPage(), ['path' => secure_url('/api/products/items/pagination')]
         );
 
-        // Log::info(response()->json($items));
         return response()->json($items);
     }
 
@@ -858,8 +868,6 @@ class ItemsController extends Controller
                 }
             });                                    
             
-            // Log::info($query->toSql());
-
         });
 
 
@@ -1881,7 +1889,14 @@ class ItemsController extends Controller
             if($request->file('image')->isValid()) {
                 $file = $request->file('image');
                 $fileName = str_slug(str_random(20)) . '.' . $file->getClientOriginalExtension();
-                $file->move($destinationDir, $fileName);
+
+                $resizedImage = Image::make($file)->resize(1024, null, function ($constraint) {
+                    $constraint->aspectRatio();
+                    $constraint->upsize();
+                })->encode('jpg', 90);
+                $resizedImage->save($destinationDir . DIRECTORY_SEPARATOR . $fileName);
+
+                // $file->move($destinationDir, $fileName);
                 $this->correctImageOrientation($destinationDir.'/'.$fileName);
                 list($width, $height, $type, $attr) = getimagesize($destinationDir.'/'.$fileName);
             }else{

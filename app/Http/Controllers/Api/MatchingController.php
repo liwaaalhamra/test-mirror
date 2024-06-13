@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Api\Item;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 
 class MatchingController extends Controller
@@ -87,7 +88,7 @@ class MatchingController extends Controller
         $max = 999999999;
 
 
-        $my_posts = Item::whereUserId($user)->whereType('offer')->get();
+        $my_posts = Item::whereUserId($user)->whereType('offer')->where('expired_at','>=', Carbon::now())->get();
         foreach ($my_posts as $my_post) {
             // Labels of priorities section 9
             $label_9 = [
@@ -199,6 +200,7 @@ class MatchingController extends Controller
             ->where($label_10)
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->where($label_9)
+            ->where('items.expired_at','>',Carbon::now())
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at','items.created_at']);
             if(!$matching_posts_p1->isEmpty()){
@@ -214,6 +216,7 @@ class MatchingController extends Controller
             ->where($label_10)
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->where($label_9_b)
+            ->where('items.expired_at','>',Carbon::now())
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             if(!$matching_posts_p2->isEmpty()){
@@ -229,6 +232,7 @@ class MatchingController extends Controller
             ->where($label_10)
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->where($label_9_c)
+            ->where('items.expired_at','>',Carbon::now())
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             if(!$matching_posts_p3->isEmpty()){
@@ -244,6 +248,7 @@ class MatchingController extends Controller
             ->where($label_10_b)
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->where($label_9)
+            ->where('items.expired_at','>',Carbon::now())
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             if(!$matching_posts_p4->isEmpty()){
@@ -259,6 +264,7 @@ class MatchingController extends Controller
             ->where($label_10_c)
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->where($label_9)
+            ->where('items.expired_at','>',Carbon::now())
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             if(!$matching_posts_p5->isEmpty()){
@@ -274,6 +280,7 @@ class MatchingController extends Controller
             ->where($label_10_b)
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->where($label_9_b)
+            ->where('items.expired_at','>',Carbon::now())
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             if(!$matching_posts_p6->isEmpty()){
@@ -289,6 +296,7 @@ class MatchingController extends Controller
             ->where($label_10_b)
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->where($label_9_c)
+            ->where('items.expired_at','>',Carbon::now())
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             if(!$matching_posts_p7->isEmpty()){
@@ -304,6 +312,7 @@ class MatchingController extends Controller
             ->where($label_10_c)
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->where($label_9_b)
+            ->where('items.expired_at','>',Carbon::now())
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             if(!$matching_posts_p8->isEmpty()){
@@ -319,6 +328,7 @@ class MatchingController extends Controller
             ->where($label_10_c)
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->where($label_9_c)
+            ->where('items.expired_at','>',Carbon::now())
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             if(!$matching_posts_p9->isEmpty()){
@@ -333,14 +343,15 @@ class MatchingController extends Controller
             $matching_posts_p10 = Item::where('items.user_id', '!=', $user)
             ->where($label_10)
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
-            ->where([
-                ['return_items.category_id', '!=', $my_post->category_id],
-                ['return_items.sub_category_id', '!=', $my_post->sub_category_id],
-                ['return_items.sub_sub_category_id', '!=', $my_post->sub_sub_category_id],
-                ['return_items.location_id', '!=', $my_post->location_id],
-                ['return_items.price_from', '>', $my_post->price ? $my_post->price : 0],
-                ['return_items.price_to', '<', $my_post->price ? $my_post->price : $max],
-            ])
+            // ->where([
+            //     ['return_items.category_id', '!=', $my_post->category_id],
+            //     ['return_items.sub_category_id', '!=', $my_post->sub_category_id],
+            //     ['return_items.sub_sub_category_id', '!=', $my_post->sub_sub_category_id],
+            //     ['return_items.location_id', '!=', $my_post->location_id],
+            //     ['return_items.price_from', '>', $my_post->price ? $my_post->price : 0],
+            //     ['return_items.price_to', '<', $my_post->price ? $my_post->price : $max],
+            // ])
+            ->where('items.expired_at','>',Carbon::now())
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             if(!$matching_posts_p10->isEmpty()){
@@ -355,14 +366,15 @@ class MatchingController extends Controller
             $data_p11 = Item::where('items.user_id', '!=', $user)
             ->where($label_9)
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
-            ->where([
-                ['items.category_id', '!=', $my_post->return_post['category_id']],
-                ['items.sub_category_id', '!=', $my_post->return_post['sub_category_id']],
-                ['items.sub_sub_category_id', '!=', $my_post->return_post['sub_sub_category_id']],
-                ['items.location_id', '!=', $my_post->return_post['location_id']],
-                ['items.price', '<', $my_post->return_post['price_from'] ? $my_post->return_post['price_from'] : 0],
-                ['items.price', '>', $my_post->return_post['price_to'] ? $my_post->return_post['price_to'] : $max],
-            ])
+            // ->where([
+            //     ['items.category_id', '!=', $my_post->return_post['category_id']],
+            //     ['items.sub_category_id', '!=', $my_post->return_post['sub_category_id']],
+            //     ['items.sub_sub_category_id', '!=', $my_post->return_post['sub_sub_category_id']],
+            //     ['items.location_id', '!=', $my_post->return_post['location_id']],
+            //     ['items.price', '<', $my_post->return_post['price_from'] ? $my_post->return_post['price_from'] : 0],
+            //     ['items.price', '>', $my_post->return_post['price_to'] ? $my_post->return_post['price_to'] : $max],
+            // ])
+            ->where('items.expired_at','>',Carbon::now())
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             $ids_p11 = [];
@@ -383,14 +395,15 @@ class MatchingController extends Controller
             $matching_posts_p12 = Item::where('items.user_id', '!=', $user)
             ->where($label_10_b)
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
-            ->where([
-                ['return_items.category_id', '!=', $my_post->category_id],
-                ['return_items.sub_category_id', '!=', $my_post->sub_category_id],
-                ['return_items.sub_sub_category_id', '!=', $my_post->sub_sub_category_id],
-                ['return_items.location_id', '!=', $my_post->location_id],
-                ['return_items.price_from', '>', $my_post->price ? $my_post->price : 0],
-                ['return_items.price_to', '<', $my_post->price ? $my_post->price : $max],
-            ])
+            // ->where([
+            //     ['return_items.category_id', '!=', $my_post->category_id],
+            //     ['return_items.sub_category_id', '!=', $my_post->sub_category_id],
+            //     ['return_items.sub_sub_category_id', '!=', $my_post->sub_sub_category_id],
+            //     ['return_items.location_id', '!=', $my_post->location_id],
+            //     ['return_items.price_from', '>', $my_post->price ? $my_post->price : 0],
+            //     ['return_items.price_to', '<', $my_post->price ? $my_post->price : $max],
+            // ])
+            ->where('items.expired_at','>',Carbon::now())
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             if(!$matching_posts_p12->isEmpty()){
@@ -405,14 +418,15 @@ class MatchingController extends Controller
             $data_p13 = Item::where('items.user_id', '!=', $user)
             ->where($label_9_b)
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
-            ->where([
-                ['items.category_id', '!=', $my_post->return_post['category_id']],
-                ['items.sub_category_id', '!=', $my_post->return_post['sub_category_id']],
-                ['items.sub_sub_category_id', '!=', $my_post->return_post['sub_sub_category_id']],
-                ['items.location_id', '!=', $my_post->return_post['location_id']],
-                ['items.price', '<', $my_post->return_post['price_from'] ? $my_post->return_post['price_from'] : 0],
-                ['items.price', '>', $my_post->return_post['price_to'] ? $my_post->return_post['price_to'] : $max],
-            ])
+            // ->where([
+            //     ['items.category_id', '!=', $my_post->return_post['category_id']],
+            //     ['items.sub_category_id', '!=', $my_post->return_post['sub_category_id']],
+            //     ['items.sub_sub_category_id', '!=', $my_post->return_post['sub_sub_category_id']],
+            //     ['items.location_id', '!=', $my_post->return_post['location_id']],
+            //     ['items.price', '<', $my_post->return_post['price_from'] ? $my_post->return_post['price_from'] : 0],
+            //     ['items.price', '>', $my_post->return_post['price_to'] ? $my_post->return_post['price_to'] : $max],
+            // ])
+            ->where('items.expired_at','>',Carbon::now())
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             $ids_p13 = [];
@@ -433,14 +447,15 @@ class MatchingController extends Controller
             $matching_posts_p14 = Item::where('items.user_id', '!=', $user)
             ->where($label_10_c)
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
-            ->where([
-                ['return_items.category_id', '!=', $my_post->category_id],
-                ['return_items.sub_category_id', '!=', $my_post->sub_category_id],
-                ['return_items.sub_sub_category_id', '!=', $my_post->sub_sub_category_id],
-                ['return_items.location_id', '!=', $my_post->location_id],
-                ['return_items.price_from', '>', $my_post->price ? $my_post->price : 0],
-                ['return_items.price_to', '<', $my_post->price ? $my_post->price : $max],
-            ])
+            // ->where([
+            //     ['return_items.category_id', '!=', $my_post->category_id],
+            //     ['return_items.sub_category_id', '!=', $my_post->sub_category_id],
+            //     ['return_items.sub_sub_category_id', '!=', $my_post->sub_sub_category_id],
+            //     ['return_items.location_id', '!=', $my_post->location_id],
+            //     ['return_items.price_from', '>', $my_post->price ? $my_post->price : 0],
+            //     ['return_items.price_to', '<', $my_post->price ? $my_post->price : $max],
+            // ])
+            ->where('items.expired_at','>',Carbon::now())
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             if(!$matching_posts_p14->isEmpty()){
@@ -455,14 +470,15 @@ class MatchingController extends Controller
             $data_p15 = Item::where('items.user_id', '!=', $user)
             ->where($label_9_c)
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
-            ->where([
-                ['items.category_id', '!=', $my_post->return_post['category_id']],
-                ['items.sub_category_id', '!=', $my_post->return_post['sub_category_id']],
-                ['items.sub_sub_category_id', '!=', $my_post->return_post['sub_sub_category_id']],
-                ['items.location_id', '!=', $my_post->return_post['location_id']],
-                ['items.price', '<', $my_post->return_post['price_from'] ? $my_post->return_post['price_from'] : 0],
-                ['items.price', '>', $my_post->return_post['price_to'] ? $my_post->return_post['price_to'] : $max],
-            ])
+            // ->where([
+            //     ['items.category_id', '!=', $my_post->return_post['category_id']],
+            //     ['items.sub_category_id', '!=', $my_post->return_post['sub_category_id']],
+            //     ['items.sub_sub_category_id', '!=', $my_post->return_post['sub_sub_category_id']],
+            //     ['items.location_id', '!=', $my_post->return_post['location_id']],
+            //     ['items.price', '<', $my_post->return_post['price_from'] ? $my_post->return_post['price_from'] : 0],
+            //     ['items.price', '>', $my_post->return_post['price_to'] ? $my_post->return_post['price_to'] : $max],
+            // ])
+            ->where('items.expired_at','>',Carbon::now())
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             $ids_p15 = [];
@@ -484,6 +500,7 @@ class MatchingController extends Controller
             ->where($label_10)
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->where($label_9_e)
+            ->where('items.expired_at','>',Carbon::now())
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             if(!$matching_posts_p16->isEmpty()){
@@ -499,6 +516,7 @@ class MatchingController extends Controller
             ->where($label_10)
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->where($label_9_d)
+            ->where('items.expired_at','>',Carbon::now())
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             if(!$matching_posts_p17->isEmpty()){
@@ -514,6 +532,7 @@ class MatchingController extends Controller
             ->where($label_10_b)
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->where($label_9_e)
+            ->where('items.expired_at','>',Carbon::now())
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             if(!$matching_posts_p18->isEmpty()){
@@ -529,6 +548,7 @@ class MatchingController extends Controller
             ->where($label_10_b)
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->where($label_9_d)
+            ->where('items.expired_at','>',Carbon::now())
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             if(!$matching_posts_p19->isEmpty()){
@@ -544,6 +564,7 @@ class MatchingController extends Controller
             ->where($label_10_c)
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->where($label_9_e)
+            ->where('items.expired_at','>',Carbon::now())
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             if(!$matching_posts_p20->isEmpty()){
@@ -559,6 +580,7 @@ class MatchingController extends Controller
             ->where($label_10_c)
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->where($label_9_d)
+            ->where('items.expired_at','>',Carbon::now())
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             if(!$matching_posts_p21->isEmpty()){
@@ -574,6 +596,7 @@ class MatchingController extends Controller
             ->where($label_10_e)
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->where($label_9)
+            ->where('items.expired_at','>',Carbon::now())
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             if(!$matching_posts_p22->isEmpty()){
@@ -589,6 +612,7 @@ class MatchingController extends Controller
             ->where($label_10_d)
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->where($label_9)
+            ->where('items.expired_at','>',Carbon::now())
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             if(!$matching_posts_p23->isEmpty()){
@@ -604,6 +628,7 @@ class MatchingController extends Controller
             ->where($label_10_e)
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->where($label_9_b)
+            ->where('items.expired_at','>',Carbon::now())
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             if(!$matching_posts_p24->isEmpty()){
@@ -619,6 +644,7 @@ class MatchingController extends Controller
             ->where($label_10_d)
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->where($label_9_b)
+            ->where('items.expired_at','>',Carbon::now())
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             if(!$matching_posts_p25->isEmpty()){
@@ -634,6 +660,7 @@ class MatchingController extends Controller
             ->where($label_10_e)
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->where($label_9_c)
+            ->where('items.expired_at','>',Carbon::now())
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             if(!$matching_posts_p26->isEmpty()){
@@ -649,6 +676,7 @@ class MatchingController extends Controller
             ->where($label_10_d)
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->where($label_9_c)
+            ->where('items.expired_at','>',Carbon::now())
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             if(!$matching_posts_p27->isEmpty()){
@@ -664,6 +692,7 @@ class MatchingController extends Controller
             ->where($label_10_e)
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->where($label_9_e)
+            ->where('items.expired_at','>',Carbon::now())
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             if(!$matching_posts_p28->isEmpty()){
@@ -679,6 +708,7 @@ class MatchingController extends Controller
             ->where($label_10_e)
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->where($label_9_d)
+            ->where('items.expired_at','>',Carbon::now())
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             if(!$matching_posts_p29->isEmpty()){
@@ -694,6 +724,7 @@ class MatchingController extends Controller
             ->where($label_10_d)
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->where($label_9_e)
+            ->where('items.expired_at','>',Carbon::now())
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             if(!$matching_posts_p30->isEmpty()){
@@ -709,6 +740,7 @@ class MatchingController extends Controller
             ->where($label_10_d)
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->where($label_9_d)
+            ->where('items.expired_at','>',Carbon::now())
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             if(!$matching_posts_p31->isEmpty()){
@@ -723,14 +755,15 @@ class MatchingController extends Controller
             $matching_posts_p32 = Item::where('items.user_id', '!=', $user)
             ->where($label_10_e)
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
-            ->where([
-                ['return_items.category_id', '!=', $my_post->category_id],
-                ['return_items.sub_category_id', '!=', $my_post->sub_category_id],
-                ['return_items.sub_sub_category_id', '!=', $my_post->sub_sub_category_id],
-                ['return_items.location_id', '!=', $my_post->location_id],
-                ['return_items.price_from', '>', $my_post->price ? $my_post->price : 0],
-                ['return_items.price_to', '<', $my_post->price ? $my_post->price : $max],
-            ])
+            // ->where([
+            //     ['return_items.category_id', '!=', $my_post->category_id],
+            //     ['return_items.sub_category_id', '!=', $my_post->sub_category_id],
+            //     ['return_items.sub_sub_category_id', '!=', $my_post->sub_sub_category_id],
+            //     ['return_items.location_id', '!=', $my_post->location_id],
+            //     ['return_items.price_from', '>', $my_post->price ? $my_post->price : 0],
+            //     ['return_items.price_to', '<', $my_post->price ? $my_post->price : $max],
+            // ])
+            ->where('items.expired_at','>',Carbon::now())
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             if(!$matching_posts_p32->isEmpty()){
@@ -745,14 +778,15 @@ class MatchingController extends Controller
             $matching_posts_p33 = Item::where('items.user_id', '!=', $user)
             ->where($label_10_d)
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
-            ->where([
-                ['return_items.category_id', '!=', $my_post->category_id],
-                ['return_items.sub_category_id', '!=', $my_post->sub_category_id],
-                ['return_items.sub_sub_category_id', '!=', $my_post->sub_sub_category_id],
-                ['return_items.location_id', '!=', $my_post->location_id],
-                ['return_items.price_from', '>', $my_post->price ? $my_post->price : 0],
-                ['return_items.price_to', '<', $my_post->price ? $my_post->price : $max],
-            ])
+            // ->where([
+            //     ['return_items.category_id', '!=', $my_post->category_id],
+            //     ['return_items.sub_category_id', '!=', $my_post->sub_category_id],
+            //     ['return_items.sub_sub_category_id', '!=', $my_post->sub_sub_category_id],
+            //     ['return_items.location_id', '!=', $my_post->location_id],
+            //     ['return_items.price_from', '>', $my_post->price ? $my_post->price : 0],
+            //     ['return_items.price_to', '<', $my_post->price ? $my_post->price : $max],
+            // ])
+            ->where('items.expired_at','>',Carbon::now())
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             if(!$matching_posts_p33->isEmpty()){
@@ -767,14 +801,15 @@ class MatchingController extends Controller
             $data_p34 = Item::where('items.user_id', '!=', $user)
             ->where($label_9_e)
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
-            ->where([
-                ['items.category_id', '!=', $my_post->return_post['category_id']],
-                ['items.sub_category_id', '!=', $my_post->return_post['sub_category_id']],
-                ['items.sub_sub_category_id', '!=', $my_post->return_post['sub_sub_category_id']],
-                ['items.location_id', '!=', $my_post->return_post['location_id']],
-                ['items.price', '<', $my_post->return_post['price_from'] ? $my_post->return_post['price_from'] : 0],
-                ['items.price', '>', $my_post->return_post['price_to'] ? $my_post->return_post['price_to'] : $max],
-            ])
+            // ->where([
+            //     ['items.category_id', '!=', $my_post->return_post['category_id']],
+            //     ['items.sub_category_id', '!=', $my_post->return_post['sub_category_id']],
+            //     ['items.sub_sub_category_id', '!=', $my_post->return_post['sub_sub_category_id']],
+            //     ['items.location_id', '!=', $my_post->return_post['location_id']],
+            //     ['items.price', '<', $my_post->return_post['price_from'] ? $my_post->return_post['price_from'] : 0],
+            //     ['items.price', '>', $my_post->return_post['price_to'] ? $my_post->return_post['price_to'] : $max],
+            // ])
+            ->where('items.expired_at','>',Carbon::now())
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             $ids_p34 = [];
@@ -795,14 +830,15 @@ class MatchingController extends Controller
             $data_p35 = Item::where('items.user_id', '!=', $user)
             ->where($label_9_d)
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
-            ->where([
-                ['items.category_id', '!=', $my_post->return_post['category_id']],
-                ['items.sub_category_id', '!=', $my_post->return_post['sub_category_id']],
-                ['items.sub_sub_category_id', '!=', $my_post->return_post['sub_sub_category_id']],
-                ['items.location_id', '!=', $my_post->return_post['location_id']],
-                ['items.price', '<', $my_post->return_post['price_from'] ? $my_post->return_post['price_from'] : 0],
-                ['items.price', '>', $my_post->return_post['price_to'] ? $my_post->return_post['price_to'] : $max],
-            ])
+            // ->where([
+            //     ['items.category_id', '!=', $my_post->return_post['category_id']],
+            //     ['items.sub_category_id', '!=', $my_post->return_post['sub_category_id']],
+            //     ['items.sub_sub_category_id', '!=', $my_post->return_post['sub_sub_category_id']],
+            //     ['items.location_id', '!=', $my_post->return_post['location_id']],
+            //     ['items.price', '<', $my_post->return_post['price_from'] ? $my_post->return_post['price_from'] : 0],
+            //     ['items.price', '>', $my_post->return_post['price_to'] ? $my_post->return_post['price_to'] : $max],
+            // ])
+            ->where('items.expired_at','>',Carbon::now())
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             $ids_p35 = [];
@@ -824,6 +860,7 @@ class MatchingController extends Controller
             ->where($label_10)
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->where($label_9_f)
+            ->where('items.expired_at','>',Carbon::now())
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             if(!$matching_posts_p36->isEmpty()){
@@ -839,6 +876,7 @@ class MatchingController extends Controller
             ->where($label_10_b)
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->where($label_9_f)
+            ->where('items.expired_at','>',Carbon::now())
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             if(!$matching_posts_p37->isEmpty()){
@@ -854,6 +892,7 @@ class MatchingController extends Controller
             ->where($label_10_c)
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->where($label_9_f)
+            ->where('items.expired_at','>',Carbon::now())
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             if(!$matching_posts_p38->isEmpty()){
@@ -869,6 +908,7 @@ class MatchingController extends Controller
             ->where($label_10_f)
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->where($label_9)
+            ->where('items.expired_at','>',Carbon::now())
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             if(!$matching_posts_p39->isEmpty()){
@@ -884,6 +924,7 @@ class MatchingController extends Controller
             ->where($label_10_f)
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->where($label_9_b)
+            ->where('items.expired_at','>',Carbon::now())
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             if(!$matching_posts_p40->isEmpty()){
@@ -899,6 +940,7 @@ class MatchingController extends Controller
             ->where($label_10_f)
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->where($label_9_c)
+            ->where('items.expired_at','>',Carbon::now())
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             if(!$matching_posts_p41->isEmpty()){
@@ -914,6 +956,7 @@ class MatchingController extends Controller
             ->where($label_10_e)
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->where($label_9_f)
+            ->where('items.expired_at','>',Carbon::now())
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             if(!$matching_posts_p42->isEmpty()){
@@ -929,6 +972,7 @@ class MatchingController extends Controller
             ->where($label_10_d)
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->where($label_9_f)
+            ->where('items.expired_at','>',Carbon::now())
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             if(!$matching_posts_p43->isEmpty()){
@@ -944,6 +988,7 @@ class MatchingController extends Controller
             ->where($label_10_f)
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->where($label_9_e)
+            ->where('items.expired_at','>',Carbon::now())
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             if(!$matching_posts_p44->isEmpty()){
@@ -959,6 +1004,7 @@ class MatchingController extends Controller
             ->where($label_10_f)
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->where($label_9_d)
+            ->where('items.expired_at','>',Carbon::now())
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             if(!$matching_posts_p45->isEmpty()){
@@ -974,6 +1020,7 @@ class MatchingController extends Controller
             ->where($label_10_f)
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->where($label_9_f)
+            ->where('items.expired_at','>',Carbon::now())
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             if(!$matching_posts_p46->isEmpty()){
@@ -988,14 +1035,15 @@ class MatchingController extends Controller
             $matching_posts_p47 = Item::where('items.user_id', '!=', $user)
             ->where($label_10_f)
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
-            ->where([
-                ['return_items.category_id', '!=', $my_post->category_id],
-                ['return_items.sub_category_id', '!=', $my_post->sub_category_id],
-                ['return_items.sub_sub_category_id', '!=', $my_post->sub_sub_category_id],
-                ['return_items.location_id', '!=', $my_post->location_id],
-                ['return_items.price_from', '>', $my_post->price ? $my_post->price : 0],
-                ['return_items.price_to', '<', $my_post->price ? $my_post->price : $max],
-            ])
+            // ->where([
+            //     ['return_items.category_id', '!=', $my_post->category_id],
+            //     ['return_items.sub_category_id', '!=', $my_post->sub_category_id],
+            //     ['return_items.sub_sub_category_id', '!=', $my_post->sub_sub_category_id],
+            //     ['return_items.location_id', '!=', $my_post->location_id],
+            //     ['return_items.price_from', '>', $my_post->price ? $my_post->price : 0],
+            //     ['return_items.price_to', '<', $my_post->price ? $my_post->price : $max],
+            // ])
+            ->where('items.expired_at','>',Carbon::now())
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             if(!$matching_posts_p47->isEmpty()){
@@ -1010,14 +1058,15 @@ class MatchingController extends Controller
             $data_p48 = Item::where('items.user_id', '!=', $user)
             ->where($label_9_f)
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
-            ->where([
-                ['items.category_id', '!=', $my_post->return_post['category_id']],
-                ['items.sub_category_id', '!=', $my_post->return_post['sub_category_id']],
-                ['items.sub_sub_category_id', '!=', $my_post->return_post['sub_sub_category_id']],
-                ['items.location_id', '!=', $my_post->return_post['location_id']],
-                ['items.price', '<', $my_post->return_post['price_from'] ? $my_post->return_post['price_from'] : 0],
-                ['items.price', '>', $my_post->return_post['price_to'] ? $my_post->return_post['price_to'] : $max],
-            ])
+            // ->where([
+            //     ['items.category_id', '!=', $my_post->return_post['category_id']],
+            //     ['items.sub_category_id', '!=', $my_post->return_post['sub_category_id']],
+            //     ['items.sub_sub_category_id', '!=', $my_post->return_post['sub_sub_category_id']],
+            //     ['items.location_id', '!=', $my_post->return_post['location_id']],
+            //     ['items.price', '<', $my_post->return_post['price_from'] ? $my_post->return_post['price_from'] : 0],
+            //     ['items.price', '>', $my_post->return_post['price_to'] ? $my_post->return_post['price_to'] : $max],
+            // ])
+            ->where('items.expired_at','>',Carbon::now())
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             $ids_p48 = [];
@@ -1049,6 +1098,7 @@ class MatchingController extends Controller
                 ['price', '>=', $my_post->price_from ? $my_post->price_from / 2 : 0],
                 ['price', '<=', $my_post->price_to ? $my_post->price_to * 2 : $max],
             ])
+            ->where('expired_at','>',Carbon::now())
             ->orderBy('created_at','desc')->get();
             if(!$matching_posts_p49->isEmpty()){
                 foreach ($matching_posts_p49 as $matching_post_p49) {
@@ -1073,6 +1123,7 @@ class MatchingController extends Controller
                 ['price', '>=', $my_post->price_from ? $my_post->price_from / 2 : 0],
                 ['price', '<=', $my_post->price_to ? $my_post->price_to * 2 : $max],
             ])
+            ->where('expired_at','>',Carbon::now())
             ->orderBy('created_at','desc')->get();
             if(!$matching_posts_p50->isEmpty()){
                 foreach ($matching_posts_p50 as $matching_post_p50) {
@@ -1097,6 +1148,7 @@ class MatchingController extends Controller
                 ['price', '>=', $my_post->price_from ? $my_post->price_from / 2 : 0],
                 ['price', '<=', $my_post->price_to ? $my_post->price_to * 2 : $max],
             ])
+            ->where('expired_at','>',Carbon::now())
             ->orderBy('created_at','desc')->get();
             if(!$matching_posts_p51->isEmpty()){
                 foreach ($matching_posts_p51 as $matching_post_p51) {
@@ -1121,6 +1173,7 @@ class MatchingController extends Controller
                 ['price', '>=', $my_post->price_from ? $my_post->price_from / 2 : 0],
                 ['price', '<=', $my_post->price_to ? $my_post->price_to * 2 : $max],
             ])
+            ->where('expired_at','>',Carbon::now())
             ->orderBy('created_at','desc')->get();
             if(!$matching_posts_p52->isEmpty()){
                 foreach ($matching_posts_p52 as $matching_post_p52) {
@@ -1145,6 +1198,7 @@ class MatchingController extends Controller
                 ['price', '>=', $my_post->price_from ? $my_post->price_from / 2 : 0],
                 ['price', '<=', $my_post->price_to ? $my_post->price_to * 2 : $max],
             ])
+            ->where('expired_at','>',Carbon::now())
             ->orderBy('created_at','desc')->get();
             if(!$matching_posts_p53->isEmpty()){
                 foreach ($matching_posts_p53 as $matching_post_p53) {
@@ -1170,6 +1224,7 @@ class MatchingController extends Controller
                     ['items.price', '>=', $my_post->price ? $my_post->price / 2 : 0],
                     ['items.price', '<=', $my_post->price ? $my_post->price * 2 : $max],
                 ])
+                ->where('items.expired_at','>',Carbon::now())
                 ->orderBy('items.created_at','desc')->get();
                 if(!$matching_posts_p54->isEmpty()){
                     foreach ($matching_posts_p54 as $matching_post_p54) {
@@ -1194,6 +1249,7 @@ class MatchingController extends Controller
                     ['items.price', '>=', $my_post->price ? $my_post->price / 2 : 0],
                     ['items.price', '<=', $my_post->price ? $my_post->price * 2 : $max],
                 ])
+                ->where('items.expired_at','>',Carbon::now())
                 ->orderBy('items.created_at','desc')->get();
                 if(!$matching_posts_p55->isEmpty()){
                     foreach ($matching_posts_p55 as $matching_post_p55) {
@@ -1218,6 +1274,7 @@ class MatchingController extends Controller
                     ['items.price', '>=', $my_post->price ? $my_post->price / 2 : 0],
                     ['items.price', '<=', $my_post->price ? $my_post->price * 2 : $max],
                 ])
+                ->where('items.expired_at','>',Carbon::now())
                 ->orderBy('items.created_at','desc')->get();
                 if(!$matching_posts_p56->isEmpty()){
                     foreach ($matching_posts_p56 as $matching_post_p56) {
@@ -1242,6 +1299,7 @@ class MatchingController extends Controller
                     ['items.price', '>=', $my_post->price ? $my_post->price / 2 : 0],
                     ['items.price', '<=', $my_post->price ? $my_post->price * 2 : $max],
                 ])
+                ->where('items.expired_at','>',Carbon::now())
                 ->orderBy('items.created_at','desc')->get();
                 if(!$matching_posts_p57->isEmpty()){
                     foreach ($matching_posts_p57 as $matching_post_p57) {
@@ -1266,6 +1324,7 @@ class MatchingController extends Controller
                     ['items.price', '>=', $my_post->price ? $my_post->price / 2 : 0],
                     ['items.price', '<=', $my_post->price ? $my_post->price * 2 : $max],
                 ])
+                ->where('items.expired_at','>',Carbon::now())
                 ->orderBy('items.created_at','desc')->get();
                 if(!$matching_posts_p58->isEmpty()){
                     foreach ($matching_posts_p58 as $matching_post_p58) {
@@ -1282,6 +1341,7 @@ class MatchingController extends Controller
                     ['price', '>=', $my_post->price ? $my_post->price / 2 : 0],
                     ['price', '<=', $my_post->price_to ? $my_post->price_to * 2 : $max],
                 ])
+                ->where('items.expired_at','>',Carbon::now())
                 ->orderBy('created_at','desc')->get();
 
                 if(!empty($matching_posts_p59[0])){
@@ -1312,6 +1372,7 @@ class MatchingController extends Controller
                     ['items.price', '>=', $my_post->price ? $my_post->price / 2 : 0],
                     ['items.price', '<=', $my_post->price ? $my_post->price * 2 : $max],
                 ])
+                ->where('items.expired_at','>',Carbon::now())
                 ->orderBy('items.created_at','desc')->get();
                 if(!$matching_posts_p60->isEmpty()){
                     foreach ($matching_posts_p60 as $matching_post_p60) {
@@ -1337,6 +1398,7 @@ class MatchingController extends Controller
                 ['price', '>=', $my_post->price_from ? $my_post->price_from / 2 : 0],
                 ['price', '<=', $my_post->price_to ? $my_post->price_to * 2 : $max],
             ])
+            ->where('expired_at','>',Carbon::now())
             ->orderBy('created_at','desc')->get();
             if(!$matching_posts_p61->isEmpty()){
                 foreach ($matching_posts_p61 as $matching_post_p61) {
@@ -1593,8 +1655,6 @@ class MatchingController extends Controller
         $uniqueValues = array_filter($uniqueValues, function ($value) {
             return $value !== "created_at";
         });
-        // Log::info($matching_ids);
-        // dd($matching_ids);
         return array_values($uniqueValues);
     }
     

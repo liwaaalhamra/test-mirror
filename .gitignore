@@ -10,3 +10,5 @@ Homestead.json
 access.log
 private.pem
 public.pem
+access.log
+error.log

@@ -34,8 +34,7 @@
                 <thead>
                 <tr>
                     <th>Region</th>
-                    <th>Name En</th>
-                    <th>Name Ar</th>
+                    <th>Name</th>
                     <th>Date Added</th>
                     <th></th>
                 </tr>
@@ -43,9 +42,8 @@
                 <tbody>
                     @foreach($items as $item)
                     <tr>
-                        <td>@if($item->region) {{$item->region->name}} @endif</td>
-                        <td>{{ $item->name_en }}</td>
-                        <td>{{ $item->name_ar }}</td>
+                        <td>@if($item->country)<img src="{{$item->country->flag}}" width="17px" /> {{$item->country->full_name}} @endif</td>
+                        <td>{{ $item->name }}</td>
                         <td>{{ \Carbon\Carbon::createFromTimestamp($item->created_at)->format('Y-m-d H:i:s') }}</td>
                         <td>
                             @if(in_array('edit',auth()->user()->role->hasAccess($section_name)))

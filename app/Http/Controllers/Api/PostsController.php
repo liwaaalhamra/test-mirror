@@ -503,6 +503,17 @@ class PostsController extends Controller
                 ]);
             }
         }
+        $info = [];
+        $info['to'] = env("MAIL_TO");
+        $info['post_title'] = $request->title;
+        $info['post_name'] = $user->full_name;
+        $info['title'] =  "New Post Created!";
+
+        Mail::send('emails.on_post_create', ['data' => $info], function ($message) use($info) {
+            $message->subject($info['title']);
+            $message->to($info['to']);
+        });
+
         return parent::return_json(['status' => 'Thank you for bartering with us. Your post will be reviewed within 24 hours. You will be updated once it is live.','payment_url' => secure_url('payment-test'),'post_id' => $item->id]);
     }
 

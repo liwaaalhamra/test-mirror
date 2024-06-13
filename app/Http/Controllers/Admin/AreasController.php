@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\TermsRequest;
 use App\Models\Api\Area;
+use App\Models\Api\Location;
 use App\Models\Api\BonusSubject;
 use App\Models\Api\Client;
 use App\Models\Api\EventType;
@@ -15,6 +16,7 @@ use App\Models\Api\PlaceTypes;
 use App\Models\Api\Player;
 use App\Models\Api\ProductType;
 use App\Models\Api\Region;
+use App\Models\Api\Country;
 use App\Models\Api\Report;
 use App\Models\Api\Store;
 use App\Models\Api\Suggestion;
@@ -45,7 +47,7 @@ class AreasController extends Controller
      */
     public function index(Request $request) /*: View*/
     {
-        $items = Area::get();
+        $items = Location::get();
         return view('pages.areas.index', compact('items'))
             ->with('section_name', 'areas')
             ->with('content_header', 'Areas');
@@ -58,7 +60,7 @@ class AreasController extends Controller
      */
     public function create()
     {
-        $regions = Region::all();
+        $regions = Country::where('visibility',1)->get();
         return view('pages.areas.create',compact('regions'))
             ->with('content_header', 'Add Area');
     }
@@ -75,10 +77,10 @@ class AreasController extends Controller
             'name_en' => 'required',
             'region_id' => 'required',
         ]);
-        Area::create([
+        Location::create([
             'name_en' => isset($request->name_en) && !empty($request->name_en) ? trim($request->name_en) : null,
             'name_ar' => isset($request->name_ar) && !empty($request->name_ar) ? trim($request->name_ar) : null,
-            'region_id' => $request->get('region_id'),
+            'country_id' => $request->get('region_id'),
         ]);
         return redirect()->route('admin.areas.index')
             ->with('success', 'Area Successfully added');
@@ -92,8 +94,8 @@ class AreasController extends Controller
      */
     public function edit($id) /*: View*/
     {
-        $regions = Region::all();
-        $item = Area::findOrFail($id);
+        $regions = Country::where('visibility',1)->get();
+        $item = Location::findOrFail($id);
         return view('pages.areas.edit', compact('item','regions'))
             ->with('content_header', 'Update Area');
     }
@@ -111,11 +113,11 @@ class AreasController extends Controller
             'name_en' => 'required',
             'region_id' => 'required',
         ]);
-        $item = Area::findOrFail($id);
+        $item = Location::findOrFail($id);
         $item->update([
             'name_en' => isset($request->name_en) && !empty($request->name_en) ? trim($request->name_en) : null,
             'name_ar' => isset($request->name_ar) && !empty($request->name_ar) ? trim($request->name_ar) : null,
-            'region_id' => $request->get('region_id'),
+            'country_id' => $request->get('region_id'),
         ]);
         return redirect()->route('admin.areas.index')
             ->with('success', 'Area Successfully updated');
@@ -129,7 +131,7 @@ class AreasController extends Controller
      */
     public function destroy($id) /*: RedirectResponse*/
     {
-        $item = Area::findOrFail($id);
+        $item = Location::findOrFail($id);
         $item->delete();
 
         return redirect()->route('admin.areas.index')

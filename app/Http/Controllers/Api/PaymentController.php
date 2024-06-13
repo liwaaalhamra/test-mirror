@@ -1196,7 +1196,6 @@ class PaymentController extends Controller
                             $message->to($details['to']);
                         });
                     }catch (\Exception $ex){
-                        // Log::info($ex->getMessage());
                     }
                 }
                                 

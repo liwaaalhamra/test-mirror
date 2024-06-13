@@ -40,7 +40,6 @@ class MatchingScheduler extends Command
      */
     public function handle()
     {
-        // \Log::info("Cron is working fine!");
 
         /*
            Write your database logic we bellow:
@@ -49,7 +48,6 @@ class MatchingScheduler extends Command
 
         $users = Item::where('id', '>', 0)->get()->pluck('user_id', 'user_id');
         // UserMatchingRecord::where('id', '>', 0)->delete();
-        // Log::info("cron start");
         foreach ($users as $user) {
             $result = $this->matchingResult($user);
             $set_data = new UserMatchingRecord();
@@ -57,7 +55,6 @@ class MatchingScheduler extends Command
             $set_data->matching_records = json_encode($result);
             $set_data->save();
         }
-        // Log::info("cron end");
     }
 
     public function matchingResult($user)
@@ -1649,8 +1646,6 @@ class MatchingScheduler extends Command
         $uniqueValues = array_filter($uniqueValues, function ($value) {
             return $value !== "created_at";
         });
-        // Log::info($matching_ids);
-        // dd($matching_ids);
         return array_values($uniqueValues);
     }
 }

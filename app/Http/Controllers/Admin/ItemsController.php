@@ -46,6 +46,7 @@ class ItemsController extends Controller
      */
     public function index(Request $request)
     {
+        $now = Carbon::now()->format('Y-m-d');
         $items = Item::where(function($query) use ($request){
             if ($request->has('item_id')){
                 $item_id = $request->get('item_id');
@@ -372,7 +373,6 @@ class ItemsController extends Controller
         // // UserMatchingRecord::where('id', '>', 0)->delete();
 
         // foreach($users as $user){
-        //     Log::info('cron');
         //     $result = (new MatchingController)->matchingResult($user);
 
         //     $set_data = new UserMatchingRecord();

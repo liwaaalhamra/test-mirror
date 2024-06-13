@@ -21,6 +21,7 @@ use SoapFault;
 use Validator;
 use libphonenumber\NumberParseException;
 use Propaganistas\LaravelPhone\PhoneNumber;
+use Intervention\Image\ImageManagerStatic as Image;
 
 class ProfileController extends Controller
 {
@@ -90,7 +91,14 @@ class ProfileController extends Controller
             if($request->file('image')->isValid()) {
                 $file = $request->file('image');
                 $fileName = str_slug(str_random(20)) . '.' . $file->getClientOriginalExtension();
-                $file->move($destinationDir, $fileName);
+
+                $resizedImage = Image::make($file)->resize(1024, null, function ($constraint) {
+                    $constraint->aspectRatio();
+                    $constraint->upsize();
+                })->encode('jpg', 90);
+                $resizedImage->save($destinationDir . DIRECTORY_SEPARATOR . $fileName);
+                
+                // $file->move($destinationDir, $fileName);
                 if($user->image != null) {
                     $filePath = public_path() . DIRECTORY_SEPARATOR . 'uploads/images'  . DIRECTORY_SEPARATOR . 'profiles' . DIRECTORY_SEPARATOR . $user->getPhotoName();
                     File::delete($filePath);

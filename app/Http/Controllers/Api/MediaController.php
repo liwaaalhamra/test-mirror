@@ -38,6 +38,7 @@ use App\Http\Controllers\Controller;
 use App\Helpers\NetworkHelper;
 use App\Helpers\ResponseHelper;
 use Validator;
+use Intervention\Image\ImageManagerStatic as Image;
 
 class MediaController extends Controller
 {
@@ -85,12 +86,20 @@ class MediaController extends Controller
                         $destinationDir = public_path() . DIRECTORY_SEPARATOR . 'uploads/'.$request->media_type . DIRECTORY_SEPARATOR . $user->id.'/'.$request->meta_name;
                     }
                 }
-                $file->move($destinationDir, $fileName);
+                     
+                $resizedImage = Image::make($file)->resize(1024, null, function ($constraint) {
+                    $constraint->aspectRatio();
+                    $constraint->upsize();
+                })->encode('jpg', 90);
+                $resizedImage->save($destinationDir . DIRECTORY_SEPARATOR . $fileName);
+                list($width, $height) = getimagesize($destinationDir . DIRECTORY_SEPARATOR . $fileName);
+
+                // $file->move($destinationDir, $fileName);
                 $this->correctImageOrientation($destinationDir.'/'.$fileName);
-//                        $exif = @exif_read_data($destinationDir.'/'.$fileName);
-//                        $width = $exif['COMPUTED']['Width'];
-//                        $height = $exif['COMPUTED']['Height'];
-                list($width, $height, $type, $attr) = getimagesize($destinationDir.'/'.$fileName);
+                // $exif = @exif_read_data($destinationDir.'/'.$fileName);
+                // $width = $exif['COMPUTED']['Width'];
+                // $height = $exif['COMPUTED']['Height'];
+                // list($width, $height, $type, $attr) = getimagesize($destinationDir.'/'.$fileName);
                 $media = Media::create([
                     'meta_id' => null,
                     'meta_name' => $request->meta_name,
