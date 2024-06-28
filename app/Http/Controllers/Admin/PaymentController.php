@@ -162,10 +162,10 @@ class PaymentController extends Controller
         $post_id = $request->header("post-id");
         $post = Item::whereId($post_id)->first();
 
-        if($request->header("renew-post") && $request->header("renew-post") == 'true'){
-            $post->expired_at = Carbon::now()->addDays(30)->timestamp;
-            $post->save();
-        }
+        // if($request->header("renew-post") && $request->header("renew-post") == 'true'){
+        //     $post->expired_at = Carbon::now()->addDays(30)->timestamp;
+        //     $post->save();
+        // }
 
         if(!$post){
             abort(401);

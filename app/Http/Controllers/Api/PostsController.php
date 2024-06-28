@@ -787,6 +787,8 @@ class PostsController extends Controller
             return $value;
         })->values();
 
+        \Log::info($items);
+
         return response()->json($items);
     }
 
