@@ -604,4 +604,51 @@ class CronController extends Controller
             // dd($data);
         return $matches;
     }
+
+    public function send_push_for_expired(Request $request){
+        if($user_push = UserPush::whereUsersId($request->user_id)->first()){
+            $players_ids[] = $user_push->player_id;
+            $contents = ["en" => "your post will expire soon"];
+            $headings = ["en" => "Reactivate your post"];
+            $info['contents'] = $contents;
+            $info['headings'] = $headings;
+            $info['player_ids'] = $players_ids;
+            $info['data'] = ['type' => 'renew_post'];
+            $result = parent::oneSignal($info);
+        }
+
+        return response()->json($result);
+    }
+
+    public function check_expired_posts(Request $request){
+        $today = Carbon::now();
+        $tomorrow_start = Carbon::now()->tomorrow()->startOfDay();
+        $tomorrow_end = Carbon::now()->tomorrow()->endOfDay();
+        $before_32_days = Carbon::now()->subDays('32')->startOfDay();
+
+
+        // $items_to_be_notified = Item::whereBetween('expired_at', [$tomorrow_start, $tomorrow_end])->get();
+        // foreach($items_to_be_notified as $noti){
+        //     $user_push = UserPush::whereUsersId($noti->user_id)->first();
+        //     $players_ids[] = $user_push->player_id;
+        //     $contents = ["en" => "your post will expire soon"];
+        //     $headings = ["en" => "Reactivate your post"];
+        //     $info['contents'] = $contents;
+        //     $info['headings'] = $headings;
+        //     $info['player_ids'] = $players_ids;
+        //     $info['data'] = ['type' => 'renew_post'];
+        //     $result = parent::oneSignal($info);
+        // }
+
+        // $items_to_change_status = Item::where('expired_at','<',$today)->get();
+        // foreach($items_to_change_status as $status){
+        //     $status->status = 'expired';
+        //     $status->save();
+        // }
+
+        $items_to_be_auto_deleted = Item::where('expired_at','<',$before_32_days)->get();
+        foreach($items_to_be_auto_deleted as $delete){
+            $delete->delete();
+        }
+    }
 }

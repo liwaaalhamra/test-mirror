@@ -191,8 +191,12 @@ class ItemsController extends Controller
         // }
 
 
+        if($user){
+            $query = Item::where('user_id','!=', $user->id)->wherein('id',$items_viewed)->whereType('offer')->whereIsAvailable(1)->where('expired_at','>=', Carbon::now())->orderby('created_at','desc');
 
-        $query = Item::wherein('id',$items_viewed)->whereType('offer')->whereIsAvailable(1)->where('expired_at','>=', Carbon::now())->orderby('created_at','desc');
+        }else{
+            $query = Item::wherein('id',$items_viewed)->whereType('offer')->whereIsAvailable(1)->where('expired_at','>=', Carbon::now())->orderby('created_at','desc');
+        }
         $currency = env('APP_CURRENCY');
         $recently_viewed_items = $query->take(10)->get()->map(function ($value, $key) use ($currency,$user) {
             $value->is_favorite = false;
@@ -208,9 +212,15 @@ class ItemsController extends Controller
             return $value;
         })->values();
 
-        $query = Item::whereType('offer')->whereHas('category', function ($q) {
-            $q->whereType('products');
-        })->whereIsAvailable(1)->where('expired_at','>=', Carbon::now())->orderby('created_at','desc');
+        if($user){
+            $query = Item::where('user_id','!=', $user->id)->whereType('offer')->whereHas('category', function ($q) {
+                $q->whereType('products');
+            })->whereIsAvailable(1)->where('expired_at','>=', Carbon::now())->orderby('created_at','desc');    
+        }else{
+            $query = Item::whereType('offer')->whereHas('category', function ($q) {
+                $q->whereType('products');
+            })->whereIsAvailable(1)->where('expired_at','>=', Carbon::now())->orderby('created_at','desc');
+        }
         $currency = env('APP_CURRENCY');
         $new_arrival_items = $query->take(10)->get()->map(function ($value, $key) use ($currency,$user) {
             $value->is_favorite = false;
@@ -225,9 +235,15 @@ class ItemsController extends Controller
             return $value;
         })->values();
 
-        $query = Item::whereType('offer')->whereHas('category', function ($q) {
-            $q->whereType('services');
-        })->whereIsAvailable(1)->where('expired_at','>=', Carbon::now())->orderby('created_at','desc');
+        if($user){
+            $query = Item::where('user_id','!=', $user->id)->whereType('offer')->whereHas('category', function ($q) {
+                $q->whereType('services');
+            })->whereIsAvailable(1)->where('expired_at','>=', Carbon::now())->orderby('created_at','desc');
+            }else{
+            $query = Item::whereType('offer')->whereHas('category', function ($q) {
+                $q->whereType('services');
+            })->whereIsAvailable(1)->where('expired_at','>=', Carbon::now())->orderby('created_at','desc');
+        }
         $currency = env('APP_CURRENCY');
         $latest_services_items = $query->take(10)->get()->map(function ($value, $key) use ($currency,$user) {
             $value->is_favorite = false;
@@ -284,6 +300,12 @@ class ItemsController extends Controller
             }
         }else{
             $matches = null;
+        }
+
+        if($user){
+            $query = Item::where('user_id','!=', $user->id)->whereType('offer')->whereIsAvailable(1)->where('expired_at','>=', Carbon::now())->orderby('created_at','desc');
+        }else{
+            $query = Item::whereType('offer')->whereIsAvailable(1)->where('expired_at','>=', Carbon::now())->orderby('created_at','desc');
         }
 
         $latest_posts = $query->take(30)->get()->map(function ($value, $key) use ($currency,$user) {
@@ -780,7 +802,11 @@ class ItemsController extends Controller
             $user = $this->validate_user($request);
         }
         $now = Carbon::now()->format('Y-m-d');
-        $query = Item::whereType('offer')->whereDate('expired_at','>=',$now)->whereIsAvailable(1);
+        if($user){
+            $query = Item::where('user_id','!=', $user->id)->whereType('offer')->whereDate('expired_at','>=',$now)->whereIsAvailable(1);
+        }else{
+            $query = Item::whereType('offer')->whereDate('expired_at','>=',$now)->whereIsAvailable(1);
+        }
         if(Input::has('search')){
             $search = Input::get('search');
             $locations = Location::whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])->pluck('id')->toArray();
@@ -917,7 +943,11 @@ class ItemsController extends Controller
             $user = $this->validate_user($request);
         }
         $now = Carbon::now()->format('Y-m-d');
-        $query = Item::whereType('offer')->whereDate('expired_at','>=',$now)->whereIsAvailable(1);
+        if($user){
+            $query = Item::where('user_id','!=', $user->id)->whereType('offer')->whereDate('expired_at','>=',$now)->whereIsAvailable(1);
+        }else{
+            $query = Item::whereType('offer')->whereDate('expired_at','>=',$now)->whereIsAvailable(1);
+        }
         if(Input::has('search')){
             $search = Input::get('search');
                         
@@ -1050,7 +1080,11 @@ class ItemsController extends Controller
             $user = $this->validate_user($request);
         }
         $now = Carbon::now()->format('Y-m-d');
-        $query = Item::whereType('offer')->whereDate('expired_at','>=',$now)->whereIsAvailable(1);
+        if($user){
+            $query = Item::where('user_id','!=', $user->id)->whereType('offer')->whereDate('expired_at','>=',$now)->whereIsAvailable(1);
+        }else{
+            $query = Item::whereType('offer')->whereDate('expired_at','>=',$now)->whereIsAvailable(1);
+        }
         if(Input::has('search')){
             $search = Input::get('search');
             $query->where(function($query) use ($search){
@@ -1167,7 +1201,11 @@ class ItemsController extends Controller
             $user = $this->validate_user($request);
         }
         $now = Carbon::now()->format('Y-m-d');
-        $query = Item::whereType('offer')->whereDate('expired_at','>=',$now)->whereIsAvailable(1);
+        if($user){
+            $query = Item::where('user_id','!=', $user->id)->whereType('offer')->whereDate('expired_at','>=',$now)->whereIsAvailable(1);
+        }else{
+            $query = Item::whereType('offer')->whereDate('expired_at','>=',$now)->whereIsAvailable(1);
+        }
         if(Input::has('search')){
             $search = Input::get('search');
             $query->where(function($query) use ($search){

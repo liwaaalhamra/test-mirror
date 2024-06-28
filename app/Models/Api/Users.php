@@ -128,7 +128,8 @@ class Users extends Model
                 })->with('return_post')
                 ->get();
         }
-        return $this->belongsToMany(Item::class,'user_favorites','user_id','meta_id')->where('user_favorites.meta_name','=','items')->with('return_post')->get();
+        //whereDoesntHave('barter')whereDoesntHave('barterReturn')
+        return $this->belongsToMany(Item::class,'user_favorites','user_id','meta_id')->where('user_favorites.meta_name','=','items')->with('return_post')->where('expired_at','>',Carbon::now())->get();
     }
 
     /**

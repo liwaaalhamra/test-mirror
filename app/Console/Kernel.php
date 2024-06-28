@@ -17,6 +17,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         // Commands\Inspire::class,
         Commands\MatchingScheduler::class,
+        Commands\ForExpiredPosts::class,
     ];
 
     /**
@@ -27,7 +28,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('match:cron')
-            ->daily();
+        $schedule->command('match:cron')->daily();
+        $schedule->command('expired:posts')->daily();
     }
 }

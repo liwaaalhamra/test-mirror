@@ -37,6 +37,16 @@ class Item extends Model
     protected function getCurrencyAttribute(){
         return env('APP_CURRENCY');
     }
+    
+    public function barter()
+    {
+        return $this->hasOne(Barter::class, 'sender_post_id');
+    }
+
+    public function barterReturn()
+    {
+        return $this->hasOne(Barter::class, 'receiver_post_id');
+    }
 
     protected function getUserFullnameAttribute(){
         return isset($this->user) ? $this->user->full_name : null;

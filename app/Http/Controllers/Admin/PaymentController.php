@@ -14,7 +14,7 @@ use App\Traits\HITrait;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use App\Http\Controllers\Controller;
-
+use Carbon\Carbon;
 /**
  * @author Hassan Itani <hassan.itani@tedmob.com>
  * Class PaymentController
@@ -156,11 +156,17 @@ class PaymentController extends Controller
     public function show_test(Request $request) /*: View*/
     {
         //below for testing
-//        $request->headers->set('token', [ 0 => '8xCpMW3OOuP5R4mxsCgFuyekYCLR9ptmGogTKgFaSIJClG9IvsPdG208IqPB0pPH']);
-//        $request->headers->set('post-id', [ 1 => '77']);
+    //    $request->headers->set('token', [ 0 => 'aKCR3JVgeM12d5tiaxlwZEiirhaPsO5Euw898OxFLUmHNYLiFG2LG0JXUGVDwPPu']);
+    //    $request->headers->set('post-id', [ 1 => '164']);
         $user = $this->validate_user($request);
         $post_id = $request->header("post-id");
         $post = Item::whereId($post_id)->first();
+
+        if($request->header("renew-post") && $request->header("renew-post") == 'true'){
+            $post->expired_at = Carbon::now()->addDays(30)->timestamp;
+            $post->save();
+        }
+
         if(!$post){
             abort(401);
         }

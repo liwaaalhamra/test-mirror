@@ -64,7 +64,8 @@ class PushController extends Controller
             $query->where(function ($query) use($user) {
                 $query->whereUserId($user->id)->whereType('targeted');
             })->orwhere('type','=','bulk');
-        })->latest();
+        })->where('created_at', '>=', Carbon::now()->subDays(30))
+        ->latest();
         if(Input::has('search')){
             $search = Input::get('search');
             $query->where(function($query) use ($search){
@@ -76,6 +77,13 @@ class PushController extends Controller
             // UserInbox::updateOrCreate(['inbox_id' => $value->id,'user_id' => $user->id]);
             return $value;
         })->values();
+
+        $counts = Inbox::whereUserId($user->id)->get();
+        foreach($counts as $count){
+            $count->is_read = true;
+            $count->save();
+        }
+        
         return response()->json($messages);
     }
 

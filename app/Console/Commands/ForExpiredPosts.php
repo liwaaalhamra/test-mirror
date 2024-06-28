@@ -5,13 +5,14 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 
 
-use App\Models\Item;
-use App\Models\Users;
-use App\Models\Inbox;
-use App\Models\UserPush;
+use App\Models\Api\Item;
+use App\Models\Api\Users;
+use App\Models\Api\Inbox;
+use App\Models\Api\UserPush;
 use Carbon\Carbon;
+use App\Http\Controllers\Controller;
 
-class ForExpiredPosts extends Command
+class ForExpiredPosts extends Command 
 {
     /**
      * The name and signature of the console command.
@@ -59,7 +60,8 @@ class ForExpiredPosts extends Command
                     if(isset($request->date)){
                         $info['send_after'] = Carbon::createFromTimestamp($request->date)->format('Y-m-d H:i:s');
                     }
-                    $result = parent::oneSignal($info);
+                    $controller = new Controller();
+                    $result = $controller->oneSignal($info);
                     
                     $code = Controller::number_generator(6);
 
@@ -79,6 +81,12 @@ class ForExpiredPosts extends Command
             $value->save();
             return $value;
         })->values();
+
+        $before_30_days = Carbon::now()->subDays('30')->startOfDay();
+        $items_to_be_auto_deleted = Item::where('expired_at','<',$before_30_days)->get();
+        foreach($items_to_be_auto_deleted as $delete){
+            $delete->delete();
+        }
         return response()->json(['status' => 'Alerts sent of expired Items']);
     }
 }

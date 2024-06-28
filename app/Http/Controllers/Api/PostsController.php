@@ -397,9 +397,9 @@ class PostsController extends Controller
             if(!Input::has('return_title')){
                 return parent::return_error('Missing Return Title', 401, 'messages.missing_parameter');
             }
-//            if(!Input::has('return_description')){
-//                return parent::return_error('Missing Return Description',401,'messages.missing_parameter');
-//            }
+        //    if(!Input::has('return_description')){
+        //        return parent::return_error('Missing Return Description',401,'messages.missing_parameter');
+        //    }
             $return_description = isset($request->return_description) && !empty($request->return_description) ? $request->return_description : null;
             if(!Input::has('return_price_from')){
                 return parent::return_error('Missing Return Price From', 401,'messages.missing_parameter');
@@ -511,6 +511,7 @@ class PostsController extends Controller
 
         Mail::send('emails.on_post_create', ['data' => $info], function ($message) use($info) {
             $message->subject($info['title']);
+            // $message->to('liwaa.alhamra@tedmob.com');
             $message->to($info['to']);
         });
 
@@ -598,9 +599,9 @@ class PostsController extends Controller
             if(!Input::has('return_title')){
                 return parent::return_error('Missing Return Title',401,'messages.missing_parameter');
             }
-//            if(!Input::has('return_description')){
-//                return parent::return_error('Missing Return Description',401,'messages.missing_parameter');
-//            }
+        //    if(!Input::has('return_description')){
+        //        return parent::return_error('Missing Return Description',401,'messages.missing_parameter');
+        //    }
             $return_description = isset($request->return_description) && !empty($request->return_description) ? $request->return_description : null;
             if(!Input::has('return_price_from')){
                 return parent::return_error('Missing Return Price From',401,'messages.missing_parameter');
@@ -743,7 +744,7 @@ class PostsController extends Controller
     public function my_posts(Request $request) {
         $user = $this->validate_user($request);
         $search = Input::has('search') ? Input::get('search') : null;
-        $query = Item::whereType('offer')->whereUserId($user->id)->orderBy('status')->orderBy('updated_at', 'desc')->when($search, function ($query) use ($search) {
+        $query = Item::whereType('offer')->whereUserId($user->id)->orderBy('status')->where('expired_at','>',Carbon::now())->orderBy('updated_at', 'desc')->when($search, function ($query) use ($search) {
             $query->where(function($query) use ($search){
                 $query->whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])
                     ->orwhereRaw("LOWER(name_ar) like ? ", [ "%".strtolower($search)."%"])
@@ -780,9 +781,9 @@ class PostsController extends Controller
             $value->currency = $currency;
             $value->post_type = $value->category->type;
             unset($value->category);
-//            $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
-//            $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
-//            $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
+        //    $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
+        //    $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
+        //    $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
             return $value;
         })->values();
 
@@ -802,7 +803,7 @@ class PostsController extends Controller
                 $value->total = $value->total + 10;
             }
             return $value;
-        })->sortbydesc("total")->values();
+        })->where('expired_at','>',Carbon::now())->sortbydesc("total")->values();
 
         
 
@@ -812,7 +813,7 @@ class PostsController extends Controller
     public function my_posts_with_pagination(Request $request) {
         $user = $this->validate_user($request);
         $search = Input::has('search') ? Input::get('search') : null;
-        $query = Item::whereType('offer')->whereUserId($user->id)->when($search, function ($query) use ($search) {
+        $query = Item::whereType('offer')->whereUserId($user->id)->where('expired_at','>',Carbon::now())->when($search, function ($query) use ($search) {
             $query->where(function($query) use ($search){
                 $query->whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])
                     ->orwhereRaw("LOWER(name_ar) like ? ", [ "%".strtolower($search)."%"])
@@ -849,9 +850,9 @@ class PostsController extends Controller
             $value->currency = $currency;
             $value->post_type = $value->category->type;
             unset($value->category);
-//            $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
-//            $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
-//            $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
+        //    $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
+        //    $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
+        //    $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
             return $value;
         })->values();
 
@@ -872,7 +873,7 @@ class PostsController extends Controller
         }
         $user_id = $request->user_id;
         $search = Input::has('search') ? Input::get('search') : null;
-        $query = Item::where('id', '!=', $request->post_id)->whereIsAvailable(1)->whereType('offer')->whereUserId($user_id)->when($search, function ($query) use ($search) {
+        $query = Item::where('id', '!=', $request->post_id)->whereIsAvailable(1)->whereType('offer')->whereUserId($user_id)->where('expired_at','>',Carbon::now())->when($search, function ($query) use ($search) {
             $query->where(function($query) use ($search){
                 $query->whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])
                     ->orwhereRaw("LOWER(name_ar) like ? ", [ "%".strtolower($search)."%"])
@@ -906,9 +907,9 @@ class PostsController extends Controller
             $value->currency = $currency;
             $value->post_type = $value->category->type;
             unset($value->category);
-//            $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
-//            $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
-//            $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
+        //    $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
+        //    $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
+        //    $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
             return $value;
         })->values();
 
@@ -929,7 +930,7 @@ class PostsController extends Controller
         }
         $user_id = $request->user_id;
         $search = Input::has('search') ? Input::get('search') : null;
-        $query = Item::where('id', '!=', $request->post_id)->whereIsAvailable(1)->whereType('offer')->whereNotIn('status', ['pending'])->whereUserId($user_id)->when($search, function ($query) use ($search) {
+        $query = Item::where('id', '!=', $request->post_id)->whereIsAvailable(1)->whereType('offer')->whereNotIn('status', ['pending'])->whereUserId($user_id)->where('expired_at','>',Carbon::now())->when($search, function ($query) use ($search) {
             $query->where(function($query) use ($search){
                 $query->whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])
                     ->orwhereRaw("LOWER(name_ar) like ? ", [ "%".strtolower($search)."%"])
@@ -963,9 +964,9 @@ class PostsController extends Controller
             $value->currency = $currency;
             $value->post_type = $value->category->type;
             unset($value->category);
-//            $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
-//            $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
-//            $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
+        //    $value->price_formatted = number_format($value->price,3) . ' ' . $currency;
+        //    $value->discounted_price_formatted = $value->discounted_price ? number_format($value->discounted_price,3) . ' ' . $currency : null;
+        //    $value->discount_amount_formatted = $value->discount_amount ? number_format($value->discount_amount,3) . ' ' . $currency : null;
             return $value;
         })->values();
 

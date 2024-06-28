@@ -31,7 +31,7 @@ class Controller extends BaseController
     var $sections = [];
     public function __construct()
     {
-        if (strpos(\Route::current()->getPrefix(), 'admin') !== false) {
+        if (\Route::current() && strpos(\Route::current()->getPrefix(), 'admin') !== false) {
             foreach (auth()->user()->access_sections as $section){
                 $this->sections[] = $section->section;
             }
