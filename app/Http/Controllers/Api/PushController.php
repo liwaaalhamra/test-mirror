@@ -78,7 +78,7 @@ class PushController extends Controller
             return $value;
         })->values();
 
-        $counts = Inbox::whereUserId($user->id)->get();
+        $counts = Inbox::whereUserId($user->id)->where('created_at', '<=', Carbon::now()->subDays(35))->get();
         foreach($counts as $count){
             $count->is_read = true;
             $count->save();

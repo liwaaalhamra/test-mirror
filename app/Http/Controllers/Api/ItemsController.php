@@ -371,9 +371,15 @@ class ItemsController extends Controller
             $items_viewed = UserPostViewed::whereUserId($user->id)->orderby('updated_at','desc')->pluck('item_id')->toarray();
         }
         if($slug == 'trending-products'){
-            $query = Item::whereType('offer')->whereHas('category', function ($q) {
-                $q->whereType('products');
-            })->whereIsAvailable(1)->where('expired_at','>=', Carbon::now())->orderby('created_at','desc');
+            if($user){
+                $query = Item::where('user_id','!=', $user->id)->whereType('offer')->whereHas('category', function ($q) {
+                    $q->whereType('products');
+                })->whereIsAvailable(1)->where('expired_at','>=', Carbon::now())->orderby('created_at','desc');
+            }else{
+                $query = Item::whereType('offer')->whereHas('category', function ($q) {
+                    $q->whereType('products');
+                })->whereIsAvailable(1)->where('expired_at','>=', Carbon::now())->orderby('created_at','desc');
+            }
             $currency = env('APP_CURRENCY');
             $items = $query->take(50)->get()->map(function ($value, $key) use ($currency,$user) {
                 $value->is_favorite = false;
@@ -389,9 +395,15 @@ class ItemsController extends Controller
                 return $value;
             })->values();
         }elseif ($slug == 'trending-services'){
-            $query = Item::whereType('offer')->whereHas('category', function ($q) {
-                $q->whereType('services');
-            })->whereIsAvailable(1)->where('expired_at','>=', Carbon::now())->orderby('created_at','desc');
+            if($user){
+                $query = Item::where('user_id','!=', $user->id)->whereType('offer')->whereHas('category', function ($q) {
+                    $q->whereType('services');
+                })->whereIsAvailable(1)->where('expired_at','>=', Carbon::now())->orderby('created_at','desc');
+            }else{
+                $query = Item::whereType('offer')->whereHas('category', function ($q) {
+                    $q->whereType('services');
+                })->whereIsAvailable(1)->where('expired_at','>=', Carbon::now())->orderby('created_at','desc');
+            }
             $currency = env('APP_CURRENCY');
             $items = $query->take(50)->get()->map(function ($value, $key) use ($currency,$user) {
                 $value->is_favorite = false;
@@ -406,7 +418,11 @@ class ItemsController extends Controller
                 return $value;
             })->values();
         }elseif ($slug == 'recently-viewed'){
-            $query = Item::wherein('id',$items_viewed)->whereType('offer')->whereIsAvailable(1)->where('expired_at','>=', Carbon::now())->orderby('created_at','desc');
+            if($user){
+                $query = Item::where('user_id','!=', $user->id)->wherein('id',$items_viewed)->whereType('offer')->whereIsAvailable(1)->where('expired_at','>=', Carbon::now())->orderby('created_at','desc');
+            }else{
+                $query = Item::wherein('id',$items_viewed)->whereType('offer')->whereIsAvailable(1)->where('expired_at','>=', Carbon::now())->orderby('created_at','desc');
+            }
             $currency = env('APP_CURRENCY');
             $items = $query->take(50)->get()->map(function ($value, $key) use ($currency,$user) {
                 $value->is_favorite = false;
@@ -424,7 +440,11 @@ class ItemsController extends Controller
             })->values();
         }elseif ($slug == 'nearby'){
             if($latitude && $longitude){
-                $query = Item::whereType('offer')->whereIsAvailable(1)->where('expired_at','>=', Carbon::now())->orderbyRaw("(6371 * 2 * ASIN(SQRT( POWER(SIN(( $latitude - latitude) *  pi()/180 / 2), 2) +COS( $latitude * pi()/180) * COS(latitude * pi()/180) * POWER(SIN(( $longitude - longitude) * pi()/180 / 2), 2) ))) asc");
+                if($user){
+                    $query = Item::where('user_id','!=', $user->id)->whereType('offer')->whereIsAvailable(1)->where('expired_at','>=', Carbon::now())->orderbyRaw("(6371 * 2 * ASIN(SQRT( POWER(SIN(( $latitude - latitude) *  pi()/180 / 2), 2) +COS( $latitude * pi()/180) * COS(latitude * pi()/180) * POWER(SIN(( $longitude - longitude) * pi()/180 / 2), 2) ))) asc");
+                }else{
+                    $query = Item::whereType('offer')->whereIsAvailable(1)->where('expired_at','>=', Carbon::now())->orderbyRaw("(6371 * 2 * ASIN(SQRT( POWER(SIN(( $latitude - latitude) *  pi()/180 / 2), 2) +COS( $latitude * pi()/180) * COS(latitude * pi()/180) * POWER(SIN(( $longitude - longitude) * pi()/180 / 2), 2) ))) asc");
+                }
                 $currency = env('APP_CURRENCY');
                 $items = $query->take(50)->get()->map(function ($value, $key) use ($currency,$user) {
                     $value->is_favorite = false;
@@ -487,7 +507,11 @@ class ItemsController extends Controller
                 $items = null;
             }
         }elseif ($slug == 'latest-posts'){
-            $query = Item::whereType('offer')->whereIsAvailable(1)->where('expired_at','>=', Carbon::now())->orderby('created_at','desc');
+            if($user){
+                $query = Item::where('user_id','!=', $user->id)->whereType('offer')->whereIsAvailable(1)->where('expired_at','>=', Carbon::now())->orderby('created_at','desc');
+            }else{
+                $query = Item::whereType('offer')->whereIsAvailable(1)->where('expired_at','>=', Carbon::now())->orderby('created_at','desc');
+            }
             $currency = env('APP_CURRENCY');
             $items = $query->take(50)->get()->map(function ($value, $key) use ($currency,$user) {
                 unset($value->quantity);
@@ -513,7 +537,11 @@ class ItemsController extends Controller
             $user = $this->validate_user($request);
         }
         $now = Carbon::now()->format('Y-m-d');
-        $query = Item::wherenotin('status',['pending', 'in_review'])->whereType('offer')->whereDate('expired_at','>=',$now)->whereIsAvailable(1);
+        if($user){
+            $query = Item::where('user_id','!=', $user->id)->wherenotin('status',['pending', 'in_review'])->whereType('offer')->whereDate('expired_at','>=',$now)->whereIsAvailable(1);
+        }else{
+            $query = Item::wherenotin('status',['pending', 'in_review'])->whereType('offer')->whereDate('expired_at','>=',$now)->whereIsAvailable(1);
+        }
         if(Input::has('search')){
             $search = Input::get('search');
             $categories_available = Category::whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])->pluck('id')->toArray();
@@ -655,7 +683,11 @@ class ItemsController extends Controller
             $user = $this->validate_user($request);
         }
         $now = Carbon::now()->format('Y-m-d');
-        $query = Item::whereType('offer')->whereDate('expired_at','>=',$now)->whereIsAvailable(1);
+        if($user){
+            $query = Item::where('user_id','!=', $user->id)->whereType('offer')->whereDate('expired_at','>=',$now)->whereIsAvailable(1);
+        }else{
+            $query = Item::whereType('offer')->whereDate('expired_at','>=',$now)->whereIsAvailable(1);
+        }
         if(Input::has('search')){
             $search = Input::get('search');
             $categories_available = Category::whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])->pluck('id')->toArray();

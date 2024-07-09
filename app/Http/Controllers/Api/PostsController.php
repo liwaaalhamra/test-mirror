@@ -69,8 +69,12 @@ class PostsController extends Controller
         if (!$sender_item = Item::whereUserId($sender->id)->whereId($request->sender_item_id)->first()) {
             return parent::return_error("Invalid Sender Item", 402, 'messages.invalid_parameters');
         }
-        if($sender_item->status != 'approved'){
-            return parent::return_error("Post not approved yet", 402, "Post not approved yet");
+        if($sender_item->status == 'expired' || $sender_item->status == 'pending'){
+            return parent::return_error("In order to use the post, please complete payment", 402, "In order to use the post, please complete payment");
+        }
+
+        if($sender_item->status == 'in_review'){
+            return parent::return_error("Post is under review", 402, "Post is under review");
         }
 
         if (!Input::has('receiver_item_id')) {
@@ -515,6 +519,8 @@ class PostsController extends Controller
             $message->to($info['to']);
         });
 
+        \Log::info('post created');
+
         return parent::return_json(['status' => 'Thank you for bartering with us. Your post will be reviewed within 24 hours. You will be updated once it is live.','payment_url' => secure_url('payment-test'),'post_id' => $item->id]);
     }
 
@@ -736,6 +742,13 @@ class PostsController extends Controller
         }
         if(!$item = Item::whereUserId($user->id)->whereId($request->item_id)->first()){
             return parent::return_error("Invalid Item", 402, 'messages.invalid_parameters');
+        }
+        if($item->return_id){
+            $return_item = Item::where('id',$item->return_id)->first();
+
+            if($return_item){
+                $return_item->delete();
+            }
         }
         $item->delete();
         return parent::return_json(['status' => 'Your post has been removed successfully']);

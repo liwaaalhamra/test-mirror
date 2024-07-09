@@ -132,10 +132,12 @@ class MediaController extends Controller
         if(!$media = Media::whereUserId($user->id)->whereId($request->media_id)->first()){
             return parent::return_error("Invalid Media", 402, 'messages.invalid_parameters');
         }
+        if($media){
+            $filePath = public_path() . DIRECTORY_SEPARATOR . 'uploads/'.$media->media_type  . DIRECTORY_SEPARATOR . $user->id . DIRECTORY_SEPARATOR . $media->meta_name . DIRECTORY_SEPARATOR . $media->getMediaName();
+            File::delete($filePath);
+            $media->delete();
+        }
 
-        $filePath = public_path() . DIRECTORY_SEPARATOR . 'uploads/'.$media->media_type  . DIRECTORY_SEPARATOR . $user->id . DIRECTORY_SEPARATOR . $media->meta_name . DIRECTORY_SEPARATOR . $media->getMediaName();
-        File::delete($filePath);
-        $media->delete();
         return response(['status' => 'Media deleted successfully'], 200);
     }
 }
