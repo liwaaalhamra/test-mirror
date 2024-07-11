@@ -86,7 +86,7 @@ class PostsController extends Controller
         $receiver = $receiver_item->user;
 
         if($existing_barter = Barter::whereSenderId($sender->id)->whereReceiverId($receiver->id)->whereSenderPostId($sender_item->id)->whereReceiverPostId($receiver_item->id)->first()){
-            return parent::return_error("Barter Request already sent, check status in My Barters section", 402, "Barter Request already sent");
+            return parent::return_error("Barter Request already sent", 402, "Barter Request already sent, check status in My Barters section");
         }
 
         $status_at['pending_at'] = Carbon::now()->format('Y-m-d H:i:s');
