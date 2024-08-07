@@ -7,7 +7,7 @@
 <body>	
 	<p>Hello <strong>{!! $data['to'] !!}</strong>,</p>
 	
-		<h3>{{$data['title']}}</h3>
+		{{-- <h3>{{$data['title']}}</h3> --}}
 		<p>{{$data['message']}}</p>    
 </body>
 </html>

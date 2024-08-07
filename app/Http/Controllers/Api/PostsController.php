@@ -85,7 +85,7 @@ class PostsController extends Controller
         }
         $receiver = $receiver_item->user;
 
-        if($existing_barter = Barter::whereSenderId($sender->id)->whereReceiverId($receiver->id)->whereSenderPostId($sender_item->id)->whereReceiverPostId($receiver_item->id)->first()){
+        if($existing_barter = Barter::whereSenderId($sender->id)->whereReceiverId($receiver->id)->whereSenderPostId($sender_item->id)->whereReceiverPostId($receiver_item->id)->where('status','!=','rejected')->first()){
             return parent::return_error("Barter Request already sent", 402, "Barter Request already sent, check status in My Barters section");
         }
 
@@ -117,6 +117,7 @@ class PostsController extends Controller
 
             Inbox::create([
                 'user_id' => $receiver->id,
+                'barter_id' => $barter->id,
                 'title' => $title,
                 'message' => $message,
                 'image' => null,
@@ -125,6 +126,20 @@ class PostsController extends Controller
                 'meta_type' => 'barter_request',
             ]);
 
+        }
+
+        if($receiver->email != ''){
+            $info = [];
+            $info['to'] = $receiver->full_name;
+            $info['reciever_email'] = $receiver->email;
+            $info['title'] = 'Barter Request!';
+            $info['message'] = "$sender->full_name is interested in your post. Please check your inbox to check what $sender->full_name is offering you. You will be able to chat with $sender->full_name once you accept the request to barter!";
+    
+            Mail::send('emails.barter_response', ['data' => $info], function ($message) use($info) {
+                $message->subject($info['title']);
+                // $message->to('liwaa.alhamra@tedmob.com');
+                $message->to($info['reciever_email']);
+            });
         }
 
         return parent::return_json(['status' => 'Thank you for bartering with us. Your barter request has been sent to '.$receiver_full_name.'. You will be able to chat with '.$receiver_full_name.' once they accept your barter.']);
@@ -190,7 +205,10 @@ class PostsController extends Controller
             $conversation->unread_messages = $conversation->unread_messages + 1;
             $conversation->save();
         }
-
+        $noti = Inbox::where('barter_id',$barter->id)->first();
+        if($noti){
+            $noti->delete();
+        }
         if($user_push = UserPush::whereUsersId($sender->id)->first()){
             $players_ids[] = $user_push->player_id;
             $contents = ["en" => $message];
