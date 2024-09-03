@@ -92,7 +92,7 @@ class ItemsController extends Controller
             $search = Input::get('search');
             $query->where(function($query) use ($search){
                 $query->whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])
-                    ->orwhereRaw("LOWER(name_ar) like ? ", [ "%".strtolower($search)."%"]);
+                    ->orWhereRaw("LOWER(name_ar) like ? ", [ "%".strtolower($search)."%"]);
             });
         }
         $categories = $query->get();
@@ -105,7 +105,7 @@ class ItemsController extends Controller
             $search = Input::get('search');
             $query->where(function($query) use ($search){
                 $query->whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])
-                    ->orwhereRaw("LOWER(name_ar) like ? ", [ "%".strtolower($search)."%"]);
+                    ->orWhereRaw("LOWER(name_ar) like ? ", [ "%".strtolower($search)."%"]);
             });
         }
         $categories = $query->get();
@@ -118,7 +118,7 @@ class ItemsController extends Controller
             $search = Input::get('search');
             $query->where(function($query) use ($search){
                 $query->whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])
-                    ->orwhereRaw("LOWER(name_ar) like ? ", [ "%".strtolower($search)."%"]);
+                    ->orWhereRaw("LOWER(name_ar) like ? ", [ "%".strtolower($search)."%"]);
             });
         }
         $reviews = $query->paginate(20);
@@ -362,6 +362,7 @@ class ItemsController extends Controller
     }
 
     public function home_top_categories_items(Request $request,$slug) {
+        \Log::info($request->all());
         $user = null;
         $items_viewed = [];
         $latitude = isset($request->latitude) ? $request->latitude : null;
@@ -379,6 +380,38 @@ class ItemsController extends Controller
                 $query = Item::whereType('offer')->whereHas('category', function ($q) {
                     $q->whereType('products');
                 })->whereIsAvailable(1)->where('expired_at','>=', Carbon::now())->orderby('created_at','desc');
+            }
+            if(Input::has('search')){
+                $search = Input::get('search');
+                $locations = Location::whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])->pluck('id')->toArray();
+                $sub_regions = SubRegion::whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])->pluck('id')->toArray();
+    
+                $query->where(function($query) use ($search, $locations, $sub_regions){
+                    $query->whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])
+                        ->orWhereRaw("LOWER(name_ar) like ? ", [ "%".strtolower($search)."%"])
+                        ->orWhereRaw("LOWER(description_en) like ? ", [ "%".strtolower($search)."%"])
+                        ->orWhereRaw("LOWER(description_ar) like ? ", [ "%".strtolower($search)."%"]);
+    
+                    if(count($locations)){
+                        $query->orWhereIn("location_id", $locations);
+                    }
+    
+                    if(count($sub_regions)){
+                        $query->orWhereIn("sub_region_id", $sub_regions);
+                    }
+                });
+            }
+            if($request->sort){
+                $sort = Input::get('sort');
+                if($sort == 'price_lowest'){
+                    $query->orderBy('price','asc');
+                }elseif ($sort == 'price_highest'){
+                    $query->orderBy('price','desc');
+                }elseif ($sort == 'most_recent'){
+                    $query->orderBy('created_at','desc');
+                }
+            }else{
+                $query->orderBy('item_order','desc');
             }
             $currency = env('APP_CURRENCY');
             $items = $query->take(50)->get()->map(function ($value, $key) use ($currency,$user) {
@@ -404,6 +437,38 @@ class ItemsController extends Controller
                     $q->whereType('services');
                 })->whereIsAvailable(1)->where('expired_at','>=', Carbon::now())->orderby('created_at','desc');
             }
+            if(Input::has('search')){
+                $search = Input::get('search');
+                $locations = Location::whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])->pluck('id')->toArray();
+                $sub_regions = SubRegion::whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])->pluck('id')->toArray();
+    
+                $query->where(function($query) use ($search, $locations, $sub_regions){
+                    $query->whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])
+                        ->orWhereRaw("LOWER(name_ar) like ? ", [ "%".strtolower($search)."%"])
+                        ->orWhereRaw("LOWER(description_en) like ? ", [ "%".strtolower($search)."%"])
+                        ->orWhereRaw("LOWER(description_ar) like ? ", [ "%".strtolower($search)."%"]);
+    
+                    if(count($locations)){
+                        $query->orWhereIn("location_id", $locations);
+                    }
+    
+                    if(count($sub_regions)){
+                        $query->orWhereIn("sub_region_id", $sub_regions);
+                    }
+                });
+            }
+            if($request->sort){
+                $sort = Input::get('sort');
+                if($sort == 'price_lowest'){
+                    $query->orderBy('price','asc');
+                }elseif ($sort == 'price_highest'){
+                    $query->orderBy('price','desc');
+                }elseif ($sort == 'most_recent'){
+                    $query->orderBy('created_at','desc');
+                }
+            }else{
+                $query->orderBy('item_order','desc');
+            }
             $currency = env('APP_CURRENCY');
             $items = $query->take(50)->get()->map(function ($value, $key) use ($currency,$user) {
                 $value->is_favorite = false;
@@ -422,6 +487,38 @@ class ItemsController extends Controller
                 $query = Item::where('user_id','!=', $user->id)->wherein('id',$items_viewed)->whereType('offer')->whereIsAvailable(1)->where('expired_at','>=', Carbon::now())->orderby('created_at','desc');
             }else{
                 $query = Item::wherein('id',$items_viewed)->whereType('offer')->whereIsAvailable(1)->where('expired_at','>=', Carbon::now())->orderby('created_at','desc');
+            }
+            if(Input::has('search')){
+                $search = Input::get('search');
+                $locations = Location::whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])->pluck('id')->toArray();
+                $sub_regions = SubRegion::whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])->pluck('id')->toArray();
+    
+                $query->where(function($query) use ($search, $locations, $sub_regions){
+                    $query->whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])
+                        ->orWhereRaw("LOWER(name_ar) like ? ", [ "%".strtolower($search)."%"])
+                        ->orWhereRaw("LOWER(description_en) like ? ", [ "%".strtolower($search)."%"])
+                        ->orWhereRaw("LOWER(description_ar) like ? ", [ "%".strtolower($search)."%"]);
+    
+                    if(count($locations)){
+                        $query->orWhereIn("location_id", $locations);
+                    }
+    
+                    if(count($sub_regions)){
+                        $query->orWhereIn("sub_region_id", $sub_regions);
+                    }
+                });
+            }
+            if($request->sort){
+                $sort = Input::get('sort');
+                if($sort == 'price_lowest'){
+                    $query->orderBy('price','asc');
+                }elseif ($sort == 'price_highest'){
+                    $query->orderBy('price','desc');
+                }elseif ($sort == 'most_recent'){
+                    $query->orderBy('created_at','desc');
+                }
+            }else{
+                $query->orderBy('item_order','desc');
             }
             $currency = env('APP_CURRENCY');
             $items = $query->take(50)->get()->map(function ($value, $key) use ($currency,$user) {
@@ -444,6 +541,38 @@ class ItemsController extends Controller
                     $query = Item::where('user_id','!=', $user->id)->whereType('offer')->whereIsAvailable(1)->where('expired_at','>=', Carbon::now())->orderbyRaw("(6371 * 2 * ASIN(SQRT( POWER(SIN(( $latitude - latitude) *  pi()/180 / 2), 2) +COS( $latitude * pi()/180) * COS(latitude * pi()/180) * POWER(SIN(( $longitude - longitude) * pi()/180 / 2), 2) ))) asc");
                 }else{
                     $query = Item::whereType('offer')->whereIsAvailable(1)->where('expired_at','>=', Carbon::now())->orderbyRaw("(6371 * 2 * ASIN(SQRT( POWER(SIN(( $latitude - latitude) *  pi()/180 / 2), 2) +COS( $latitude * pi()/180) * COS(latitude * pi()/180) * POWER(SIN(( $longitude - longitude) * pi()/180 / 2), 2) ))) asc");
+                }
+                if(Input::has('search')){
+                    $search = Input::get('search');
+                    $locations = Location::whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])->pluck('id')->toArray();
+                    $sub_regions = SubRegion::whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])->pluck('id')->toArray();
+        
+                    $query->where(function($query) use ($search, $locations, $sub_regions){
+                        $query->whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])
+                            ->orWhereRaw("LOWER(name_ar) like ? ", [ "%".strtolower($search)."%"])
+                            ->orWhereRaw("LOWER(description_en) like ? ", [ "%".strtolower($search)."%"])
+                            ->orWhereRaw("LOWER(description_ar) like ? ", [ "%".strtolower($search)."%"]);
+        
+                        if(count($locations)){
+                            $query->orWhereIn("location_id", $locations);
+                        }
+        
+                        if(count($sub_regions)){
+                            $query->orWhereIn("sub_region_id", $sub_regions);
+                        }
+                    });
+                }
+                if($request->sort){
+                    $sort = Input::get('sort');
+                    if($sort == 'price_lowest'){
+                        $query->orderBy('price','asc');
+                    }elseif ($sort == 'price_highest'){
+                        $query->orderBy('price','desc');
+                    }elseif ($sort == 'most_recent'){
+                        $query->orderBy('created_at','desc');
+                    }
+                }else{
+                    $query->orderBy('item_order','desc');
                 }
                 $currency = env('APP_CURRENCY');
                 $items = $query->take(50)->get()->map(function ($value, $key) use ($currency,$user) {
@@ -512,6 +641,38 @@ class ItemsController extends Controller
             }else{
                 $query = Item::whereType('offer')->whereIsAvailable(1)->where('expired_at','>=', Carbon::now())->orderby('created_at','desc');
             }
+            if(Input::has('search')){
+                $search = Input::get('search');
+                $locations = Location::whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])->pluck('id')->toArray();
+                $sub_regions = SubRegion::whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])->pluck('id')->toArray();
+    
+                $query->where(function($query) use ($search, $locations, $sub_regions){
+                    $query->whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])
+                        ->orWhereRaw("LOWER(name_ar) like ? ", [ "%".strtolower($search)."%"])
+                        ->orWhereRaw("LOWER(description_en) like ? ", [ "%".strtolower($search)."%"])
+                        ->orWhereRaw("LOWER(description_ar) like ? ", [ "%".strtolower($search)."%"]);
+    
+                    if(count($locations)){
+                        $query->orWhereIn("location_id", $locations);
+                    }
+    
+                    if(count($sub_regions)){
+                        $query->orWhereIn("sub_region_id", $sub_regions);
+                    }
+                });
+            }
+            if($request->sort){
+                $sort = Input::get('sort');
+                if($sort == 'price_lowest'){
+                    $query->orderBy('price','asc');
+                }elseif ($sort == 'price_highest'){
+                    $query->orderBy('price','desc');
+                }elseif ($sort == 'most_recent'){
+                    $query->orderBy('created_at','desc');
+                }
+            }else{
+                $query->orderBy('item_order','desc');
+            }
             $currency = env('APP_CURRENCY');
             $items = $query->take(50)->get()->map(function ($value, $key) use ($currency,$user) {
                 unset($value->quantity);
@@ -551,24 +712,24 @@ class ItemsController extends Controller
 
             $query->where(function($query) use ($search, $categories_available, $sub_categories_available, $sub_sub_categories_available, $locations){
                 $query->whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])
-                    ->orwhereRaw("LOWER(name_ar) like ? ", [ "%".strtolower($search)."%"])
-                    ->orwhereRaw("LOWER(description_en) like ? ", [ "%".strtolower($search)."%"])
-                    ->orwhereRaw("LOWER(description_ar) like ? ", [ "%".strtolower($search)."%"]);    
+                    ->orWhereRaw("LOWER(name_ar) like ? ", [ "%".strtolower($search)."%"])
+                    ->orWhereRaw("LOWER(description_en) like ? ", [ "%".strtolower($search)."%"])
+                    ->orWhereRaw("LOWER(description_ar) like ? ", [ "%".strtolower($search)."%"]);    
                         
                 if(count($categories_available)){
-                    $query->orwhereIn("category_id", $categories_available);
+                    $query->orWhereIn("category_id", $categories_available);
                 }
                             
                 if(count($sub_categories_available)){
-                    $query->orwhereIn("sub_category_id", $sub_categories_available);
+                    $query->orWhereIn("sub_category_id", $sub_categories_available);
                 }
                             
                 if(count($sub_sub_categories_available)){
-                    $query->orwhereIn("sub_sub_category_id", $sub_sub_categories_available);
+                    $query->orWhereIn("sub_sub_category_id", $sub_sub_categories_available);
                 }
                                             
                 if(count($locations)){
-                    $query->orwhereIn("location_id", $locations);
+                    $query->orWhereIn("location_id", $locations);
                 }
             });
         }
@@ -697,23 +858,23 @@ class ItemsController extends Controller
 
             $query->where(function($query) use ($search, $categories_available, $sub_categories_available, $sub_sub_categories_available){
                 $query->whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])
-                    ->orwhereRaw("LOWER(name_ar) like ? ", [ "%".strtolower($search)."%"])
-                    ->orwhereRaw("LOWER(description_en) like ? ", [ "%".strtolower($search)."%"])
-                    ->orwhereRaw("LOWER(description_ar) like ? ", [ "%".strtolower($search)."%"]);
+                    ->orWhereRaw("LOWER(name_ar) like ? ", [ "%".strtolower($search)."%"])
+                    ->orWhereRaw("LOWER(description_en) like ? ", [ "%".strtolower($search)."%"])
+                    ->orWhereRaw("LOWER(description_ar) like ? ", [ "%".strtolower($search)."%"]);
                 if(count($categories_available)){
-                    $query->orwhereIn("category_id", $categories_available);
+                    $query->orWhereIn("category_id", $categories_available);
                 }
                             
                 if(count($sub_categories_available)){
-                    $query->orwhereIn("sub_category_id", $sub_categories_available);
+                    $query->orWhereIn("sub_category_id", $sub_categories_available);
                 }
                             
                 if(count($sub_sub_categories_available)){
-                    $query->orwhereIn("sub_sub_category_id", $sub_sub_categories_available);
+                    $query->orWhereIn("sub_sub_category_id", $sub_sub_categories_available);
                 }
                                             
                 if(count($locations)){
-                    $query->orwhereIn("location_id", $locations);
+                    $query->orWhereIn("location_id", $locations);
                 }
             });
         }
@@ -846,16 +1007,16 @@ class ItemsController extends Controller
 
             $query->where(function($query) use ($search, $locations, $sub_regions){
                 $query->whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])
-                    ->orwhereRaw("LOWER(name_ar) like ? ", [ "%".strtolower($search)."%"])
-                    ->orwhereRaw("LOWER(description_en) like ? ", [ "%".strtolower($search)."%"])
-                    ->orwhereRaw("LOWER(description_ar) like ? ", [ "%".strtolower($search)."%"]);
+                    ->orWhereRaw("LOWER(name_ar) like ? ", [ "%".strtolower($search)."%"])
+                    ->orWhereRaw("LOWER(description_en) like ? ", [ "%".strtolower($search)."%"])
+                    ->orWhereRaw("LOWER(description_ar) like ? ", [ "%".strtolower($search)."%"]);
 
                 if(count($locations)){
-                    $query->orwhereIn("location_id", $locations);
+                    $query->orWhereIn("location_id", $locations);
                 }
 
                 if(count($sub_regions)){
-                    $query->orwhereIn("sub_region_id", $sub_regions);
+                    $query->orWhereIn("sub_region_id", $sub_regions);
                 }
             });
         }
@@ -988,16 +1149,16 @@ class ItemsController extends Controller
 
             $query->where(function($query) use ($search, $locations, $sub_regions){
                 $query->whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])
-                    ->orwhereRaw("LOWER(name_ar) like ? ", [ "%".strtolower($search)."%"])
-                    ->orwhereRaw("LOWER(description_en) like ? ", [ "%".strtolower($search)."%"])
-                    ->orwhereRaw("LOWER(description_ar) like ? ", [ "%".strtolower($search)."%"]);
+                    ->orWhereRaw("LOWER(name_ar) like ? ", [ "%".strtolower($search)."%"])
+                    ->orWhereRaw("LOWER(description_en) like ? ", [ "%".strtolower($search)."%"])
+                    ->orWhereRaw("LOWER(description_ar) like ? ", [ "%".strtolower($search)."%"]);
 
                 if(count($locations)){
-                    $query->orwhereIn("location_id", $locations);
+                    $query->orWhereIn("location_id", $locations);
                 }
 
                 if(count($sub_regions)){
-                    $query->orwhereIn("sub_region_id", $sub_regions);
+                    $query->orWhereIn("sub_region_id", $sub_regions);
                 }
             });
         }
@@ -1121,9 +1282,9 @@ class ItemsController extends Controller
             $search = Input::get('search');
             $query->where(function($query) use ($search){
                 $query->whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])
-                    ->orwhereRaw("LOWER(name_ar) like ? ", [ "%".strtolower($search)."%"])
-                    ->orwhereRaw("LOWER(description_en) like ? ", [ "%".strtolower($search)."%"])
-                    ->orwhereRaw("LOWER(description_ar) like ? ", [ "%".strtolower($search)."%"]);
+                    ->orWhereRaw("LOWER(name_ar) like ? ", [ "%".strtolower($search)."%"])
+                    ->orWhereRaw("LOWER(description_en) like ? ", [ "%".strtolower($search)."%"])
+                    ->orWhereRaw("LOWER(description_ar) like ? ", [ "%".strtolower($search)."%"]);
             });
         }
         $category_id = isset($request->category_id) ? $request->category_id : null;
@@ -1242,9 +1403,9 @@ class ItemsController extends Controller
             $search = Input::get('search');
             $query->where(function($query) use ($search){
                 $query->whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])
-                    ->orwhereRaw("LOWER(name_ar) like ? ", [ "%".strtolower($search)."%"])
-                    ->orwhereRaw("LOWER(description_en) like ? ", [ "%".strtolower($search)."%"])
-                    ->orwhereRaw("LOWER(description_ar) like ? ", [ "%".strtolower($search)."%"]);
+                    ->orWhereRaw("LOWER(name_ar) like ? ", [ "%".strtolower($search)."%"])
+                    ->orWhereRaw("LOWER(description_en) like ? ", [ "%".strtolower($search)."%"])
+                    ->orWhereRaw("LOWER(description_ar) like ? ", [ "%".strtolower($search)."%"]);
             });
         }
         $category_id = isset($request->category_id) ? $request->category_id : null;
@@ -1359,6 +1520,7 @@ class ItemsController extends Controller
             $sub_category_id = isset($request->sub_category_id) ? $request->sub_category_id : null;
             $sub_category_ids = isset($request->sub_category_ids) ? $request->sub_category_ids : null;
             $sub_sub_category_id = isset($request->sub_sub_category_id) ? $request->sub_sub_category_id : null;
+            $keyword = isset($request->keyword) ? $request->keyword : null;
 
             $query->when($category_id, function ($query) use ($category_id) {
                 $query->whereCategoryId($category_id);
@@ -1374,9 +1536,13 @@ class ItemsController extends Controller
                 });
             }
             
-    //        $query->when($sub_sub_category_id, function ($query) use ($sub_sub_category_id) {
-    //            $query->whereSubSubCategoryId($sub_sub_category_id);
-    //        });
+            // $query->when($sub_sub_category_id, function ($query) use ($sub_sub_category_id) {
+            //     $query->whereSubSubCategoryId($sub_sub_category_id);
+            // });
+
+            $query->when($keyword, function ($query) use ($keyword) {
+                $query->where('title', 'LIKE', '%' . $keyword . '%')->orWhere('title', 'LIKE', '%' . $keyword . '%');
+            });
 
             $filters = $query->orderby('sub_category_id','asc')->get()->map(function ($value, $key){
                 if($value->field_type == 'boolean'){
