@@ -362,7 +362,6 @@ class ItemsController extends Controller
     }
 
     public function home_top_categories_items(Request $request,$slug) {
-        \Log::info($request->all());
         $user = null;
         $items_viewed = [];
         $latitude = isset($request->latitude) ? $request->latitude : null;
@@ -375,11 +374,11 @@ class ItemsController extends Controller
             if($user){
                 $query = Item::where('user_id','!=', $user->id)->whereType('offer')->whereHas('category', function ($q) {
                     $q->whereType('products');
-                })->whereIsAvailable(1)->where('expired_at','>=', Carbon::now())->orderby('created_at','desc');
+                })->whereIsAvailable(1)->where('expired_at','>=', Carbon::now());
             }else{
                 $query = Item::whereType('offer')->whereHas('category', function ($q) {
                     $q->whereType('products');
-                })->whereIsAvailable(1)->where('expired_at','>=', Carbon::now())->orderby('created_at','desc');
+                })->whereIsAvailable(1)->where('expired_at','>=', Carbon::now());
             }
             if(Input::has('search')){
                 $search = Input::get('search');
@@ -431,11 +430,11 @@ class ItemsController extends Controller
             if($user){
                 $query = Item::where('user_id','!=', $user->id)->whereType('offer')->whereHas('category', function ($q) {
                     $q->whereType('services');
-                })->whereIsAvailable(1)->where('expired_at','>=', Carbon::now())->orderby('created_at','desc');
+                })->whereIsAvailable(1)->where('expired_at','>=', Carbon::now());
             }else{
                 $query = Item::whereType('offer')->whereHas('category', function ($q) {
                     $q->whereType('services');
-                })->whereIsAvailable(1)->where('expired_at','>=', Carbon::now())->orderby('created_at','desc');
+                })->whereIsAvailable(1)->where('expired_at','>=', Carbon::now());
             }
             if(Input::has('search')){
                 $search = Input::get('search');
@@ -484,9 +483,9 @@ class ItemsController extends Controller
             })->values();
         }elseif ($slug == 'recently-viewed'){
             if($user){
-                $query = Item::where('user_id','!=', $user->id)->wherein('id',$items_viewed)->whereType('offer')->whereIsAvailable(1)->where('expired_at','>=', Carbon::now())->orderby('created_at','desc');
+                $query = Item::where('user_id','!=', $user->id)->wherein('id',$items_viewed)->whereType('offer')->whereIsAvailable(1)->where('expired_at','>=', Carbon::now());
             }else{
-                $query = Item::wherein('id',$items_viewed)->whereType('offer')->whereIsAvailable(1)->where('expired_at','>=', Carbon::now())->orderby('created_at','desc');
+                $query = Item::wherein('id',$items_viewed)->whereType('offer')->whereIsAvailable(1)->where('expired_at','>=', Carbon::now());
             }
             if(Input::has('search')){
                 $search = Input::get('search');
@@ -637,9 +636,9 @@ class ItemsController extends Controller
             }
         }elseif ($slug == 'latest-posts'){
             if($user){
-                $query = Item::where('user_id','!=', $user->id)->whereType('offer')->whereIsAvailable(1)->where('expired_at','>=', Carbon::now())->orderby('created_at','desc');
+                $query = Item::where('user_id','!=', $user->id)->whereType('offer')->whereIsAvailable(1)->where('expired_at','>=', Carbon::now());
             }else{
-                $query = Item::whereType('offer')->whereIsAvailable(1)->where('expired_at','>=', Carbon::now())->orderby('created_at','desc');
+                $query = Item::whereType('offer')->whereIsAvailable(1)->where('expired_at','>=', Carbon::now());
             }
             if(Input::has('search')){
                 $search = Input::get('search');
