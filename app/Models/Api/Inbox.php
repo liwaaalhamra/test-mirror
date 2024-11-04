@@ -49,7 +49,7 @@ class Inbox extends Model
     }
 
     public function getImageAttribute($value){
-        return ($value == null) ? null : secure_url('public/uploads/images/push/'.$value);
+        return ($value == null) ? null : secure_url('uploads/images/push/'.$value);
     }
 
     public function getImageName(){

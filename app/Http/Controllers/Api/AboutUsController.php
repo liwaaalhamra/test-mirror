@@ -41,7 +41,7 @@ class AboutUsController extends Controller
 	public function index(Request $request) {
 
 	    $about_us = AboutUs::first();
-	    $about_us->image = $about_us->image == null ? null : secure_url('public/uploads/images/about_us/'.$about_us->image);
+	    $about_us->image = $about_us->image == null ? null : secure_url('uploads/images/about_us/'.$about_us->image);
         return response()->json($about_us);
 	}
 

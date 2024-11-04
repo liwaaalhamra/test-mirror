@@ -64,6 +64,6 @@ class UserPoints extends Model
     }
 
     public function getImageAttribute($value){
-        return ($value == null) ? null : secure_url('public/uploads/images/selfies/'.$value);
+        return ($value == null) ? null : secure_url('uploads/images/selfies/'.$value);
     }
 }

@@ -47,7 +47,7 @@
                                         <h3 class="panel-title pull-left">Image</h3>
                                         <div class="btn-group">
                                             @if(!empty($location) && $location->image != null)
-                                                <img  alt="Image Preview"  src="{{ secure_url("public/uploads/images/locate_us/".$location->image) }}" class="thumbnail" data-toggle="modal" data-target="#logo"  style="cursor: pointer;max-width:200px;max-height: 200px;margin-bottom: 0px"/>
+                                                <img  alt="Image Preview"  src="{{ secure_url("uploads/images/locate_us/".$location->image) }}" class="thumbnail" data-toggle="modal" data-target="#logo"  style="cursor: pointer;max-width:200px;max-height: 200px;margin-bottom: 0px"/>
                                                 <div id="logo" class="modal fade" role="dialog">
                                                     <div class="modal-dialog">
                                                         <div class="modal-content">
@@ -56,7 +56,7 @@
                                                                 <h3 class="modal-title">Image</h3>
                                                             </div>
                                                             <div class="modal-body">
-                                                                <img src="{{ secure_url("public/uploads/images/locate_us/".$location->image) }}" width="100%;">
+                                                                <img src="{{ secure_url("uploads/images/locate_us/".$location->image) }}" width="100%;">
                                                             </div>
                                                             <div class="modal-footer">
                                                                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

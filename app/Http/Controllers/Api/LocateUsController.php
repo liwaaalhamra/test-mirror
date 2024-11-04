@@ -50,7 +50,7 @@ class LocateUsController extends Controller
         }
 
         foreach($locations as $item){
-            $item->image = $item->image == null ? null : secure_url('public/uploads/images/locate_us/'.$item->image);
+            $item->image = $item->image == null ? null : secure_url('uploads/images/locate_us/'.$item->image);
         }
         return response()->json($locations);
     }

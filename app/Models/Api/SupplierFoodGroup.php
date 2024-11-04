@@ -78,7 +78,7 @@ class SupplierFoodGroup extends Model
     }
 
     public function getImageAttribute($value){
-        return ($value == null) ? null : secure_url('public/uploads/images/food_groups/'.$value);
+        return ($value == null) ? null : secure_url('uploads/images/food_groups/'.$value);
     }
 
     public function getMediaName(){
@@ -86,7 +86,7 @@ class SupplierFoodGroup extends Model
     }
 
     public function getPdfAttribute($value){
-        return ($value == null) ? null : secure_url('public/uploads/documents/food_groups/'.$value);
+        return ($value == null) ? null : secure_url('uploads/documents/food_groups/'.$value);
     }
 
     public function getPdfName(){

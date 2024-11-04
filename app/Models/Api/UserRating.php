@@ -94,7 +94,7 @@ class UserRating extends Model
     }
 
     public function getImageAttribute($value){
-        return ($value == null) ? null : secure_url('public/uploads/images/rating/'.$value);
+        return ($value == null) ? null : secure_url('uploads/images/rating/'.$value);
     }
 
     public function getMediaName(){

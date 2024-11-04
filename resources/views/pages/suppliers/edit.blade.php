@@ -250,7 +250,7 @@
         });
 
         var uploadedUrl = location.href.split("suppliers")[0]+'suppliers/get_uploaded_images';
-        var imageUrl = location.href.split("admin")[0]+'public/uploads/images/suppliers/';
+        var imageUrl = location.href.split("admin")[0]+'uploads/images/suppliers/';
         /*
          get existing images
          */

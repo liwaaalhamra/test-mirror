@@ -126,7 +126,7 @@
         });
 
         var uploadedUrl = location.href.split("events")[0]+'events/get_uploaded_images';
-        var imageUrl = location.href.split("admin")[0]+'public/uploads/images/events/';
+        var imageUrl = location.href.split("admin")[0]+'uploads/images/events/';
         /*
          get existing images
          */

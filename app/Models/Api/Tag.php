@@ -33,7 +33,7 @@ class Tag extends Model
     }
 
     public function getImageAttribute($value){
-        return ($value == null) ? null : secure_url('public/uploads/images/tags/'.$value);
+        return ($value == null) ? null : secure_url('uploads/images/tags/'.$value);
     }
 
     public function getMediaName(){

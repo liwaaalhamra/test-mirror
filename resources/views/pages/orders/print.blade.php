@@ -13,11 +13,11 @@
 
     <title>{{env('APP_NAME')}} | Invoice Print</title>
 
-    <link href="{{env('APP_ENV') == 'local' ? asset('invoice')}}/css/bootstrap.min.css : secure_asset('public/invoice')}}/css/bootstrap.min.css" rel="stylesheet">
-    <link href="{{env('APP_ENV') == 'local' ? asset('invoice')}}/font-awesome/css/font-awesome.css : secure_asset('public/invoice')}}/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="{{env('APP_ENV') == 'local' ? asset('invoice')}}/css/bootstrap.min.css : secure_asset('invoice')}}/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{env('APP_ENV') == 'local' ? asset('invoice')}}/font-awesome/css/font-awesome.css : secure_asset('invoice')}}/font-awesome/css/font-awesome.css" rel="stylesheet">
 
-    <link href="{{env('APP_ENV') == 'local' ? asset('invoice')}}/css/animate.css : secure_asset('public/invoice')}}/css/animate.css" rel="stylesheet">
-    <link href="{{env('APP_ENV') == 'local' ? asset('invoice')}}/css/style1.css : secure_asset('public/invoice')}}/css/style1.css" rel="stylesheet">
+    <link href="{{env('APP_ENV') == 'local' ? asset('invoice')}}/css/animate.css : secure_asset('invoice')}}/css/animate.css" rel="stylesheet">
+    <link href="{{env('APP_ENV') == 'local' ? asset('invoice')}}/css/style1.css : secure_asset('invoice')}}/css/style1.css" rel="stylesheet">
 
 </head>
 <body class="white-bg">
@@ -36,7 +36,7 @@
             {{--</div>--}}
             <div class="row">
                 <div class="ibox-content  wrapper wrapper-content animated fadeInRight" style="border-width:0px 0;padding:0px 10px 0px" >
-                    <img src="{{env('APP_ENV') == 'local' ? asset('resources/assets/images/logo_new.png') : secure_asset('public/resources/assets/images/logo_new.png')}}"  height="52">
+                    <img src="{{env('APP_ENV') == 'local' ? asset('resources/assets/images/logo_new.png') : secure_asset('resources/assets/images/logo_new.png')}}"  height="52">
                     <div class="table-responsive">
                         <table class="table invoice-table">
                             <thead>
@@ -238,12 +238,12 @@
     </div>
 
     <!-- Mainly scripts -->
-    <script src="{{env('APP_ENV') == 'local' ? asset('invoice')}}/js/jquery-2.1.1.js : secure_asset('public/invoice')}}/js/jquery-2.1.1.js"></script>
-    <script src="{{env('APP_ENV') == 'local' ? asset('invoice')}}/js/bootstrap.min.js : secure_asset('public/invoice')}}/js/bootstrap.min.js"></script>
-    <script src="{{env('APP_ENV') == 'local' ? asset('invoice')}}/js/plugins/metisMenu/jquery.metisMenu.js : secure_asset('public/invoice')}}/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="{{env('APP_ENV') == 'local' ? asset('invoice')}}/js/jquery-2.1.1.js : secure_asset('invoice')}}/js/jquery-2.1.1.js"></script>
+    <script src="{{env('APP_ENV') == 'local' ? asset('invoice')}}/js/bootstrap.min.js : secure_asset('invoice')}}/js/bootstrap.min.js"></script>
+    <script src="{{env('APP_ENV') == 'local' ? asset('invoice')}}/js/plugins/metisMenu/jquery.metisMenu.js : secure_asset('invoice')}}/js/plugins/metisMenu/jquery.metisMenu.js"></script>
 
     <!-- Custom and plugin javascript -->
-    <script src="{{env('APP_ENV') == 'local' ? asset('invoice')}}/js/inspinia.js : secure_asset('public/invoice')}}/js/inspinia.js"></script>
+    <script src="{{env('APP_ENV') == 'local' ? asset('invoice')}}/js/inspinia.js : secure_asset('invoice')}}/js/inspinia.js"></script>
 
     <script type="text/javascript">
         window.print();

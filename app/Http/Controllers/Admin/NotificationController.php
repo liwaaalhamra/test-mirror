@@ -90,18 +90,18 @@ class NotificationController extends Controller
                  * this image will be displayed in the notification
                  */
                 //Android
-                $info['big_picture'] = secure_url('public/uploads/images/push/'.$fileName);
+                $info['big_picture'] = secure_url('uploads/images/push/'.$fileName);
                 //iOS
                 $media_id = 'id'.str_random(5);
-                $info['ios_attachments'] = [$media_id => secure_url('public/uploads/images/push/'.$fileName)];
+                $info['ios_attachments'] = [$media_id => secure_url('uploads/images/push/'.$fileName)];
                 /**
                  * at the same time, we will send the image in "data" in case
                  * they want to display it int the application
                  */
-                list($width, $height, $type, $attr) = getimagesize(secure_url('public/uploads/images/push/'.$fileName));
+                list($width, $height, $type, $attr) = getimagesize(secure_url('uploads/images/push/'.$fileName));
                 $data['image_width'] = $width;
                 $data['image_height'] = $height;
-                $data['image_url'] = secure_url('public/uploads/images/push/'.$fileName);
+                $data['image_url'] = secure_url('uploads/images/push/'.$fileName);
             }
         }
 
@@ -238,18 +238,18 @@ class NotificationController extends Controller
                  * this image will be displayed in the notification
                  */
                 //Android
-                $info['big_picture'] = secure_url('public/uploads/images/push/'.$fileName);
+                $info['big_picture'] = secure_url('uploads/images/push/'.$fileName);
                 //iOS
                 $media_id = 'id'.str_random(5);
-                $info['ios_attachments'] = [$media_id => secure_url('public/uploads/images/push/'.$fileName)];
+                $info['ios_attachments'] = [$media_id => secure_url('uploads/images/push/'.$fileName)];
                 /**
                  * at the same time, we will send the image in "data" in case
                  * they want to display it int the application
                  */
-                list($width, $height, $type, $attr) = getimagesize(secure_url('public/uploads/images/push/'.$fileName));
+                list($width, $height, $type, $attr) = getimagesize(secure_url('uploads/images/push/'.$fileName));
                 $data['image_width'] = $width;
                 $data['image_height'] = $height;
-                $data['image_url'] = secure_url('public/uploads/images/push/'.$fileName);
+                $data['image_url'] = secure_url('uploads/images/push/'.$fileName);
             }
         }
 

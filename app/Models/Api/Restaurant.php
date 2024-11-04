@@ -73,7 +73,7 @@ class Restaurant extends Model
     }
 
     public function getImageAttribute($value){
-       return ($value == null) ? null : secure_url('public/uploads/images/restaurants/'.$value);
+       return ($value == null) ? null : secure_url('uploads/images/restaurants/'.$value);
     }
 
     public function getMediaName(){
@@ -81,7 +81,7 @@ class Restaurant extends Model
     }
 
     public function getPdfAttribute($value){
-        return ($value == null) ? null : secure_url('public/uploads/documents/restaurants/'.$value);
+        return ($value == null) ? null : secure_url('uploads/documents/restaurants/'.$value);
     }
 
     public function getPdfName(){

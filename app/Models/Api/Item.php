@@ -154,7 +154,7 @@ class Item extends Model
     }
 
     public function getImageAttribute($value){
-        return ($value == null) ? null : secure_url('public/uploads/images/items/'.$value);
+        return ($value == null) ? null : secure_url('uploads/images/items/'.$value);
     }
 
     public function getMediaName(){
@@ -162,7 +162,7 @@ class Item extends Model
     }
 
     public function getPdfAttribute($value){
-        return ($value == null) ? null : secure_url('public/uploads/documents/items/'.$value);
+        return ($value == null) ? null : secure_url('uploads/documents/items/'.$value);
     }
 
     public function getPdfName(){

@@ -31,7 +31,7 @@ class TipsItem extends Model
     }
 
     public function getImageAttribute($value){
-        return ($value == null) ? null : secure_url('public/uploads/images/tips/'.$value);
+        return ($value == null) ? null : secure_url('uploads/images/tips/'.$value);
     }
 
     public function getImageName(){

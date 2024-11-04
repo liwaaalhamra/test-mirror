@@ -30,7 +30,7 @@
                             </div>
                             <div class="form-group col-sm-4">
                                 <label>Fullname <p style="color: red; display: inline-block; line-height: 0.1rem">*</p></label>
-                                <input type="text" name="fullname" class="form-control" required placeholder="Name" value="{{$item->full_name}}">
+                                <input type="text" name="full_name" class="form-control" required placeholder="Name" value="{{$item->full_name}}">
                             </div>
                             <div class="form-group col-sm-4">
                                 <label>Published <p style="color: red; display: inline-block; line-height: 0.1rem">*</p></label>

@@ -116,7 +116,7 @@ class MediaController extends Controller
             return parent::return_error("Missing Image", 401, 'messages.missing_parameter');
         }
 
-        return response(['media_id' => $media->id,'meta_name' => $request->meta_name,'media_url' => secure_url('public/uploads/images/'.$user->id.'/'.$request->meta_name.'/'.$fileName)], 200);
+        return response(['media_id' => $media->id,'meta_name' => $request->meta_name,'media_url' => secure_url('uploads/images/'.$user->id.'/'.$request->meta_name.'/'.$fileName)], 200);
     }
 
     /**

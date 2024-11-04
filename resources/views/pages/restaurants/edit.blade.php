@@ -360,7 +360,7 @@
         });
 
         var uploadedUrl = location.href.split("restaurants")[0]+'restaurants/get_uploaded_images';
-        var imageUrl = location.href.split("admin")[0]+'public/uploads/images/restaurants/';
+        var imageUrl = location.href.split("admin")[0]+'uploads/images/restaurants/';
         /*
          get existing images
          */

@@ -2,7 +2,7 @@
     <li class="dropdown">
         <a href="#" data-toggle="dropdown" class="dropdown-toggle clear" data-toggle="dropdown">
             <span class="thumb-sm avatar pull-right m-t-n-sm m-b-n-sm m-l-sm">
-                <img src="{{env('APP_ENV') == 'local' ? asset('resources/assets/images/logo_new.png') : secure_asset('public/resources/assets/images/logo_new.png')}}">
+                <img src="{{env('APP_ENV') == 'local' ? asset('resources/assets/images/logo_new.png') : secure_asset('resources/assets/images/logo_new.png')}}">
                 <i class="on md b-white bottom"></i>
             </span>
             <span class="hidden-sm hidden-md"></span>{{ucwords(auth()->user()->first_name)}} {{ucwords(auth()->user()->last_name)}}<b class="caret"></b>

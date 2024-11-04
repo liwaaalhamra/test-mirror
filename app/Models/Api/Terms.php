@@ -38,7 +38,7 @@ class Terms extends Model
     }
 
     public function getImageAttribute($value){
-        return ($value == null) ? null : secure_url('public/uploads/images/terms/'.$value);
+        return ($value == null) ? null : secure_url('uploads/images/terms/'.$value);
     }
 
     public function getImageName(){

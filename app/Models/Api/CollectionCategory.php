@@ -42,7 +42,7 @@ class CollectionCategory extends Model
     }
 
     public function getImageAttribute($value){
-        return ($value == null) ? null : secure_url('public/uploads/images/categories/'.$value);
+        return ($value == null) ? null : secure_url('uploads/images/categories/'.$value);
     }
 
     public function getMediaName(){

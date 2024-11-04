@@ -107,7 +107,7 @@ class CronController extends Controller
                             'url' => $instagram_media->videos->standard_resolution->url,
                             'height' => $instagram_media->videos->standard_resolution->height,
                             'width' => $instagram_media->videos->standard_resolution->width,
-                            'video_thumbnail' => secure_url('public/uploads/images/wall/'.$id.'_'.$index.'.png')
+                            'video_thumbnail' => secure_url('uploads/images/wall/'.$id.'_'.$index.'.png')
                         ];
                         WallMedia::create([
                             'post_id' => $db_post->id,
@@ -115,7 +115,7 @@ class CronController extends Controller
                             'url' => $instagram_media->videos->standard_resolution->url,
                             'height' => $instagram_media->videos->standard_resolution->height,
                             'width' => $instagram_media->videos->standard_resolution->width,
-                            'video_thumbnail' => secure_url('public/uploads/images/wall/'.$id.'_'.$index.'.png')
+                            'video_thumbnail' => secure_url('uploads/images/wall/'.$id.'_'.$index.'.png')
                         ]);
                     }
                 }

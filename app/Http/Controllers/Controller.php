@@ -877,14 +877,14 @@ class Controller extends BaseController
                     'id' => $c_id,
                     'name' => $c_name,
                     'label' => $c_name,
-                    'cover_image' => secure_url('/public/images/'.$c_id.'.jpg')
+                    'cover_image' => secure_url('/images/'.$c_id.'.jpg')
                 ];
             }else{
                 $categories[] = [
                     'id' => $applications->$c_id->id,
                     'name' => $applications->$c_id->name,
                     'label' => $applications->$c_id->name,
-                    'cover_image' => secure_url('/public/images/'.$applications->$c_id->id.'.jpg')
+                    'cover_image' => secure_url('/images/'.$applications->$c_id->id.'.jpg')
                 ];
             }
         }

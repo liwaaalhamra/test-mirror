@@ -40,7 +40,7 @@
                     <span class="icon-bar"></span>
                 </button>
                 
-                <img style="max-width: 60px;float:left" src="{{ env('APP_ENV') == 'local' ? asset('resources/assets/images/logo_new.png') : secure_asset('public/resources/assets/images/logo_new.png') }}">
+                <img style="max-width: 60px;float:left" src="{{ env('APP_ENV') == 'local' ? asset('resources/assets/images/logo_new.png') : secure_asset('resources/assets/images/logo_new.png') }}">
 
                 <!-- Branding Image -->
                 <a class="navbar-brand" href="{{ url('/') }}" style="background-color: {{env('BACKGROUND_COLOR')}};color: {{env('TEXT_COLOR')}}">

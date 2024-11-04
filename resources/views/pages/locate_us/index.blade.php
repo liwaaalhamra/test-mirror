@@ -51,7 +51,7 @@
                         </td>
                         <td>
                             @if($item->image != null)
-                                <img src="{{secure_url('public/uploads/images/locate_us')}}{{DIRECTORY_SEPARATOR}}{{$item->image}}" width="100px" data-toggle="modal" data-target="#myModal_{{$item->id}}"  style="cursor: pointer;"/>
+                                <img src="{{secure_url('uploads/images/locate_us')}}{{DIRECTORY_SEPARATOR}}{{$item->image}}" width="100px" data-toggle="modal" data-target="#myModal_{{$item->id}}"  style="cursor: pointer;"/>
                                 <div id="myModal_{{$item->id}}" class="modal fade" role="dialog">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
@@ -59,7 +59,7 @@
                                                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                                             </div>
                                             <div class="modal-body">
-                                                <img src="{{secure_url('public/uploads/images/locate_us')}}{{DIRECTORY_SEPARATOR}}{{$item->image}}" width="100%;">
+                                                <img src="{{secure_url('uploads/images/locate_us')}}{{DIRECTORY_SEPARATOR}}{{$item->image}}" width="100%;">
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

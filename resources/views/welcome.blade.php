@@ -8,7 +8,7 @@
     {{-- Fonts --}}
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     {{-- Libraries --}}
-    <link rel="stylesheet" type="text/css" href="{{ env('APP_ENV') == 'local' ? asset('theme/css/bootstrap.min.css') : secure_asset('public/theme/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ env('APP_ENV') == 'local' ? asset('theme/css/bootstrap.min.css') : secure_asset('theme/css/bootstrap.min.css') }}">
     {{-- Main CSS --}}
     <style type="text/css">
         html,
@@ -40,7 +40,7 @@
 <div class="d-table w-100 h-100">
     <div class="d-table-cell align-middle">
         <div class="container">
-            <img class="logo d-block mx-auto mb-5" src="{{ env('APP_ENV') == 'local' ? asset('resources/assets/images/logo_new.png') : secure_asset('public/resources/assets/images/logo_new.png') }}">
+            <img class="logo d-block mx-auto mb-5" src="{{ env('APP_ENV') == 'local' ? asset('resources/assets/images/logo_new.png') : secure_asset('resources/assets/images/logo_new.png') }}">
 
             <h3 class="text-uppercase text-center mb-4"><b>Download {{ env('APP_NAME') }} App Now!</b></h3>
 
@@ -49,12 +49,12 @@
                     <div class="row">
                         <div class="col">
                             <a href="{{ env('GOOGLE_PLAY_STORE_APP_LINK') }}" target="_blank">
-                                <img class="shadow" src="{{ env('APP_ENV') == 'local' ? asset('uploads/images/google_play.svg') : secure_asset('public/uploads/images/google_play.svg') }}">
+                                <img class="shadow" src="{{ env('APP_ENV') == 'local' ? asset('uploads/images/google_play.svg') : secure_asset('uploads/images/google_play.svg') }}">
                             </a>
                         </div>
                         <div class="col">
                             <a href="{{ env('APPLE_STORE_APP_LINK') }}" target="_blank">
-                                <img class="shadow" src="{{ env('APP_ENV') == 'local' ? asset('uploads/images/app_store.svg') : secure_asset('public/uploads/images/app_store.svg') }}">
+                                <img class="shadow" src="{{ env('APP_ENV') == 'local' ? asset('uploads/images/app_store.svg') : secure_asset('uploads/images/app_store.svg') }}">
                             </a>
                         </div>
                     </div>

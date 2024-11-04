@@ -33,7 +33,7 @@ class Service extends Model
     }
 
     public function getImageAttribute($value){
-        return ($value == null) ? null : secure_url('public/uploads/images/services/'.$value);
+        return ($value == null) ? null : secure_url('uploads/images/services/'.$value);
     }
 
     public function getMediaName(){

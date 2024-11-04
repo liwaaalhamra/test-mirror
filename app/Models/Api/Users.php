@@ -144,7 +144,7 @@ class Users extends Model
 
     public function getPhotoAttribute($value)
     {
-        return ($value == null || !file_exists(public_path('uploads/images/profiles/'.$value))) ? null : secure_url('public/uploads/images/profiles').DIRECTORY_SEPARATOR.$value;
+        return ($value == null || !file_exists(public_path('uploads/images/profiles/'.$value))) ? null : secure_url('uploads/images/profiles').DIRECTORY_SEPARATOR.$value;
     }
 
     public function getPhotoName(){

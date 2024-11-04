@@ -36,7 +36,7 @@ class Category extends Model
     }
 
     public function getImageAttribute($value){
-        return ($value == null) ? null : secure_url('public/uploads/images/categories/'.$value);
+        return ($value == null) ? null : secure_url('uploads/images/categories/'.$value);
     }
 
     public function getMediaName(){
@@ -44,7 +44,7 @@ class Category extends Model
     }
 
     public function getSelectedImageAttribute($value){
-        return ($value == null) ? null : secure_url('public/uploads/images/categories/'.$value);
+        return ($value == null) ? null : secure_url('uploads/images/categories/'.$value);
     }
 
     public function getSelectedMediaName(){

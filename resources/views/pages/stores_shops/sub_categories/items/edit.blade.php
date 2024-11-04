@@ -89,7 +89,7 @@
         });
 
         var uploadedUrl = location.href.split("sub_categories")[0]+'sub_categories/items/get_uploaded_images';
-        var imageUrl = location.href.split("admin")[0]+'public/images/store_items/';
+        var imageUrl = location.href.split("admin")[0]+'images/store_items/';
         /*
          get existing images
          */

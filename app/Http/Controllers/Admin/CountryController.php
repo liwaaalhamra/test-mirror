@@ -60,6 +60,7 @@ class CountryController extends Controller
             'country_code' => 'required',
         ]);
         $destinationDir = public_path() . DIRECTORY_SEPARATOR . 'uploads/images/flags';
+
         $fileName = null;
         // check if a file exist and is valid.
         if($request->hasFile('flag')) {
@@ -81,7 +82,9 @@ class CountryController extends Controller
                     return redirect()->back()
                         ->with('warning', 'Invalid Media Type');
                 }
+
                 $fileName = $request->country_code . '.' . $file->getClientOriginalExtension();
+
                 $file->move($destinationDir, $fileName);
                 list($width, $height, $type, $attr) = getimagesize($destinationDir.'/'.$fileName);
             }
@@ -92,7 +95,7 @@ class CountryController extends Controller
         $country->id                = (int) $maxId + 1;
         $country->flag              = $fileName;
         $country->name              = $request->name;
-        $country->full_name         = $request->fullname;
+        $country->full_name         = $request->full_name;
         $country->visibility        = $request->visibility;
         $country->capital           = $request->capital;
         $country->country_code      = $request->country_code;
@@ -170,7 +173,7 @@ class CountryController extends Controller
         $country = new Country();
         $country->flag              = $fileName ?? $country->flag;
         $country->name              = $request->name;
-        $country->full_name         = $request->fullname;
+        $country->full_name         = $request->full_name;
         $country->visibility        = $request->visibility;
         $country->capital           = $request->capital;
         $country->country_code      = $request->country_code;

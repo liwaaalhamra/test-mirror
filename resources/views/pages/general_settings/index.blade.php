@@ -46,7 +46,7 @@
                                             <h3 class="panel-title pull-left">FAQs Image</h3>
                                             <div class="btn-group">
                                                 @if(isset($settings['faq_image']))
-                                                    <img  alt="Image Preview"  src="{{ secure_url('public/uploads/images/settings/'.$settings['faq_image']) }}" class="thumbnail" data-toggle="modal" data-target="#logo"  style="cursor: pointer;max-width:200px;max-height: 200px;margin-bottom: 0px"/>
+                                                    <img  alt="Image Preview"  src="{{ secure_url('uploads/images/settings/'.$settings['faq_image']) }}" class="thumbnail" data-toggle="modal" data-target="#logo"  style="cursor: pointer;max-width:200px;max-height: 200px;margin-bottom: 0px"/>
                                                     <div id="logo" class="modal fade" role="dialog">
                                                         <div class="modal-dialog">
                                                             <div class="modal-content">
@@ -55,7 +55,7 @@
                                                                     <h3 class="modal-title">FAQs Image</h3>
                                                                 </div>
                                                                 <div class="modal-body">
-                                                                    <img src="{{ secure_url('public/uploads/images/settings/'.$settings['faq_image']) }}" width="100%;">
+                                                                    <img src="{{ secure_url('uploads/images/settings/'.$settings['faq_image']) }}" width="100%;">
                                                                 </div>
                                                                 <div class="modal-footer">
                                                                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -86,7 +86,7 @@
                                             <h3 class="panel-title pull-left">Settings Image</h3>
                                             <div class="btn-group">
                                                 @if(isset($settings['settings_image']))
-                                                    <img  alt="Image Preview"  src="{{ secure_url('public/uploads/images/settings/'.$settings['settings_image']) }}" class="thumbnail" data-toggle="modal" data-target="#logo"  style="cursor: pointer;max-width:200px;max-height: 200px;margin-bottom: 0px"/>
+                                                    <img  alt="Image Preview"  src="{{ secure_url('uploads/images/settings/'.$settings['settings_image']) }}" class="thumbnail" data-toggle="modal" data-target="#logo"  style="cursor: pointer;max-width:200px;max-height: 200px;margin-bottom: 0px"/>
                                                     <div id="logo" class="modal fade" role="dialog">
                                                         <div class="modal-dialog">
                                                             <div class="modal-content">
@@ -95,7 +95,7 @@
                                                                     <h3 class="modal-title">Settings Image</h3>
                                                                 </div>
                                                                 <div class="modal-body">
-                                                                    <img src="{{ secure_url('public/uploads/images/settings/'.$settings['settings_image']) }}" width="100%;">
+                                                                    <img src="{{ secure_url('uploads/images/settings/'.$settings['settings_image']) }}" width="100%;">
                                                                 </div>
                                                                 <div class="modal-footer">
                                                                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -126,7 +126,7 @@
                                             <h3 class="panel-title pull-left">Contact Us Image</h3>
                                             <div class="btn-group">
                                                 @if(isset($settings['contact_us_image']))
-                                                    <img  alt="Image Preview"  src="{{ secure_url('public/uploads/images/settings/'.$settings['contact_us_image']) }}" class="thumbnail" data-toggle="modal" data-target="#logo"  style="cursor: pointer;max-width:200px;max-height: 200px;margin-bottom: 0px"/>
+                                                    <img  alt="Image Preview"  src="{{ secure_url('uploads/images/settings/'.$settings['contact_us_image']) }}" class="thumbnail" data-toggle="modal" data-target="#logo"  style="cursor: pointer;max-width:200px;max-height: 200px;margin-bottom: 0px"/>
                                                     <div id="logo" class="modal fade" role="dialog">
                                                         <div class="modal-dialog">
                                                             <div class="modal-content">
@@ -135,7 +135,7 @@
                                                                     <h3 class="modal-title">Contact Us Image</h3>
                                                                 </div>
                                                                 <div class="modal-body">
-                                                                    <img src="{{ secure_url('public/uploads/images/settings/'.$settings['contact_us_image']) }}" width="100%;">
+                                                                    <img src="{{ secure_url('uploads/images/settings/'.$settings['contact_us_image']) }}" width="100%;">
                                                                 </div>
                                                                 <div class="modal-footer">
                                                                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

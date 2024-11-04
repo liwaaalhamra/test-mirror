@@ -46,7 +46,7 @@ class Banner extends Model
     }
 
     public function getBannerImageAttribute($value){
-        return ($value == null) ? null : secure_url('public/uploads/images/banners/'.$value);
+        return ($value == null) ? null : secure_url('uploads/images/banners/'.$value);
     }
 
     public function getMediaName(){

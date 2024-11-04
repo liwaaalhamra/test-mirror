@@ -84,7 +84,7 @@
         });
 
         var uploadedUrl = location.href.split("restaurants_cafes")[0]+'restaurants_cafes/items/get_uploaded_images';
-        var imageUrl = location.href.split("admin")[0]+'public/images/restaurants_items/';
+        var imageUrl = location.href.split("admin")[0]+'images/restaurants_items/';
         /*
          get existing images
          */

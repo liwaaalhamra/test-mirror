@@ -43,7 +43,7 @@
                         line1: '',
                         line2: ''
                     },
-                    logo: '{{secure_url('public/uploads/images/logo_payment.png')}}',
+                    logo: '{{secure_url('uploads/images/logo_payment.png')}}',
                 },
                 displayControl: {
                     billingAddress: 'HIDE',

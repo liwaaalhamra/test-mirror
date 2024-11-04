@@ -125,7 +125,7 @@
                             <tr>
                                 <td align="center"
                                     style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding-top: 25px;">
-                                    <img src="{{secure_url('public/uploads/images/'.$data['icon'])}}"
+                                    <img src="{{secure_url('uploads/images/'.$data['icon'])}}"
                                          width="125" height="120" style="display: block; border: 0px;"/><br>
                                     <h2 style="font-size: 30px; font-weight: 800; line-height: 36px; color: #333333; margin: 0;">{{$data['message']}}</h2>
                                 </td>
@@ -243,29 +243,29 @@
                                     style="word-break: break-word; vertical-align: top;white-space: nowrap;"
                                     valign="top">
                                     <a href="https://www.facebook.com/" target="_blank"><img alt="Facebook" height="32"
-                                                                                             src="{{secure_asset('public/uploads/images/facebook.png')}}"
+                                                                                             src="{{secure_asset('uploads/images/facebook.png')}}"
                                                                                              style="text-decoration: none; -ms-interpolation-mode: bicubic; height: auto; border: none; display: inline-block;margin:2px"
                                                                                              width="32"/></a>
                                     <a href="https://www.twitter.com/" target="_blank"><img alt="Twitter" height="32"
-                                                                                            src="{{secure_asset('public/uploads/images/twitter.png')}}"
+                                                                                            src="{{secure_asset('uploads/images/twitter.png')}}"
                                                                                             style="text-decoration: none; -ms-interpolation-mode: bicubic; height: auto; border: none; display: inline-block;margin:2px"
                                                                                             width="32"/></a>
                                     <a href="https://www.instagram.com/" target="_blank"><img alt="Instagram"
                                                                                               height="32"
-                                                                                              src="{{secure_asset('public/uploads/images/instagram.png')}}"
+                                                                                              src="{{secure_asset('uploads/images/instagram.png')}}"
                                                                                               style="text-decoration: none; -ms-interpolation-mode: bicubic; height: auto; border: none; display: inline-block;margin:2px"
                                                                                               width="32"/></a>
                                     <a href="https://www.google.com/" target="_blank"><img alt="Website" height="32"
-                                                                                           src="{{secure_asset('public/uploads/images/website.png')}}"
+                                                                                           src="{{secure_asset('uploads/images/website.png')}}"
                                                                                            style="text-decoration: none; -ms-interpolation-mode: bicubic; height: auto; border: none; display: inline-block;margin:2px"
                                                                                            width="32"/></a>
                                     <a href="https://www.pinterest.com/" target="_blank"><img alt="Pinterest"
                                                                                               height="32"
-                                                                                              src="{{secure_asset('public/uploads/images/pinterest.png')}}"
+                                                                                              src="{{secure_asset('uploads/images/pinterest.png')}}"
                                                                                               style="text-decoration: none; -ms-interpolation-mode: bicubic; height: auto; border: none; display: inline-block;margin:2px"
                                                                                               width="32"/></a>
                                     <a href="https://www.linkedin.com/" target="_blank"><img alt="Linkedin" height="32"
-                                                                                             src="{{secure_asset('public/uploads/images/linkedin.png')}}"
+                                                                                             src="{{secure_asset('uploads/images/linkedin.png')}}"
                                                                                              style="text-decoration: none; -ms-interpolation-mode: bicubic; height: auto; border: none; display: inline-block;margin:2px"
                                                                                              width="32"/></a>
                                 </td>

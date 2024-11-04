@@ -30,7 +30,7 @@
                             <input type="file" name="image" accept="image/*">
                         </div>
                         @if($item->image != null)
-                            <img src="{{ url('public/uploads/images/redeem/'.$item->image) }}" width="100px" data-toggle="modal" data-target="#myModal"  style="cursor: pointer;"/>
+                            <img src="{{ url('uploads/images/redeem/'.$item->image) }}" width="100px" data-toggle="modal" data-target="#myModal"  style="cursor: pointer;"/>
                             <div id="myModal" class="modal fade" role="dialog">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
@@ -38,7 +38,7 @@
                                             <button type="button" class="close" data-dismiss="modal">&times;</button>
                                         </div>
                                         <div class="modal-body">
-                                            <img src="{{ url('public/uploads/images/redeem/'.$item->image) }}" width="100%;">
+                                            <img src="{{ url('uploads/images/redeem/'.$item->image) }}" width="100%;">
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

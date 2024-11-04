@@ -79,7 +79,7 @@ class News extends Model
 
     public function getMediaAttribute($value){
         if($this->attributes['media_type'] == 'image'){
-            return ($value == null) ? null : secure_url('public/uploads/images/news/'.$value);
+            return ($value == null) ? null : secure_url('uploads/images/news/'.$value);
         }else{
             return ($value == null) ? null : $value;
         }

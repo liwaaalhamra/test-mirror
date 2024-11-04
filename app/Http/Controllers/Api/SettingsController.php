@@ -58,7 +58,7 @@ class SettingsController extends Controller
             }elseif (in_array($key, ['android_version']) || strpos($key,'delivery') !== false){
                 $value = floatval($value);
             }elseif (in_array($key, []) || strpos($key,'image') !== false){
-                $value = secure_url('public/uploads/images/settings/'.$value);
+                $value = secure_url('uploads/images/settings/'.$value);
             }elseif ($key == 'force_update_message_ar' && $locale == 'ar'){
                 $version_update_message = $value;
             }elseif ($key == 'force_update_message_en' && $locale == 'en'){
