@@ -37,4 +37,18 @@ class GeneralController extends Controller
 
         return view('web.pages.delete-account', compact('page_title'));
     }
+
+    public function support()
+    {
+        $page_title = 'Support';
+
+        return view('web.pages.support', compact('page_title'));
+    }
+
+    public function submitSupport(Request $request)
+    {
+        $page_title = 'Support';
+
+        return redirect()->route('support')->with('success', 'Thank you for your message. Our team will check it and get back to you.');
+    }
 }
