@@ -278,7 +278,7 @@ class ItemsController extends Controller
                 $ids = json_decode($data->matching_records,true);
                 if($ids){
                     $ids_ordered = implode(',', $ids);
-                    $match_query = Item::whereIn('id',$ids)->where('is_available', 1)->orderByRaw("FIELD(id, $ids_ordered)");
+                    $match_query = Item::whereIn('id',$ids)->where('is_available', 1)->orderByRaw("FIELD(id, $ids_ordered)")->where('expired_at','>=', Carbon::now());
                     $currency = env('APP_CURRENCY');
                     
                     $matches = $match_query->get()->map(function ($value, $key) use ($currency,$user) {

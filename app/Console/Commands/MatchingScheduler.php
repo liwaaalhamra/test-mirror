@@ -6,7 +6,7 @@ use App\Models\Api\UserMatchingRecord;
 use App\Models\Api\Item;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
-
+use Carbon\Carbon;
 class MatchingScheduler extends Command
 {
     /**
@@ -40,14 +40,13 @@ class MatchingScheduler extends Command
      */
     public function handle()
     {
+        $delete_old_matchings = UserMatchingRecord::where('created_at','<',Carbon::now()->subDays('5'))->get();
+        foreach($delete_old_matchings as $d){
+            $d->delete();
+        }
 
-        /*
-           Write your database logic we bellow:
-           Item::create(['name'=>'hello new']);
-        */
+        $users = Item::where('expired_at','>=', Carbon::now())->where('id', '>', 0)->get()->pluck('user_id', 'user_id');
 
-        $users = Item::where('id', '>', 0)->get()->pluck('user_id', 'user_id');
-        // UserMatchingRecord::where('id', '>', 0)->delete();
         foreach ($users as $user) {
             $result = $this->matchingResult($user);
             $set_data = new UserMatchingRecord();
@@ -128,7 +127,7 @@ class MatchingScheduler extends Command
         $max = 999999999;
 
 
-        $my_posts = Item::whereUserId($user)->whereType('offer')->get();
+        $my_posts = Item::where('expired_at','>=', Carbon::now())->whereUserId($user)->whereType('offer')->get();
         foreach ($my_posts as $my_post) {
             // Labels of priorities section 9
             $label_9 = [
@@ -1399,55 +1398,6 @@ class MatchingScheduler extends Command
                 $matches->push(...$matching_posts_p61);
             }
         }
-
-        // $merged_array = array_merge($merged_array, array_reverse($p1));
-        // $merged_array = array_merge($merged_array, array_reverse($p2));
-        // $merged_array = array_merge($merged_array, array_reverse($p3));
-        // $merged_array = array_merge($merged_array, array_reverse($p4));
-        // $merged_array = array_merge($merged_array, array_reverse($p5));
-        // $merged_array = array_merge($merged_array, array_reverse($p6));
-        // $merged_array = array_merge($merged_array, array_reverse($p7));
-        // $merged_array = array_merge($merged_array, array_reverse($p8));
-        // $merged_array = array_merge($merged_array, array_reverse($p9));
-        // $merged_array = array_merge($merged_array, array_reverse($p10));
-        // $merged_array = array_merge($merged_array, array_reverse($p11));
-        // $merged_array = array_merge($merged_array, array_reverse($p12));
-        // $merged_array = array_merge($merged_array, array_reverse($p13));
-        // $merged_array = array_merge($merged_array, array_reverse($p14));
-        // $merged_array = array_merge($merged_array, array_reverse($p15));
-        // $merged_array = array_merge($merged_array, array_reverse($p16));
-        // $merged_array = array_merge($merged_array, array_reverse($p17));
-        // $merged_array = array_merge($merged_array, array_reverse($p18));
-        // $merged_array = array_merge($merged_array, array_reverse($p19));
-        // $merged_array = array_merge($merged_array, array_reverse($p20));
-        // $merged_array = array_merge($merged_array, array_reverse($p21));
-        // $merged_array = array_merge($merged_array, array_reverse($p22));
-        // $merged_array = array_merge($merged_array, array_reverse($p23));
-        // $merged_array = array_merge($merged_array, array_reverse($p24));
-        // $merged_array = array_merge($merged_array, array_reverse($p25));
-        // $merged_array = array_merge($merged_array, array_reverse($p26));
-        // $merged_array = array_merge($merged_array, array_reverse($p27));
-        // $merged_array = array_merge($merged_array, array_reverse($p28));
-        // $merged_array = array_merge($merged_array, array_reverse($p29));
-        // $merged_array = array_merge($merged_array, array_reverse($p30));
-        // $merged_array = array_merge($merged_array, array_reverse($p31));
-        // $merged_array = array_merge($merged_array, array_reverse($p32));
-        // $merged_array = array_merge($merged_array, array_reverse($p33));
-        // $merged_array = array_merge($merged_array, array_reverse($p34));
-        // $merged_array = array_merge($merged_array, array_reverse($p35));
-        // $merged_array = array_merge($merged_array, array_reverse($p36));
-        // $merged_array = array_merge($merged_array, array_reverse($p37));
-        // $merged_array = array_merge($merged_array, array_reverse($p38));
-        // $merged_array = array_merge($merged_array, array_reverse($p39));
-        // $merged_array = array_merge($merged_array, array_reverse($p40));
-        // $merged_array = array_merge($merged_array, array_reverse($p41));
-        // $merged_array = array_merge($merged_array, array_reverse($p42));
-        // $merged_array = array_merge($merged_array, array_reverse($p43));
-        // $merged_array = array_merge($merged_array, array_reverse($p44));
-        // $merged_array = array_merge($merged_array, array_reverse($p45));
-        // $merged_array = array_merge($merged_array, array_reverse($p46));
-        // $merged_array = array_merge($merged_array, array_reverse($p47));
-        // $merged_array = array_merge($merged_array, array_reverse($p48));
 
         $timestamps = array_column($p1, 'created_at');
         array_multisort($timestamps, SORT_DESC, $p1);
