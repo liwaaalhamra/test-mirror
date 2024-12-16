@@ -53,6 +53,8 @@ class PushController extends Controller
             ]);
         }
         $message = utf8_decode(utf8_encode(Lang::get('messages.request_submitted_successfully')));
+        \Log::info('set player id',[$request->get('player_id')]);
+
         return response()->json(['status' => $message]);
 
     }
@@ -64,7 +66,7 @@ class PushController extends Controller
             $query->where(function ($query) use($user) {
                 $query->whereUserId($user->id)->whereType('targeted');
             })->orwhere('type','=','bulk');
-        })->where('created_at', '>=', Carbon::now()->subDays(30))
+        })->where('created_at', '>=', Carbon::now()->subDays(60))
         ->latest();
         if(Input::has('search')){
             $search = Input::get('search');

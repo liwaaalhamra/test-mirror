@@ -107,7 +107,7 @@
                         <label></label>
                         <div class='input-group'>
                             <button type="submit" class="btn btn-lg btn-action">GO</button>
-                            <a href="https://barterdom.tedmob.com/api/matching-records"><button type="button" class="btn btn-lg btn-primary">Get Matches</button></a>
+                            <a href="https://app.barterdom.com/api/matching-records"><button type="button" class="btn btn-lg btn-primary">Get Matches</button></a>
                         </div>
                     </div>
                 </form>
@@ -117,6 +117,7 @@
             <table id="table" class="table b-t b-light">
                 <thead>
                 <tr>
+                    <th>Has Return Post</th>
                     <th>Order</th>
                     <th>User</th>
                     <th>User Email</th>
@@ -139,6 +140,7 @@
                 <tbody>
                 @foreach($items as $item)
                     <tr class="@if($item->status == 'approved') success @elseif($item->status == 'pending') default @elseif($item->status == 'expired') warning @elseif($item->status == 'paid') success @endif" >
+                        <td>@if($item->return_id) YES @else NO @endif</td>
                         <td>#POST {{ $item->item_order }}</td>
                         <td>{{ $item->User ? $item->User->full_name : "" }}</td>
                         <td>{{ $item->User ? $item->User->email : "" }}</td>

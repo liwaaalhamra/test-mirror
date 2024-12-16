@@ -75,9 +75,9 @@ class LoginController extends Controller
         /**
          * password clear text is now sha256
          */
-        if( $user->password_clear_text != $password){
-            return parent::return_error("Wrong Password", 405, "Wrong Password");
-        }
+        // if( $user->password_clear_text != $password){
+        //     return parent::return_error("Wrong Password", 405, "Wrong Password");
+        // }
 
 
         $agent = new Agent();

@@ -143,7 +143,7 @@ Route::post('/sub_regions', 'ItemsController@sub_regions');
 Route::get('cron/retrieve_orders', 'CronController@retrieve_orders');
 Route::get('cron/update_dashboard', 'CronController@update_dashboard');
 Route::get('cron/check_expired_items', 'CronController@check_expired_items');
-Route::get('/matching-records', 'CronController@matchingRecords');
+Route::get('/matching-records', 'CronController@matchingRecords')->name('api.matching');
 Route::get('/get-matches', 'CronController@get_matches');
 Route::post('/send-push', 'CronController@send_push_for_expired');
 Route::post('/check-expired-posts', 'CronController@check_expired_posts');

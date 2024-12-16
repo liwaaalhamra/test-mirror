@@ -365,6 +365,7 @@ class ItemsController extends Controller
 
     public function publish(Item $item){
         if($item){
+            \Log::info($item);
             $item->is_available = !$item->is_available;
             $item->save();
         }
