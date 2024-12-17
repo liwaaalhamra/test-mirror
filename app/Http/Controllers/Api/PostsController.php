@@ -774,7 +774,7 @@ class PostsController extends Controller
     public function my_posts(Request $request) {
         $user = $this->validate_user($request);
         $search = Input::has('search') ? Input::get('search') : null;
-        $query = Item::where('expired_at','>=', Carbon::now())->where('is_available', 1)->whereType('offer')->whereUserId($user->id)->orderBy('status')->orderBy('updated_at', 'desc')->when($search, function ($query) use ($search) {
+        $query = Item::where('expired_at','>=', Carbon::now())->whereType('offer')->whereUserId($user->id)->orderBy('status')->orderBy('updated_at', 'desc')->when($search, function ($query) use ($search) {
             $query->where(function($query) use ($search){
                 $query->whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])
                     ->orwhereRaw("LOWER(name_ar) like ? ", [ "%".strtolower($search)."%"])
