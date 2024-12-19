@@ -127,7 +127,7 @@ class MatchingScheduler extends Command
         $max = 999999999;
 
 
-        $my_posts = Item::whereUserId($user)->whereType('offer')->where('expired_at','>=', Carbon::now())->where('is_available')->get();
+        $my_posts = Item::whereUserId($user)->whereType('offer')->where('expired_at','>=', Carbon::now())->where('is_available',1)->get();
 
         foreach ($my_posts as $my_post) {
             // Labels of priorities section 9
