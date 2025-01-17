@@ -42,7 +42,7 @@ return [
     | to be allowed to remain idle before it expires.
     |
     */
-    'api_lifetime' => 1440,
+    'api_lifetime' => 525600,
 
     /*
     |--------------------------------------------------------------------------

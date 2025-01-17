@@ -7,7 +7,7 @@ return [
     'invalid_parameters'     => 'Invalid Parameters',
     'registration_error'     => 'Error in registration',
     'logout_success'     => 'You have been logged out successfully',
-    'invalid_access_token'     => 'Invalid Access Token',
+    'invalid_access_token'     => 'Your session has expired. Please log in again.',
     'authentication_missing'     => 'Authentication Missing',
     'request_submitted_successfully' => 'Thank you. We will get back to you shortly.',
     'order_submitted_successfully' => 'Your order has been Submitted Successfully',
