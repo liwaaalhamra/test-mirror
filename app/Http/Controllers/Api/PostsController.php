@@ -291,7 +291,6 @@ class PostsController extends Controller
 
     public function my_barters(Request $request)
     {
-        \Log::info('here');
         $user = $this->validate_user($request);
 
         $barters = Barter::wherenotin('status',['completed', 'rejected'])
@@ -299,14 +298,13 @@ class PostsController extends Controller
         ->where(function ($query) use ($user) {
             $query->whereReceiverId($user->id)->orWhere('sender_id',$user->id);
         })->orderByRaw("FIELD(status , 'pending', 'accepted', 'rejected') ASC")->orderByRaw("FIELD(sender_id, $user->id) ASC")->orderBy('created_at', 'desc')->get()->map(function ($query, $key) use ($user){
+            $conversation = null;
             $query->sender_post_type = $query->sender_post ? $query->sender_post->category->type : "";
             $query->receiver_post_type = $query->receiver_post ? $query->receiver_post->category->type : "";
-            \Log::info('query->status', [$query->status == 'accepted' && $query->receiver_post]);
             if($query->status == 'accepted' && $query->receiver_post){
                 $sender = $query->sender_post;
                 $receiver = $query->receiver_post;
 
-                \Log::info('sender receiver', [$sender, $receiver]);
                 if(isset($sender) && isset($receiver)){
                     $conversation = Conversation::where(function ($query) use($sender, $receiver) {
                         $query->where(function ($query) use($sender, $receiver) {
@@ -326,9 +324,6 @@ class PostsController extends Controller
                         $conversation->unread_messages = $conversation->unread_messages + 1;
                         $conversation->save();
                     }
-
-                    \Log::info('conversation query', [$conversation]);
-
                 }     
             }          
             $query->conversation_id = isset($conversation) && $conversation ? $conversation->id : null;
