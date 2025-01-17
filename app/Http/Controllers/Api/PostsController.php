@@ -328,6 +328,8 @@ class PostsController extends Controller
             }          
             $query->conversation_id = isset($conversation) && $conversation ? $conversation->id : null;
             return $query;
+        })->filter(function ($barter) {
+            return !is_null($barter->receiver_post);
         });
 
         return parent::return_json($barters);
