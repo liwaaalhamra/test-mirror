@@ -24,5 +24,36 @@
 
 <script src="https://cdn.ckeditor.com/4.14.1/full-all/ckeditor.js"></script>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Select the target element where you want to observe changes
+        const targetNode = document.body; // You can change this to a more specific element
 
+        // Set up the configuration for the observer
+        const config = {
+            childList: true, // Observe direct child addition or removal
+            subtree: true    // Also observe all descendants
+        };
+
+        // Callback function to execute when mutations are observed
+        const callback = function(mutationsList) {
+            for (let mutation of mutationsList) {
+                if (mutation.type === 'childList') {
+                    mutation.addedNodes.forEach(function(node) {
+                        if (node.nodeType === Node.ELEMENT_NODE && node.classList.contains('cke_notifications_area')) {
+                            // Hide the new notification element if it has the exact class 'cke_notifications_area'
+                            node.style.display = 'none';
+                        }
+                    });
+                }
+            }
+        };
+
+        // Create a MutationObserver instance and pass the callback
+        const observer = new MutationObserver(callback);
+
+        // Start observing the target node with the specified configuration
+        observer.observe(targetNode, config);
+    });
+</script> 
 

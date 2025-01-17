@@ -19,6 +19,11 @@ if(env('APP_ENV') == 'local'){
 
 Route::auth();
 
+Route::any('/privacy', ['uses' => 'GeneralController@privacy', 'as' => 'privacy']);
+Route::any('/delete-account', ['uses' => 'GeneralController@handle', 'as' => 'delete-account']);
+Route::get('/support', ['uses' => 'GeneralController@support', 'as' => 'support']);
+Route::post('/support', ['uses' => 'GeneralController@submitSupport', 'as' => 'submit-support']);
+
 Route::group(['prefix' => 'cms'], function () {
 	Route::get('/', function () {
 		// check if the user is authenticated.

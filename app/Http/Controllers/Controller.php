@@ -737,8 +737,6 @@ class Controller extends BaseController
             'excluded_segments' => $excluded_segments,
             'contents' => $contents,
             'headings' => $headings,
-//            'send_after' => Carbon::now('UTC')->addDays(1)->format('Y-m-d H:i:s'),
-//            'send_after' => Carbon::now('UTC')->addHours(2)->format('Y-m-d H:i:s'),
         );
         if(isset($info['send_after'])){
             $fields['send_after'] = $info['send_after'];
@@ -763,8 +761,10 @@ class Controller extends BaseController
             $ch = curl_init();
             $rest_api_key = $type == 'user' ? env('ONE_SIGNAL_REST_API_KEY') : env('ONE_SIGNAL_MERCHANT_REST_API_KEY');
             curl_setopt($ch, CURLOPT_URL, env('ONE_SIGNAL_URL'));
-            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json; charset=utf-8',
-                'Authorization: Basic '.$rest_api_key));
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                'Content-Type: application/json; charset=utf-8',
+                'Authorization: Basic '.$rest_api_key
+            ));
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
             curl_setopt($ch, CURLOPT_HEADER, FALSE);
             curl_setopt($ch, CURLOPT_POST, TRUE);

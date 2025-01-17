@@ -22,7 +22,7 @@ class Item extends Model
 
     protected $table = "items";
     protected $guarded = [];
-    protected $hidden = ['deleted_at','pivot','item_order','meta_name','is_available','location_id','sub_region_id',
+    protected $hidden = ['deleted_at','pivot','item_order','meta_name','location_id','sub_region_id',
         'name_en','name_ar','description_en','description_ar','pdf',
         'share_link','country_id','latitude','longitude','address','country_code','phone_number','user','image','width','height'
     ];

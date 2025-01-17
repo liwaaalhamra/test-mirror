@@ -112,6 +112,7 @@ class PostsController extends Controller
             $info['player_ids'] = $players_ids;
             $info['data'] = ['meta_id' => $barter->id, 'type' => 'barter_request'];
             $result = parent::oneSignal($info);
+            Log::info('barter send push',[$result]);
                         
             $code = Controller::number_generator(6);
 
@@ -294,7 +295,7 @@ class PostsController extends Controller
         $user = $this->validate_user($request);
 
         $barters = Barter::wherenotin('status',['completed', 'rejected'])
-        ->where('created_at', '>=', Carbon::now()->subMonths(1)->toDateTimeString()) //removing barters older than 2 months
+        ->where('created_at', '>=', Carbon::now()->subMonths(2)->toDateTimeString()) //removing barters older than 2 months
         ->where(function ($query) use ($user) {
             $query->whereReceiverId($user->id)->orWhere('sender_id',$user->id);
         })->orderByRaw("FIELD(status , 'pending', 'accepted', 'rejected') ASC")->orderByRaw("FIELD(sender_id, $user->id) ASC")->orderBy('created_at', 'desc')->get()->map(function ($query, $key) use ($user){
@@ -543,8 +544,6 @@ class PostsController extends Controller
             $message->to($info['to']);
         });
 
-        \Log::info('post created');
-
         return parent::return_json(['status' => 'Thank you for bartering with us. Your post will be reviewed within 24 hours. You will be updated once it is live.','payment_url' => secure_url('payment-test'),'post_id' => $item->id]);
     }
 
@@ -781,7 +780,7 @@ class PostsController extends Controller
     public function my_posts(Request $request) {
         $user = $this->validate_user($request);
         $search = Input::has('search') ? Input::get('search') : null;
-        $query = Item::whereType('offer')->whereUserId($user->id)->orderBy('status')->orderBy('updated_at', 'desc')->when($search, function ($query) use ($search) {
+        $query = Item::where('expired_at','>=', Carbon::now())->whereType('offer')->whereUserId($user->id)->orderBy('status')->orderBy('updated_at', 'desc')->when($search, function ($query) use ($search) {
             $query->where(function($query) use ($search){
                 $query->whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])
                     ->orwhereRaw("LOWER(name_ar) like ? ", [ "%".strtolower($search)."%"])
