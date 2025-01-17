@@ -330,7 +330,7 @@ class PostsController extends Controller
             return $query;
         })->filter(function ($barter) {
             return !is_null($barter->receiver_post);
-        });
+        })->values();
 
         return parent::return_json($barters);
     }
