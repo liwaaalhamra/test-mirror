@@ -127,6 +127,17 @@ class PostsController extends Controller
                 'meta_type' => 'barter_request',
             ]);
 
+        } else {
+            Inbox::create([
+                'user_id' => $receiver->id,
+                'barter_id' => $barter->id,
+                'title' => $title,
+                'message' => $message,
+                'image' => null,
+                'type' => 'targeted',
+                'code' => $code,
+                'meta_type' => 'barter_request',
+            ]);
         }
 
         if($receiver->email != ''){
