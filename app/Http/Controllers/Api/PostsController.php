@@ -112,7 +112,6 @@ class PostsController extends Controller
             $info['player_ids'] = $players_ids;
             $info['data'] = ['meta_id' => $barter->id, 'type' => 'barter_request'];
             $result = parent::oneSignal($info);
-            Log::info('barter send push',[$result]);
                         
             $code = Controller::number_generator(6);
 

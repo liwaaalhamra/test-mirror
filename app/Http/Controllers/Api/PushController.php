@@ -53,7 +53,6 @@ class PushController extends Controller
             ]);
         }
         $message = utf8_decode(utf8_encode(Lang::get('messages.request_submitted_successfully')));
-        \Log::info('set player id',[$request->get('player_id')]);
 
         return response()->json(['status' => $message]);
 

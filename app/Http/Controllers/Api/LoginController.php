@@ -268,7 +268,7 @@ class LoginController extends Controller
                 'verified_at' => null,
                 'country_id' => $country_id,
                 'registration' => $registration,
-                'pin' => $otp,
+                'pin' => config('app.debug') ? $pin : $otp,
                 'device_name' => $device_name,
                 'browser_name' => $browser_name,
                 'browser_version' => $browser_version,
@@ -295,8 +295,9 @@ class LoginController extends Controller
             return parent::return_error('Failed to Send Pin:'.$fault->faultstring,455,'messages.failed_send_pin');
         }
 
-        $return_body["pin"] = config('app.debug') ? $pin : null;
+        $return_body["pin"] = config('app.debug') ? $pin : $otp;
         $return_body["registration"] = $registration;
+
         return parent::return_json($return_body);
     }
 
