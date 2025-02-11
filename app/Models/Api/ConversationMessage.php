@@ -43,4 +43,26 @@ class ConversationMessage extends Model
         return $this->belongsTo(Conversation::class,'conversation_id');
     }
 
+    public function getIsReadAttribute($attr)
+    {
+        $access_token = request()->header("token");
+    
+        $user_access = UsersAccess::where("access_token", $access_token)->first();
+        if (!$user_access) {
+            return $attr;
+        }
+    
+        $user = Users::find($user_access->user_id);
+        if (!$user) {
+            return $attr;
+        }
+    
+        if ($this->getAttribute('sender_id') == $user->id) {
+            return true;
+        }
+
+        $result = $attr == 0 ? false : true;
+    
+        return $result;
+    }
 }
