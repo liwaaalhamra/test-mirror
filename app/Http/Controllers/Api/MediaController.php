@@ -48,76 +48,144 @@ class MediaController extends Controller
 	 * @param Request $request
 	 * @return \stdClass
 	 */
+    // public function upload(Request $request) {
+    //     $user = $this->validate_user($request);
+    //     if(!Input::has('media_type')){
+    //         return parent::return_error("Missing Media Type", 401, 'messages.missing_parameter');
+    //     }
+    //     if(!Input::has('meta_name')){
+    //         return parent::return_error("Missing Meta Name", 401, 'messages.missing_parameter');
+    //     }
+    //     $type_possible_values = ['voices','images','videos','documents'];
+    //     if(!in_array($request->media_type,$type_possible_values)){
+    //         return parent::return_error("Media Type Wrong Value", 402, 'messages.invalid_parameters');
+    //     }
+    //     $meta_possible_values = ['items'];
+    //     if(!in_array($request->meta_name,$meta_possible_values)){
+    //         return parent::return_error("Meta Name Wrong Value", 402, 'messages.invalid_parameters');
+    //     }
+
+    //     $fileName = null;
+    //     $destinationDir = public_path() . DIRECTORY_SEPARATOR . 'uploads/images' . DIRECTORY_SEPARATOR . $user->id;
+    //     // check if a file exist and is valid.
+    //     if($request->hasFile('file')) {
+    //         if($request->file('file')->isValid()) {
+    //             $file = $request->file('file');
+    //             $fileName = str_slug(str_random(20)) . '.' . $file->getClientOriginalExtension();
+    //             if (!File::isDirectory($destinationDir)) {
+    //                 File::makeDirectory($destinationDir, 0777, true, true);
+    //                 $destinationDir = public_path() . DIRECTORY_SEPARATOR . 'uploads/'.$request->media_type . DIRECTORY_SEPARATOR . $user->id.'/'.$request->meta_name;
+    //                 if (!File::isDirectory($destinationDir)) {
+    //                     File::makeDirectory($destinationDir, 0777, true, true);
+    //                 }
+    //             }else{
+    //                 $destinationDir = public_path() . DIRECTORY_SEPARATOR . 'uploads/'.$request->media_type . DIRECTORY_SEPARATOR . $user->id.'/'.$request->meta_name;
+    //                 if (!File::isDirectory($destinationDir)) {
+    //                     File::makeDirectory($destinationDir, 0777, true, true);
+    //                 }else{
+    //                     $destinationDir = public_path() . DIRECTORY_SEPARATOR . 'uploads/'.$request->media_type . DIRECTORY_SEPARATOR . $user->id.'/'.$request->meta_name;
+    //                 }
+    //             }
+                     
+    //             $resizedImage = Image::make($file)->resize(1024, null, function ($constraint) {
+    //                 $constraint->aspectRatio();
+    //                 $constraint->upsize();
+    //             })->encode('jpg', 90);
+    //             $resizedImage->save($destinationDir . DIRECTORY_SEPARATOR . $fileName);
+    //             list($width, $height) = getimagesize($destinationDir . DIRECTORY_SEPARATOR . $fileName);
+
+    //             // $file->move($destinationDir, $fileName);
+    //             $this->correctImageOrientation($destinationDir.'/'.$fileName);
+    //             // $exif = @exif_read_data($destinationDir.'/'.$fileName);
+    //             // $width = $exif['COMPUTED']['Width'];
+    //             // $height = $exif['COMPUTED']['Height'];
+    //             // list($width, $height, $type, $attr) = getimagesize($destinationDir.'/'.$fileName);
+    //             $media = Media::create([
+    //                 'meta_id' => null,
+    //                 'meta_name' => $request->meta_name,
+    //                 'user_id' => $user->id,
+    //                 'media_type' => $request->media_type,
+    //                 'media_name' => $fileName,
+    //                 'height' => $height,
+    //                 'width' => $width,
+    //             ]);
+    //         }else{
+    //             return parent::return_error("Invalid Image", 402, 'messages.invalid_parameters');
+    //         }
+    //     }else{
+    //         return parent::return_error("Missing Image", 401, 'messages.missing_parameter');
+    //     }
+
+    //     return response(['media_id' => $media->id,'meta_name' => $request->meta_name,'media_url' => secure_url('uploads/images/'.$user->id.'/'.$request->meta_name.'/'.$fileName)], 200);
+    // }
+
     public function upload(Request $request) {
         $user = $this->validate_user($request);
-        if(!Input::has('media_type')){
+    
+        if (!$request->has('media_type')) {
             return parent::return_error("Missing Media Type", 401, 'messages.missing_parameter');
         }
-        if(!Input::has('meta_name')){
+        if (!$request->has('meta_name')) {
             return parent::return_error("Missing Meta Name", 401, 'messages.missing_parameter');
         }
-        $type_possible_values = ['voices','images','videos','documents'];
-        if(!in_array($request->media_type,$type_possible_values)){
+    
+        $type_possible_values = ['voices', 'images', 'videos', 'documents'];
+        if (!in_array($request->media_type, $type_possible_values)) {
             return parent::return_error("Media Type Wrong Value", 402, 'messages.invalid_parameters');
         }
         $meta_possible_values = ['items'];
-        if(!in_array($request->meta_name,$meta_possible_values)){
+        if (!in_array($request->meta_name, $meta_possible_values)) {
             return parent::return_error("Meta Name Wrong Value", 402, 'messages.invalid_parameters');
         }
-
+    
         $fileName = null;
-        $destinationDir = public_path() . DIRECTORY_SEPARATOR . 'uploads/images' . DIRECTORY_SEPARATOR . $user->id;
-        // check if a file exist and is valid.
-        if($request->hasFile('file')) {
-            if($request->file('file')->isValid()) {
-                $file = $request->file('file');
-                $fileName = str_slug(str_random(20)) . '.' . $file->getClientOriginalExtension();
-                if (!File::isDirectory($destinationDir)) {
-                    File::makeDirectory($destinationDir, 0777, true, true);
-                    $destinationDir = public_path() . DIRECTORY_SEPARATOR . 'uploads/'.$request->media_type . DIRECTORY_SEPARATOR . $user->id.'/'.$request->meta_name;
-                    if (!File::isDirectory($destinationDir)) {
-                        File::makeDirectory($destinationDir, 0777, true, true);
-                    }
-                }else{
-                    $destinationDir = public_path() . DIRECTORY_SEPARATOR . 'uploads/'.$request->media_type . DIRECTORY_SEPARATOR . $user->id.'/'.$request->meta_name;
-                    if (!File::isDirectory($destinationDir)) {
-                        File::makeDirectory($destinationDir, 0777, true, true);
-                    }else{
-                        $destinationDir = public_path() . DIRECTORY_SEPARATOR . 'uploads/'.$request->media_type . DIRECTORY_SEPARATOR . $user->id.'/'.$request->meta_name;
-                    }
-                }
-                     
-                $resizedImage = Image::make($file)->resize(1024, null, function ($constraint) {
-                    $constraint->aspectRatio();
-                    $constraint->upsize();
-                })->encode('jpg', 90);
-                $resizedImage->save($destinationDir . DIRECTORY_SEPARATOR . $fileName);
-                list($width, $height) = getimagesize($destinationDir . DIRECTORY_SEPARATOR . $fileName);
-
-                // $file->move($destinationDir, $fileName);
-                $this->correctImageOrientation($destinationDir.'/'.$fileName);
-                // $exif = @exif_read_data($destinationDir.'/'.$fileName);
-                // $width = $exif['COMPUTED']['Width'];
-                // $height = $exif['COMPUTED']['Height'];
-                // list($width, $height, $type, $attr) = getimagesize($destinationDir.'/'.$fileName);
-                $media = Media::create([
-                    'meta_id' => null,
-                    'meta_name' => $request->meta_name,
-                    'user_id' => $user->id,
-                    'media_type' => $request->media_type,
-                    'media_name' => $fileName,
-                    'height' => $height,
-                    'width' => $width,
-                ]);
-            }else{
-                return parent::return_error("Invalid Image", 402, 'messages.invalid_parameters');
+        $destinationDir = public_path("uploads/images/{$user->id}/{$request->meta_name}");
+    
+        if ($request->hasFile('file') && $request->file('file')->isValid()) {
+            $file = $request->file('file');
+            $fileName = str_slug(str_random(20)) . '.' . $file->getClientOriginalExtension();
+    
+            // Ensure directory exists
+            if (!File::isDirectory($destinationDir)) {
+                File::makeDirectory($destinationDir, 0777, true, true);
             }
-        }else{
-            return parent::return_error("Missing Image", 401, 'messages.missing_parameter');
+    
+            // Load image and auto-rotate based on EXIF orientation
+            $image = Image::make($file)->orientate();
+    
+            // Resize while keeping aspect ratio
+            $image->resize(1024, null, function ($constraint) {
+                $constraint->aspectRatio();
+                $constraint->upsize();
+            })->encode('jpg', 90);
+    
+            // Save image
+            $image->save("$destinationDir/$fileName");
+    
+            // Get image dimensions after processing
+            list($width, $height) = getimagesize("$destinationDir/$fileName");
+    
+            // Store media record
+            $media = Media::create([
+                'meta_id'    => null,
+                'meta_name'  => $request->meta_name,
+                'user_id'    => $user->id,
+                'media_type' => $request->media_type,
+                'media_name' => $fileName,
+                'height'     => $height,
+                'width'      => $width,
+            ]);
+        } else {
+            return parent::return_error("Invalid or Missing Image", 402, 'messages.invalid_parameters');
         }
-
-        return response(['media_id' => $media->id,'meta_name' => $request->meta_name,'media_url' => secure_url('uploads/images/'.$user->id.'/'.$request->meta_name.'/'.$fileName)], 200);
+    
+        return response([
+            'media_id'   => $media->id,
+            'meta_name'  => $request->meta_name,
+            'media_url'  => secure_url("uploads/images/{$user->id}/{$request->meta_name}/$fileName")
+        ], 200);
     }
+    
 
     /**
      * Delete Image
