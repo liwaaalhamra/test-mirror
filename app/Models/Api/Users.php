@@ -121,6 +121,7 @@ class Users extends Model
     public function favorites($search = null){
 	    if($search){
             return $this->belongsToMany(Item::class,'user_favorites','user_id','meta_id')
+                ->where('expired_at','>',Carbon::now())
                 ->where('user_favorites.meta_name','=','items')
                 ->where(function($query) use ($search){
                     $query->whereRaw("LOWER(name_en) like ? ", [ "%".strtolower($search)."%"])
