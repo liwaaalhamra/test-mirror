@@ -623,7 +623,7 @@ class CronController extends Controller
         $today = Carbon::now();
         $tomorrow_start = Carbon::now()->tomorrow()->startOfDay();
         $tomorrow_end = Carbon::now()->tomorrow()->endOfDay();
-        $before_32_days = Carbon::now()->subDays('32')->startOfDay();
+        $before_32_days = Carbon::now()->subDays('60')->startOfDay();
 
 
         // $items_to_be_notified = Item::whereBetween('expired_at', [$tomorrow_start, $tomorrow_end])->get();

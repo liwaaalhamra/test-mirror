@@ -82,11 +82,17 @@ class ForExpiredPosts extends Command
             return $value;
         })->values();
 
-        $before_30_days = Carbon::now()->subDays('30')->startOfDay();
-        $items_to_be_auto_deleted = Item::where('expired_at','<',$before_30_days)->get();
+        $before_60_days = Carbon::now()->subMonths(2)->startOfDay();
+        $items_to_be_auto_deleted = Item::where('expired_at','<',$before_60_days)->get();
         foreach($items_to_be_auto_deleted as $delete){
             $delete->delete();
         }
+
+        $unvalidPosts = Item::where('expired_at', null)->where('created_at', '<', $before_60_days)->get();
+        foreach($unvalidPosts as $unvalid){
+            $unvalid->delete();
+        }
+
         return response()->json(['status' => 'Alerts sent of expired Items']);
     }
 }

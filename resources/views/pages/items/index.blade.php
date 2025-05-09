@@ -347,7 +347,7 @@
                 "ordering": true,
                 "bAutoWidth": true,
                 "pagingType": "full_numbers",
-                order: [15,'desc'],
+                order: [16,'desc'],
                 dom: 'Bfrtip',
                 buttons: [
                     'copy', 'csv', 'excel', 'print'
@@ -365,7 +365,7 @@
                 "ordering": true,
                 "bAutoWidth": true,
                 "pagingType": "full_numbers",
-                order: [12,'desc'],
+                order: [13,'desc'],
             });
         } );
         @endif

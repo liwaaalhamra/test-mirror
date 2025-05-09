@@ -436,6 +436,11 @@ class ItemsController extends Controller
             }
 
             $item->status = $item->status == 'in_review' ? 'approved' : 'in_review';
+            $item->expired_at = Carbon::now()->addMonths(6)->timestamp;
+            if($item->return_post){
+                $item->return_post->expired_at = Carbon::now()->addMonths(6)->timestamp;
+                $item->return_post->save();
+            }
             $item->save();
         }
         return redirect()->route('admin.'.$this->section_name.'.index')
