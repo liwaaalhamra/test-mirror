@@ -57,7 +57,7 @@
                 var id = $(this).data('id');
 
                 $.ajax({
-                    url: '{{ secure_url('admin/dropdown_lists') }}' + '/' + id,
+                    url: '{{ secure_url('admin/lists') }}' + '/' + id,
                     type: 'POST',
                     data: {
                         _method: 'DELETE',

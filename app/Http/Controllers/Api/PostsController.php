@@ -447,6 +447,10 @@ class PostsController extends Controller
             if(Input::has('return_regular_fields')){
                 $return_regular_fields = json_decode($request->return_regular_fields);
             }
+            $return_extra_fields = [];
+            if(Input::has('return_extra_fields')){
+                $return_extra_fields = json_decode($request->return_extra_fields);
+            }
         }
         $latitude = isset($request->latitude) ? $request->latitude : null;
         $longitude = isset($request->longitude) ? $request->longitude : null;
@@ -536,6 +540,16 @@ class PostsController extends Controller
                     'field_value' => $return_regular_field->field_value,
                     'extra_field_name' => isset($return_regular_field->extra_field_name) ? $return_regular_field->extra_field_name : null,
                     'extra_field_value' => isset($return_regular_field->extra_field_value) ? $return_regular_field->extra_field_value : null,
+                ]);
+            }
+            foreach ($return_extra_fields as $return_extra_field){
+                ItemCustomField::create([
+                    'item_id' => $return_item->id,
+                    'custom_field_id' => $return_extra_field->id,
+                    'field_name' => $return_extra_field->field_name,
+                    'field_value' => $return_extra_field->field_value,
+                    'extra_field_name' => isset($return_extra_field->extra_field_name) ? $return_extra_field->extra_field_name : null,
+                    'extra_field_value' => isset($return_extra_field->extra_field_value) ? $return_extra_field->extra_field_value : null,
                 ]);
             }
         }

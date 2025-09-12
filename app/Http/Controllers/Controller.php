@@ -353,13 +353,16 @@ class Controller extends BaseController
                 $new_value = intval($value);
                 break;
             case $type == 'boolean':
-                $new_value = (Boolean) $value;
+                $new_value = $value;
                 break;
             case $type == 'string':
                 $new_value = strval($value);
                 break;
             case $type == 'double':
                 $new_value = floatval($value);
+                break;
+            case $type == 'text':
+                $new_value = $value;
                 break;
             default:
                 $new_value = intval($value);
