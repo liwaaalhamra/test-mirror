@@ -558,7 +558,7 @@ class ProfileController extends Controller
             return parent::return_error('Missing parameter(s)', 400, $validator->messages()->all()[0]);
         }
         $username = $request->username;
-        $user = Users::where('email',$username)->orWhere('primary_phone', $username)->first();
+        $user = Users::where('email',$username)->orWhere('primary_phone', substr($username, 4))->first();
         
         if(!$user){
             return parent::return_error("Email does not exist", 403, "User does not exist");

@@ -1670,7 +1670,7 @@ class ItemsController extends Controller
             $custom_field_value = ItemCustomField::whereFieldName($value->field_name)->whereItemId($item->id)->whereCustomFieldId($value->id)->first();
             $value->field_value = $custom_field_value ? $this->cast_field_value($custom_field_value->field_value, $value->field_type) : null;
             $field_display_name = null;
-            if($custom_field_value && $value->field_type == 'list'){
+            if($custom_field_value){
                 $list_item = CustomFieldList::whereId($value->field_value)->first();
                 // whereFieldName($value->field_name)->
                 if($list_item){
@@ -1680,12 +1680,12 @@ class ItemsController extends Controller
             $value->field_display_name = $field_display_name;
             $custom_extra_field_value = null;
             if($value->has_extra_field){
-                $custom_extra_field_value = ItemCustomField::whereExtraFieldName($value->extra_field_name)->whereItemId($item->id)->whereCustomFieldId($value->id)->first();
+                $custom_extra_field_value = ItemCustomField::whereItemId($item->id)->whereCustomFieldId($value->id)->first();
             }
             $value->extra_field_value = $custom_extra_field_value ? $this->cast_field_value($custom_extra_field_value->extra_field_value, $value->extra_field_type) : null;
             $extra_field_display_name = null;
-            if($custom_extra_field_value && $value->extra_field_type == 'list'){
-                $extra_list_item = CustomFieldList::whereFieldName($value->extra_field_name)->whereId($value->extra_field_value)->first();
+            if($custom_extra_field_value){
+                $extra_list_item = CustomFieldList::whereId($value->extra_field_value)->first();
                 if($extra_list_item){
                     $extra_field_display_name = $extra_list_item->name_en;
                 }
@@ -1712,10 +1712,10 @@ class ItemsController extends Controller
             
             $return_post->custom_fields = CustomField::whereInReturn(1)->whereCategoryId($return_post->category_id)->whereSubCategoryId($return_post->sub_category_id)->orderby('item_order','asc')->get()->map(function ($value, $key) use ($return_post) {
                 $value->section = $value->in_filters ? 'filters' : 'regular';
-                $custom_field_value = ItemCustomField::whereFieldName($value->field_name)->whereItemId($return_post->id)->whereCustomFieldId($value->id)->first();
+                $custom_field_value = ItemCustomField::whereItemId($return_post->id)->whereCustomFieldId($value->id)->first();
                 $value->field_value = $custom_field_value ? $this->cast_field_value($custom_field_value->field_value, $value->field_type) : null;
                 $field_display_name = null;
-                if($custom_field_value && $value->field_type == 'list'){
+                if($custom_field_value){
                     $list_item = CustomFieldList::whereId($value->field_value)->first();
                     // whereFieldName($value->field_name)->
                     if($list_item){
@@ -1729,11 +1729,11 @@ class ItemsController extends Controller
                     // \Log::info($return_post->id);
                     // \Log::info($value->id);
 
-                    $custom_extra_field_value = ItemCustomField::whereExtraFieldName($value->extra_field_name)->whereItemId($return_post->id)->whereCustomFieldId($value->id)->first();
+                    $custom_extra_field_value = ItemCustomField::whereItemId($return_post->id)->whereCustomFieldId($value->id)->first();
                 }
                 $value->extra_field_value = $custom_extra_field_value ? $this->cast_field_value($custom_extra_field_value->extra_field_value, $value->extra_field_type) : null;
                 $extra_field_display_name = null;
-                if($custom_extra_field_value && $value->extra_field_type == 'list'){
+                if($custom_extra_field_value){
                     $extra_list_item = CustomFieldList::whereFieldName($value->extra_field_name)->whereId($value->extra_field_value)->first();
                     if($extra_list_item){
                         $extra_field_display_name = $extra_list_item->name_en;
