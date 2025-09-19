@@ -82,7 +82,7 @@ class ProfileController extends Controller
         ]);
 
         if($validator->fails()){
-            return parent::return_error('Missing parameter(s)', 400, 'Should contain 8 characters or more. At least one Upper case letter, one number and symbol (like ! @ # $ %..)');
+            return parent::return_error('Missing parameter(s)', 400, 'Password should contain 8 characters or more. At least one Upper case letter, one number and symbol (like ! @ # $ %..)');
         }
 
         $destinationDir = public_path() . DIRECTORY_SEPARATOR . 'uploads/images' . DIRECTORY_SEPARATOR . 'profiles';
@@ -530,7 +530,7 @@ class ProfileController extends Controller
         ]);
 
         if($validator->fails()){
-            return parent::return_error('Missing parameter(s)', 400, 'Should contain 8 characters or more. At least one Upper case letter, one number and symbol (like ! @ # $ %..)');
+            return parent::return_error('Missing parameter(s)', 400, 'Password should contain 8 characters or more. At least one Upper case letter, one number and symbol (like ! @ # $ %..)');
         }
 
         if($request->old_password != $user->password_clear_text){
