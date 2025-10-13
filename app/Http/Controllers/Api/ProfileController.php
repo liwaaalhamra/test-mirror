@@ -558,7 +558,7 @@ class ProfileController extends Controller
             return parent::return_error('Missing parameter(s)', 400, $validator->messages()->all()[0]);
         }
         $username = $request->username;
-        $user = Users::where('email',$username)->orWhere('primary_phone', substr($username, 4))->first();
+        $user = Users::where('email',strtolower($username))->orWhere('primary_phone', substr($username, 4))->first();
         
         if(!$user){
             return parent::return_error("Email does not exist", 403, "User does not exist");
@@ -576,7 +576,7 @@ class ProfileController extends Controller
         $registration = parent::generate_tokens(4);
         if($user->account_type == 'email'){
             $info = [];
-            $info['to'] = $username;
+            $info['to'] = strtolower($username);
             $info['title'] = 'Reset Password';
             $info['message1'] = 'You requested a password reset for your account : '.Input::get('email');
             $info['message2'] = 'Please use the following code in your application to reset your password';
