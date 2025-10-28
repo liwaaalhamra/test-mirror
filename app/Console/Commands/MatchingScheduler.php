@@ -45,8 +45,8 @@ class MatchingScheduler extends Command
             $d->delete();
         }
 
-        // $users = Item::where('is_available', 1)->where('id', '>', 0)->get()->pluck('user_id', 'user_id');
-        $users = Item::where('is_available', 1)->where('user_id', 8)->get()->pluck('user_id', 'user_id');
+        $users = Item::where('is_available', 1)->where('id', '>', 0)->get()->pluck('user_id', 'user_id');
+        // $users = Item::where('is_available', 1)->where('user_id', 8)->get()->pluck('user_id', 'user_id');
 
         foreach ($users as $user) {
             $result = $this->matchingResult($user);
@@ -430,6 +430,8 @@ class MatchingScheduler extends Command
                 }
                 $matches->push(...$matching_posts_p11);
             }
+
+            // PRIORITY12
             $matching_posts_p12 = Item::where('items.user_id', '!=', $user)
             ->where($label_10_b)
             ->orderBy('items.created_at','desc')
@@ -922,9 +924,9 @@ class MatchingScheduler extends Command
 
             // PRIORITY39
             $matching_posts_p39 = Item::where('items.user_id', '!=', $user)
-            ->where($label_10_f)
+            ->where($label_10_e)
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
-            ->where($label_9)
+            ->where($label_9_f)
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             if(!$matching_posts_p39->isEmpty()){
@@ -939,9 +941,9 @@ class MatchingScheduler extends Command
 
             // PRIORITY40
             $matching_posts_p40 = Item::where('items.user_id', '!=', $user)
-            ->where($label_10_f)
+            ->where($label_10_d)
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
-            ->where($label_9_b)
+            ->where($label_9_f)
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             if(!$matching_posts_p40->isEmpty()){
@@ -958,7 +960,7 @@ class MatchingScheduler extends Command
             $matching_posts_p41 = Item::where('items.user_id', '!=', $user)
             ->where($label_10_f)
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
-            ->where($label_9_c)
+            ->where($label_9_f)
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             if(!$matching_posts_p41->isEmpty()){
@@ -973,9 +975,9 @@ class MatchingScheduler extends Command
 
             // PRIORITY42
             $matching_posts_p42 = Item::where('items.user_id', '!=', $user)
-            ->where($label_10_e)
+            ->where($label_10_f)
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
-            ->where($label_9_f)
+            ->where($label_9)
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             if(!$matching_posts_p42->isEmpty()){
@@ -990,9 +992,9 @@ class MatchingScheduler extends Command
 
             // PRIORITY43
             $matching_posts_p43 = Item::where('items.user_id', '!=', $user)
-            ->where($label_10_d)
+            ->where($label_10_f)
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
-            ->where($label_9_f)
+            ->where($label_9_b)
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             if(!$matching_posts_p43->isEmpty()){
@@ -1009,7 +1011,7 @@ class MatchingScheduler extends Command
             $matching_posts_p44 = Item::where('items.user_id', '!=', $user)
             ->where($label_10_f)
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
-            ->where($label_9_e)
+            ->where($label_9_c)
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             if(!$matching_posts_p44->isEmpty()){
@@ -1026,7 +1028,7 @@ class MatchingScheduler extends Command
             $matching_posts_p45 = Item::where('items.user_id', '!=', $user)
             ->where($label_10_f)
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
-            ->where($label_9_d)
+            ->where($label_9_e)
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             if(!$matching_posts_p45->isEmpty()){
@@ -1043,7 +1045,7 @@ class MatchingScheduler extends Command
             $matching_posts_p46 = Item::where('items.user_id', '!=', $user)
             ->where($label_10_f)
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
-            ->where($label_9_f)
+            ->where($label_9_d)
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             if(!$matching_posts_p46->isEmpty()){

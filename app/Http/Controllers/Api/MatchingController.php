@@ -205,7 +205,9 @@ class MatchingController extends Controller
             if(!$matching_posts_p1->isEmpty()){
                 foreach ($matching_posts_p1 as $matching_post_p1) {
                     $value1 = [$matching_post_p1->id => 'priority_1' , 'created_at' => $matching_post_p1->created_at];
-                    array_push($p1, $value1);
+                        \Log::info($my_post->id);
+                        \Log::info('Priority 1' . $matching_post_p1);
+                        array_push($p1, $value1);
                 }
                 $matches->push(...$matching_posts_p1);
             }
@@ -220,6 +222,8 @@ class MatchingController extends Controller
             if(!$matching_posts_p2->isEmpty()){
                 foreach ($matching_posts_p2 as $matching_post_p2) {
                 $value2 = [$matching_post_p2->id => 'priority_2' , 'created_at' => $matching_post_p2->created_at];
+                    \Log::info($my_post->id);    
+                    \Log::info('Priority 2' . $matching_post_p2);
                     array_push($p2, $value2);
                 }
                 $matches->push(...$matching_posts_p2);
@@ -235,6 +239,8 @@ class MatchingController extends Controller
             if(!$matching_posts_p3->isEmpty()){
                 foreach ($matching_posts_p3 as $matching_post_p3) {
                 $value3 = [$matching_post_p3->id => 'priority_3' , 'created_at' => $matching_post_p3->created_at];
+                    \Log::info($my_post->id);    
+                    \Log::info('Priority 3' . $matching_post_p3);
                     array_push($p3, $value3);
                 }
                 $matches->push(...$matching_posts_p3);
@@ -250,6 +256,8 @@ class MatchingController extends Controller
             if(!$matching_posts_p4->isEmpty()){
                 foreach ($matching_posts_p4 as $matching_post_p4) {
                 $value4 = [$matching_post_p4->id => 'priority_4' , 'created_at' => $matching_post_p4->created_at];
+                    \Log::info($my_post->id);    
+                    \Log::info('Priority 4' . $matching_post_p4);
                     array_push($p4, $value4);
                 }
                 $matches->push(...$matching_posts_p4);
@@ -265,6 +273,8 @@ class MatchingController extends Controller
             if(!$matching_posts_p5->isEmpty()){
                 foreach ($matching_posts_p5 as $matching_post_p5) {
                 $value5 = [$matching_post_p5->id => 'priority_5' , 'created_at' => $matching_post_p5->created_at];
+                    \Log::info($my_post->id);    
+                    \Log::info('Priority 5' . $matching_post_p5);
                     array_push($p5, $value5);
                 }
                 $matches->push(...$matching_posts_p5);
@@ -280,7 +290,9 @@ class MatchingController extends Controller
             if(!$matching_posts_p6->isEmpty()){
                 foreach ($matching_posts_p6 as $matching_post_p6) {
                 $value6 = [$matching_post_p6->id => 'priority_6' , 'created_at' => $matching_post_p6->created_at];
-                array_push($p6, $value6);
+                    \Log::info($my_post->id);
+                    \Log::info('Priority 6' . $matching_post_p6);
+                    array_push($p6, $value6);
                 }
                 $matches->push(...$matching_posts_p6);
             }
@@ -295,6 +307,8 @@ class MatchingController extends Controller
             if(!$matching_posts_p7->isEmpty()){
                 foreach ($matching_posts_p7 as $matching_post_p7) {
                 $value7 = [$matching_post_p7->id => 'priority_7' , 'created_at' => $matching_post_p7->created_at];
+                    \Log::info($my_post->id);    
+                    \Log::info('Priority 7' . $matching_post_p7);
                     array_push($p7, $value7);
                 }
                 $matches->push(...$matching_posts_p7);
@@ -310,7 +324,9 @@ class MatchingController extends Controller
             if(!$matching_posts_p8->isEmpty()){
                 foreach ($matching_posts_p8 as $matching_post_p8) {
                 $value8 = [$matching_post_p8->id => 'priority_8' , 'created_at' => $matching_post_p8->created_at];
-                array_push($p8, $value8);
+                    \Log::info($my_post->id);
+                    \Log::info('Priority 8' . $matching_post_p8);
+                    array_push($p8, $value8);
                 }
                 $matches->push(...$matching_posts_p8);
             }
@@ -325,7 +341,9 @@ class MatchingController extends Controller
             if(!$matching_posts_p9->isEmpty()){
                 foreach ($matching_posts_p9 as $matching_post_p9) {
                 $value9 = [$matching_post_p9->id => 'priority_9' , 'created_at' => $matching_post_p9->created_at];
-                array_push($p9, $value9);
+                    \Log::info($my_post->id);
+                    \Log::info('Priority 9' . $matching_post_p9);
+                    array_push($p9, $value9);
                 }
                 $matches->push(...$matching_posts_p9);
             }
@@ -339,27 +357,36 @@ class MatchingController extends Controller
             if(!$matching_posts_p10->isEmpty()){
                 foreach ($matching_posts_p10 as $matching_post_p10) {
                 $value10 = [$matching_post_p10->id => 'priority_10' , 'created_at' => $matching_post_p10->created_at];
-                array_push($p10, $value10);
+                    \Log::info($my_post->id);
+                    \Log::info('Priority 10' . $matching_post_p10);
+                    array_push($p10, $value10);
                 }
                 $matches->push(...$matching_posts_p10);
             }
 
             // PRIORITY11
             $data_p11 = Item::where('items.user_id', '!=', $user)
-            ->where($label_9)
-            ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
+            ->where([
+                ['items.category_id', '=', $my_post->return_post['category_id']],
+                ['items.sub_category_id', '=', $my_post->return_post['sub_category_id']],
+                ['items.sub_sub_category_id', '=', $my_post->return_post['sub_sub_category_id']],
+                ['items.location_id', '=', $my_post->return_post['location_id']],
+                ['items.price', '>=', $my_post->return_post['price_from'] ? $my_post->return_post['price_from'] : 0],
+                ['items.price', '<=', $my_post->return_post['price_to'] ? $my_post->return_post['price_to'] : $max],
+            ])
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             $ids_p11 = [];
             foreach($data_p11 as $d_p11){
-                $array_p11 = [$d_p11->id - 1];
-                array_push($ids_p11,$array_p11);
+                array_push($ids_p11, $d_p11->id);
             }
             $matching_posts_p11 = Item::whereIn('id',$ids_p11)->get();
             if(!$matching_posts_p11->isEmpty()){
                 foreach ($matching_posts_p11 as $matching_post_p11) {
                 $value11 = [$matching_post_p11->id => 'priority_11' , 'created_at' => $matching_post_p11->created_at];
-                array_push($p11, $value11);
+                    \Log::info($my_post->id);
+                    \Log::info('Priority 11' . $matching_post_p11);
+                    array_push($p11, $value11);
                 }
                 $matches->push(...$matching_posts_p11);
             }
@@ -367,33 +394,41 @@ class MatchingController extends Controller
             // PRIORITY12
             $matching_posts_p12 = Item::where('items.user_id', '!=', $user)
             ->where($label_10_b)
-            ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             if(!$matching_posts_p12->isEmpty()){
                 foreach ($matching_posts_p12 as $matching_post_p12) {
                 $value12 = [$matching_post_p12->id => 'priority_12' , 'created_at' => $matching_post_p12->created_at];
-                array_push($p12, $value12);
+                    \Log::info($my_post->id);
+                    \Log::info('Priority 12' . $matching_post_p12);
+                    array_push($p12, $value12);
                 }
                 $matches->push(...$matching_posts_p12);
             }
 
             // PRIORITY13
             $data_p13 = Item::where('items.user_id', '!=', $user)
-            ->where($label_9_b)
-            ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
+            ->where([
+                ['items.category_id', '=', $my_post->return_post['category_id']],
+                ['items.sub_category_id', '=', $my_post->return_post['sub_category_id']],
+                ['items.sub_sub_category_id', '!=', $my_post->return_post['sub_sub_category_id']],
+                ['items.location_id', '=', $my_post->return_post['location_id']],
+                ['items.price', '>=', $my_post->return_post['price_from'] ? $my_post->return_post['price_from'] : 0],
+                ['items.price', '<=', $my_post->return_post['price_to'] ? $my_post->return_post['price_to'] : $max],
+            ])
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             $ids_p13 = [];
             foreach($data_p13 as $d_p13){
-                $array_p13 = [$d_p13->id - 1];
-                array_push($ids_p13,$array_p13);
+                array_push($ids_p13, $d_p13->id);
             }
             $matching_posts_p13 = Item::whereIn('id',$ids_p13)->get();
             if(!$matching_posts_p13->isEmpty()){
                 foreach ($matching_posts_p13 as $matching_post_p13) {
                 $value13 = [$matching_post_p13->id => 'priority_13' , 'created_at' => $matching_post_p13->created_at];
-                array_push($p13, $value13);
+                    \Log::info($my_post->id);
+                    \Log::info('Priority 13' . $matching_post_p13);
+                    array_push($p13, $value13);
                 }
                 $matches->push(...$matching_posts_p13);
             }
@@ -401,33 +436,41 @@ class MatchingController extends Controller
             // PRIORITY14
             $matching_posts_p14 = Item::where('items.user_id', '!=', $user)
             ->where($label_10_c)
-            ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             if(!$matching_posts_p14->isEmpty()){
                 foreach ($matching_posts_p14 as $matching_post_p14) {
                 $value14 = [$matching_post_p14->id => 'priority_14' , 'created_at' => $matching_post_p14->created_at];
-                array_push($p14, $value14);
+                    \Log::info($my_post->id);
+                    \Log::info('Priority 14' . $matching_post_p14);
+                    array_push($p14, $value14);
                 }
                 $matches->push(...$matching_posts_p14);
             }
 
             // PRIORITY15
             $data_p15 = Item::where('items.user_id', '!=', $user)
-            ->where($label_9_c)
-            ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
+            ->where([
+                ['items.category_id', '=', $my_post->return_post['category_id']],
+                ['items.sub_category_id', '!=', $my_post->return_post['sub_category_id']],
+                ['items.sub_sub_category_id', '!=', $my_post->return_post['sub_sub_category_id']],
+                ['items.location_id', '=', $my_post->return_post['location_id']],
+                ['items.price', '>=', $my_post->return_post['price_from'] ? $my_post->return_post['price_from'] : 0],
+                ['items.price', '<=', $my_post->return_post['price_to'] ? $my_post->return_post['price_to'] : $max],
+            ])
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             $ids_p15 = [];
             foreach($data_p15 as $d_p15){
-                $array_p15 = [$d_p15->id - 1];
-                array_push($ids_p15,$array_p15);
+                array_push($ids_p15, $d_p15->id);
             }
             $matching_posts_p15 = Item::whereIn('id',$ids_p15)->get();
             if(!$matching_posts_p15->isEmpty()){
                 foreach ($matching_posts_p15 as $matching_post_p15) {
                 $value15 = [$matching_post_p15->id => 'priority_15' , 'created_at' => $matching_post_p15->created_at];
-                array_push($p15, $value15);
+                    \Log::info($my_post->id);
+                    \Log::info('Priority 15' . $matching_post_p15);
+                    array_push($p15, $value15);
                 }
                 $matches->push(...$matching_posts_p15);
             }
@@ -442,6 +485,8 @@ class MatchingController extends Controller
             if(!$matching_posts_p16->isEmpty()){
                 foreach ($matching_posts_p16 as $matching_post_p16) {
                 $value16 = [$matching_post_p16->id => 'priority_16' , 'created_at' => $matching_post_p16->created_at];
+                    \Log::info($my_post->id);    
+                    \Log::info('Priority 16' . $matching_post_p16);
                     array_push($p16, $value16);
                 }
                 $matches->push(...$matching_posts_p16);
@@ -457,7 +502,9 @@ class MatchingController extends Controller
             if(!$matching_posts_p17->isEmpty()){
                 foreach ($matching_posts_p17 as $matching_post_p17) {
                 $value17 = [$matching_post_p17->id => 'priority_17' , 'created_at' => $matching_post_p17->created_at];
-                array_push($p17, $value17);
+                    \Log::info($my_post->id);
+                    \Log::info('Priority 17' . $matching_post_p17);
+                    array_push($p17, $value17);
                 }
                 $matches->push(...$matching_posts_p17);
             }
@@ -472,7 +519,9 @@ class MatchingController extends Controller
             if(!$matching_posts_p18->isEmpty()){
                 foreach ($matching_posts_p18 as $matching_post_p18) {
                 $value18 = [$matching_post_p18->id => 'priority_18' , 'created_at' => $matching_post_p18->created_at];
-                array_push($p18, $value18);
+                    \Log::info($my_post->id);
+                    \Log::info('Priority 18' . $matching_post_p18);
+                    array_push($p18, $value18);
                 }
                 $matches->push(...$matching_posts_p18);
             }
@@ -487,6 +536,8 @@ class MatchingController extends Controller
             if(!$matching_posts_p19->isEmpty()){
                 foreach ($matching_posts_p19 as $matching_post_p19) {
                 $value19 = [$matching_post_p19->id => 'priority_19' , 'created_at' => $matching_post_p19->created_at];
+                    \Log::info($my_post->id);    
+                    \Log::info('Priority 19' . $matching_post_p19);
                     array_push($p19, $value19);
                 }
                 $matches->push(...$matching_posts_p19);
@@ -502,6 +553,8 @@ class MatchingController extends Controller
             if(!$matching_posts_p20->isEmpty()){
                 foreach ($matching_posts_p20 as $matching_post_p20) {
                 $value20 = [$matching_post_p20->id => 'priority_20' , 'created_at' => $matching_post_p20->created_at];
+                    \Log::info($my_post->id);    
+                    \Log::info('Priority 20' . $matching_post_p20);
                     array_push($p20, $value20);
                 }
                 $matches->push(...$matching_posts_p20);
@@ -517,6 +570,8 @@ class MatchingController extends Controller
             if(!$matching_posts_p21->isEmpty()){
                 foreach ($matching_posts_p21 as $matching_post_p21) {
                 $value21 = [$matching_post_p21->id => 'priority_21' , 'created_at' => $matching_post_p21->created_at];
+                    \Log::info($my_post->id);    
+                    \Log::info('Priority 21' . $matching_post_p21);
                     array_push($p21, $value21);
                 }
                 $matches->push(...$matching_posts_p21);
@@ -532,7 +587,9 @@ class MatchingController extends Controller
             if(!$matching_posts_p22->isEmpty()){
                 foreach ($matching_posts_p22 as $matching_post_p22) {
                 $value22 = [$matching_post_p22->id => 'priority_22' , 'created_at' => $matching_post_p22->created_at];
-                array_push($p22, $value22);
+                    \Log::info($my_post->id);
+                    \Log::info('Priority 22' . $matching_post_p22);
+                    array_push($p22, $value22);
                 }
                 $matches->push(...$matching_posts_p22);
             }
@@ -547,6 +604,8 @@ class MatchingController extends Controller
             if(!$matching_posts_p23->isEmpty()){
                 foreach ($matching_posts_p23 as $matching_post_p23) {
                 $value23 = [$matching_post_p23->id => 'priority_23' , 'created_at' => $matching_post_p23->created_at];
+                    \Log::info($my_post->id);    
+                    \Log::info('Priority 23' . $matching_post_p23);
                     array_push($p23, $value23);
                 }
                 $matches->push(...$matching_posts_p23);
@@ -562,6 +621,8 @@ class MatchingController extends Controller
             if(!$matching_posts_p24->isEmpty()){
                 foreach ($matching_posts_p24 as $matching_post_p24) {
                 $value24 = [$matching_post_p24->id => 'priority_24' , 'created_at' => $matching_post_p24->created_at];
+                    \Log::info($my_post->id);    
+                    \Log::info('Priority 24' . $matching_post_p24);
                     array_push($p24, $value24);
                 }
                 $matches->push(...$matching_posts_p24);
@@ -577,6 +638,8 @@ class MatchingController extends Controller
             if(!$matching_posts_p25->isEmpty()){
                 foreach ($matching_posts_p25 as $matching_post_p25) {
                 $value25 = [$matching_post_p25->id => 'priority_25' , 'created_at' => $matching_post_p25->created_at];
+                    \Log::info($my_post->id);    
+                    \Log::info('Priority 25' . $matching_post_p25);
                     array_push($p25, $value25);
                 }
                 $matches->push(...$matching_posts_p25);
@@ -592,6 +655,8 @@ class MatchingController extends Controller
             if(!$matching_posts_p26->isEmpty()){
                 foreach ($matching_posts_p26 as $matching_post_p26) {
                 $value26 = [$matching_post_p26->id => 'priority_26' , 'created_at' => $matching_post_p26->created_at];
+                    \Log::info($my_post->id);    
+                    \Log::info('Priority 26' . $matching_post_p26);
                     array_push($p26, $value26);
                 }
                 $matches->push(...$matching_posts_p26);
@@ -607,6 +672,8 @@ class MatchingController extends Controller
             if(!$matching_posts_p27->isEmpty()){
                 foreach ($matching_posts_p27 as $matching_post_p27) {
                 $value27 = [$matching_post_p27->id => 'priority_27' , 'created_at' => $matching_post_p27->created_at];
+                    \Log::info($my_post->id);    
+                    \Log::info('Priority 27' . $matching_post_p27);
                     array_push($p27, $value27);
                 }
                 $matches->push(...$matching_posts_p27);
@@ -622,6 +689,8 @@ class MatchingController extends Controller
             if(!$matching_posts_p28->isEmpty()){
                 foreach ($matching_posts_p28 as $matching_post_p28) {
                 $value28 = [$matching_post_p28->id => 'priority_28' , 'created_at' => $matching_post_p28->created_at];
+                    \Log::info($my_post->id);    
+                    \Log::info('Priority 28' . $matching_post_p28);
                     array_push($p28, $value28);
                 }
                 $matches->push(...$matching_posts_p28);
@@ -637,6 +706,8 @@ class MatchingController extends Controller
             if(!$matching_posts_p29->isEmpty()){
                 foreach ($matching_posts_p29 as $matching_post_p29) {
                 $value29 = [$matching_post_p29->id => 'priority_29' , 'created_at' => $matching_post_p29->created_at];
+                    \Log::info($my_post->id);    
+                    \Log::info('Priority 29' . $matching_post_p29);
                     array_push($p29, $value29);
                 }
                 $matches->push(...$matching_posts_p29);
@@ -652,6 +723,8 @@ class MatchingController extends Controller
             if(!$matching_posts_p30->isEmpty()){
                 foreach ($matching_posts_p30 as $matching_post_p30) {
                 $value30 = [$matching_post_p30->id => 'priority_30' , 'created_at' => $matching_post_p30->created_at];
+                    \Log::info($my_post->id);    
+                    \Log::info('Priority 30' . $matching_post_p30);
                     array_push($p30, $value30);
                 }
                 $matches->push(...$matching_posts_p30);
@@ -667,6 +740,8 @@ class MatchingController extends Controller
             if(!$matching_posts_p31->isEmpty()){
                 foreach ($matching_posts_p31 as $matching_post_p31) {
                 $value31 = [$matching_post_p31->id => 'priority_31' , 'created_at' => $matching_post_p31->created_at];
+                    \Log::info($my_post->id);    
+                    \Log::info('Priority 31' . $matching_post_p31);
                     array_push($p31, $value31);
                 }
                 $matches->push(...$matching_posts_p31);
@@ -675,12 +750,13 @@ class MatchingController extends Controller
             // PRIORITY32
             $matching_posts_p32 = Item::where('items.user_id', '!=', $user)
             ->where($label_10_e)
-            ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             if(!$matching_posts_p32->isEmpty()){
                 foreach ($matching_posts_p32 as $matching_post_p32) {
                 $value32 = [$matching_post_p32->id => 'priority_32' , 'created_at' => $matching_post_p32->created_at];
+                    \Log::info($my_post->id);    
+                    \Log::info('Priority 32' . $matching_post_p32);
                     array_push($p32, $value32);
                 }
                 $matches->push(...$matching_posts_p32);
@@ -689,12 +765,13 @@ class MatchingController extends Controller
             // PRIORITY33
             $matching_posts_p33 = Item::where('items.user_id', '!=', $user)
             ->where($label_10_d)
-            ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             if(!$matching_posts_p33->isEmpty()){
                 foreach ($matching_posts_p33 as $matching_post_p33) {
                 $value33 = [$matching_post_p33->id => 'priority_33' , 'created_at' => $matching_post_p33->created_at];
+                    \Log::info($my_post->id);    
+                    \Log::info('Priority 33' . $matching_post_p33);
                     array_push($p33, $value33);
                 }
                 $matches->push(...$matching_posts_p33);
@@ -702,19 +779,26 @@ class MatchingController extends Controller
 
             // PRIORITY34
             $data_p34 = Item::where('items.user_id', '!=', $user)
-            ->where($label_9_e)
-            ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
+            ->where([
+                ['items.category_id', '=', $my_post->return_post['category_id']],
+                ['items.sub_category_id', '!=', $my_post->return_post['sub_category_id']],
+                ['items.sub_sub_category_id', '!=', $my_post->return_post['sub_sub_category_id']],
+                ['items.location_id', '!=', $my_post->return_post['location_id']],
+                ['items.price', '>=', $my_post->return_post['price_from'] ? $my_post->return_post['price_from'] : 0],
+                ['items.price', '<=', $my_post->return_post['price_to'] ? $my_post->return_post['price_to'] : $max],
+            ])
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             $ids_p34 = [];
             foreach($data_p34 as $d_p34){
-                $array_p34 = [$d_p34->id - 1];
-                array_push($ids_p34,$array_p34);
+                array_push($ids_p34, $d_p34->id);
             }
             $matching_posts_p34 = Item::whereIn('id',$ids_p34)->get();
             if(!$matching_posts_p34->isEmpty()){
                 foreach ($matching_posts_p34 as $matching_post_p34) {
                 $value34 = [$matching_post_p34->id => 'priority_34' , 'created_at' => $matching_post_p34->created_at];
+                    \Log::info($my_post->id);    
+                    \Log::info('Priority 34' . $matching_post_p34);
                     array_push($p34, $value34);
                 }
                 $matches->push(...$matching_posts_p34);
@@ -722,19 +806,26 @@ class MatchingController extends Controller
 
             // PRIORITY35
             $data_p35 = Item::where('items.user_id', '!=', $user)
-            ->where($label_9_d)
-            ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
+            ->where([
+                ['items.category_id', '!=', $my_post->return_post['category_id']],
+                ['items.sub_category_id', '!=', $my_post->return_post['sub_category_id']],
+                ['items.sub_sub_category_id', '!=', $my_post->return_post['sub_sub_category_id']],
+                ['items.location_id', '=', $my_post->return_post['location_id']],
+                ['items.price', '>=', $my_post->return_post['price_from'] ? $my_post->return_post['price_from'] : 0],
+                ['items.price', '<=', $my_post->return_post['price_to'] ? $my_post->return_post['price_to'] : $max],
+            ])
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             $ids_p35 = [];
             foreach($data_p35 as $d_p35){
-                $array_p35 = [$d_p35->id - 1];
-                array_push($ids_p35,$array_p35);
+                array_push($ids_p35, $d_p35->id);
             }
             $matching_posts_p35 = Item::whereIn('id',$ids_p35)->get();
             if(!$matching_posts_p35->isEmpty()){
                 foreach ($matching_posts_p35 as $matching_post_p35) {
                 $value35 = [$matching_post_p35->id => 'priority_35' , 'created_at' => $matching_post_p35->created_at];
+                    \Log::info($my_post->id);    
+                    \Log::info('Priority 35' . $matching_post_p35);
                     array_push($p35, $value35);
                 }
                 $matches->push(...$matching_posts_p35);
@@ -750,6 +841,8 @@ class MatchingController extends Controller
             if(!$matching_posts_p36->isEmpty()){
                 foreach ($matching_posts_p36 as $matching_post_p36) {
                 $value36 = [$matching_post_p36->id => 'priority_36' , 'created_at' => $matching_post_p36->created_at];
+                    \Log::info($my_post->id);    
+                    \Log::info('Priority 36' . $matching_post_p36);
                     array_push($p36, $value36);
                 }
                 $matches->push(...$matching_posts_p36);
@@ -765,6 +858,8 @@ class MatchingController extends Controller
             if(!$matching_posts_p37->isEmpty()){
                 foreach ($matching_posts_p37 as $matching_post_p37) {
                 $value37 = [$matching_post_p37->id => 'priority_37' , 'created_at' => $matching_post_p37->created_at];
+                    \Log::info($my_post->id);    
+                    \Log::info('Priority 37' . $matching_post_p37);
                     array_push($p37, $value37);
                 }
                 $matches->push(...$matching_posts_p37);
@@ -780,6 +875,8 @@ class MatchingController extends Controller
             if(!$matching_posts_p38->isEmpty()){
                 foreach ($matching_posts_p38 as $matching_post_p38) {
                 $value38 = [$matching_post_p38->id => 'priority_38' , 'created_at' => $matching_post_p38->created_at];
+                    \Log::info($my_post->id);    
+                    \Log::info('Priority 38' . $matching_post_p38);
                     array_push($p38, $value38);
                 }
                 $matches->push(...$matching_posts_p38);
@@ -787,14 +884,16 @@ class MatchingController extends Controller
 
             // PRIORITY39
             $matching_posts_p39 = Item::where('items.user_id', '!=', $user)
-            ->where($label_10_f)
+            ->where($label_10_e)
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
-            ->where($label_9)
+            ->where($label_9_f)
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             if(!$matching_posts_p39->isEmpty()){
                 foreach ($matching_posts_p39 as $matching_post_p39) {
                 $value39 = [$matching_post_p39->id => 'priority_39' , 'created_at' => $matching_post_p39->created_at];
+                    \Log::info($my_post->id);    
+                    \Log::info('Priority 39' . $matching_post_p39);
                     array_push($p39, $value39);
                 }
                 $matches->push(...$matching_posts_p39);
@@ -802,14 +901,16 @@ class MatchingController extends Controller
 
             // PRIORITY40
             $matching_posts_p40 = Item::where('items.user_id', '!=', $user)
-            ->where($label_10_f)
+            ->where($label_10_d)
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
-            ->where($label_9_b)
+            ->where($label_9_f)
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             if(!$matching_posts_p40->isEmpty()){
                 foreach ($matching_posts_p40 as $matching_post_p40) {
                 $value40 = [$matching_post_p40->id => 'priority_40' , 'created_at' => $matching_post_p40->created_at];
+                    \Log::info($my_post->id);    
+                    \Log::info('Priority 40' . $matching_post_p40);
                     array_push($p40, $value40);
                 }
                 $matches->push(...$matching_posts_p40);
@@ -819,12 +920,14 @@ class MatchingController extends Controller
             $matching_posts_p41 = Item::where('items.user_id', '!=', $user)
             ->where($label_10_f)
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
-            ->where($label_9_c)
+            ->where($label_9_f)
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             if(!$matching_posts_p41->isEmpty()){
                 foreach ($matching_posts_p41 as $matching_post_p41) {
                 $value41 = [$matching_post_p41->id => 'priority_41' , 'created_at' => $matching_post_p41->created_at];
+                    \Log::info($my_post->id);    
+                    \Log::info('Priority 41' . $matching_post_p41);
                     array_push($p41, $value41);
                 }
                 $matches->push(...$matching_posts_p41);
@@ -832,14 +935,16 @@ class MatchingController extends Controller
 
             // PRIORITY42
             $matching_posts_p42 = Item::where('items.user_id', '!=', $user)
-            ->where($label_10_e)
+            ->where($label_10_f)
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
-            ->where($label_9_f)
+            ->where($label_9)
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             if(!$matching_posts_p42->isEmpty()){
                 foreach ($matching_posts_p42 as $matching_post_p42) {
                 $value42 = [$matching_post_p42->id => 'priority_42' , 'created_at' => $matching_post_p42->created_at];
+                    \Log::info($my_post->id);    
+                    \Log::info('Priority 42' . $matching_post_p42);
                     array_push($p42, $value42);
                 }
                 $matches->push(...$matching_posts_p42);
@@ -847,14 +952,16 @@ class MatchingController extends Controller
 
             // PRIORITY43
             $matching_posts_p43 = Item::where('items.user_id', '!=', $user)
-            ->where($label_10_d)
+            ->where($label_10_f)
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
-            ->where($label_9_f)
+            ->where($label_9_b)
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             if(!$matching_posts_p43->isEmpty()){
                 foreach ($matching_posts_p43 as $matching_post_p43) {
                 $value43 = [$matching_post_p43->id => 'priority_43' , 'created_at' => $matching_post_p43->created_at];
+                    \Log::info($my_post->id);    
+                    \Log::info('Priority 43' . $matching_post_p43);
                     array_push($p43, $value43);
                 }
                 $matches->push(...$matching_posts_p43);
@@ -864,12 +971,14 @@ class MatchingController extends Controller
             $matching_posts_p44 = Item::where('items.user_id', '!=', $user)
             ->where($label_10_f)
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
-            ->where($label_9_e)
+            ->where($label_9_c)
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             if(!$matching_posts_p44->isEmpty()){
                 foreach ($matching_posts_p44 as $matching_post_p44) {
                 $value44 = [$matching_post_p44->id => 'priority_44' , 'created_at' => $matching_post_p44->created_at];
+                    \Log::info($my_post->id);    
+                    \Log::info('Priority 44' . $matching_post_p44);
                     array_push($p44, $value44);
                 }
                 $matches->push(...$matching_posts_p44);
@@ -879,12 +988,14 @@ class MatchingController extends Controller
             $matching_posts_p45 = Item::where('items.user_id', '!=', $user)
             ->where($label_10_f)
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
-            ->where($label_9_d)
+            ->where($label_9_e)
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             if(!$matching_posts_p45->isEmpty()){
                 foreach ($matching_posts_p45 as $matching_post_p45) {
                 $value45 = [$matching_post_p45->id => 'priority_45' , 'created_at' => $matching_post_p45->created_at];
+                    \Log::info($my_post->id);    
+                    \Log::info('Priority 45' . $matching_post_p45);
                     array_push($p45, $value45);
                 }
                 $matches->push(...$matching_posts_p45);
@@ -894,12 +1005,14 @@ class MatchingController extends Controller
             $matching_posts_p46 = Item::where('items.user_id', '!=', $user)
             ->where($label_10_f)
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
-            ->where($label_9_f)
+            ->where($label_9_d)
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             if(!$matching_posts_p46->isEmpty()){
                 foreach ($matching_posts_p46 as $matching_post_p46) {
                 $value46 = [$matching_post_p46->id => 'priority_46' , 'created_at' => $matching_post_p46->created_at];
+                    \Log::info($my_post->id);    
+                    \Log::info('Priority 46' . $matching_post_p46);
                     array_push($p46, $value46);
                 }
                 $matches->push(...$matching_posts_p46);
@@ -908,12 +1021,13 @@ class MatchingController extends Controller
             // PRIORITY47
             $matching_posts_p47 = Item::where('items.user_id', '!=', $user)
             ->where($label_10_f)
-            ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             if(!$matching_posts_p47->isEmpty()){
                 foreach ($matching_posts_p47 as $matching_post_p47) {
                 $value47 = [$matching_post_p47->id => 'priority_47' , 'created_at' => $matching_post_p47->created_at];
+                    \Log::info($my_post->id);    
+                    \Log::info('Priority 47' . $matching_post_p47);
                     array_push($p47, $value47);
                 }
                 $matches->push(...$matching_posts_p47);
@@ -921,19 +1035,26 @@ class MatchingController extends Controller
 
             // PRIORITY48
             $data_p48 = Item::where('items.user_id', '!=', $user)
-            ->where($label_9_f)
-            ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
+            ->where([
+                ['items.category_id', '!=', $my_post->return_post['category_id']],
+                ['items.sub_category_id', '!=', $my_post->return_post['sub_category_id']],
+                ['items.sub_sub_category_id', '!=', $my_post->return_post['sub_sub_category_id']],
+                ['items.location_id', '!=', $my_post->return_post['location_id']],
+                ['items.price', '>=', $my_post->return_post['price_from'] ? $my_post->return_post['price_from'] : 0],
+                ['items.price', '<=', $my_post->return_post['price_to'] ? $my_post->return_post['price_to'] : $max],
+            ])
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             $ids_p48 = [];
             foreach($data_p48 as $d_p48){
-                $array_p48 = [$d_p48->id - 1];
-                array_push($ids_p48,$array_p48);
+                array_push($ids_p48, $d_p48->id);
             }
             $matching_posts_p48 = Item::whereIn('id',$ids_p48)->get();
             if(!$matching_posts_p48->isEmpty()){
                 foreach ($matching_posts_p48 as $matching_post_p48) {
                 $value48 = [$matching_post_p48->id => 'priority_48' , 'created_at' => $matching_post_p48->created_at];
+                    \Log::info($my_post->id);    
+                    \Log::info('Priority 48' . $matching_post_p48);
                     array_push($p48, $value48);
                 }
                 $matches->push(...$matching_posts_p48);
@@ -959,6 +1080,8 @@ class MatchingController extends Controller
             if(!$matching_posts_p49->isEmpty()){
                 foreach ($matching_posts_p49 as $matching_post_p49) {
                 $value49 = [$matching_post_p49->id => 'priority_49' , 'created_at' => $matching_post_p49->created_at];
+                    \Log::info($my_post->id);    
+                    \Log::info('Priority 49' . $matching_post_p49);
                     array_push($p49, $value49);
                 }
                 $matches->push(...$matching_posts_p49);
@@ -984,6 +1107,8 @@ class MatchingController extends Controller
             if(!$matching_posts_p50->isEmpty()){
                 foreach ($matching_posts_p50 as $matching_post_p50) {
                 $value50 = [$matching_post_p50->id => 'priority_50' , 'created_at' => $matching_post_p50->created_at];
+                    \Log::info($my_post->id);    
+                    \Log::info('Priority 50' . $matching_post_p50);
                     array_push($p50, $value50);
                 }
                 $matches->push(...$matching_posts_p50);
@@ -1009,6 +1134,8 @@ class MatchingController extends Controller
             if(!$matching_posts_p51->isEmpty()){
                 foreach ($matching_posts_p51 as $matching_post_p51) {
                 $value51 = [$matching_post_p51->id => 'priority_51' , 'created_at' => $matching_post_p51->created_at];
+                    \Log::info($my_post->id);    
+                    \Log::info('Priority 51' . $matching_post_p51);
                     array_push($p51, $value51);
                 }
                 $matches->push(...$matching_posts_p51);
@@ -1034,6 +1161,8 @@ class MatchingController extends Controller
             if(!$matching_posts_p52->isEmpty()){
                 foreach ($matching_posts_p52 as $matching_post_p52) {
                 $value52 = [$matching_post_p52->id => 'priority_52' , 'created_at' => $matching_post_p52->created_at];
+                    \Log::info($my_post->id);    
+                    \Log::info('Priority 52' . $matching_post_p52);
                     array_push($p52, $value52);
                 }
                 $matches->push(...$matching_posts_p52);
@@ -1059,6 +1188,8 @@ class MatchingController extends Controller
             if(!$matching_posts_p53->isEmpty()){
                 foreach ($matching_posts_p53 as $matching_post_p53) {
                 $value53 = [$matching_post_p53->id => 'priority_53' , 'created_at' => $matching_post_p53->created_at];
+                    \Log::info($my_post->id);    
+                    \Log::info('Priority 53' . $matching_post_p53);
                     array_push($p53, $value53);
                 }
                 $matches->push(...$matching_posts_p53);
@@ -1069,12 +1200,12 @@ class MatchingController extends Controller
                 $matching_posts_p54 = Item::where('items.user_id','!=',$user)
                 ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where([
-                    ['return_items.category_id', '=', $my_post->category_id],
-                    ['return_items.sub_category_id', '=', $my_post->sub_category_id],
-                    ['return_items.sub_sub_category_id', '=', $my_post->sub_sub_category_id],
-                    ['return_items.location_id', '=', $my_post->location_id],
-                    ['return_items.price', '>=', $my_post->price_from ? $my_post->price_from : 0],
-                    ['return_items.price', '<=', $my_post->price_to ? $my_post->price_to : $max],
+                    ['items.category_id', '=', $my_post->category_id],
+                    ['items.sub_category_id', '=', $my_post->sub_category_id],
+                    ['items.sub_sub_category_id', '=', $my_post->sub_sub_category_id],
+                    ['items.location_id', '=', $my_post->location_id],
+                    ['items.price', '>=', $my_post->price_from ? $my_post->price_from : 0],
+                    ['items.price', '<=', $my_post->price_to ? $my_post->price_to : $max],
                 ])
                 ->where([
                     ['items.price', '>=', $my_post->price ? $my_post->price / 2 : 0],
@@ -1085,6 +1216,8 @@ class MatchingController extends Controller
                 if(!$matching_posts_p54->isEmpty()){
                     foreach ($matching_posts_p54 as $matching_post_p54) {
                     $value54 = [$matching_post_p54->id => 'priority_54' , 'created_at' => $matching_post_p54->created_at];
+                        \Log::info($my_post->id);    
+                        \Log::info('Priority 54' . $matching_post_p54);
                         array_push($p54, $value54);
                     }
                     $matches->push(...$matching_posts_p54);
@@ -1094,12 +1227,12 @@ class MatchingController extends Controller
                 $matching_posts_p55 = Item::where('items.user_id','!=',$user)
                 ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where([
-                    ['return_items.category_id', '=', $my_post->category_id],
-                    ['return_items.sub_category_id', '=', $my_post->sub_category_id],
-                    ['return_items.sub_sub_category_id', '!=', $my_post->sub_sub_category_id],
-                    ['return_items.location_id', '=', $my_post->location_id],
-                    ['return_items.price', '>=', $my_post->price_from ? $my_post->price_from : 0],
-                    ['return_items.price', '<=', $my_post->price_to ? $my_post->price_to : $max],
+                    ['items.category_id', '=', $my_post->category_id],
+                    ['items.sub_category_id', '=', $my_post->sub_category_id],
+                    ['items.sub_sub_category_id', '!=', $my_post->sub_sub_category_id],
+                    ['items.location_id', '=', $my_post->location_id],
+                    ['items.price', '>=', $my_post->price_from ? $my_post->price_from : 0],
+                    ['items.price', '<=', $my_post->price_to ? $my_post->price_to : $max],
                 ])
                 ->where([
                     ['items.price', '>=', $my_post->price ? $my_post->price / 2 : 0],
@@ -1110,6 +1243,8 @@ class MatchingController extends Controller
                 if(!$matching_posts_p55->isEmpty()){
                     foreach ($matching_posts_p55 as $matching_post_p55) {
                     $value55 = [$matching_post_p55->id => 'priority_55' , 'created_at' => $matching_post_p55->created_at];
+                        \Log::info($my_post->id);    
+                        \Log::info('Priority 55' . $matching_post_p55);
                         array_push($p55, $value55);
                     }
                     $matches->push(...$matching_posts_p55);
@@ -1119,12 +1254,12 @@ class MatchingController extends Controller
                 $matching_posts_p56 = Item::where('items.user_id','!=',$user)
                 ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where([
-                    ['return_items.category_id', '=', $my_post->category_id],
-                    ['return_items.sub_category_id', '!=', $my_post->sub_category_id],
-                    ['return_items.sub_sub_category_id', '!=', $my_post->sub_sub_category_id],
-                    ['return_items.location_id', '=', $my_post->location_id],
-                    ['return_items.price', '>=', $my_post->price_from ? $my_post->price_from : 0],
-                    ['return_items.price', '<=', $my_post->price_to ? $my_post->price_to : $max],
+                    ['items.category_id', '=', $my_post->category_id],
+                    ['items.sub_category_id', '!=', $my_post->sub_category_id],
+                    ['items.sub_sub_category_id', '!=', $my_post->sub_sub_category_id],
+                    ['items.location_id', '=', $my_post->location_id],
+                    ['items.price', '>=', $my_post->price_from ? $my_post->price_from : 0],
+                    ['items.price', '<=', $my_post->price_to ? $my_post->price_to : $max],
                 ])
                 ->where([
                     ['items.price', '>=', $my_post->price ? $my_post->price / 2 : 0],
@@ -1135,6 +1270,8 @@ class MatchingController extends Controller
                 if(!$matching_posts_p56->isEmpty()){
                     foreach ($matching_posts_p56 as $matching_post_p56) {
                     $value56 = [$matching_post_p56->id => 'priority_56' , 'created_at' => $matching_post_p56->created_at];
+                        \Log::info($my_post->id);    
+                        \Log::info('Priority 56' . $matching_post_p56);
                         array_push($p56, $value56);
                     }
                     $matches->push(...$matching_posts_p56);
@@ -1144,12 +1281,12 @@ class MatchingController extends Controller
                 $matching_posts_p57 = Item::where('items.user_id','!=',$user)
                 ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where([
-                    ['return_items.category_id', '=', $my_post->category_id],
-                    ['return_items.sub_category_id', '!=', $my_post->sub_category_id],
-                    ['return_items.sub_sub_category_id', '!=', $my_post->sub_sub_category_id],
-                    ['return_items.location_id', '!=', $my_post->location_id],
-                    ['return_items.price', '>=', $my_post->price_from ? $my_post->price_from : 0],
-                    ['return_items.price', '<=', $my_post->price_to ? $my_post->price_to : $max],
+                    ['items.category_id', '=', $my_post->category_id],
+                    ['items.sub_category_id', '!=', $my_post->sub_category_id],
+                    ['items.sub_sub_category_id', '!=', $my_post->sub_sub_category_id],
+                    ['items.location_id', '!=', $my_post->location_id],
+                    ['items.price', '>=', $my_post->price_from ? $my_post->price_from : 0],
+                    ['items.price', '<=', $my_post->price_to ? $my_post->price_to : $max],
                 ])
                 ->where([
                     ['items.price', '>=', $my_post->price ? $my_post->price / 2 : 0],
@@ -1160,6 +1297,8 @@ class MatchingController extends Controller
                 if(!$matching_posts_p57->isEmpty()){
                     foreach ($matching_posts_p57 as $matching_post_p57) {
                     $value57 = [$matching_post_p57->id => 'priority_57' , 'created_at' => $matching_post_p57->created_at];
+                        \Log::info($my_post->id);    
+                        \Log::info('Priority 57' . $matching_post_p57);
                         array_push($p57, $value57);
                     }
                     $matches->push(...$matching_posts_p57);
@@ -1169,12 +1308,12 @@ class MatchingController extends Controller
                 $matching_posts_p58 = Item::where('items.user_id','!=',$user)
                 ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where([
-                    ['return_items.category_id', '!=', $my_post->category_id],
-                    ['return_items.sub_category_id', '!=', $my_post->sub_category_id],
-                    ['return_items.sub_sub_category_id', '!=', $my_post->sub_sub_category_id],
-                    ['return_items.location_id', '=', $my_post->location_id],
-                    ['return_items.price', '>=', $my_post->price_from ? $my_post->price_from : 0],
-                    ['return_items.price', '<=', $my_post->price_to ? $my_post->price_to : $max],
+                    ['items.category_id', '!=', $my_post->category_id],
+                    ['items.sub_category_id', '!=', $my_post->sub_category_id],
+                    ['items.sub_sub_category_id', '!=', $my_post->sub_sub_category_id],
+                    ['items.location_id', '=', $my_post->location_id],
+                    ['items.price', '>=', $my_post->price_from ? $my_post->price_from : 0],
+                    ['items.price', '<=', $my_post->price_to ? $my_post->price_to : $max],
                 ])
                 ->where([
                     ['items.price', '>=', $my_post->price ? $my_post->price / 2 : 0],
@@ -1185,6 +1324,8 @@ class MatchingController extends Controller
                 if(!$matching_posts_p58->isEmpty()){
                     foreach ($matching_posts_p58 as $matching_post_p58) {
                     $value58 = [$matching_post_p58->id => 'priority_58' , 'created_at' => $matching_post_p58->created_at];
+                        \Log::info($my_post->id);    
+                        \Log::info('Priority 58' . $matching_post_p58);
                         array_push($p58, $value58);
                     }
                     $matches->push(...$matching_posts_p58);
@@ -1207,6 +1348,8 @@ class MatchingController extends Controller
                     if(!$matching_posts_p59->isEmpty() && $my_post->price >= $price_from && $my_post->price <= $price_to){
                         foreach ($matching_posts_p59 as $matching_post_p59) {
                         $value59 = [$matching_post_p59->id => 'priority_59' , 'created_at' => $matching_post_p59->created_at];
+                            \Log::info($my_post->id);    
+                            \Log::info('Priority 59' . $matching_post_p59);
                             array_push($p59, $value59);
                         }
                         $matches->push(...$matching_posts_p59);
@@ -1217,12 +1360,12 @@ class MatchingController extends Controller
                 $matching_posts_p60 = Item::where('items.user_id','!=',$user)
                 ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where([
-                    ['return_items.category_id', '!=', $my_post->category_id],
-                    ['return_items.sub_category_id', '!=', $my_post->sub_category_id],
-                    ['return_items.sub_sub_category_id', '!=', $my_post->sub_sub_category_id],
-                    ['return_items.location_id', '!=', $my_post->location_id],
-                    ['return_items.price', '<=', $my_post->price_from ? $my_post->price_from : 0],
-                    ['return_items.price', '>=', $my_post->price_to ? $my_post->price_to : $max],
+                    ['items.category_id', '!=', $my_post->category_id],
+                    ['items.sub_category_id', '!=', $my_post->sub_category_id],
+                    ['items.sub_sub_category_id', '!=', $my_post->sub_sub_category_id],
+                    ['items.location_id', '!=', $my_post->location_id],
+                    ['items.price', '<=', $my_post->price_from ? $my_post->price_from : 0],
+                    ['items.price', '>=', $my_post->price_to ? $my_post->price_to : $max],
                 ])
                 ->where([
                     ['items.price', '>=', $my_post->price ? $my_post->price / 2 : 0],
@@ -1233,35 +1376,39 @@ class MatchingController extends Controller
                 if(!$matching_posts_p60->isEmpty()){
                     foreach ($matching_posts_p60 as $matching_post_p60) {
                     $value60 = [$matching_post_p60->id => 'priority_60' , 'created_at' => $matching_post_p60->created_at];
+                        \Log::info($my_post->id);    
+                        \Log::info('Priority 60' . $matching_post_p60);
                         array_push($p60, $value60);
                     }
                     $matches->push(...$matching_posts_p60);
                 }
-            }
 
-            //PRIORITY61
-            $matching_posts_p61 = Item::where('user_id','!=',$user)
-            ->where('type','offer')->where('return_id',null)
-            ->where([
-                ['category_id', '!=', $my_post->return_post['category_id']],
-                ['sub_category_id', '!=', $my_post->return_post['sub_category_id']],
-                ['sub_sub_category_id', '!=', $my_post->return_post['sub_sub_category_id']],
-                ['location_id', '!=', $my_post->return_post['location_id']],
-                ['price', '<=', $my_post->return_post['price_from'] ? $my_post->return_post['price_from'] : 0],
-                ['price', '>=', $my_post->return_post['price_to'] ? $my_post->return_post['price_to'] : $max],
-            ])
-            ->where([
-                ['price', '>=', $my_post->price_from ? $my_post->price_from / 2 : 0],
-                ['price', '<=', $my_post->price_to ? $my_post->price_to * 2 : $max],
-            ])
-            ->where('expired_at','>',Carbon::now()->getTimestamp())
-            ->orderBy('created_at','desc')->get();
-            if(!$matching_posts_p61->isEmpty()){
-                foreach ($matching_posts_p61 as $matching_post_p61) {
-                $value61 = [$matching_post_p61->id => 'priority_61' , 'created_at' => $matching_post_p61->created_at];
-                    array_push($p61, $value61);
+                //PRIORITY61
+                $matching_posts_p61 = Item::where('user_id','!=',$user)
+                ->where('type','offer')->where('return_id',null)
+                ->where([
+                    ['category_id', '!=', $my_post->return_post['category_id']],
+                    ['sub_category_id', '!=', $my_post->return_post['sub_category_id']],
+                    ['sub_sub_category_id', '!=', $my_post->return_post['sub_sub_category_id']],
+                    ['location_id', '!=', $my_post->return_post['location_id']],
+                    ['price', '<=', $my_post->return_post['price_from'] ? $my_post->return_post['price_from'] : 0],
+                    ['price', '>=', $my_post->return_post['price_to'] ? $my_post->return_post['price_to'] : $max],
+                ])
+                ->where([
+                    ['price', '>=', $my_post->price_from ? $my_post->price_from / 2 : 0],
+                    ['price', '<=', $my_post->price_to ? $my_post->price_to * 2 : $max],
+                ])
+                ->where('expired_at','>',Carbon::now()->getTimestamp())
+                ->orderBy('created_at','desc')->get();
+                if(!$matching_posts_p61->isEmpty()){
+                    foreach ($matching_posts_p61 as $matching_post_p61) {
+                    $value61 = [$matching_post_p61->id => 'priority_61' , 'created_at' => $matching_post_p61->created_at];
+                        \Log::info($my_post->id);    
+                        \Log::info('Priority 61' . $matching_post_p61);
+                        array_push($p61, $value61);
+                    }
+                    $matches->push(...$matching_posts_p61);
                 }
-                $matches->push(...$matching_posts_p61);
             }
         }
 
