@@ -407,20 +407,18 @@ class MatchingScheduler extends Command
             // PRIORITY11
             $data_p11 = Item::where('items.user_id', '!=', $user)
             ->where([
-                ['items.category_id', '=', $my_post->category_id],
-                ['items.sub_category_id', '=', $my_post->sub_category_id],
-                ['items.sub_sub_category_id', '=', $my_post->sub_sub_category_id],
-                ['items.location_id', '=', $my_post->location_id],
-                ['items.price_from', '<=', $my_post->price ? $my_post->price : $max],
-                ['items.price_to', '>=', $my_post->price ? $my_post->price : 0],
+                ['items.category_id', '=', $my_post->return_post['category_id']],
+                ['items.sub_category_id', '=', $my_post->return_post['sub_category_id']],
+                ['items.sub_sub_category_id', '=', $my_post->return_post['sub_sub_category_id']],
+                ['items.location_id', '=', $my_post->return_post['location_id']],
+                ['items.price', '>=', $my_post->return_post['price_from'] ? $my_post->return_post['price_from'] : 0],
+                ['items.price', '<=', $my_post->return_post['price_to'] ? $my_post->return_post['price_to'] : $max],
             ])
-            ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             $ids_p11 = [];
             foreach($data_p11 as $d_p11){
-                $array_p11 = [$d_p11->id - 1];
-                array_push($ids_p11,$array_p11);
+                array_push($ids_p11, $d_p11->id);
             }
             $matching_posts_p11 = Item::whereIn('id',$ids_p11)->get();
             if(!$matching_posts_p11->isEmpty()){
@@ -432,11 +430,8 @@ class MatchingScheduler extends Command
                 }
                 $matches->push(...$matching_posts_p11);
             }
-
-            // PRIORITY12
             $matching_posts_p12 = Item::where('items.user_id', '!=', $user)
             ->where($label_10_b)
-            ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             if(!$matching_posts_p12->isEmpty()){
@@ -452,20 +447,18 @@ class MatchingScheduler extends Command
             // PRIORITY13
             $data_p13 = Item::where('items.user_id', '!=', $user)
             ->where([
-                ['items.category_id', '=', $my_post->category_id],
-                ['items.sub_category_id', '=', $my_post->sub_category_id],
-                ['items.sub_sub_category_id', '!=', $my_post->sub_sub_category_id],
-                ['items.location_id', '=', $my_post->location_id],
-                ['items.price_from', '<=', $my_post->price ? $my_post->price : $max],
-                ['items.price_to', '>=', $my_post->price ? $my_post->price : 0],
+                ['items.category_id', '=', $my_post->return_post['category_id']],
+                ['items.sub_category_id', '=', $my_post->return_post['sub_category_id']],
+                ['items.sub_sub_category_id', '!=', $my_post->return_post['sub_sub_category_id']],
+                ['items.location_id', '=', $my_post->return_post['location_id']],
+                ['items.price', '>=', $my_post->return_post['price_from'] ? $my_post->return_post['price_from'] : 0],
+                ['items.price', '<=', $my_post->return_post['price_to'] ? $my_post->return_post['price_to'] : $max],
             ])
-            ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             $ids_p13 = [];
             foreach($data_p13 as $d_p13){
-                $array_p13 = [$d_p13->id - 1];
-                array_push($ids_p13,$array_p13);
+                array_push($ids_p13, $d_p13->id);
             }
             $matching_posts_p13 = Item::whereIn('id',$ids_p13)->get();
             if(!$matching_posts_p13->isEmpty()){
@@ -481,7 +474,6 @@ class MatchingScheduler extends Command
             // PRIORITY14
             $matching_posts_p14 = Item::where('items.user_id', '!=', $user)
             ->where($label_10_c)
-            ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             if(!$matching_posts_p14->isEmpty()){
@@ -497,20 +489,18 @@ class MatchingScheduler extends Command
             // PRIORITY15
             $data_p15 = Item::where('items.user_id', '!=', $user)
             ->where([
-                ['items.category_id', '=', $my_post->category_id],
-                ['items.sub_category_id', '!=', $my_post->sub_category_id],
-                ['items.sub_sub_category_id', '!=', $my_post->sub_sub_category_id],
-                ['items.location_id', '=', $my_post->location_id],
-                ['items.price_from', '<=', $my_post->price ? $my_post->price : $max],
-                ['items.price_to', '>=', $my_post->price ? $my_post->price : 0],
+                ['items.category_id', '=', $my_post->return_post['category_id']],
+                ['items.sub_category_id', '!=', $my_post->return_post['sub_category_id']],
+                ['items.sub_sub_category_id', '!=', $my_post->return_post['sub_sub_category_id']],
+                ['items.location_id', '=', $my_post->return_post['location_id']],
+                ['items.price', '>=', $my_post->return_post['price_from'] ? $my_post->return_post['price_from'] : 0],
+                ['items.price', '<=', $my_post->return_post['price_to'] ? $my_post->return_post['price_to'] : $max],
             ])
-            ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             $ids_p15 = [];
             foreach($data_p15 as $d_p15){
-                $array_p15 = [$d_p15->id - 1];
-                array_push($ids_p15,$array_p15);
+                array_push($ids_p15, $d_p15->id);
             }
             $matching_posts_p15 = Item::whereIn('id',$ids_p15)->get();
             if(!$matching_posts_p15->isEmpty()){
@@ -798,7 +788,6 @@ class MatchingScheduler extends Command
             // PRIORITY32
             $matching_posts_p32 = Item::where('items.user_id', '!=', $user)
             ->where($label_10_e)
-            ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             if(!$matching_posts_p32->isEmpty()){
@@ -814,7 +803,6 @@ class MatchingScheduler extends Command
             // PRIORITY33
             $matching_posts_p33 = Item::where('items.user_id', '!=', $user)
             ->where($label_10_d)
-            ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             if(!$matching_posts_p33->isEmpty()){
@@ -830,20 +818,18 @@ class MatchingScheduler extends Command
             // PRIORITY34
             $data_p34 = Item::where('items.user_id', '!=', $user)
             ->where([
-                ['items.category_id', '=', $my_post->category_id],
-                ['items.sub_category_id', '!=', $my_post->sub_category_id],
-                ['items.sub_sub_category_id', '!=', $my_post->sub_sub_category_id],
-                ['items.location_id', '!=', $my_post->location_id],
-                ['items.price_from', '<=', $my_post->price ? $my_post->price : $max],
-                ['items.price_to', '>=', $my_post->price ? $my_post->price : 0],
+                ['items.category_id', '=', $my_post->return_post['category_id']],
+                ['items.sub_category_id', '!=', $my_post->return_post['sub_category_id']],
+                ['items.sub_sub_category_id', '!=', $my_post->return_post['sub_sub_category_id']],
+                ['items.location_id', '!=', $my_post->return_post['location_id']],
+                ['items.price', '>=', $my_post->return_post['price_from'] ? $my_post->return_post['price_from'] : 0],
+                ['items.price', '<=', $my_post->return_post['price_to'] ? $my_post->return_post['price_to'] : $max],
             ])
-            ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             $ids_p34 = [];
             foreach($data_p34 as $d_p34){
-                $array_p34 = [$d_p34->id - 1];
-                array_push($ids_p34,$array_p34);
+                array_push($ids_p34, $d_p34->id);
             }
             $matching_posts_p34 = Item::whereIn('id',$ids_p34)->get();
             if(!$matching_posts_p34->isEmpty()){
@@ -859,20 +845,18 @@ class MatchingScheduler extends Command
             // PRIORITY35
             $data_p35 = Item::where('items.user_id', '!=', $user)
             ->where([
-                ['items.category_id', '!=', $my_post->category_id],
-                ['items.sub_category_id', '!=', $my_post->sub_category_id],
-                ['items.sub_sub_category_id', '!=', $my_post->sub_sub_category_id],
-                ['items.location_id', '=', $my_post->location_id],
-                ['items.price_from', '<=', $my_post->price ? $my_post->price : $max],
-                ['items.price_to', '>=', $my_post->price ? $my_post->price : 0],
+                ['items.category_id', '!=', $my_post->return_post['category_id']],
+                ['items.sub_category_id', '!=', $my_post->return_post['sub_category_id']],
+                ['items.sub_sub_category_id', '!=', $my_post->return_post['sub_sub_category_id']],
+                ['items.location_id', '=', $my_post->return_post['location_id']],
+                ['items.price', '>=', $my_post->return_post['price_from'] ? $my_post->return_post['price_from'] : 0],
+                ['items.price', '<=', $my_post->return_post['price_to'] ? $my_post->return_post['price_to'] : $max],
             ])
-            ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             $ids_p35 = [];
             foreach($data_p35 as $d_p35){
-                $array_p35 = [$d_p35->id - 1];
-                array_push($ids_p35,$array_p35);
+                array_push($ids_p35, $d_p35->id);
             }
             $matching_posts_p35 = Item::whereIn('id',$ids_p35)->get();
             if(!$matching_posts_p35->isEmpty()){
@@ -1075,7 +1059,6 @@ class MatchingScheduler extends Command
             // PRIORITY47
             $matching_posts_p47 = Item::where('items.user_id', '!=', $user)
             ->where($label_10_f)
-            ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             if(!$matching_posts_p47->isEmpty()){
@@ -1091,20 +1074,18 @@ class MatchingScheduler extends Command
             // PRIORITY48
             $data_p48 = Item::where('items.user_id', '!=', $user)
             ->where([
-                ['items.category_id', '!=', $my_post->category_id],
-                ['items.sub_category_id', '!=', $my_post->sub_category_id],
-                ['items.sub_sub_category_id', '!=', $my_post->sub_sub_category_id],
-                ['items.location_id', '!=', $my_post->location_id],
-                ['items.price_from', '<=', $my_post->price ? $my_post->price : $max],
-                ['items.price_to', '>=', $my_post->price ? $my_post->price : 0],
+                ['items.category_id', '!=', $my_post->return_post['category_id']],
+                ['items.sub_category_id', '!=', $my_post->return_post['sub_category_id']],
+                ['items.sub_sub_category_id', '!=', $my_post->return_post['sub_sub_category_id']],
+                ['items.location_id', '!=', $my_post->return_post['location_id']],
+                ['items.price', '>=', $my_post->return_post['price_from'] ? $my_post->return_post['price_from'] : 0],
+                ['items.price', '<=', $my_post->return_post['price_to'] ? $my_post->return_post['price_to'] : $max],
             ])
-            ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             $ids_p48 = [];
             foreach($data_p48 as $d_p48){
-                $array_p48 = [$d_p48->id - 1];
-                array_push($ids_p48,$array_p48);
+                array_push($ids_p48, $d_p48->id);
             }
             $matching_posts_p48 = Item::whereIn('id',$ids_p48)->get();
             if(!$matching_posts_p48->isEmpty()){
@@ -1417,12 +1398,12 @@ class MatchingScheduler extends Command
                 $matching_posts_p60 = Item::where('items.user_id','!=',$user)
                 ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where([
-                    ['return_items.category_id', '!=', $my_post->category_id],
-                    ['return_items.sub_category_id', '!=', $my_post->sub_category_id],
-                    ['return_items.sub_sub_category_id', '!=', $my_post->sub_sub_category_id],
-                    ['return_items.location_id', '!=', $my_post->location_id],
-                    ['return_items.price', '<=', $my_post->price_from ? $my_post->price_from : 0],
-                    ['return_items.price', '>=', $my_post->price_to ? $my_post->price_to : $max],
+                    ['items.category_id', '!=', $my_post->category_id],
+                    ['items.sub_category_id', '!=', $my_post->sub_category_id],
+                    ['items.sub_sub_category_id', '!=', $my_post->sub_sub_category_id],
+                    ['items.location_id', '!=', $my_post->location_id],
+                    ['items.price', '<=', $my_post->price_from ? $my_post->price_from : 0],
+                    ['items.price', '>=', $my_post->price_to ? $my_post->price_to : $max],
                 ])
                 ->where([
                     ['items.price', '>=', $my_post->price ? $my_post->price / 2 : 0],
