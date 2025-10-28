@@ -201,7 +201,7 @@ class MatchingController extends Controller
             ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->where($label_9)
             ->orderBy('items.created_at','desc')
-            ->get(['items.id','items.created_at','items.created_at']);
+            ->get(['items.id','items.created_at']);
             if(!$matching_posts_p1->isEmpty()){
                 foreach ($matching_posts_p1 as $matching_post_p1) {
                     $value1 = [$matching_post_p1->id => 'priority_1' , 'created_at' => $matching_post_p1->created_at];
@@ -351,7 +351,6 @@ class MatchingController extends Controller
             // PRIORITY10
             $matching_posts_p10 = Item::where('items.user_id', '!=', $user)
             ->where($label_10)
-            ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
             ->orderBy('items.created_at','desc')
             ->get(['items.id','items.created_at']);
             if(!$matching_posts_p10->isEmpty()){
@@ -1364,8 +1363,8 @@ class MatchingController extends Controller
                     ['items.sub_category_id', '!=', $my_post->sub_category_id],
                     ['items.sub_sub_category_id', '!=', $my_post->sub_sub_category_id],
                     ['items.location_id', '!=', $my_post->location_id],
-                    ['items.price', '<=', $my_post->price_from ? $my_post->price_from : 0],
-                    ['items.price', '>=', $my_post->price_to ? $my_post->price_to : $max],
+                    ['items.price', '>=', $my_post->price_from ? $my_post->price_from : 0],
+                    ['items.price', '<=', $my_post->price_to ? $my_post->price_to : $max],
                 ])
                 ->where([
                     ['items.price', '>=', $my_post->price ? $my_post->price / 2 : 0],
