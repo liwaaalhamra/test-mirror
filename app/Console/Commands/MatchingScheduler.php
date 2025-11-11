@@ -241,7 +241,6 @@ class MatchingScheduler extends Command
                 ->where($label_10)
                 ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_9)
-                ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
                 ->get(['items.id', 'items.created_at']);
             if (!$matching_posts_p1->isEmpty()) {
@@ -259,7 +258,6 @@ class MatchingScheduler extends Command
                 ->where($label_10)
                 ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_9_b)
-                ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
                 ->get(['items.id', 'items.created_at']);
             if (!$matching_posts_p2->isEmpty()) {
@@ -277,7 +275,6 @@ class MatchingScheduler extends Command
                 ->where($label_10)
                 ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_9_c)
-                ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
                 ->get(['items.id', 'items.created_at']);
             if (!$matching_posts_p3->isEmpty()) {
@@ -295,7 +292,6 @@ class MatchingScheduler extends Command
                 ->where($label_10_b)
                 ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_9)
-                ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
                 ->get(['items.id', 'items.created_at']);
             if (!$matching_posts_p4->isEmpty()) {
@@ -313,7 +309,6 @@ class MatchingScheduler extends Command
                 ->where($label_10_c)
                 ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_9)
-                ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
                 ->get(['items.id', 'items.created_at']);
             if (!$matching_posts_p5->isEmpty()) {
@@ -331,7 +326,6 @@ class MatchingScheduler extends Command
                 ->where($label_10_b)
                 ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_9_b)
-                ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
                 ->get(['items.id', 'items.created_at']);
             if (!$matching_posts_p6->isEmpty()) {
@@ -349,7 +343,6 @@ class MatchingScheduler extends Command
                 ->where($label_10_b)
                 ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_9_c)
-                ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
                 ->get(['items.id', 'items.created_at']);
             if (!$matching_posts_p7->isEmpty()) {
@@ -367,7 +360,6 @@ class MatchingScheduler extends Command
                 ->where($label_10_c)
                 ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_9_b)
-                ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
                 ->get(['items.id', 'items.created_at']);
             if (!$matching_posts_p8->isEmpty()) {
@@ -385,7 +377,6 @@ class MatchingScheduler extends Command
                 ->where($label_10_c)
                 ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_9_c)
-                ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
                 ->get(['items.id', 'items.created_at']);
             if (!$matching_posts_p9->isEmpty()) {
@@ -410,7 +401,6 @@ class MatchingScheduler extends Command
                     ['return_items.price_from', '>', $my_post->price ? $my_post->price : $max],
                     ['return_items.price_to', '<', $my_post->price ? $my_post->price : 0],
                 ])
-                ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
                 ->get(['items.id', 'items.created_at']);
             if (!$matching_posts_p10->isEmpty()) {
@@ -435,7 +425,6 @@ class MatchingScheduler extends Command
                 ])
                 ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_9)
-                ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
                 ->get(['items.id', 'items.created_at']);
             $ids_p11 = [];
@@ -465,7 +454,6 @@ class MatchingScheduler extends Command
                     ['return_items.price_from', '>', $my_post->price ? $my_post->price : $max],
                     ['return_items.price_to', '<', $my_post->price ? $my_post->price : 0],
                 ])
-                ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
                 ->get(['items.id', 'items.created_at']);
             if (!$matching_posts_p12->isEmpty()) {
@@ -490,7 +478,6 @@ class MatchingScheduler extends Command
                 ])
                 ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_9_b)
-                ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
                 ->get(['items.id', 'items.created_at']);
             $ids_p13 = [];
@@ -520,7 +507,6 @@ class MatchingScheduler extends Command
                     ['return_items.price_from', '>', $my_post->price ? $my_post->price : $max],
                     ['return_items.price_to', '<', $my_post->price ? $my_post->price : 0],
                 ])
-                ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
                 ->get(['items.id', 'items.created_at']);
             if (!$matching_posts_p14->isEmpty()) {
@@ -545,7 +531,6 @@ class MatchingScheduler extends Command
                 ])
                 ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_9_c)
-                ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
                 ->get(['items.id', 'items.created_at']);
             $ids_p15 = [];
@@ -568,7 +553,6 @@ class MatchingScheduler extends Command
                 ->where($label_10)
                 ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_9_e)
-                ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
                 ->get(['items.id', 'items.created_at']);
             if (!$matching_posts_p16->isEmpty()) {
@@ -586,7 +570,6 @@ class MatchingScheduler extends Command
                 ->where($label_10)
                 ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_9_d)
-                ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
                 ->get(['items.id', 'items.created_at']);
             if (!$matching_posts_p17->isEmpty()) {
@@ -604,7 +587,6 @@ class MatchingScheduler extends Command
                 ->where($label_10_b)
                 ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_9_e)
-                ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
                 ->get(['items.id', 'items.created_at']);
             if (!$matching_posts_p18->isEmpty()) {
@@ -622,7 +604,6 @@ class MatchingScheduler extends Command
                 ->where($label_10_b)
                 ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_9_d)
-                ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
                 ->get(['items.id', 'items.created_at']);
             if (!$matching_posts_p19->isEmpty()) {
@@ -640,7 +621,6 @@ class MatchingScheduler extends Command
                 ->where($label_10_c)
                 ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_9_e)
-                ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
                 ->get(['items.id', 'items.created_at']);
             if (!$matching_posts_p20->isEmpty()) {
@@ -658,7 +638,6 @@ class MatchingScheduler extends Command
                 ->where($label_10_c)
                 ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_9_d)
-                ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
                 ->get(['items.id', 'items.created_at']);
             if (!$matching_posts_p21->isEmpty()) {
@@ -676,7 +655,6 @@ class MatchingScheduler extends Command
                 ->where($label_10_e)
                 ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_9)
-                ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
                 ->get(['items.id', 'items.created_at']);
             if (!$matching_posts_p22->isEmpty()) {
@@ -694,7 +672,6 @@ class MatchingScheduler extends Command
                 ->where($label_10_d)
                 ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_9)
-                ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
                 ->get(['items.id', 'items.created_at']);
             if (!$matching_posts_p23->isEmpty()) {
@@ -712,7 +689,6 @@ class MatchingScheduler extends Command
                 ->where($label_10_e)
                 ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_9_b)
-                ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
                 ->get(['items.id', 'items.created_at']);
             if (!$matching_posts_p24->isEmpty()) {
@@ -730,7 +706,6 @@ class MatchingScheduler extends Command
                 ->where($label_10_d)
                 ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_9_b)
-                ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
                 ->get(['items.id', 'items.created_at']);
             if (!$matching_posts_p25->isEmpty()) {
@@ -748,7 +723,6 @@ class MatchingScheduler extends Command
                 ->where($label_10_e)
                 ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_9_c)
-                ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
                 ->get(['items.id', 'items.created_at']);
             if (!$matching_posts_p26->isEmpty()) {
@@ -766,7 +740,6 @@ class MatchingScheduler extends Command
                 ->where($label_10_d)
                 ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_9_c)
-                ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
                 ->get(['items.id', 'items.created_at']);
             if (!$matching_posts_p27->isEmpty()) {
@@ -784,7 +757,6 @@ class MatchingScheduler extends Command
                 ->where($label_10_e)
                 ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_9_e)
-                ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
                 ->get(['items.id', 'items.created_at']);
             if (!$matching_posts_p28->isEmpty()) {
@@ -802,7 +774,6 @@ class MatchingScheduler extends Command
                 ->where($label_10_e)
                 ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_9_d)
-                ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
                 ->get(['items.id', 'items.created_at']);
             if (!$matching_posts_p29->isEmpty()) {
@@ -820,7 +791,6 @@ class MatchingScheduler extends Command
                 ->where($label_10_d)
                 ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_9_e)
-                ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
                 ->get(['items.id', 'items.created_at']);
             if (!$matching_posts_p30->isEmpty()) {
@@ -838,7 +808,6 @@ class MatchingScheduler extends Command
                 ->where($label_10_d)
                 ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_9_d)
-                ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
                 ->get(['items.id', 'items.created_at']);
             if (!$matching_posts_p31->isEmpty()) {
@@ -863,7 +832,6 @@ class MatchingScheduler extends Command
                     ['return_items.price_from', '>', $my_post->price ? $my_post->price : $max],
                     ['return_items.price_to', '<', $my_post->price ? $my_post->price : 0],
                 ])
-                ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
                 ->get(['items.id', 'items.created_at']);
             if (!$matching_posts_p32->isEmpty()) {
@@ -888,7 +856,6 @@ class MatchingScheduler extends Command
                     ['return_items.price_from', '>', $my_post->price ? $my_post->price : $max],
                     ['return_items.price_to', '<', $my_post->price ? $my_post->price : 0],
                 ])
-                ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
                 ->get(['items.id', 'items.created_at']);
             if (!$matching_posts_p33->isEmpty()) {
@@ -913,7 +880,6 @@ class MatchingScheduler extends Command
                 ])
                 ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_9_e)
-                ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
                 ->get(['items.id', 'items.created_at']);
             $ids_p34 = [];
@@ -943,7 +909,6 @@ class MatchingScheduler extends Command
                 ])
                 ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_9_d)
-                ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
                 ->get(['items.id', 'items.created_at']);
             $ids_p35 = [];
@@ -966,7 +931,6 @@ class MatchingScheduler extends Command
                 ->where($label_10)
                 ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_9_f)
-                ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
                 ->get(['items.id', 'items.created_at']);
             if (!$matching_posts_p36->isEmpty()) {
@@ -984,7 +948,6 @@ class MatchingScheduler extends Command
                 ->where($label_10_b)
                 ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_9_f)
-                ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
                 ->get(['items.id', 'items.created_at']);
             if (!$matching_posts_p37->isEmpty()) {
@@ -1002,7 +965,6 @@ class MatchingScheduler extends Command
                 ->where($label_10_c)
                 ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_9_f)
-                ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
                 ->get(['items.id', 'items.created_at']);
             if (!$matching_posts_p38->isEmpty()) {
@@ -1020,7 +982,6 @@ class MatchingScheduler extends Command
                 ->where($label_10_e)
                 ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_9_f)
-                ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
                 ->get(['items.id', 'items.created_at']);
             if (!$matching_posts_p39->isEmpty()) {
@@ -1038,7 +999,6 @@ class MatchingScheduler extends Command
                 ->where($label_10_d)
                 ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_9_f)
-                ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
                 ->get(['items.id', 'items.created_at']);
             if (!$matching_posts_p40->isEmpty()) {
@@ -1056,7 +1016,6 @@ class MatchingScheduler extends Command
                 ->where($label_10_f)
                 ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_9_f)
-                ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
                 ->get(['items.id', 'items.created_at']);
             if (!$matching_posts_p41->isEmpty()) {
@@ -1074,7 +1033,6 @@ class MatchingScheduler extends Command
                 ->where($label_10_f)
                 ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_9)
-                ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
                 ->get(['items.id', 'items.created_at']);
             if (!$matching_posts_p42->isEmpty()) {
@@ -1092,7 +1050,6 @@ class MatchingScheduler extends Command
                 ->where($label_10_f)
                 ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_9_b)
-                ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
                 ->get(['items.id', 'items.created_at']);
             if (!$matching_posts_p43->isEmpty()) {
@@ -1110,7 +1067,6 @@ class MatchingScheduler extends Command
                 ->where($label_10_f)
                 ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_9_c)
-                ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
                 ->get(['items.id', 'items.created_at']);
             if (!$matching_posts_p44->isEmpty()) {
@@ -1128,7 +1084,6 @@ class MatchingScheduler extends Command
                 ->where($label_10_f)
                 ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_9_e)
-                ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
                 ->get(['items.id', 'items.created_at']);
             if (!$matching_posts_p45->isEmpty()) {
@@ -1146,7 +1101,6 @@ class MatchingScheduler extends Command
                 ->where($label_10_f)
                 ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_9_d)
-                ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
                 ->get(['items.id', 'items.created_at']);
             if (!$matching_posts_p46->isEmpty()) {
@@ -1171,7 +1125,6 @@ class MatchingScheduler extends Command
                     ['return_items.price_from', '>', $my_post->price ? $my_post->price : $max],
                     ['return_items.price_to', '<', $my_post->price ? $my_post->price : 0],
                 ])
-                ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
                 ->get(['items.id', 'items.created_at']);
             if (!$matching_posts_p47->isEmpty()) {
@@ -1196,7 +1149,6 @@ class MatchingScheduler extends Command
                 ])
                 ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_9_f)
-                ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
                 ->get(['items.id', 'items.created_at']);
             $ids_p48 = [];
@@ -1230,7 +1182,6 @@ class MatchingScheduler extends Command
                 //     ['price', '>=', $my_post->price_from ? $my_post->price_from / 2 : 0],
                 //     ['price', '<=', $my_post->price_to ? $my_post->price_to * 2 : $max],
                 // ])
-                // ->where('expired_at','>',Carbon::now()->getTimestamp())
                 // ->orderBy('created_at','desc')->get();
                 // if(!$matching_posts_p49->isEmpty()){
                 //     foreach ($matching_posts_p49 as $matching_post_p49) {
@@ -1257,7 +1208,6 @@ class MatchingScheduler extends Command
                 //     ['price', '>=', $my_post->price_from ? $my_post->price_from / 2 : 0],
                 //     ['price', '<=', $my_post->price_to ? $my_post->price_to * 2 : $max],
                 // ])
-                // ->where('expired_at','>',Carbon::now()->getTimestamp())
                 // ->orderBy('created_at','desc')->get();
                 // if(!$matching_posts_p50->isEmpty()){
                 //     foreach ($matching_posts_p50 as $matching_post_p50) {
@@ -1284,7 +1234,6 @@ class MatchingScheduler extends Command
                 //     ['price', '>=', $my_post->price_from ? $my_post->price_from / 2 : 0],
                 //     ['price', '<=', $my_post->price_to ? $my_post->price_to * 2 : $max],
                 // ])
-                // ->where('expired_at','>',Carbon::now()->getTimestamp())
                 // ->orderBy('created_at','desc')->get();
                 // if(!$matching_posts_p51->isEmpty()){
                 //     foreach ($matching_posts_p51 as $matching_post_p51) {
@@ -1311,7 +1260,6 @@ class MatchingScheduler extends Command
                 //     ['price', '>=', $my_post->price_from ? $my_post->price_from / 2 : 0],
                 //     ['price', '<=', $my_post->price_to ? $my_post->price_to * 2 : $max],
                 // ])
-                // ->where('expired_at','>',Carbon::now()->getTimestamp())
                 // ->orderBy('created_at','desc')->get();
                 // if(!$matching_posts_p52->isEmpty()){
                 //     foreach ($matching_posts_p52 as $matching_post_p52) {
@@ -1338,7 +1286,6 @@ class MatchingScheduler extends Command
                 //     ['price', '>=', $my_post->price_from ? $my_post->price_from / 2 : 0],
                 //     ['price', '<=', $my_post->price_to ? $my_post->price_to * 2 : $max],
                 // ])
-                // ->where('expired_at','>',Carbon::now()->getTimestamp())
                 // ->orderBy('created_at','desc')->get();
                 // if(!$matching_posts_p53->isEmpty()){
                 //     foreach ($matching_posts_p53 as $matching_post_p53) {
@@ -1362,7 +1309,6 @@ class MatchingScheduler extends Command
                     ])
                     ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                     ->where($label_9)
-                    ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                     ->orderBy('items.created_at', 'desc')
                     ->get(['items.id', 'items.created_at']);
                 if (!$matching_posts_p54->isEmpty()) {
@@ -1387,7 +1333,6 @@ class MatchingScheduler extends Command
                     ])
                     ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                     ->where($label_9_b)
-                    ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                     ->orderBy('items.created_at', 'desc')
                     ->get(['items.id', 'items.created_at']);
                 if (!$matching_posts_p55->isEmpty()) {
@@ -1412,7 +1357,6 @@ class MatchingScheduler extends Command
                     ])
                     ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                     ->where($label_9_c)
-                    ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                     ->orderBy('items.created_at', 'desc')
                     ->get(['items.id', 'items.created_at']);
                 if (!$matching_posts_p56->isEmpty()) {
@@ -1437,7 +1381,6 @@ class MatchingScheduler extends Command
                     ])
                     ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                     ->where($label_9_e)
-                    ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                     ->orderBy('items.created_at', 'desc')
                     ->get(['items.id', 'items.created_at']);
                 if (!$matching_posts_p57->isEmpty()) {
@@ -1462,7 +1405,6 @@ class MatchingScheduler extends Command
                     ])
                     ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                     ->where($label_9_d)
-                    ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                     ->orderBy('items.created_at', 'desc')
                     ->get(['items.id', 'items.created_at']);
                 if (!$matching_posts_p58->isEmpty()) {
@@ -1486,7 +1428,6 @@ class MatchingScheduler extends Command
                         ['price', '>=', $my_post->price ? $my_post->price - ($my_post->price / 2) : 0],
                         ['price', '<=', $my_post->price ? $my_post->price * 2 : $max],
                     ])
-                    ->where('expired_at', '>', Carbon::now()->getTimestamp())
                     ->orderBy('created_at', 'desc')
                     ->get(['id', 'created_at']);
 
@@ -1520,7 +1461,6 @@ class MatchingScheduler extends Command
                 //     ['items.price', '>=', $my_post->price ? $my_post->price / 2 : 0],
                 //     ['items.price', '<=', $my_post->price ? $my_post->price * 2 : $max],
                 // ])
-                // ->where('items.expired_at','>',Carbon::now()->getTimestamp())
                 // ->orderBy('items.created_at','desc')
                 // ->get(['items.id','items.created_at']);
                 // if(!$matching_posts_p60->isEmpty()){
@@ -1544,7 +1484,6 @@ class MatchingScheduler extends Command
                         ['price', '>=', $my_post->price ? $my_post->price - ($my_post->price / 2) : 0],
                         ['price', '<=', $my_post->price ? $my_post->price * 2 : $max],
                     ])
-                    ->where('expired_at', '>', Carbon::now()->getTimestamp())
                     ->orderBy('created_at', 'desc')
                     ->get(['id', 'created_at']);
                 if (!$matching_posts_p61->isEmpty()) {
