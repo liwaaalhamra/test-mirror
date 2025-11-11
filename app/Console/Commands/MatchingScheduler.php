@@ -238,8 +238,8 @@ class MatchingScheduler extends Command
 
             // PRIORITY1   
             $matching_posts_p1 = Item::where('items.user_id', '!=', $user)
-                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_10)
+                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_9)
                 ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
@@ -256,8 +256,8 @@ class MatchingScheduler extends Command
 
             // PRIORITY2
             $matching_posts_p2 = Item::where('items.user_id', '!=', $user)
-                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_10)
+                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_9_b)
                 ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
@@ -274,8 +274,8 @@ class MatchingScheduler extends Command
 
             // PRIORITY3
             $matching_posts_p3 = Item::where('items.user_id', '!=', $user)
-                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_10)
+                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_9_c)
                 ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
@@ -292,8 +292,8 @@ class MatchingScheduler extends Command
 
             // PRIORITY4
             $matching_posts_p4 = Item::where('items.user_id', '!=', $user)
-                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_10_b)
+                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_9)
                 ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
@@ -310,8 +310,8 @@ class MatchingScheduler extends Command
 
             // PRIORITY5
             $matching_posts_p5 = Item::where('items.user_id', '!=', $user)
-                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_10_c)
+                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_9)
                 ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
@@ -328,8 +328,8 @@ class MatchingScheduler extends Command
 
             // PRIORITY6
             $matching_posts_p6 = Item::where('items.user_id', '!=', $user)
-                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_10_b)
+                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_9_b)
                 ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
@@ -346,8 +346,8 @@ class MatchingScheduler extends Command
 
             // PRIORITY7
             $matching_posts_p7 = Item::where('items.user_id', '!=', $user)
-                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_10_b)
+                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_9_c)
                 ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
@@ -364,8 +364,8 @@ class MatchingScheduler extends Command
 
             // PRIORITY8
             $matching_posts_p8 = Item::where('items.user_id', '!=', $user)
-                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_10_c)
+                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_9_b)
                 ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
@@ -382,8 +382,8 @@ class MatchingScheduler extends Command
 
             // PRIORITY9
             $matching_posts_p9 = Item::where('items.user_id', '!=', $user)
-                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_10_c)
+                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_9_c)
                 ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
@@ -400,8 +400,8 @@ class MatchingScheduler extends Command
 
             // PRIORITY10
             $matching_posts_p10 = Item::where('items.user_id', '!=', $user)
-                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_10)
+                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where([
                     ['return_items.category_id', '!=', $my_post->category_id],
                     ['return_items.sub_category_id', '!=', $my_post->sub_category_id],
@@ -425,8 +425,6 @@ class MatchingScheduler extends Command
 
             // PRIORITY11
             $data_p11 = Item::where('items.user_id', '!=', $user)
-                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
-                ->where($label_9)
                 ->where([
                     ['items.category_id', '!=', $my_post->return_post['category_id']],
                     ['items.sub_category_id', '!=', $my_post->return_post['sub_category_id']],
@@ -435,6 +433,8 @@ class MatchingScheduler extends Command
                     ['items.price', '<', $my_post->return_post['price_from'] ? $my_post->return_post['price_from'] : 0],
                     ['items.price', '>', $my_post->return_post['price_to'] ? $my_post->return_post['price_to'] : $max],
                 ])
+                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
+                ->where($label_9)
                 ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
                 ->get(['items.id', 'items.created_at']);
@@ -455,8 +455,8 @@ class MatchingScheduler extends Command
 
             // PRIORITY12
             $matching_posts_p12 = Item::where('items.user_id', '!=', $user)
-                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_10_b)
+                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where([
                     ['return_items.category_id', '!=', $my_post->category_id],
                     ['return_items.sub_category_id', '!=', $my_post->sub_category_id],
@@ -480,8 +480,6 @@ class MatchingScheduler extends Command
 
             // PRIORITY13
             $data_p13 = Item::where('items.user_id', '!=', $user)
-                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
-                ->where($label_9_b)
                 ->where([
                     ['items.category_id', '!=', $my_post->return_post['category_id']],
                     ['items.sub_category_id', '!=', $my_post->return_post['sub_category_id']],
@@ -490,6 +488,8 @@ class MatchingScheduler extends Command
                     ['items.price', '<', $my_post->return_post['price_from'] ? $my_post->return_post['price_from'] : 0],
                     ['items.price', '>', $my_post->return_post['price_to'] ? $my_post->return_post['price_to'] : $max],
                 ])
+                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
+                ->where($label_9_b)
                 ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
                 ->get(['items.id', 'items.created_at']);
@@ -510,8 +510,8 @@ class MatchingScheduler extends Command
 
             // PRIORITY14
             $matching_posts_p14 = Item::where('items.user_id', '!=', $user)
-                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_10_c)
+                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where([
                     ['return_items.category_id', '!=', $my_post->category_id],
                     ['return_items.sub_category_id', '!=', $my_post->sub_category_id],
@@ -535,8 +535,6 @@ class MatchingScheduler extends Command
 
             // PRIORITY15
             $data_p15 = Item::where('items.user_id', '!=', $user)
-                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
-                ->where($label_9_c)
                 ->where([
                     ['items.category_id', '!=', $my_post->return_post['category_id']],
                     ['items.sub_category_id', '!=', $my_post->return_post['sub_category_id']],
@@ -545,6 +543,8 @@ class MatchingScheduler extends Command
                     ['items.price', '<', $my_post->return_post['price_from'] ? $my_post->return_post['price_from'] : 0],
                     ['items.price', '>', $my_post->return_post['price_to'] ? $my_post->return_post['price_to'] : $max],
                 ])
+                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
+                ->where($label_9_c)
                 ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
                 ->get(['items.id', 'items.created_at']);
@@ -565,8 +565,8 @@ class MatchingScheduler extends Command
 
             // PRIORITY16
             $matching_posts_p16 = Item::where('items.user_id', '!=', $user)
-                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_10)
+                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_9_e)
                 ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
@@ -583,8 +583,8 @@ class MatchingScheduler extends Command
 
             // PRIORITY17
             $matching_posts_p17 = Item::where('items.user_id', '!=', $user)
-                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_10)
+                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_9_d)
                 ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
@@ -601,8 +601,8 @@ class MatchingScheduler extends Command
 
             // PRIORITY18
             $matching_posts_p18 = Item::where('items.user_id', '!=', $user)
-                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_10_b)
+                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_9_e)
                 ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
@@ -619,8 +619,8 @@ class MatchingScheduler extends Command
 
             // PRIORITY19
             $matching_posts_p19 = Item::where('items.user_id', '!=', $user)
-                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_10_b)
+                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_9_d)
                 ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
@@ -637,8 +637,8 @@ class MatchingScheduler extends Command
 
             // PRIORITY20
             $matching_posts_p20 = Item::where('items.user_id', '!=', $user)
-                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_10_c)
+                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_9_e)
                 ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
@@ -655,8 +655,8 @@ class MatchingScheduler extends Command
 
             // PRIORITY21
             $matching_posts_p21 = Item::where('items.user_id', '!=', $user)
-                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_10_c)
+                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_9_d)
                 ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
@@ -673,8 +673,8 @@ class MatchingScheduler extends Command
 
             // PRIORITY22
             $matching_posts_p22 = Item::where('items.user_id', '!=', $user)
-                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_10_e)
+                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_9)
                 ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
@@ -691,8 +691,8 @@ class MatchingScheduler extends Command
 
             // PRIORITY23
             $matching_posts_p23 = Item::where('items.user_id', '!=', $user)
-                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_10_d)
+                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_9)
                 ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
@@ -709,8 +709,8 @@ class MatchingScheduler extends Command
 
             // PRIORITY24
             $matching_posts_p24 = Item::where('items.user_id', '!=', $user)
-                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_10_e)
+                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_9_b)
                 ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
@@ -727,8 +727,8 @@ class MatchingScheduler extends Command
 
             // PRIORITY25
             $matching_posts_p25 = Item::where('items.user_id', '!=', $user)
-                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_10_d)
+                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_9_b)
                 ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
@@ -745,8 +745,8 @@ class MatchingScheduler extends Command
 
             // PRIORITY26
             $matching_posts_p26 = Item::where('items.user_id', '!=', $user)
-                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_10_e)
+                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_9_c)
                 ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
@@ -763,8 +763,8 @@ class MatchingScheduler extends Command
 
             // PRIORITY27
             $matching_posts_p27 = Item::where('items.user_id', '!=', $user)
-                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_10_d)
+                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_9_c)
                 ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
@@ -781,8 +781,8 @@ class MatchingScheduler extends Command
 
             // PRIORITY28
             $matching_posts_p28 = Item::where('items.user_id', '!=', $user)
-                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_10_e)
+                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_9_e)
                 ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
@@ -799,8 +799,8 @@ class MatchingScheduler extends Command
 
             // PRIORITY29
             $matching_posts_p29 = Item::where('items.user_id', '!=', $user)
-                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_10_e)
+                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_9_d)
                 ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
@@ -817,8 +817,8 @@ class MatchingScheduler extends Command
 
             // PRIORITY30
             $matching_posts_p30 = Item::where('items.user_id', '!=', $user)
-                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_10_d)
+                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_9_e)
                 ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
@@ -835,8 +835,8 @@ class MatchingScheduler extends Command
 
             // PRIORITY31
             $matching_posts_p31 = Item::where('items.user_id', '!=', $user)
-                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_10_d)
+                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_9_d)
                 ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
@@ -853,8 +853,8 @@ class MatchingScheduler extends Command
 
             // PRIORITY32
             $matching_posts_p32 = Item::where('items.user_id', '!=', $user)
-                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_10_e)
+                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where([
                     ['return_items.category_id', '!=', $my_post->category_id],
                     ['return_items.sub_category_id', '!=', $my_post->sub_category_id],
@@ -878,8 +878,8 @@ class MatchingScheduler extends Command
 
             // PRIORITY33
             $matching_posts_p33 = Item::where('items.user_id', '!=', $user)
-                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_10_d)
+                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where([
                     ['return_items.category_id', '!=', $my_post->category_id],
                     ['return_items.sub_category_id', '!=', $my_post->sub_category_id],
@@ -903,8 +903,6 @@ class MatchingScheduler extends Command
 
             // PRIORITY34
             $data_p34 = Item::where('items.user_id', '!=', $user)
-                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
-                ->where($label_9_e)
                 ->where([
                     ['items.category_id', '!=', $my_post->return_post['category_id']],
                     ['items.sub_category_id', '!=', $my_post->return_post['sub_category_id']],
@@ -913,6 +911,8 @@ class MatchingScheduler extends Command
                     ['items.price', '<', $my_post->return_post['price_from'] ? $my_post->return_post['price_from'] : 0],
                     ['items.price', '>', $my_post->return_post['price_to'] ? $my_post->return_post['price_to'] : $max],
                 ])
+                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
+                ->where($label_9_e)
                 ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
                 ->get(['items.id', 'items.created_at']);
@@ -933,8 +933,6 @@ class MatchingScheduler extends Command
 
             // PRIORITY35
             $data_p35 = Item::where('items.user_id', '!=', $user)
-                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
-                ->where($label_9_d)
                 ->where([
                     ['items.category_id', '!=', $my_post->return_post['category_id']],
                     ['items.sub_category_id', '!=', $my_post->return_post['sub_category_id']],
@@ -943,6 +941,8 @@ class MatchingScheduler extends Command
                     ['items.price', '<', $my_post->return_post['price_from'] ? $my_post->return_post['price_from'] : 0],
                     ['items.price', '>', $my_post->return_post['price_to'] ? $my_post->return_post['price_to'] : $max],
                 ])
+                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
+                ->where($label_9_d)
                 ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
                 ->get(['items.id', 'items.created_at']);
@@ -963,8 +963,8 @@ class MatchingScheduler extends Command
 
             // PRIORITY36
             $matching_posts_p36 = Item::where('items.user_id', '!=', $user)
-                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_10)
+                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_9_f)
                 ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
@@ -981,8 +981,8 @@ class MatchingScheduler extends Command
 
             // PRIORITY37
             $matching_posts_p37 = Item::where('items.user_id', '!=', $user)
-                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_10_b)
+                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_9_f)
                 ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
@@ -999,8 +999,8 @@ class MatchingScheduler extends Command
 
             // PRIORITY38
             $matching_posts_p38 = Item::where('items.user_id', '!=', $user)
-                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_10_c)
+                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_9_f)
                 ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
@@ -1017,8 +1017,8 @@ class MatchingScheduler extends Command
 
             // PRIORITY39
             $matching_posts_p39 = Item::where('items.user_id', '!=', $user)
-                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_10_e)
+                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_9_f)
                 ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
@@ -1035,8 +1035,8 @@ class MatchingScheduler extends Command
 
             // PRIORITY40
             $matching_posts_p40 = Item::where('items.user_id', '!=', $user)
-                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_10_d)
+                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_9_f)
                 ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
@@ -1053,8 +1053,8 @@ class MatchingScheduler extends Command
 
             // PRIORITY41
             $matching_posts_p41 = Item::where('items.user_id', '!=', $user)
-                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_10_f)
+                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_9_f)
                 ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
@@ -1071,8 +1071,8 @@ class MatchingScheduler extends Command
 
             // PRIORITY42
             $matching_posts_p42 = Item::where('items.user_id', '!=', $user)
-                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_10_f)
+                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_9)
                 ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
@@ -1089,8 +1089,8 @@ class MatchingScheduler extends Command
 
             // PRIORITY43
             $matching_posts_p43 = Item::where('items.user_id', '!=', $user)
-                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_10_f)
+                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_9_b)
                 ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
@@ -1107,8 +1107,8 @@ class MatchingScheduler extends Command
 
             // PRIORITY44
             $matching_posts_p44 = Item::where('items.user_id', '!=', $user)
-                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_10_f)
+                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_9_c)
                 ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
@@ -1125,8 +1125,8 @@ class MatchingScheduler extends Command
 
             // PRIORITY45
             $matching_posts_p45 = Item::where('items.user_id', '!=', $user)
-                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_10_f)
+                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_9_e)
                 ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
@@ -1143,8 +1143,8 @@ class MatchingScheduler extends Command
 
             // PRIORITY 46
             $matching_posts_p46 = Item::where('items.user_id', '!=', $user)
-                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_10_f)
+                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_9_d)
                 ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
@@ -1161,8 +1161,8 @@ class MatchingScheduler extends Command
 
             // PRIORITY47
             $matching_posts_p47 = Item::where('items.user_id', '!=', $user)
-                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where($label_10_f)
+                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                 ->where([
                     ['return_items.category_id', '!=', $my_post->category_id],
                     ['return_items.sub_category_id', '!=', $my_post->sub_category_id],
@@ -1186,8 +1186,6 @@ class MatchingScheduler extends Command
 
             // PRIORITY48
             $data_p48 = Item::where('items.user_id', '!=', $user)
-                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
-                ->where($label_9_f)
                 ->where([
                     ['items.category_id', '!=', $my_post->return_post['category_id']],
                     ['items.sub_category_id', '!=', $my_post->return_post['sub_category_id']],
@@ -1196,6 +1194,8 @@ class MatchingScheduler extends Command
                     ['items.price', '<', $my_post->return_post['price_from'] ? $my_post->return_post['price_from'] : 0],
                     ['items.price', '>', $my_post->return_post['price_to'] ? $my_post->return_post['price_to'] : $max],
                 ])
+                ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
+                ->where($label_9_f)
                 ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                 ->orderBy('items.created_at', 'desc')
                 ->get(['items.id', 'items.created_at']);
@@ -1352,12 +1352,16 @@ class MatchingScheduler extends Command
 
                 // PRIORITY54
                 $matching_posts_p54 = Item::where('items.user_id', '!=', $user)
-                    ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
-                    ->where($label_9)
                     ->where([
-                        ['items.price', '>=', $my_post->price ? $my_post->price / 2 : 0],
+                        ['items.category_id', '!=', $my_post->category_id],
+                        ['items.sub_category_id', '!=', $my_post->sub_category_id],
+                        ['items.sub_sub_category_id', '!=', $my_post->sub_sub_category_id],
+                        ['items.location_id', '!=', $my_post->location_id],
+                        ['items.price', '>=', $my_post->price ? $my_post->price - ($my_post->price / 2) : 0],
                         ['items.price', '<=', $my_post->price ? $my_post->price * 2 : $max],
                     ])
+                    ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
+                    ->where($label_9)
                     ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                     ->orderBy('items.created_at', 'desc')
                     ->get(['items.id', 'items.created_at']);
@@ -1373,12 +1377,16 @@ class MatchingScheduler extends Command
 
                 // PRIORITY55
                 $matching_posts_p55 = Item::where('items.user_id', '!=', $user)
-                    ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
-                    ->where($label_9_b)
                     ->where([
-                        ['items.price', '>=', $my_post->price ? $my_post->price / 2 : 0],
+                        ['items.category_id', '!=', $my_post->category_id],
+                        ['items.sub_category_id', '!=', $my_post->sub_category_id],
+                        ['items.sub_sub_category_id', '!=', $my_post->sub_sub_category_id],
+                        ['items.location_id', '!=', $my_post->location_id],
+                        ['items.price', '>=', $my_post->price ? $my_post->price - ($my_post->price / 2) : 0],
                         ['items.price', '<=', $my_post->price ? $my_post->price * 2 : $max],
                     ])
+                    ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
+                    ->where($label_9_b)
                     ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                     ->orderBy('items.created_at', 'desc')
                     ->get(['items.id', 'items.created_at']);
@@ -1394,12 +1402,16 @@ class MatchingScheduler extends Command
 
                 // PRIORITY56
                 $matching_posts_p56 = Item::where('items.user_id', '!=', $user)
-                    ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
-                    ->where($label_9_c)
                     ->where([
-                        ['items.price', '>=', $my_post->price ? $my_post->price / 2 : 0],
+                        ['items.category_id', '!=', $my_post->category_id],
+                        ['items.sub_category_id', '!=', $my_post->sub_category_id],
+                        ['items.sub_sub_category_id', '!=', $my_post->sub_sub_category_id],
+                        ['items.location_id', '!=', $my_post->location_id],
+                        ['items.price', '>=', $my_post->price ? $my_post->price - ($my_post->price / 2) : 0],
                         ['items.price', '<=', $my_post->price ? $my_post->price * 2 : $max],
                     ])
+                    ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
+                    ->where($label_9_c)
                     ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                     ->orderBy('items.created_at', 'desc')
                     ->get(['items.id', 'items.created_at']);
@@ -1415,12 +1427,16 @@ class MatchingScheduler extends Command
 
                 // PRIORITY57
                 $matching_posts_p57 = Item::where('items.user_id', '!=', $user)
-                    ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
-                    ->where($label_9_e)
                     ->where([
-                        ['items.price', '>=', $my_post->price ? $my_post->price / 2 : 0],
+                        ['items.category_id', '!=', $my_post->category_id],
+                        ['items.sub_category_id', '!=', $my_post->sub_category_id],
+                        ['items.sub_sub_category_id', '!=', $my_post->sub_sub_category_id],
+                        ['items.location_id', '!=', $my_post->location_id],
+                        ['items.price', '>=', $my_post->price ? $my_post->price - ($my_post->price / 2) : 0],
                         ['items.price', '<=', $my_post->price ? $my_post->price * 2 : $max],
                     ])
+                    ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
+                    ->where($label_9_e)
                     ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                     ->orderBy('items.created_at', 'desc')
                     ->get(['items.id', 'items.created_at']);
@@ -1436,12 +1452,16 @@ class MatchingScheduler extends Command
 
                 // PRIORITY58
                 $matching_posts_p58 = Item::where('items.user_id', '!=', $user)
-                    ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
-                    ->where($label_9_d)
                     ->where([
-                        ['items.price', '>=', $my_post->price ? $my_post->price / 2 : 0],
+                        ['items.category_id', '!=', $my_post->category_id],
+                        ['items.sub_category_id', '!=', $my_post->sub_category_id],
+                        ['items.sub_sub_category_id', '!=', $my_post->sub_sub_category_id],
+                        ['items.location_id', '!=', $my_post->location_id],
+                        ['items.price', '>=', $my_post->price ? $my_post->price - ($my_post->price / 2) : 0],
                         ['items.price', '<=', $my_post->price ? $my_post->price * 2 : $max],
                     ])
+                    ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
+                    ->where($label_9_d)
                     ->where('items.expired_at', '>', Carbon::now()->getTimestamp())
                     ->orderBy('items.created_at', 'desc')
                     ->get(['items.id', 'items.created_at']);
