@@ -94,7 +94,7 @@ class MatchingController extends Controller
                 ['return_items.category_id', '=', $my_post->category_id],
                 ['return_items.sub_category_id', '=', $my_post->sub_category_id],
                 ['return_items.sub_sub_category_id', '=', $my_post->sub_sub_category_id],
-                ['return_items.location_id', '=', $my_post->location_id],
+                ['return_items.country_id', '=', $my_post->country_id],
                 ['return_items.price_from', '<=', $my_post->price ? $my_post->price : $max],
                 ['return_items.price_to', '>=', $my_post->price ? $my_post->price : 0],
             ];
@@ -102,7 +102,7 @@ class MatchingController extends Controller
                 ['return_items.category_id', '=', $my_post->category_id],
                 ['return_items.sub_category_id', '=', $my_post->sub_category_id],
                 ['return_items.sub_sub_category_id', '!=', $my_post->sub_sub_category_id],
-                ['return_items.location_id', '=', $my_post->location_id],
+                ['return_items.country_id', '=', $my_post->country_id],
                 ['return_items.price_from', '<=', $my_post->price ? $my_post->price : $max],
                 ['return_items.price_to', '>=', $my_post->price ? $my_post->price : 0],
             ];
@@ -110,7 +110,7 @@ class MatchingController extends Controller
                 ['return_items.category_id', '=', $my_post->category_id],
                 ['return_items.sub_category_id', '!=', $my_post->sub_category_id],
                 ['return_items.sub_sub_category_id', '!=', $my_post->sub_sub_category_id],
-                ['return_items.location_id', '=', $my_post->location_id],
+                ['return_items.country_id', '=', $my_post->country_id],
                 ['return_items.price_from', '<=', $my_post->price ? $my_post->price : $max],
                 ['return_items.price_to', '>=', $my_post->price ? $my_post->price : 0],
             ];
@@ -118,7 +118,7 @@ class MatchingController extends Controller
                 ['return_items.category_id', '=', $my_post->category_id],
                 ['return_items.sub_category_id', '!=', $my_post->sub_category_id],
                 ['return_items.sub_sub_category_id', '!=', $my_post->sub_sub_category_id],
-                ['return_items.location_id', '!=', $my_post->location_id],
+                ['return_items.country_id', '!=', $my_post->country_id],
                 ['return_items.price_from', '<=', $my_post->price ? $my_post->price : $max],
                 ['return_items.price_to', '>=', $my_post->price ? $my_post->price : 0],
             ];
@@ -126,7 +126,7 @@ class MatchingController extends Controller
                 ['return_items.category_id', '!=', $my_post->category_id],
                 ['return_items.sub_category_id', '!=', $my_post->sub_category_id],
                 ['return_items.sub_sub_category_id', '!=', $my_post->sub_sub_category_id],
-                ['return_items.location_id', '=', $my_post->location_id],
+                ['return_items.country_id', '=', $my_post->country_id],
                 ['return_items.price_from', '<=', $my_post->price ? $my_post->price : $max],
                 ['return_items.price_to', '>=', $my_post->price ? $my_post->price : 0],
             ];
@@ -134,7 +134,7 @@ class MatchingController extends Controller
                 ['return_items.category_id', '!=', $my_post->category_id],
                 ['return_items.sub_category_id', '!=', $my_post->sub_category_id],
                 ['return_items.sub_sub_category_id', '!=', $my_post->sub_sub_category_id],
-                ['return_items.location_id', '!=', $my_post->location_id],
+                ['return_items.country_id', '!=', $my_post->country_id],
                 ['return_items.price_from', '<=', $my_post->price ? $my_post->price : $max],
                 ['return_items.price_to', '>=', $my_post->price ? $my_post->price : 0],
             ];
@@ -144,7 +144,7 @@ class MatchingController extends Controller
                 ['items.category_id', '=', $my_post->return_post['category_id']],
                 ['items.sub_category_id', '=', $my_post->return_post['sub_category_id']],
                 ['items.sub_sub_category_id', '=', $my_post->return_post['sub_sub_category_id']],
-                ['items.location_id', '=', $my_post->return_post['location_id']],
+                ['items.country_id', '=', $my_post->return_post['country_id']],
                 ['items.price', '>=', $my_post->return_post['price_from'] ? $my_post->return_post['price_from'] : 0],
                 ['items.price', '<=', $my_post->return_post['price_to'] ? $my_post->return_post['price_to'] : $max],
             ];
@@ -152,7 +152,7 @@ class MatchingController extends Controller
                 ['items.category_id', '=', $my_post->return_post['category_id']],
                 ['items.sub_category_id', '=', $my_post->return_post['sub_category_id']],
                 ['items.sub_sub_category_id', '!=', $my_post->return_post['sub_sub_category_id']],
-                ['items.location_id', '=', $my_post->return_post['location_id']],
+                ['items.country_id', '=', $my_post->return_post['country_id']],
                 ['items.price', '>=', $my_post->return_post['price_from'] ? $my_post->return_post['price_from'] : 0],
                 ['items.price', '<=', $my_post->return_post['price_to'] ? $my_post->return_post['price_to'] : $max],
             ];
@@ -160,7 +160,7 @@ class MatchingController extends Controller
                 ['items.category_id', '=', $my_post->return_post['category_id']],
                 ['items.sub_category_id', '!=', $my_post->return_post['sub_category_id']],
                 ['items.sub_sub_category_id', '!=', $my_post->return_post['sub_sub_category_id']],
-                ['items.location_id', '=', $my_post->return_post['location_id']],
+                ['items.country_id', '=', $my_post->return_post['country_id']],
                 ['items.price', '>=', $my_post->return_post['price_from'] ? $my_post->return_post['price_from'] : 0],
                 ['items.price', '<=', $my_post->return_post['price_to'] ? $my_post->return_post['price_to'] : $max],
             ];
@@ -168,7 +168,7 @@ class MatchingController extends Controller
                 ['items.category_id', '=', $my_post->return_post['category_id']],
                 ['items.sub_category_id', '!=', $my_post->return_post['sub_category_id']],
                 ['items.sub_sub_category_id', '!=', $my_post->return_post['sub_sub_category_id']],
-                ['items.location_id', '!=', $my_post->return_post['location_id']],
+                ['items.country_id', '!=', $my_post->return_post['country_id']],
                 ['items.price', '>=', $my_post->return_post['price_from'] ? $my_post->return_post['price_from'] : 0],
                 ['items.price', '<=', $my_post->return_post['price_to'] ? $my_post->return_post['price_to'] : $max],
             ];
@@ -176,7 +176,7 @@ class MatchingController extends Controller
                 ['items.category_id', '!=', $my_post->return_post['category_id']],
                 ['items.sub_category_id', '!=', $my_post->return_post['sub_category_id']],
                 ['items.sub_sub_category_id', '!=', $my_post->return_post['sub_sub_category_id']],
-                ['items.location_id', '=', $my_post->return_post['location_id']],
+                ['items.country_id', '=', $my_post->return_post['country_id']],
                 ['items.price', '>=', $my_post->return_post['price_from'] ? $my_post->return_post['price_from'] : 0],
                 ['items.price', '<=', $my_post->return_post['price_to'] ? $my_post->return_post['price_to'] : $max],
             ];
@@ -184,7 +184,7 @@ class MatchingController extends Controller
                 ['items.category_id', '!=', $my_post->return_post['category_id']],
                 ['items.sub_category_id', '!=', $my_post->return_post['sub_category_id']],
                 ['items.sub_sub_category_id', '!=', $my_post->return_post['sub_sub_category_id']],
-                ['items.location_id', '!=', $my_post->return_post['location_id']],
+                ['items.country_id', '!=', $my_post->return_post['country_id']],
                 ['items.price', '>=', $my_post->return_post['price_from'] ? $my_post->return_post['price_from'] : 0],
                 ['items.price', '<=', $my_post->return_post['price_to'] ? $my_post->return_post['price_to'] : $max],
             ];
@@ -355,7 +355,7 @@ class MatchingController extends Controller
                     ['return_items.category_id', '!=', $my_post->category_id],
                     ['return_items.sub_category_id', '!=', $my_post->sub_category_id],
                     ['return_items.sub_sub_category_id', '!=', $my_post->sub_sub_category_id],
-                    ['return_items.location_id', '!=', $my_post->location_id],
+                    ['return_items.country_id', '!=', $my_post->country_id],
                     ['return_items.price_from', '>', $my_post->price ? $my_post->price : $max],
                     ['return_items.price_to', '<', $my_post->price ? $my_post->price : 0],
                 ])
@@ -377,7 +377,7 @@ class MatchingController extends Controller
                     ['items.category_id', '!=', $my_post->return_post['category_id']],
                     ['items.sub_category_id', '!=', $my_post->return_post['sub_category_id']],
                     ['items.sub_sub_category_id', '!=', $my_post->return_post['sub_sub_category_id']],
-                    ['items.location_id', '!=', $my_post->return_post['location_id']],
+                    ['items.country_id', '!=', $my_post->return_post['country_id']],
                     ['items.price', '<', $my_post->return_post['price_from'] ? $my_post->return_post['price_from'] : 0],
                     ['items.price', '>', $my_post->return_post['price_to'] ? $my_post->return_post['price_to'] : $max],
                 ])
@@ -408,7 +408,7 @@ class MatchingController extends Controller
                     ['return_items.category_id', '!=', $my_post->category_id],
                     ['return_items.sub_category_id', '!=', $my_post->sub_category_id],
                     ['return_items.sub_sub_category_id', '!=', $my_post->sub_sub_category_id],
-                    ['return_items.location_id', '!=', $my_post->location_id],
+                    ['return_items.country_id', '!=', $my_post->country_id],
                     ['return_items.price_from', '>', $my_post->price ? $my_post->price : $max],
                     ['return_items.price_to', '<', $my_post->price ? $my_post->price : 0],
                 ])
@@ -430,7 +430,7 @@ class MatchingController extends Controller
                     ['items.category_id', '!=', $my_post->return_post['category_id']],
                     ['items.sub_category_id', '!=', $my_post->return_post['sub_category_id']],
                     ['items.sub_sub_category_id', '!=', $my_post->return_post['sub_sub_category_id']],
-                    ['items.location_id', '!=', $my_post->return_post['location_id']],
+                    ['items.country_id', '!=', $my_post->return_post['country_id']],
                     ['items.price', '<', $my_post->return_post['price_from'] ? $my_post->return_post['price_from'] : 0],
                     ['items.price', '>', $my_post->return_post['price_to'] ? $my_post->return_post['price_to'] : $max],
                 ])
@@ -461,7 +461,7 @@ class MatchingController extends Controller
                     ['return_items.category_id', '!=', $my_post->category_id],
                     ['return_items.sub_category_id', '!=', $my_post->sub_category_id],
                     ['return_items.sub_sub_category_id', '!=', $my_post->sub_sub_category_id],
-                    ['return_items.location_id', '!=', $my_post->location_id],
+                    ['return_items.country_id', '!=', $my_post->country_id],
                     ['return_items.price_from', '>', $my_post->price ? $my_post->price : $max],
                     ['return_items.price_to', '<', $my_post->price ? $my_post->price : 0],
                 ])
@@ -483,7 +483,7 @@ class MatchingController extends Controller
                     ['items.category_id', '!=', $my_post->return_post['category_id']],
                     ['items.sub_category_id', '!=', $my_post->return_post['sub_category_id']],
                     ['items.sub_sub_category_id', '!=', $my_post->return_post['sub_sub_category_id']],
-                    ['items.location_id', '!=', $my_post->return_post['location_id']],
+                    ['items.country_id', '!=', $my_post->return_post['country_id']],
                     ['items.price', '<', $my_post->return_post['price_from'] ? $my_post->return_post['price_from'] : 0],
                     ['items.price', '>', $my_post->return_post['price_to'] ? $my_post->return_post['price_to'] : $max],
                 ])
@@ -786,7 +786,7 @@ class MatchingController extends Controller
                     ['return_items.category_id', '!=', $my_post->category_id],
                     ['return_items.sub_category_id', '!=', $my_post->sub_category_id],
                     ['return_items.sub_sub_category_id', '!=', $my_post->sub_sub_category_id],
-                    ['return_items.location_id', '!=', $my_post->location_id],
+                    ['return_items.country_id', '!=', $my_post->country_id],
                     ['return_items.price_from', '>', $my_post->price ? $my_post->price : $max],
                     ['return_items.price_to', '<', $my_post->price ? $my_post->price : 0],
                 ])
@@ -810,7 +810,7 @@ class MatchingController extends Controller
                     ['return_items.category_id', '!=', $my_post->category_id],
                     ['return_items.sub_category_id', '!=', $my_post->sub_category_id],
                     ['return_items.sub_sub_category_id', '!=', $my_post->sub_sub_category_id],
-                    ['return_items.location_id', '!=', $my_post->location_id],
+                    ['return_items.country_id', '!=', $my_post->country_id],
                     ['return_items.price_from', '>', $my_post->price ? $my_post->price : $max],
                     ['return_items.price_to', '<', $my_post->price ? $my_post->price : 0],
                 ])
@@ -832,7 +832,7 @@ class MatchingController extends Controller
                     ['items.category_id', '!=', $my_post->return_post['category_id']],
                     ['items.sub_category_id', '!=', $my_post->return_post['sub_category_id']],
                     ['items.sub_sub_category_id', '!=', $my_post->return_post['sub_sub_category_id']],
-                    ['items.location_id', '!=', $my_post->return_post['location_id']],
+                    ['items.country_id', '!=', $my_post->return_post['country_id']],
                     ['items.price', '<', $my_post->return_post['price_from'] ? $my_post->return_post['price_from'] : 0],
                     ['items.price', '>', $my_post->return_post['price_to'] ? $my_post->return_post['price_to'] : $max],
                 ])
@@ -861,7 +861,7 @@ class MatchingController extends Controller
                     ['items.category_id', '!=', $my_post->return_post['category_id']],
                     ['items.sub_category_id', '!=', $my_post->return_post['sub_category_id']],
                     ['items.sub_sub_category_id', '!=', $my_post->return_post['sub_sub_category_id']],
-                    ['items.location_id', '!=', $my_post->return_post['location_id']],
+                    ['items.country_id', '!=', $my_post->return_post['country_id']],
                     ['items.price', '<', $my_post->return_post['price_from'] ? $my_post->return_post['price_from'] : 0],
                     ['items.price', '>', $my_post->return_post['price_to'] ? $my_post->return_post['price_to'] : $max],
                 ])
@@ -1079,7 +1079,7 @@ class MatchingController extends Controller
                     ['return_items.category_id', '!=', $my_post->category_id],
                     ['return_items.sub_category_id', '!=', $my_post->sub_category_id],
                     ['return_items.sub_sub_category_id', '!=', $my_post->sub_sub_category_id],
-                    ['return_items.location_id', '!=', $my_post->location_id],
+                    ['return_items.country_id', '!=', $my_post->country_id],
                     ['return_items.price_from', '>', $my_post->price ? $my_post->price : $max],
                     ['return_items.price_to', '<', $my_post->price ? $my_post->price : 0],
                 ])
@@ -1101,7 +1101,7 @@ class MatchingController extends Controller
                     ['items.category_id', '!=', $my_post->return_post['category_id']],
                     ['items.sub_category_id', '!=', $my_post->return_post['sub_category_id']],
                     ['items.sub_sub_category_id', '!=', $my_post->return_post['sub_sub_category_id']],
-                    ['items.location_id', '!=', $my_post->return_post['location_id']],
+                    ['items.country_id', '!=', $my_post->return_post['country_id']],
                     ['items.price', '<', $my_post->return_post['price_from'] ? $my_post->return_post['price_from'] : 0],
                     ['items.price', '>', $my_post->return_post['price_to'] ? $my_post->return_post['price_to'] : $max],
                 ])
@@ -1124,144 +1124,129 @@ class MatchingController extends Controller
                 $matches->push(...$matching_posts_p48);
             }
 
+            // PRIORITY49
+            $matching_posts_p49 = Item::where('user_id','!=',$user)
+                ->where('type','offer')->where('return_id',null)
+                ->where($label_10)
+                ->where([
+                    ['category_id', '!=', $my_post->category_id],
+                    ['sub_category_id', '!=', $my_post->sub_category_id],
+                    ['sub_sub_category_id', '!=', $my_post->sub_sub_category_id],
+                    ['country_id', '!=', $my_post->country_id],
+                    ['price', '>=', $my_post->price ? $my_post->price - ($my_post->price / 2) : 0],
+                    ['price', '<=', $my_post->price ? $my_post->price * 2 : $max],
+                ])
+                ->orderBy('created_at','desc')->get();
+            if(!$matching_posts_p49->isEmpty()){
+                foreach ($matching_posts_p49 as $matching_post_p49) {
+                $value49 = [$matching_post_p49->id => 'priority_49' , 'created_at' => $matching_post_p49->created_at];
+                    Log::info($my_post->id);    
+                    Log::info('Priority 49' . $matching_post_p49);
+                    array_push($p49, $value49);
+                }
+                $matches->push(...$matching_posts_p49);
+            }
+
+            // PRIORITY50
+            $matching_posts_p50 = Item::where('user_id','!=',$user)
+                ->where('type','offer')->where('return_id',null)
+                ->where($label_10_b)
+                ->where([
+                    ['category_id', '!=', $my_post->category_id],
+                    ['sub_category_id', '!=', $my_post->sub_category_id],
+                    ['sub_sub_category_id', '!=', $my_post->sub_sub_category_id],
+                    ['country_id', '!=', $my_post->country_id],
+                    ['price', '>=', $my_post->price ? $my_post->price - ($my_post->price / 2) : 0],
+                    ['price', '<=', $my_post->price ? $my_post->price * 2 : $max],
+                ])
+                ->orderBy('created_at','desc')->get();
+            if(!$matching_posts_p50->isEmpty()){
+                foreach ($matching_posts_p50 as $matching_post_p50) {
+                $value50 = [$matching_post_p50->id => 'priority_50' , 'created_at' => $matching_post_p50->created_at];
+                    Log::info($my_post->id);    
+                    Log::info('Priority 50' . $matching_post_p50);
+                    array_push($p50, $value50);
+                }
+                $matches->push(...$matching_posts_p50);
+            }
+
+            // PRIORITY51
+            $matching_posts_p51 = Item::where('user_id','!=',$user)
+                ->where('type','offer')->where('return_id',null)
+                ->where($label_10_c)
+                ->where([
+                    ['category_id', '!=', $my_post->category_id],
+                    ['sub_category_id', '!=', $my_post->sub_category_id],
+                    ['sub_sub_category_id', '!=', $my_post->sub_sub_category_id],
+                    ['country_id', '!=', $my_post->country_id],
+                    ['price', '>=', $my_post->price ? $my_post->price - ($my_post->price / 2) : 0],
+                    ['price', '<=', $my_post->price ? $my_post->price * 2 : $max],
+                ])
+                ->orderBy('created_at','desc')->get();
+            if(!$matching_posts_p51->isEmpty()){
+                foreach ($matching_posts_p51 as $matching_post_p51) {
+                $value51 = [$matching_post_p51->id => 'priority_51' , 'created_at' => $matching_post_p51->created_at];
+                    Log::info($my_post->id);    
+                    Log::info('Priority 51' . $matching_post_p51);
+                    array_push($p51, $value51);
+                }
+                $matches->push(...$matching_posts_p51);
+            }
+
+            // PRIORITY52
+            $matching_posts_p52 = Item::where('user_id','!=',$user)
+                ->where('type','offer')->where('return_id',null)
+                ->where($label_10_e)
+                ->where([
+                    ['category_id', '!=', $my_post->category_id],
+                    ['sub_category_id', '!=', $my_post->sub_category_id],
+                    ['sub_sub_category_id', '!=', $my_post->sub_sub_category_id],
+                    ['country_id', '!=', $my_post->country_id],
+                    ['price', '>=', $my_post->price ? $my_post->price - ($my_post->price / 2) : 0],
+                    ['price', '<=', $my_post->price ? $my_post->price * 2 : $max],
+                ])
+                ->orderBy('created_at','desc')->get();
+            if(!$matching_posts_p52->isEmpty()){
+                foreach ($matching_posts_p52 as $matching_post_p52) {
+                $value52 = [$matching_post_p52->id => 'priority_52' , 'created_at' => $matching_post_p52->created_at];
+                    Log::info($my_post->id);    
+                    Log::info('Priority 52' . $matching_post_p52);
+                    array_push($p52, $value52);
+                }
+                $matches->push(...$matching_posts_p52);
+            }
+
+            // PRIORITY53
+            $matching_posts_p53 = Item::where('user_id','!=',$user)
+                ->where('type','offer')->where('return_id',null)
+                ->where($label_10_d)
+                ->where([
+                    ['category_id', '!=', $my_post->category_id],
+                    ['sub_category_id', '!=', $my_post->sub_category_id],
+                    ['sub_sub_category_id', '!=', $my_post->sub_sub_category_id],
+                    ['country_id', '!=', $my_post->country_id],
+                    ['price', '>=', $my_post->price ? $my_post->price - ($my_post->price / 2) : 0],
+                    ['price', '<=', $my_post->price ? $my_post->price * 2 : $max],
+                ])
+                ->orderBy('created_at','desc')->get();
+            if(!$matching_posts_p53->isEmpty()){
+                foreach ($matching_posts_p53 as $matching_post_p53) {
+                $value53 = [$matching_post_p53->id => 'priority_53' , 'created_at' => $matching_post_p53->created_at];
+                    Log::info($my_post->id);    
+                    Log::info('Priority 53' . $matching_post_p53);
+                    array_push($p53, $value53);
+                }
+                $matches->push(...$matching_posts_p53);
+            }
+
             if ($my_post->return_id == null) {
-                // // PRIORITY49 TODO
-                // $matching_posts_p49 = Item::where('user_id','!=',$user)
-                // ->where('type','offer')->where('return_id',null)
-                // ->where([
-                //     ['category_id', '=', $my_post->return_post['category_id']],
-                //     ['sub_category_id', '=', $my_post->return_post['sub_category_id']],
-                //     ['sub_sub_category_id', '=', $my_post->return_post['sub_sub_category_id']],
-                //     ['location_id', '=', $my_post->return_post['location_id']],
-                //     ['price', '>=', $my_post->return_post['price_from'] ? $my_post->return_post['price_from'] : 0],
-                //     ['price', '<=', $my_post->return_post['price_to'] ? $my_post->return_post['price_to'] : $max],
-                // ])
-                // ->where([
-                //     ['price', '>=', $my_post->price_from ? $my_post->price_from / 2 : 0],
-                //     ['price', '<=', $my_post->price_to ? $my_post->price_to * 2 : $max],
-                // ])
-                // ->orderBy('created_at','desc')->get();
-                // if(!$matching_posts_p49->isEmpty()){
-                //     foreach ($matching_posts_p49 as $matching_post_p49) {
-                //     $value49 = [$matching_post_p49->id => 'priority_49' , 'created_at' => $matching_post_p49->created_at];
-                //         Log::info($my_post->id);    
-                //         Log::info('Priority 49' . $matching_post_p49);
-                //         array_push($p49, $value49);
-                //     }
-                //     $matches->push(...$matching_posts_p49);
-                // }
-
-                // // PRIORITY50 TODO
-                // $matching_posts_p50 = Item::where('user_id','!=',$user)
-                // ->where('type','offer')->where('return_id',null)
-                // ->where([
-                //     ['category_id', '=', $my_post->return_post['category_id']],
-                //     ['sub_category_id', '=', $my_post->return_post['sub_category_id']],
-                //     ['sub_sub_category_id', '!=', $my_post->return_post['sub_sub_category_id']],
-                //     ['location_id', '=', $my_post->return_post['location_id']],
-                //     ['price', '>=', $my_post->return_post['price_from'] ? $my_post->return_post['price_from'] : 0],
-                //     ['price', '<=', $my_post->return_post['price_to'] ? $my_post->return_post['price_to'] : $max],
-                // ])
-                // ->where([
-                //     ['price', '>=', $my_post->price_from ? $my_post->price_from / 2 : 0],
-                //     ['price', '<=', $my_post->price_to ? $my_post->price_to * 2 : $max],
-                // ])
-                // ->orderBy('created_at','desc')->get();
-                // if(!$matching_posts_p50->isEmpty()){
-                //     foreach ($matching_posts_p50 as $matching_post_p50) {
-                //     $value50 = [$matching_post_p50->id => 'priority_50' , 'created_at' => $matching_post_p50->created_at];
-                //         Log::info($my_post->id);    
-                //         Log::info('Priority 50' . $matching_post_p50);
-                //         array_push($p50, $value50);
-                //     }
-                //     $matches->push(...$matching_posts_p50);
-                // }
-
-                // // PRIORITY51 TODO
-                // $matching_posts_p51 = Item::where('user_id','!=',$user)
-                // ->where('type','offer')->where('return_id',null)
-                // ->where([
-                //     ['category_id', '=', $my_post->return_post['category_id']],
-                //     ['sub_category_id', '!=', $my_post->return_post['sub_category_id']],
-                //     ['sub_sub_category_id', '!=', $my_post->return_post['sub_sub_category_id']],
-                //     ['location_id', '=', $my_post->return_post['location_id']],
-                //     ['price', '>=', $my_post->return_post['price_from'] ? $my_post->return_post['price_from'] : 0],
-                //     ['price', '<=', $my_post->return_post['price_to'] ? $my_post->return_post['price_to'] : $max],
-                // ])
-                // ->where([
-                //     ['price', '>=', $my_post->price_from ? $my_post->price_from / 2 : 0],
-                //     ['price', '<=', $my_post->price_to ? $my_post->price_to * 2 : $max],
-                // ])
-                // ->orderBy('created_at','desc')->get();
-                // if(!$matching_posts_p51->isEmpty()){
-                //     foreach ($matching_posts_p51 as $matching_post_p51) {
-                //     $value51 = [$matching_post_p51->id => 'priority_51' , 'created_at' => $matching_post_p51->created_at];
-                //         Log::info($my_post->id);    
-                //         Log::info('Priority 51' . $matching_post_p51);
-                //         array_push($p51, $value51);
-                //     }
-                //     $matches->push(...$matching_posts_p51);
-                // }
-
-                // // PRIORITY52 TODO
-                // $matching_posts_p52 = Item::where('user_id','!=',$user)
-                // ->where('type','offer')->where('return_id',null)
-                // ->where([
-                //     ['category_id', '=', $my_post->return_post['category_id']],
-                //     ['sub_category_id', '!=', $my_post->return_post['sub_category_id']],
-                //     ['sub_sub_category_id', '!=', $my_post->return_post['sub_sub_category_id']],
-                //     ['location_id', '!=', $my_post->return_post['location_id']],
-                //     ['price', '>=', $my_post->return_post['price_from'] ? $my_post->return_post['price_from'] : 0],
-                //     ['price', '<=', $my_post->return_post['price_to'] ? $my_post->return_post['price_to'] : $max],
-                // ])
-                // ->where([
-                //     ['price', '>=', $my_post->price_from ? $my_post->price_from / 2 : 0],
-                //     ['price', '<=', $my_post->price_to ? $my_post->price_to * 2 : $max],
-                // ])
-                // ->orderBy('created_at','desc')->get();
-                // if(!$matching_posts_p52->isEmpty()){
-                //     foreach ($matching_posts_p52 as $matching_post_p52) {
-                //     $value52 = [$matching_post_p52->id => 'priority_52' , 'created_at' => $matching_post_p52->created_at];
-                //         Log::info($my_post->id);    
-                //         Log::info('Priority 52' . $matching_post_p52);
-                //         array_push($p52, $value52);
-                //     }
-                //     $matches->push(...$matching_posts_p52);
-                // }
-
-                // // PRIORITY53 TODO
-                // $matching_posts_p53 = Item::where('user_id','!=',$user)
-                // ->where('type','offer')->where('return_id',null)
-                // ->where([
-                //     ['category_id', '!=', $my_post->return_post['category_id']],
-                //     ['sub_category_id', '!=', $my_post->return_post['sub_category_id']],
-                //     ['sub_sub_category_id', '!=', $my_post->return_post['sub_sub_category_id']],
-                //     ['location_id', '=', $my_post->return_post['location_id']],
-                //     ['price', '>=', $my_post->return_post['price_from'] ? $my_post->return_post['price_from'] : 0],
-                //     ['price', '<=', $my_post->return_post['price_to'] ? $my_post->return_post['price_to'] : $max],
-                // ])
-                // ->where([
-                //     ['price', '>=', $my_post->price_from ? $my_post->price_from / 2 : 0],
-                //     ['price', '<=', $my_post->price_to ? $my_post->price_to * 2 : $max],
-                // ])
-                // ->orderBy('created_at','desc')->get();
-                // if(!$matching_posts_p53->isEmpty()){
-                //     foreach ($matching_posts_p53 as $matching_post_p53) {
-                //     $value53 = [$matching_post_p53->id => 'priority_53' , 'created_at' => $matching_post_p53->created_at];
-                //         Log::info($my_post->id);    
-                //         Log::info('Priority 53' . $matching_post_p53);
-                //         array_push($p53, $value53);
-                //     }
-                //     $matches->push(...$matching_posts_p53);
-                // }
-
                 // PRIORITY54
                 $matching_posts_p54 = Item::where('items.user_id', '!=', $user)
                     ->where([
                         ['items.category_id', '!=', $my_post->category_id],
                         ['items.sub_category_id', '!=', $my_post->sub_category_id],
                         ['items.sub_sub_category_id', '!=', $my_post->sub_sub_category_id],
-                        ['items.location_id', '!=', $my_post->location_id],
+                        ['items.country_id', '!=', $my_post->country_id],
                         ['items.price', '>=', $my_post->price ? $my_post->price - ($my_post->price / 2) : 0],
                         ['items.price', '<=', $my_post->price ? $my_post->price * 2 : $max],
                     ])
@@ -1285,7 +1270,7 @@ class MatchingController extends Controller
                         ['items.category_id', '!=', $my_post->category_id],
                         ['items.sub_category_id', '!=', $my_post->sub_category_id],
                         ['items.sub_sub_category_id', '!=', $my_post->sub_sub_category_id],
-                        ['items.location_id', '!=', $my_post->location_id],
+                        ['items.country_id', '!=', $my_post->country_id],
                         ['items.price', '>=', $my_post->price ? $my_post->price - ($my_post->price / 2) : 0],
                         ['items.price', '<=', $my_post->price ? $my_post->price * 2 : $max],
                     ])
@@ -1309,7 +1294,7 @@ class MatchingController extends Controller
                         ['items.category_id', '!=', $my_post->category_id],
                         ['items.sub_category_id', '!=', $my_post->sub_category_id],
                         ['items.sub_sub_category_id', '!=', $my_post->sub_sub_category_id],
-                        ['items.location_id', '!=', $my_post->location_id],
+                        ['items.country_id', '!=', $my_post->country_id],
                         ['items.price', '>=', $my_post->price ? $my_post->price - ($my_post->price / 2) : 0],
                         ['items.price', '<=', $my_post->price ? $my_post->price * 2 : $max],
                     ])
@@ -1333,7 +1318,7 @@ class MatchingController extends Controller
                         ['items.category_id', '!=', $my_post->category_id],
                         ['items.sub_category_id', '!=', $my_post->sub_category_id],
                         ['items.sub_sub_category_id', '!=', $my_post->sub_sub_category_id],
-                        ['items.location_id', '!=', $my_post->location_id],
+                        ['items.country_id', '!=', $my_post->country_id],
                         ['items.price', '>=', $my_post->price ? $my_post->price - ($my_post->price / 2) : 0],
                         ['items.price', '<=', $my_post->price ? $my_post->price * 2 : $max],
                     ])
@@ -1357,7 +1342,7 @@ class MatchingController extends Controller
                         ['items.category_id', '!=', $my_post->category_id],
                         ['items.sub_category_id', '!=', $my_post->sub_category_id],
                         ['items.sub_sub_category_id', '!=', $my_post->sub_sub_category_id],
-                        ['items.location_id', '!=', $my_post->location_id],
+                        ['items.country_id', '!=', $my_post->country_id],
                         ['items.price', '>=', $my_post->price ? $my_post->price - ($my_post->price / 2) : 0],
                         ['items.price', '<=', $my_post->price ? $my_post->price * 2 : $max],
                     ])
@@ -1382,7 +1367,7 @@ class MatchingController extends Controller
                         ['category_id', '!=', $my_post->category_id],
                         ['sub_category_id', '!=', $my_post->sub_category_id],
                         ['sub_sub_category_id', '!=', $my_post->sub_sub_category_id],
-                        ['location_id', '!=', $my_post->location_id],
+                        ['country_id', '!=', $my_post->country_id],
                         ['price', '>=', $my_post->price ? $my_post->price - ($my_post->price / 2) : 0],
                         ['price', '<=', $my_post->price ? $my_post->price * 2 : $max],
                     ])
@@ -1411,7 +1396,7 @@ class MatchingController extends Controller
                 //     ['items.category_id', '!=', $my_post->category_id],
                 //     ['items.sub_category_id', '!=', $my_post->sub_category_id],
                 //     ['items.sub_sub_category_id', '!=', $my_post->sub_sub_category_id],
-                //     ['items.location_id', '!=', $my_post->location_id],
+                //     ['items.country_id', '!=', $my_post->country_id],
                 //     ['items.price', '>=', $my_post->price_from ? $my_post->price_from : 0],
                 //     ['items.price', '<=', $my_post->price_to ? $my_post->price_to : $max],
                 // ])
@@ -1438,7 +1423,7 @@ class MatchingController extends Controller
                         ['category_id', '!=', $my_post->category_id],
                         ['sub_category_id', '!=', $my_post->sub_category_id],
                         ['sub_sub_category_id', '!=', $my_post->sub_sub_category_id],
-                        ['location_id', '!=', $my_post->location_id],
+                        ['country_id', '!=', $my_post->country_id],
                         ['price', '>=', $my_post->price ? $my_post->price - ($my_post->price / 2) : 0],
                         ['price', '<=', $my_post->price ? $my_post->price * 2 : $max],
                     ])
