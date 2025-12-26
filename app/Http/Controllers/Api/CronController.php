@@ -568,6 +568,7 @@ class CronController extends Controller
     public function matchingRecords()
     {
         $users = Item::where('is_available', 1)->where('id', '>', 0)->get()->pluck('user_id', 'user_id');
+        // $users = Item::where('is_available', 1)->where('user_id', 8)->get()->pluck('user_id', 'user_id');
 
         foreach($users as $user){
             $result = (new MatchingController)->matchingResult($user);
