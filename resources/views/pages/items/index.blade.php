@@ -141,7 +141,7 @@
                 @foreach($items as $item)
                     <tr class="@if($item->status == 'approved') success @elseif($item->status == 'pending') default @elseif($item->status == 'expired') warning @elseif($item->status == 'paid') success @endif" >
                         <td>@if($item->return_id) YES @else NO @endif</td>
-                        <td>#POST {{ $item->item_order }}</td>
+                        <td>#POST {{ $item->id }}</td>
                         <td>{{ $item->User ? $item->User->full_name : "" }}</td>
                         <td>{{ $item->User ? $item->User->email : "" }}</td>
                         <td>{{ $item->code }}</td>

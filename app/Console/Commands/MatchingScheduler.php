@@ -56,6 +56,10 @@ class MatchingScheduler extends Command
             $set_data->matching_records = json_encode($result);
             $set_data->save();
         }
+
+        $command = 'sudo chown -R www-data:www-data storage/logs/';
+
+        exec($command, $output, $returnCode);
     }
 
     public function matchingResult($user)
@@ -393,7 +397,13 @@ class MatchingScheduler extends Command
 
                 // PRIORITY10
                 $matching_posts_p10 = Item::where('items.user_id', '!=', $user)
-                    ->where($label_10)
+                    ->where([
+                        ['items.category_id', '=', $my_post->return_post['category_id']],
+                        ['items.sub_category_id', '=', $my_post->return_post['sub_category_id']],
+                        ['items.sub_sub_category_id', '=', $my_post->return_post['sub_sub_category_id']],
+                        ['items.country_id', '=', $my_post->return_post['country_id']],
+                    ])
+                    ->whereBetween('items.price', [$my_post->return_post['price_from'] ? $my_post->return_post['price_from'] : 0, $my_post->return_post['price_to'] ? $my_post->return_post['price_to'] : $max])
                     ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                     ->where([
                         ['return_items.category_id', '!=', $my_post->category_id],
@@ -401,7 +411,6 @@ class MatchingScheduler extends Command
                         ['return_items.sub_sub_category_id', '!=', $my_post->sub_sub_category_id],
                         ['return_items.country_id', '!=', $my_post->country_id],
                         ['return_items.price_from', '>', $my_post->price ? $my_post->price : $max],
-                        ['return_items.price_to', '<', $my_post->price ? $my_post->price : 0],
                     ])
                     ->orderBy('items.created_at', 'desc')
                     ->get(['items.id', 'items.created_at']);
@@ -422,9 +431,8 @@ class MatchingScheduler extends Command
                         ['items.sub_category_id', '!=', $my_post->return_post['sub_category_id']],
                         ['items.sub_sub_category_id', '!=', $my_post->return_post['sub_sub_category_id']],
                         ['items.country_id', '!=', $my_post->return_post['country_id']],
-                        ['items.price', '<', $my_post->return_post['price_from'] ? $my_post->return_post['price_from'] : 0],
-                        ['items.price', '>', $my_post->return_post['price_to'] ? $my_post->return_post['price_to'] : $max],
                     ])
+                    ->whereNotBetween('items.price',[$my_post->return_post['price_from'] ? $my_post->return_post['price_from'] : 0, $my_post->return_post['price_to'] ? $my_post->return_post['price_to'] : $max])
                     ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                     ->where($label_9)
                     ->orderBy('items.created_at', 'desc')
@@ -446,7 +454,13 @@ class MatchingScheduler extends Command
 
                 // PRIORITY12
                 $matching_posts_p12 = Item::where('items.user_id', '!=', $user)
-                    ->where($label_10_b)
+                    ->where([
+                        ['items.category_id', '=', $my_post->return_post['category_id']],
+                        ['items.sub_category_id', '=', $my_post->return_post['sub_category_id']],
+                        ['items.sub_sub_category_id', '!=', $my_post->return_post['sub_sub_category_id']],
+                        ['items.country_id', '=', $my_post->return_post['country_id']],
+                    ])
+                    ->whereBetween('items.price', [$my_post->return_post['price_from'] ? $my_post->return_post['price_from'] : 0, $my_post->return_post['price_to'] ? $my_post->return_post['price_to'] : $max])
                     ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                     ->where([
                         ['return_items.category_id', '!=', $my_post->category_id],
@@ -454,7 +468,6 @@ class MatchingScheduler extends Command
                         ['return_items.sub_sub_category_id', '!=', $my_post->sub_sub_category_id],
                         ['return_items.country_id', '!=', $my_post->country_id],
                         ['return_items.price_from', '>', $my_post->price ? $my_post->price : $max],
-                        ['return_items.price_to', '<', $my_post->price ? $my_post->price : 0],
                     ])
                     ->orderBy('items.created_at', 'desc')
                     ->get(['items.id', 'items.created_at']);
@@ -475,9 +488,8 @@ class MatchingScheduler extends Command
                         ['items.sub_category_id', '!=', $my_post->return_post['sub_category_id']],
                         ['items.sub_sub_category_id', '!=', $my_post->return_post['sub_sub_category_id']],
                         ['items.country_id', '!=', $my_post->return_post['country_id']],
-                        ['items.price', '<', $my_post->return_post['price_from'] ? $my_post->return_post['price_from'] : 0],
-                        ['items.price', '>', $my_post->return_post['price_to'] ? $my_post->return_post['price_to'] : $max],
                     ])
+                    ->whereNotBetween('items.price',[$my_post->return_post['price_from'] ? $my_post->return_post['price_from'] : 0, $my_post->return_post['price_to'] ? $my_post->return_post['price_to'] : $max])
                     ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                     ->where($label_9_b)
                     ->orderBy('items.created_at', 'desc')
@@ -499,7 +511,13 @@ class MatchingScheduler extends Command
 
                 // PRIORITY14
                 $matching_posts_p14 = Item::where('items.user_id', '!=', $user)
-                    ->where($label_10_c)
+                    ->where([
+                        ['items.category_id', '=', $my_post->return_post['category_id']],
+                        ['items.sub_category_id', '!=', $my_post->return_post['sub_category_id']],
+                        ['items.sub_sub_category_id', '!=', $my_post->return_post['sub_sub_category_id']],
+                        ['items.country_id', '=', $my_post->return_post['country_id']],
+                    ])
+                    ->whereBetween('items.price', [$my_post->return_post['price_from'] ? $my_post->return_post['price_from'] : 0, $my_post->return_post['price_to'] ? $my_post->return_post['price_to'] : $max])
                     ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                     ->where([
                         ['return_items.category_id', '!=', $my_post->category_id],
@@ -507,7 +525,6 @@ class MatchingScheduler extends Command
                         ['return_items.sub_sub_category_id', '!=', $my_post->sub_sub_category_id],
                         ['return_items.country_id', '!=', $my_post->country_id],
                         ['return_items.price_from', '>', $my_post->price ? $my_post->price : $max],
-                        ['return_items.price_to', '<', $my_post->price ? $my_post->price : 0],
                     ])
                     ->orderBy('items.created_at', 'desc')
                     ->get(['items.id', 'items.created_at']);
@@ -528,9 +545,8 @@ class MatchingScheduler extends Command
                         ['items.sub_category_id', '!=', $my_post->return_post['sub_category_id']],
                         ['items.sub_sub_category_id', '!=', $my_post->return_post['sub_sub_category_id']],
                         ['items.country_id', '!=', $my_post->return_post['country_id']],
-                        ['items.price', '<', $my_post->return_post['price_from'] ? $my_post->return_post['price_from'] : 0],
-                        ['items.price', '>', $my_post->return_post['price_to'] ? $my_post->return_post['price_to'] : $max],
                     ])
+                    ->whereNotBetween('items.price',[$my_post->return_post['price_from'] ? $my_post->return_post['price_from'] : 0, $my_post->return_post['price_to'] ? $my_post->return_post['price_to'] : $max])
                     ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                     ->where($label_9_c)
                     ->orderBy('items.created_at', 'desc')
@@ -824,7 +840,13 @@ class MatchingScheduler extends Command
 
                 // PRIORITY32
                 $matching_posts_p32 = Item::where('items.user_id', '!=', $user)
-                    ->where($label_10_e)
+                    ->where([
+                        ['items.category_id', '=', $my_post->return_post['category_id']],
+                        ['items.sub_category_id', '!=', $my_post->return_post['sub_category_id']],
+                        ['items.sub_sub_category_id', '!=', $my_post->return_post['sub_sub_category_id']],
+                        ['items.country_id', '!=', $my_post->return_post['country_id']],
+                    ])
+                    ->whereBetween('items.price', [$my_post->return_post['price_from'] ? $my_post->return_post['price_from'] : 0, $my_post->return_post['price_to'] ? $my_post->return_post['price_to'] : $max])
                     ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                     ->where([
                         ['return_items.category_id', '!=', $my_post->category_id],
@@ -832,7 +854,6 @@ class MatchingScheduler extends Command
                         ['return_items.sub_sub_category_id', '!=', $my_post->sub_sub_category_id],
                         ['return_items.country_id', '!=', $my_post->country_id],
                         ['return_items.price_from', '>', $my_post->price ? $my_post->price : $max],
-                        ['return_items.price_to', '<', $my_post->price ? $my_post->price : 0],
                     ])
                     ->orderBy('items.created_at', 'desc')
                     ->get(['items.id', 'items.created_at']);
@@ -848,7 +869,13 @@ class MatchingScheduler extends Command
 
                 // PRIORITY33
                 $matching_posts_p33 = Item::where('items.user_id', '!=', $user)
-                    ->where($label_10_d)
+                    ->where([
+                        ['items.category_id', '!=', $my_post->return_post['category_id']],
+                        ['items.sub_category_id', '!=', $my_post->return_post['sub_category_id']],
+                        ['items.sub_sub_category_id', '!=', $my_post->return_post['sub_sub_category_id']],
+                        ['items.country_id', '=', $my_post->return_post['country_id']],
+                    ])
+                    ->whereBetween('items.price', [$my_post->return_post['price_from'] ? $my_post->return_post['price_from'] : 0, $my_post->return_post['price_to'] ? $my_post->return_post['price_to'] : $max])
                     ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                     ->where([
                         ['return_items.category_id', '!=', $my_post->category_id],
@@ -856,7 +883,6 @@ class MatchingScheduler extends Command
                         ['return_items.sub_sub_category_id', '!=', $my_post->sub_sub_category_id],
                         ['return_items.country_id', '!=', $my_post->country_id],
                         ['return_items.price_from', '>', $my_post->price ? $my_post->price : $max],
-                        ['return_items.price_to', '<', $my_post->price ? $my_post->price : 0],
                     ])
                     ->orderBy('items.created_at', 'desc')
                     ->get(['items.id', 'items.created_at']);
@@ -877,9 +903,8 @@ class MatchingScheduler extends Command
                         ['items.sub_category_id', '!=', $my_post->return_post['sub_category_id']],
                         ['items.sub_sub_category_id', '!=', $my_post->return_post['sub_sub_category_id']],
                         ['items.country_id', '!=', $my_post->return_post['country_id']],
-                        ['items.price', '<', $my_post->return_post['price_from'] ? $my_post->return_post['price_from'] : 0],
-                        ['items.price', '>', $my_post->return_post['price_to'] ? $my_post->return_post['price_to'] : $max],
                     ])
+                    ->whereNotBetween('items.price',[$my_post->return_post['price_from'] ? $my_post->return_post['price_from'] : 0, $my_post->return_post['price_to'] ? $my_post->return_post['price_to'] : $max])
                     ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                     ->where($label_9_e)
                     ->orderBy('items.created_at', 'desc')
@@ -906,9 +931,8 @@ class MatchingScheduler extends Command
                         ['items.sub_category_id', '!=', $my_post->return_post['sub_category_id']],
                         ['items.sub_sub_category_id', '!=', $my_post->return_post['sub_sub_category_id']],
                         ['items.country_id', '!=', $my_post->return_post['country_id']],
-                        ['items.price', '<', $my_post->return_post['price_from'] ? $my_post->return_post['price_from'] : 0],
-                        ['items.price', '>', $my_post->return_post['price_to'] ? $my_post->return_post['price_to'] : $max],
                     ])
+                    ->whereNotBetween('items.price',[$my_post->return_post['price_from'] ? $my_post->return_post['price_from'] : 0, $my_post->return_post['price_to'] ? $my_post->return_post['price_to'] : $max])
                     ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                     ->where($label_9_d)
                     ->orderBy('items.created_at', 'desc')
@@ -1117,7 +1141,13 @@ class MatchingScheduler extends Command
 
                 // PRIORITY47
                 $matching_posts_p47 = Item::where('items.user_id', '!=', $user)
-                    ->where($label_10_f)
+                    ->where([
+                        ['items.category_id', '!=', $my_post->return_post['category_id']],
+                        ['items.sub_category_id', '!=', $my_post->return_post['sub_category_id']],
+                        ['items.sub_sub_category_id', '!=', $my_post->return_post['sub_sub_category_id']],
+                        ['items.country_id', '!=', $my_post->return_post['country_id']],
+                    ])
+                    ->whereBetween('items.price', [$my_post->return_post['price_from'] ? $my_post->return_post['price_from'] : 0, $my_post->return_post['price_to'] ? $my_post->return_post['price_to'] : $max])
                     ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                     ->where([
                         ['return_items.category_id', '!=', $my_post->category_id],
@@ -1125,7 +1155,6 @@ class MatchingScheduler extends Command
                         ['return_items.sub_sub_category_id', '!=', $my_post->sub_sub_category_id],
                         ['return_items.country_id', '!=', $my_post->country_id],
                         ['return_items.price_from', '>', $my_post->price ? $my_post->price : $max],
-                        ['return_items.price_to', '<', $my_post->price ? $my_post->price : 0],
                     ])
                     ->orderBy('items.created_at', 'desc')
                     ->get(['items.id', 'items.created_at']);
@@ -1146,9 +1175,8 @@ class MatchingScheduler extends Command
                         ['items.sub_category_id', '!=', $my_post->return_post['sub_category_id']],
                         ['items.sub_sub_category_id', '!=', $my_post->return_post['sub_sub_category_id']],
                         ['items.country_id', '!=', $my_post->return_post['country_id']],
-                        ['items.price', '<', $my_post->return_post['price_from'] ? $my_post->return_post['price_from'] : 0],
-                        ['items.price', '>', $my_post->return_post['price_to'] ? $my_post->return_post['price_to'] : $max],
                     ])
+                    ->whereNotBetween('items.price',[$my_post->return_post['price_from'] ? $my_post->return_post['price_from'] : 0, $my_post->return_post['price_to'] ? $my_post->return_post['price_to'] : $max])
                     ->join('items AS return_items', 'items.return_id', '=', 'return_items.id')
                     ->where($label_9_f)
                     ->orderBy('items.created_at', 'desc')
