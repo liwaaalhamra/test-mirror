@@ -89,16 +89,28 @@ class PushController extends Controller
     }
 
     public function getMessage(Request $request) {
+        // Validate user (assuming this method is defined)
         $user = $this->validate_user($request);
-        
-        UserInbox::updateOrCreate(['inbox_id' => $request->id,'user_id' => $user->id]);
-        
-        $message = Inbox::findOrFail($request->id);
-        $message->is_read =1;
+
+        // Check if the inbox_id exists in the Inbox table
+        $message = Inbox::find($request->id);
+        if (!$message) {
+            // Return an error response if the inbox_id doesn't exist
+            return response()->json(['error' => 'Message not found'], 404);
+        }
+
+        // Update or create the UserInbox record
+        UserInbox::updateOrCreate(
+            ['inbox_id' => $request->id, 'user_id' => $user->id]
+        );
+
+        // Mark the message as read
+        $message->is_read = 1;
         $message->save();
 
         return response()->json($message);
     }
+
 
     public function unread_count(Request $request) {
         $user = $this->validate_user($request);
