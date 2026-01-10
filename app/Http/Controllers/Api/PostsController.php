@@ -247,6 +247,17 @@ class PostsController extends Controller
                 'meta_type' => $type,
                 'meta_value' => '{"friend_name": "'.$conversation->friend_name.'","conversation_id": '.$conversation->id.',"friend_id": '.$conversation->friend_id.',"friend_image": "'.$conversation->friend_image.'"}'
             ]);
+        } else {
+            Inbox::create([
+                'user_id' => $sender->id,
+                'title' => $title,
+                'message' => $message,
+                'image' => null,
+                'type' => 'targeted',
+                'code' => $code,
+                'meta_type' => $type,
+                'meta_value' => '{"friend_name": "'.$conversation->friend_name.'","conversation_id": '.$conversation->id.',"friend_id": '.$conversation->friend_id.',"friend_image": "'.$conversation->friend_image.'"}'
+            ]);
         }
 
         return parent::return_json(['status' => $status]);
