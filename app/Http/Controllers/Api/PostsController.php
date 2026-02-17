@@ -773,6 +773,11 @@ class PostsController extends Controller
                 ]);
             }
 
+        }else{
+            $delete_return_post = $item->return_post;
+            if($delete_return_post) {
+                $delete_return_post->delete();
+            }
         }
 
         $info = [];
