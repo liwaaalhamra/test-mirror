@@ -256,7 +256,7 @@ class PostsController extends Controller
                 'type' => 'targeted',
                 'code' => $code,
                 'meta_type' => $type,
-                'meta_value' => '{"friend_name": "'.$conversation->friend_name.'","conversation_id": '.$conversation->id.',"friend_id": '.$conversation->friend_id.',"friend_image": "'.$conversation->friend_image.'"}'
+                'meta_value' => '{"friend_name": "'.$receiver->full_name.'","conversation_id": '.$conversation->id.',"friend_id": '.$receiver->id.',"friend_image": "'.$receiver->photo.'"}'
             ]);
         }
 
