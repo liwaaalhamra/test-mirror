@@ -32,6 +32,10 @@ class PushController extends Controller
         /**
          * get onesignal user details
          */
+        \Log::info('Player ID && User ID',[
+            $request->player_id, 
+            $user->id
+        ]);
         $details = parent::oneSignalViewUser($request->player_id);
         if($user_push = UserPush::where('type','=','user')->whereUsersId($user->id)->first()){
             $user_push->device_model = isset($details['error']) ? null : $details['device_model'];

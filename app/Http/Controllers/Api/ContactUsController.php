@@ -80,14 +80,14 @@ class ContactUsController extends Controller
             'title' => $request->title
         ]);
         $info = [];
+        // $info['body_title'] = $request->title;
         $info['to'] = $to = explode(',', env('SUGGESTION_EMAILS'));
-        $info['user'] = $user;
-//        $info['body_title'] = $request->title;
-        $info['body_message'] = $request->message;
-        $info['email'] = $request->email;
-        $info['category_name'] = $category->name;
-        $info['message'] = "A New Feedback has been sent to you with the following info:";
         $info['title'] = 'Contact Us';
+        $info['message'] = "A New Feedback has been sent to you with the following info:";
+        $info['user'] = $user;
+        $info['body_message'] = $request->message;
+        $info['email'] = $email;
+        $info['category_name'] = $category->name;
        Mail::send('emails.suggestion', ['data' => $info], function ($message) use ($info) {
            $message->subject($info['title']);
            $message->to($info['to']);

@@ -61,13 +61,15 @@
                                 <div class="form-group ">
                                     <select class="form-control selectpicker" id="users" data-live-search="true" multiple name="users[]" required data-actions-box="true">
                                         @foreach($users as $user)
-                                            <option data-tokens="{{$user->first_name}} {{$user->last_name}} {{$user->primary_phone}}" value="{{$user->id}}" > 
-                                                @if($user->full_name && $user->primary_phone) 
-                                                    {{$user->full_name}} - {{$user->primary_phone}} 
+                                                @if($user->full_name) 
+                                                    <option value="{{$user->id}}" > 
+                                                        {{$user->full_name}}
+                                                    </option>
                                                 @else 
-                                                    {{ $user->email }} 
+                                                    <option value="{{$user->id}}" > 
+                                                        {{$user->email}}
+                                                    </option>
                                                 @endif
-                                            </option>
                                         @endforeach
                                     </select>
                                 </div>

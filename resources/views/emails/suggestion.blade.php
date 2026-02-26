@@ -56,21 +56,20 @@
                 <tbody>
                 <tr>
                     <td style="padding-bottom: 23px; padding-top: 23px;">
-                        <p>{{$data['message']}}</p><br><br>
+                        <p>{{ $data['message'] }}</p><br><br>
                         @if($data['user'] != null)
-                            <p>User Full Name: <strong>{{$data['user']->full_name}}</strong></p>
-                        @endif
-                        @if($data['email'] != null)
-                            <p>User Email: <strong>{{$data['email']}}</strong></p>
+                            <p>User ID: <strong>{{ $data['user']->id }}</strong></p>
+                            <p>User Full Name: <strong>{{ $data['user']->full_name }}</strong></p>
+                            <p>User Email: <strong>{{ $data['user']->email ?? 'No email' }}</strong></p>
+                            <p>User Mobile: <strong>{{ $data['user']->country_code ?? '' }}{{ $data['user']->primary_phone ?? 'No phone number' }}</strong></p>
                         @endif
                         @if(isset($data['category_name']))
-                            <p>Category Name: <strong>{{$data['category_name']}}</strong></p>
+                            <p>Category Name: <strong>{{ $data['category_name'] }}</strong></p>
                         @endif
                         @if(isset($data['body_title']))
-                            <p>Title: <strong>{{$data['body_title']}}</strong></p>
+                            <p>Title: <strong>{{ $data['body_title'] }}</strong></p>
                         @endif
-                        {{--<p>Title: <strong>{{$data['body_title']}}</strong></p>--}}
-                        <p>Message: <strong>{{$data['body_message']}}</strong></p>
+                        <p>Message: <strong>{{ $data['body_message'] }}</strong></p>
                     </td>
                 </tr>
                 </tbody>

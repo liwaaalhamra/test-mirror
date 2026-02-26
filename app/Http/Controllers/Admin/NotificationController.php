@@ -38,10 +38,10 @@ class NotificationController extends Controller
      */
     public function push() /*: View*/
     {
-        $users = Users::join('user_push','users_id','=','users.id')->get();
+        $users = Users::join('user_push','users_id','=','users.id')->where('users.full_name','!=',null)->where('users.email','!=',null)->get();
 
         $products = Category::orderBy('id','desc')->get();
-//        $suppliers = SupplierFoodGroup::orderBy('id','desc')->get();
+
         return view('pages.notification.push',compact('users','products'))
             ->with('section_name', 'notification')
             ->with('content_header', 'Notification: Push');
