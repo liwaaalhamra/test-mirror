@@ -11,7 +11,7 @@
                     <div class="panel-body">
                         <div class="row">
                             <div class="form-group col-sm-4">
-                                <label>Choose Country <p style="color: red; display: inline-block; line-height: 0.1rem">*</p></label>
+                                <label>Choose Area/Location <p style="color: red; display: inline-block; line-height: 0.1rem">*</p></label>
                                 <select class="form-control selectpicker" title="Choose..."  data-live-search="true" name="country_id" required>
                                     @foreach($countries as $country)
                                         <option data-tokens="{{$country->name}}" @if($item->city_id == $country->id) selected @endif value="{{ $country->id }}">{{$country->name}}</option>

@@ -47,7 +47,7 @@ class ItemsController extends Controller
     public function index(Request $request)
     {
         $now = Carbon::now()->format('Y-m-d');
-        $items = Item::where(function($query) use ($request){
+        $items = Item::where('type', 'offer')->where(function($query) use ($request){
             if ($request->has('item_id')){
                 $item_id = $request->get('item_id');
                 $query->whereId($item_id);
@@ -234,10 +234,9 @@ class ItemsController extends Controller
      */
     public function show($id)
     {
-        //
-        $items = Item::whereCategoryId($id)->orderBy('item_order','asc')->get();
+        $items = Item::whereId($id)->orderBy('item_order','asc')->get();
         $accessible_sections = $this->sections;
-        return view('pages.'.$this->section_name.'.index', compact('items','accessible_sections'))
+        return view('pages.'.$this->section_name.'.show', compact('items','accessible_sections'))
             ->with('section_name', $this->section_name)
             ->with('content_header', $this->display_name);
     }
@@ -366,6 +365,7 @@ class ItemsController extends Controller
     public function publish(Item $item){
         if($item){
             $item->is_available = !$item->is_available;
+            $item->status = $item->is_available == 1 ? 'approved' : 'in_review';
             $item->save();
         }
         try {
@@ -435,7 +435,8 @@ class ItemsController extends Controller
               
             }
 
-            $item->status = $item->status == 'in_review' ? 'approved' : 'in_review';
+            $item->status = 'approved';
+            // $item->status = $item->status == 'in_review' ? 'approved' : 'in_review';
             $item->expired_at = Carbon::now()->addMonths(6)->timestamp;
             if($item->return_post){
                 $item->return_post->expired_at = Carbon::now()->addMonths(6)->timestamp;
@@ -494,7 +495,7 @@ class ItemsController extends Controller
               
             }
 
-            $item->status = 'in_review';
+            $item->status = 'rejected';
             $item->save();
         }
         return redirect()->route('admin.'.$this->section_name.'.index')

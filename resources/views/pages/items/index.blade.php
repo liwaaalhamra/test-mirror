@@ -118,6 +118,7 @@
                 <thead>
                 <tr>
                     <th>Has Return Post</th>
+                    <th>Return Post</th>
                     <th>Order</th>
                     <th>User</th>
                     <th>User Email</th>
@@ -139,8 +140,9 @@
                 </thead>
                 <tbody>
                 @foreach($items as $item)
-                    <tr class="@if($item->status == 'approved') success @elseif($item->status == 'pending') default @elseif($item->status == 'expired') warning @elseif($item->status == 'paid') success @endif" >
+                    <tr class="@if($item->status == 'approved') success @elseif($item->status == 'pending') default @elseif($item->status == 'expired') warning @elseif($item->status == 'paid') success @elseif($item->status == 'rejected') danger @endif" >
                         <td>@if($item->return_id) YES @else NO @endif</td>
+                        <td>@if($item->return_id) <a href="{{ route('admin.items.show',[$item->return_id]) }}">Return Post</a> @else NOT Available @endif</td>
                         <td>#POST {{ $item->id }}</td>
                         <td>{{ $item->User ? $item->User->full_name : "" }}</td>
                         <td>{{ $item->User ? $item->User->email : "" }}</td>
