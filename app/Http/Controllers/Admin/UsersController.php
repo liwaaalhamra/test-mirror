@@ -32,7 +32,6 @@ class UsersController extends Controller
      */
     public function index(Request $request) /*: View*/
     {
-//        dd($request->all());
         $users = Users::where(function($query) use ($request){
             if ($request->has('type')){
                 $type = $request->get('type');

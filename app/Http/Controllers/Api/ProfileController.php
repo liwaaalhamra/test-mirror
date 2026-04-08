@@ -576,7 +576,7 @@ class ProfileController extends Controller
         $registration = parent::generate_tokens(4);
         if($user->account_type == 'email'){
             $info = [];
-            $info['to'] = strtolower($username);
+            $info['to'] = strtolower($user->email);
             $info['title'] = 'Reset Password';
             $info['message1'] = 'You requested a password reset for your account : '.Input::get('email');
             $info['message2'] = 'Please use the following code in your application to reset your password';
@@ -593,6 +593,10 @@ class ProfileController extends Controller
             try {
                 $new_country_code = $user->country_code;
                 $new_phone_number = $user->primary_phone;
+
+                $phoneNumber = str_replace('+', '', $new_country_code.$new_phone_number);
+                $result = parent::send_otp($phoneNumber,$reset_code);
+
 //            $result = parent::infobip_send_sms($data);
 //            $result = parent::SendQpaySMS('Your Password Reset Code: '.$reset_code, $new_country_code.$new_phone_number,env('SMS_SOURCE'));
 //            if(!$result){

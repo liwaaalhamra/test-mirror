@@ -184,6 +184,7 @@ class NotificationController extends Controller
             foreach ($player_ids_chunks as $chunk){
                 $info['player_ids'] = $chunk;
                 $result = parent::oneSignal($info);
+                \Log::info($result);
                 if(!empty($result['error'])){
                     $notification_message .= 'Error: '.$result['error'].'<br>';
                 }else{

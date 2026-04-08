@@ -1046,7 +1046,8 @@ class PaymentController extends Controller
 
     public function stripe_payment_response(Request $request) {
         try{
-            $is_test = $request->type == '1' ? true : false;
+            // $is_test = $request->type == '1' ? true : false;
+            $is_test = env('STRIPE_TEST_ENV');
             if($is_test){
             // if(config('app.env') != 'production'){
                 Stripe::setApiKey(env('STRIPE_TEST_API_KEY'));

@@ -266,7 +266,6 @@ class OrdersController extends Controller
                         ->where('payment_type', '=', 'online')
                         ->orWhere('payment_type','=','cash');
                 })->get();
-//            dd(DB::getQueryLog());
         }
         $data = [];
         $orders->map(function ($order, $index) use(&$data){

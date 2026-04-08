@@ -76,7 +76,6 @@ class PaymentController extends Controller
                 if(isset($session_info['error'])){
                     abort(401);
                 }
-                dd($data,$session_info,$return_url,env('PAYMENT_SESSION_BASE_URL'),http_build_query($data));
                 $order->session_info = $session_info;
                 parse_str($session_info, $session_details);
                 if(isset($session_details['error_cause'])){

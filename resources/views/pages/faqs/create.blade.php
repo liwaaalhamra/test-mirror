@@ -11,7 +11,9 @@
                         <div class="row">
                             <div class="form-group col-sm-4">
                                 <label>Question</label>
-                                <textarea name="question_en" id="desc1" class="form-control"></textarea>
+                                <input type="text" name="question_en" id="question_en" class="form-control" required placeholder="Question English" value="{{ old('question_en') }}">
+
+                                {{-- <textarea name="question_en" id="desc1" class="form-control"></textarea> --}}
                             </div>
                             <div class="form-group col-sm-4">
                                 <label>Answer</label>
@@ -21,7 +23,9 @@
                         <div class="row">
                             <div class="form-group col-sm-4">
                                 <label>Question Arabic</label>
-                                <textarea name="question_ar" class="form-control"></textarea>
+                                <input type="text" name="question_ar" id="question_ar" class="form-control" required placeholder="Question Arabic" value="{{ old('question_ar') }}">
+
+                                {{-- <textarea name="question_ar" class="form-control"></textarea> --}}
                             </div>
                             <div class="form-group col-sm-4">
                                 <label>Answer Arabic</label>

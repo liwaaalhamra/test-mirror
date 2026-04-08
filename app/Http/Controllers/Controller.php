@@ -95,7 +95,6 @@ class Controller extends BaseController
         $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
         $err = curl_errno($ch);
-//        dd($full_url,$fields,$response,$http_status,$err);
         curl_close($ch);
         if ($err) {
             return false;

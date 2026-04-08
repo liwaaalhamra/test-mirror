@@ -601,7 +601,6 @@ class CronController extends Controller
                     return $value;
                 })->values();
             }
-            // dd($data);
         return $matches;
     }
 

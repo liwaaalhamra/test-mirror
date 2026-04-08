@@ -51,7 +51,6 @@ class SheetsController extends Controller
                  * for car models set startRow to 1
                  */
                 $sheets = $sheets;
-                dd($sheets);
 
 //                foreach ($sheets as $item){
 //                    if($item['brand_id'] == null || $item['brand_name'] == null){
@@ -76,7 +75,6 @@ class SheetsController extends Controller
                         ]);
                     }
                 }
-                dd('done');
 //                DB::table('users')->delete();
                 foreach ($items as $item){
                     if($item['sku'] == null || $item['price'] == null || $item['name_en'] == null
