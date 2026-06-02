@@ -28,6 +28,7 @@ return [
     'reset_code' => 'Please use the following code in your application to reset your password',
     'sincerely' => 'Sincerely',
     'somfy_team' => 'Somfy Team',
+    'post_not_published' => 'Bu gönderi henüz yayınlanmadı. Lütfen daha sonra tekrar deneyin.',
 
 
 ];

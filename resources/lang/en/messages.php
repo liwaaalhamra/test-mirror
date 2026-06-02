@@ -69,5 +69,6 @@ return [
     'cannot_complete_order' => 'Cannot Complete Order',
     'item_already_exist' => 'Post successfully added to cart',
     'select_a_post' => 'Please select a post',
+    'post_not_published' => 'This post is not published yet. Please try again later.',
 
 ];

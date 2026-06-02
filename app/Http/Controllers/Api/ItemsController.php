@@ -1975,7 +1975,7 @@ class ItemsController extends Controller
             return parent::return_error('Invalid Action Value',402,'messages.invalid_parameters');
         }
         if(!$item = Item::whereIsAvailable(1)->whereId($request->item_id)->first()){
-            return parent::return_error("Invalid Item", 402, 'messages.invalid_parameters');
+            return parent::return_error("Post Not Published Yet", 402, 'messages.post_not_published');
         }
         $action = Input::get('action');
         $user_favorite = UserFavorite::whereMetaId($item->id)->whereUserId($user->id)->first();

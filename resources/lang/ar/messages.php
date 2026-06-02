@@ -73,6 +73,7 @@ return [
     'item_added_to_cart' => 'need translation',
     'item_already_exist' => 'need translation',
     'select_a_post' => 'الرجاء تحديد',
+    'post_not_published' => 'لم يتم نشر هذا المنشور بعد. يُرجى المحاولة مرة أخرى لاحقًا.',
 
 
 

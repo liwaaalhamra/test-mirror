@@ -28,6 +28,7 @@ return [
     'reset_code' => 'Please use the following code in your application to reset your password',
     'sincerely' => 'Sincerely',
     'somfy_team' => 'Somfy Team',
+    'post_not_published' => 'Cette publication n’est pas encore publiée. Veuillez réessayer plus tard.',
 
 
 ];
