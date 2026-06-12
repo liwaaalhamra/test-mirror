@@ -89,7 +89,7 @@ class LoginController extends Controller
         $is_mobile = $agent->isMobile();
         $is_tablet = $agent->isTablet();
         $is_desktop = $agent->isDesktop();
-        $ip = isset($agent->getHttpHeaders()['HTTP_X_FORWARDED_FOR']) ? $agent->getHttpHeaders()['HTTP_X_FORWARDED_FOR'] : null;
+        $ip = request()->header('X-Forwarded-For') ?? null;
         $user->device_name = $device_name;
         $user->browser_name = $browser_name;
         $user->browser_version = $browser_version;
@@ -163,8 +163,8 @@ class LoginController extends Controller
             $is_mobile = $agent->isMobile();
             $is_tablet = $agent->isTablet();
             $is_desktop = $agent->isDesktop();
-            $ip = isset($agent->getHttpHeaders()['HTTP_X_FORWARDED_FOR']) ? $agent->getHttpHeaders()['HTTP_X_FORWARDED_FOR'] : null;
-    
+            $ip = request()->header('X-Forwarded-For') ?? null;
+
             /**
              * if user logged in using google/apple/ facebook(email)
              * account type will be email and concerned social id will be filled
@@ -256,7 +256,7 @@ class LoginController extends Controller
         $is_mobile = $agent->isMobile();
         $is_tablet = $agent->isTablet();
         $is_desktop = $agent->isDesktop();
-        $ip = isset($agent->getHttpHeaders()['HTTP_X_FORWARDED_FOR']) ? $agent->getHttpHeaders()['HTTP_X_FORWARDED_FOR'] : null;
+        $ip = request()->header('X-Forwarded-For') ?? null;
 
         /**
          * if user logged in using facebook(mobile)
@@ -325,7 +325,7 @@ class LoginController extends Controller
             $is_mobile = $agent->isMobile();
             $is_tablet = $agent->isTablet();
             $is_desktop = $agent->isDesktop();
-            $ip = isset($agent->getHttpHeaders()['HTTP_X_FORWARDED_FOR']) ? $agent->getHttpHeaders()['HTTP_X_FORWARDED_FOR'] : null;
+            $ip = request()->header('X-Forwarded-For') ?? null;
 
             $user = Users::updateOrCreate(['google_id' => $google_user->id],
                 [
@@ -389,7 +389,7 @@ class LoginController extends Controller
             $is_mobile = $agent->isMobile();
             $is_tablet = $agent->isTablet();
             $is_desktop = $agent->isDesktop();
-            $ip = isset($agent->getHttpHeaders()['HTTP_X_FORWARDED_FOR']) ? $agent->getHttpHeaders()['HTTP_X_FORWARDED_FOR'] : null;
+            $ip = request()->header('X-Forwarded-For') ?? null;
 
             $user = Users::updateOrCreate(['facebook_id' => $facebook_user->id],
                 [
@@ -451,7 +451,8 @@ class LoginController extends Controller
         $is_mobile = $agent->isMobile();
         $is_tablet = $agent->isTablet();
         $is_desktop = $agent->isDesktop();
-        $ip = isset($agent->getHttpHeaders()['HTTP_HOST']) ? $agent->getHttpHeaders()['HTTP_HOST'] : null;
+        $ip = request()->header('Host') ?? null;
+
         if(!$user) {
             $user = Users::create([
                 'udid' => $udid,
@@ -567,7 +568,7 @@ class LoginController extends Controller
         $is_mobile = $agent->isMobile();
         $is_tablet = $agent->isTablet();
         $is_desktop = $agent->isDesktop();
-        $ip = isset($agent->getHttpHeaders()['HTTP_HOST']) ? $agent->getHttpHeaders()['HTTP_HOST'] : null;
+        $ip = request()->header('Host') ?? null;
         if($user = Users::whereRaw("LOWER(email) = ?",[ strtolower(trim(Input::get('email')))])->first()){
             if($user->is_verified == 1){
                 return parent::return_error('User Already Exists',419,'messages.user_already_exists');

@@ -87,7 +87,7 @@ class AppleController extends Controller
             $is_mobile = $agent->isMobile();
             $is_tablet = $agent->isTablet();
             $is_desktop = $agent->isDesktop();
-            $ip = isset($agent->getHttpHeaders()['HTTP_X_FORWARDED_FOR']) ? $agent->getHttpHeaders()['HTTP_X_FORWARDED_FOR'] : null;
+			$ip = request()->header('X-Forwarded-For') ?? null;
             $user_request = json_decode($request['user'], true);
             $user = Users::updateOrCreate(['apple_id' => $jwtPayload['sub']],
                 [

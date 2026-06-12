@@ -1027,7 +1027,7 @@ class PostsController extends Controller
         });
         $query->orderBy('item_order','desc');
         $currency = env('APP_CURRENCY');
-        $items = $query->take(5)->get()->map(function ($value, $key) use ($currency,$user) {
+        $items = $query->get()->map(function ($value, $key) use ($currency,$user) {
             $value->is_favorite = false;
             if($user){
                 if(UserFavorite::whereMetaName('items')->whereMetaId($value->id)->whereUserId($user->id)->first()){
