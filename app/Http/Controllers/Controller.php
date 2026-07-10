@@ -654,7 +654,8 @@ class Controller extends BaseController
     protected function send_otp($phoneNumber,$otp)
     {
         $message = 'Please verify using the following code: '.$otp;
-        $senderId = 'Barterdom';
+        $senderId = 'SMSGlobal';
+        // $senderId = 'Barterdom';
 
         $apiUrl = env('SMSGLOBAL_API_URL');
         $apiKey = env('SMSGLOBAL_API_KEY');
@@ -683,15 +684,22 @@ class Controller extends BaseController
                 ],
             ]);
 
+            
             if ($response->getStatusCode() === 200) {
                 // SMS sent successfully
+                \Log::info('SMS sent successfully');
+
                 return response()->json(['message' => 'SMS sent successfully']);
             } else {
                 // Handle error if needed
+                \Log::info('Failed to send SMS');
+
                 return response()->json(['error' => 'Failed to send SMS']);
             }
         } catch (\Exception $e) {
             // Handle exceptions, log errors, etc.
+            \Log::error($e);
+
             return response()->json(['error' => 'Error sending SMS: ' . $e->getMessage()]);
         }
     }

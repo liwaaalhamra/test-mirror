@@ -81,6 +81,7 @@ class SettingsController extends Controller
         unset($info['force_update_message_en']);
         unset($info['force_update_title_ar']);
         unset($info['force_update_title_en']);
+        $info['has_mobile_login'] = env('HAS_MOBILE_LOGIN') ?? false;
         return response()->json($info);
 	}
 }
